@@ -1164,7 +1164,11 @@
      "side": "short",
      "branch": "single_extended",
      "reference": "EQ 29,460 rejection after the open spike to 29,485 into the prior value low (chart re-read 2026-09-17: the single-break read, not the outbound trade)",
-     "target": 29358
+     "target": 29358,
+     "accepted_by_owner": {
+      "decision": "2026-09-17",
+      "reason": "the 9.6-point delta is an intrabar market fill: his 29,451.50 lies inside the 09:34 bar (O 29,475.25, H 29,482.25, L 29,429.75, C 29,433.50), on the correct side of the EQ, at the right minute on the close-labelled NinjaTrader clock. Counted as a match; no tolerance changes elsewhere."
+     }
     },
     {
      "time_et": "09:35",
@@ -1198,28 +1202,59 @@
    "chart_clock": "ninjatrader UK",
    "inside_tape": true,
    "levels": {
-    "context": "open below the prior RTH high and value-area high"
+    "context": "open below the prior RTH high and value-area high",
+    "box_6_9": [
+     28629.25,
+     28758.0
+    ],
+    "W": 128.75,
+    "EQ": 28693.625,
+    "minus_1_0": 28500.5,
+    "minus_1_33": 28458.0,
+    "note": "coordinator re-read of JR p.38 (NinjaTrader UK clock = ET+5): the execution trace prints Sell 5 @ 28,685.75 at 14:02 UK = 09:02 ET at the EQ tag, adds at 14:33 UK, and buys back 3 @ 28,49x.75 at the -1.0 projection"
    },
    "actions": [
     {
-     "time_et": "09:30-10:30",
-     "note": "single break through the A period, entry at the range mid, +124, done at the open"
+     "time_et": "09:02",
+     "action": "sell",
+     "qty": 5,
+     "price": 28685.75,
+     "note": "EQ tag and rejection; the execution trace on JR p.38 (14:02 UK)",
+     "proper_entry": true,
+     "marked_by": "ticket",
+     "side": "short",
+     "branch": "single_extended",
+     "reference": "EQ 28,693.625 of the 06:00-09:00 box 28,629.25-28,758.00; the range low was broken 07:30-08:10 and the open sits below it",
+     "reference_price": 28693.625,
+     "target": 28500.5
+    },
+    {
+     "time_et": "09:33",
+     "action": "add",
+     "qty": 1,
+     "price": 28578.0,
+     "note": "14:33 UK"
+    },
+    {
+     "time_et": "09:33",
+     "action": "add",
+     "qty": 3,
+     "price": 28550.0,
+     "note": "14:33 UK, 28,55x"
     },
     {
      "time_et": "09:35",
-     "note": "proper entry added 2026-09-17 from the post narration",
-     "proper_entry": true,
-     "marked_by": "narration",
-     "side": "short",
-     "branch": "single_extended",
-     "reference": "range mid (EQ)"
+     "action": "buy",
+     "qty": 3,
+     "price": 28490.75,
+     "note": "cover at L2 = the -1.0 projection 28,500.50 (14:35 UK)"
     }
    ],
    "expected_detection": {
     "branch": "single_extended",
     "side": "short",
-    "reference": "open below pRTHH and pRTHVAH; entry at EQ",
-    "entry_window_et": "09:30-10:30"
+    "reference": "the single-break read is available from 09:00: the EQ tag at 09:00-09:03 and the rejection back below it",
+    "entry_window_et": "09:00-09:05"
    },
    "n_proper_entries": 1
   },

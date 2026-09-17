@@ -1,5 +1,22 @@
 {
   "family": "JJ-TBR",
+  "branch_population_diagnostics": [
+    "judas_outbound out of bound on episodes_per_session: eps=8.000 pass_rate=0.483 sessions_with_pass=10/15 (0.667) n=120 pass=58. Bound eps=[0, 2] pass_rate=[0, 0.7]. A generated diagnosis is not a waiver.",
+    "judas_outbound out of bound on session_frequency: eps=8.000 pass_rate=0.483 sessions_with_pass=10/15 (0.667) n=120 pass=58. Bound eps=[0, 2] pass_rate=[0, 0.7]. A generated diagnosis is not a waiver.",
+    "judas_reversal out of bound on episodes_per_session: eps=113.333 pass_rate=0.474 sessions_with_pass=15/15 (1.000) n=1700 pass=806. Bound eps=[0, 4] pass_rate=[0, 0.9]. A generated diagnosis is not a waiver.",
+    "judas_reversal out of bound on session_frequency: eps=113.333 pass_rate=0.474 sessions_with_pass=15/15 (1.000) n=1700 pass=806. Bound eps=[0, 4] pass_rate=[0, 0.9]. A generated diagnosis is not a waiver.",
+    "single_extended out of bound on episodes_per_session: eps=118.200 pass_rate=0.685 sessions_with_pass=15/15 (1.000) n=1773 pass=1215. Bound eps=[0, 6] pass_rate=[0, 0.5]. A generated diagnosis is not a waiver.",
+    "single_extended out of bound on pass_rate: eps=118.200 pass_rate=0.685 sessions_with_pass=15/15 (1.000) n=1773 pass=1215. Bound eps=[0, 6] pass_rate=[0, 0.5]. A generated diagnosis is not a waiver.",
+    "single_extended out of bound on session_frequency: eps=118.200 pass_rate=0.685 sessions_with_pass=15/15 (1.000) n=1773 pass=1215. Bound eps=[0, 6] pass_rate=[0, 0.5]. A generated diagnosis is not a waiver.",
+    "single_purged out of bound on episodes_per_session: eps=28.867 pass_rate=0.801 sessions_with_pass=8/15 (0.533) n=433 pass=347. Bound eps=[0, 6] pass_rate=[0, 0.5]. A generated diagnosis is not a waiver.",
+    "single_purged out of bound on pass_rate: eps=28.867 pass_rate=0.801 sessions_with_pass=8/15 (0.533) n=433 pass=347. Bound eps=[0, 6] pass_rate=[0, 0.5]. A generated diagnosis is not a waiver.",
+    "internal_rotation out of bound on episodes_per_session: eps=217.600 pass_rate=0.613 sessions_with_pass=15/15 (1.000) n=3264 pass=2002. Bound eps=[0, 8] pass_rate=[0, 0.4]. A generated diagnosis is not a waiver.",
+    "internal_rotation out of bound on pass_rate: eps=217.600 pass_rate=0.613 sessions_with_pass=15/15 (1.000) n=3264 pass=2002. Bound eps=[0, 8] pass_rate=[0, 0.4]. A generated diagnosis is not a waiver.",
+    "internal_rotation out of bound on session_frequency: eps=217.600 pass_rate=0.613 sessions_with_pass=15/15 (1.000) n=3264 pass=2002. Bound eps=[0, 8] pass_rate=[0, 0.4]. A generated diagnosis is not a waiver.",
+    "other_session out of bound on episodes_per_session: eps=57.067 pass_rate=0.437 sessions_with_pass=15/15 (1.000) n=856 pass=374. Bound eps=[0, 12] pass_rate=[0, 0.5]. A generated diagnosis is not a waiver.",
+    "other_session out of bound on session_frequency: eps=57.067 pass_rate=0.437 sessions_with_pass=15/15 (1.000) n=856 pass=374. Bound eps=[0, 12] pass_rate=[0, 0.5]. A generated diagnosis is not a waiver.",
+    "other_session out of bound on passes_per_side: eps=57.067 pass_rate=0.437 sessions_with_pass=15/15 (1.000) n=856 pass=374. Bound eps=[0, 12] pass_rate=[0, 0.5]. A generated diagnosis is not a waiver."
+  ],
   "slice_dates": [
     "2020-01-02",
     "2020-06-01",
@@ -39,38 +56,58 @@
     {
       "branch": "judas_outbound",
       "sessions": 15,
-      "episodes": 11,
-      "pass": 2,
-      "fail": 9,
+      "episodes": 120,
+      "pass": 58,
+      "fail": 62,
       "unknown": 0,
-      "pass_rate": 0.18181818181818182,
-      "episodes_per_session": 0.7333333333333333,
-      "sessions_with_pass": 2,
-      "session_pass_fraction": 0.13333333333333333,
+      "pass_rate": 0.48333333333333334,
+      "episodes_per_session": 8.0,
+      "sessions_with_pass": 10,
+      "session_pass_fraction": 0.6666666666666666,
       "stages": {
         "context": {
-          "pass": 11,
+          "pass": 120,
           "fail": 0,
           "unknown": 0
         },
         "reference": {
-          "pass": 11,
+          "pass": 120,
+          "fail": 0,
+          "unknown": 0
+        },
+        "location": {
+          "pass": 120,
           "fail": 0,
           "unknown": 0
         },
         "trigger": {
-          "pass": 11,
+          "pass": 120,
           "fail": 0,
           "unknown": 0
         },
         "confirmation": {
-          "pass": 2,
-          "fail": 9,
+          "pass": 58,
+          "fail": 62,
+          "unknown": 0
+        },
+        "risk": {
+          "pass": 58,
+          "fail": 0,
+          "unknown": 0
+        },
+        "objective": {
+          "pass": 58,
+          "fail": 0,
+          "unknown": 0
+        },
+        "management": {
+          "pass": 58,
+          "fail": 0,
           "unknown": 0
         }
       },
       "time_of_entry_histogram_30m_et": {
-        "09:30": 2
+        "09:30": 58
       },
       "bound": {
         "episodes_per_session": [
@@ -85,52 +122,74 @@
         "page": "TBR pp.8-10",
         "claim_kind": "literal"
       },
-      "in_bound": true,
-      "violations": [],
-      "diagnosis": null,
+      "in_bound": false,
+      "violations": [
+        "episodes_per_session",
+        "session_frequency"
+      ],
+      "diagnosis": "violations=['episodes_per_session', 'session_frequency'] hottest_stage=context. This note is not a waiver.",
       "printed_zone_fixture_count": null
     },
     {
       "branch": "judas_reversal",
       "sessions": 15,
-      "episodes": 34,
-      "pass": 7,
-      "fail": 27,
+      "episodes": 1700,
+      "pass": 806,
+      "fail": 894,
       "unknown": 0,
-      "pass_rate": 0.20588235294117646,
-      "episodes_per_session": 2.2666666666666666,
-      "sessions_with_pass": 7,
-      "session_pass_fraction": 0.4666666666666667,
+      "pass_rate": 0.47411764705882353,
+      "episodes_per_session": 113.33333333333333,
+      "sessions_with_pass": 15,
+      "session_pass_fraction": 1.0,
       "stages": {
         "context": {
-          "pass": 34,
+          "pass": 1700,
           "fail": 0,
           "unknown": 0
         },
         "reference": {
-          "pass": 34,
+          "pass": 1700,
           "fail": 0,
           "unknown": 0
         },
         "location": {
-          "pass": 34,
-          "fail": 0,
+          "pass": 1547,
+          "fail": 153,
           "unknown": 0
         },
         "trigger": {
-          "pass": 34,
+          "pass": 1547,
           "fail": 0,
           "unknown": 0
         },
         "confirmation": {
-          "pass": 7,
-          "fail": 27,
+          "pass": 812,
+          "fail": 729,
+          "unknown": 6
+        },
+        "risk": {
+          "pass": 812,
+          "fail": 6,
+          "unknown": 0
+        },
+        "objective": {
+          "pass": 806,
+          "fail": 6,
+          "unknown": 0
+        },
+        "management": {
+          "pass": 806,
+          "fail": 0,
           "unknown": 0
         }
       },
       "time_of_entry_histogram_30m_et": {
-        "09:30": 6,
-        "10:00": 1
+        "09:00": 145,
+        "09:30": 333,
+        "10:00": 198,
+        "10:30": 58,
+        "11:00": 26,
+        "11:30": 46
       },
       "bound": {
         "episodes_per_session": [
@@ -145,53 +204,72 @@
         "page": "JR p.70; JR p.23",
         "claim_kind": "literal"
       },
-      "in_bound": true,
-      "violations": [],
-      "diagnosis": null,
+      "in_bound": false,
+      "violations": [
+        "episodes_per_session",
+        "session_frequency"
+      ],
+      "diagnosis": "violations=['episodes_per_session', 'session_frequency'] hottest_stage=context. This note is not a waiver.",
       "printed_zone_fixture_count": null
     },
     {
       "branch": "single_extended",
       "sessions": 15,
-      "episodes": 12,
-      "pass": 4,
-      "fail": 8,
+      "episodes": 1773,
+      "pass": 1215,
+      "fail": 558,
       "unknown": 0,
-      "pass_rate": 0.3333333333333333,
-      "episodes_per_session": 0.8,
-      "sessions_with_pass": 3,
-      "session_pass_fraction": 0.2,
+      "pass_rate": 0.6852791878172588,
+      "episodes_per_session": 118.2,
+      "sessions_with_pass": 15,
+      "session_pass_fraction": 1.0,
       "stages": {
         "context": {
-          "pass": 12,
+          "pass": 1773,
           "fail": 0,
           "unknown": 0
         },
         "reference": {
-          "pass": 12,
+          "pass": 1773,
           "fail": 0,
           "unknown": 0
         },
         "location": {
-          "pass": 12,
-          "fail": 0,
+          "pass": 1725,
+          "fail": 48,
           "unknown": 0
         },
         "trigger": {
-          "pass": 12,
+          "pass": 1725,
           "fail": 0,
           "unknown": 0
         },
         "confirmation": {
-          "pass": 4,
-          "fail": 8,
+          "pass": 1455,
+          "fail": 248,
+          "unknown": 22
+        },
+        "risk": {
+          "pass": 1455,
+          "fail": 22,
+          "unknown": 0
+        },
+        "objective": {
+          "pass": 1215,
+          "fail": 240,
+          "unknown": 0
+        },
+        "management": {
+          "pass": 1215,
+          "fail": 0,
           "unknown": 0
         }
       },
       "time_of_entry_histogram_30m_et": {
-        "09:00": 2,
-        "09:30": 1,
-        "15:30": 1
+        "09:00": 230,
+        "09:30": 565,
+        "10:00": 407,
+        "10:30": 13
       },
       "bound": {
         "episodes_per_session": [
@@ -206,24 +284,76 @@
         "page": "TBR pp.12-14, 24",
         "claim_kind": "literal"
       },
-      "in_bound": true,
-      "violations": [],
-      "diagnosis": null,
+      "in_bound": false,
+      "violations": [
+        "episodes_per_session",
+        "pass_rate",
+        "session_frequency"
+      ],
+      "diagnosis": "violations=['episodes_per_session', 'pass_rate', 'session_frequency'] hottest_stage=context. This note is not a waiver.",
       "printed_zone_fixture_count": null
     },
     {
       "branch": "single_purged",
       "sessions": 15,
-      "episodes": 0,
-      "pass": 0,
-      "fail": 0,
+      "episodes": 433,
+      "pass": 347,
+      "fail": 86,
       "unknown": 0,
-      "pass_rate": 0.0,
-      "episodes_per_session": 0.0,
-      "sessions_with_pass": 0,
-      "session_pass_fraction": 0.0,
-      "stages": {},
-      "time_of_entry_histogram_30m_et": {},
+      "pass_rate": 0.8013856812933026,
+      "episodes_per_session": 28.866666666666667,
+      "sessions_with_pass": 8,
+      "session_pass_fraction": 0.5333333333333333,
+      "stages": {
+        "context": {
+          "pass": 433,
+          "fail": 0,
+          "unknown": 0
+        },
+        "reference": {
+          "pass": 433,
+          "fail": 0,
+          "unknown": 0
+        },
+        "location": {
+          "pass": 418,
+          "fail": 15,
+          "unknown": 0
+        },
+        "trigger": {
+          "pass": 418,
+          "fail": 0,
+          "unknown": 0
+        },
+        "confirmation": {
+          "pass": 356,
+          "fail": 62,
+          "unknown": 0
+        },
+        "risk": {
+          "pass": 356,
+          "fail": 0,
+          "unknown": 0
+        },
+        "objective": {
+          "pass": 347,
+          "fail": 9,
+          "unknown": 0
+        },
+        "management": {
+          "pass": 347,
+          "fail": 0,
+          "unknown": 0
+        }
+      },
+      "time_of_entry_histogram_30m_et": {
+        "09:30": 163,
+        "10:00": 77,
+        "10:30": 43,
+        "11:00": 45,
+        "11:30": 18,
+        "12:00": 1
+      },
       "bound": {
         "episodes_per_session": [
           0,
@@ -237,52 +367,82 @@
         "page": "TBR pp.12-15; E3",
         "claim_kind": "literal"
       },
-      "in_bound": true,
-      "violations": [],
-      "diagnosis": null,
+      "in_bound": false,
+      "violations": [
+        "episodes_per_session",
+        "pass_rate"
+      ],
+      "diagnosis": "violations=['episodes_per_session', 'pass_rate'] hottest_stage=context. This note is not a waiver.",
       "printed_zone_fixture_count": null
     },
     {
       "branch": "internal_rotation",
       "sessions": 15,
-      "episodes": 20,
-      "pass": 3,
-      "fail": 17,
+      "episodes": 3264,
+      "pass": 2002,
+      "fail": 1262,
       "unknown": 0,
-      "pass_rate": 0.15,
-      "episodes_per_session": 1.3333333333333333,
-      "sessions_with_pass": 2,
-      "session_pass_fraction": 0.13333333333333333,
+      "pass_rate": 0.6133578431372549,
+      "episodes_per_session": 217.6,
+      "sessions_with_pass": 15,
+      "session_pass_fraction": 1.0,
       "stages": {
         "context": {
-          "pass": 20,
+          "pass": 3264,
           "fail": 0,
           "unknown": 0
         },
         "reference": {
-          "pass": 20,
+          "pass": 3264,
           "fail": 0,
           "unknown": 0
         },
         "location": {
-          "pass": 20,
-          "fail": 0,
+          "pass": 3218,
+          "fail": 46,
           "unknown": 0
         },
         "trigger": {
-          "pass": 20,
+          "pass": 3218,
           "fail": 0,
           "unknown": 0
         },
         "confirmation": {
-          "pass": 3,
-          "fail": 17,
+          "pass": 2790,
+          "fail": 422,
+          "unknown": 6
+        },
+        "risk": {
+          "pass": 2790,
+          "fail": 6,
+          "unknown": 0
+        },
+        "objective": {
+          "pass": 2002,
+          "fail": 788,
+          "unknown": 0
+        },
+        "management": {
+          "pass": 2002,
+          "fail": 0,
           "unknown": 0
         }
       },
       "time_of_entry_histogram_30m_et": {
-        "09:00": 2,
-        "09:30": 1
+        "09:30": 709,
+        "10:00": 454,
+        "10:30": 352,
+        "11:00": 167,
+        "11:30": 67,
+        "12:00": 59,
+        "12:30": 53,
+        "13:00": 28,
+        "13:30": 25,
+        "14:00": 30,
+        "14:30": 16,
+        "15:00": 6,
+        "15:30": 31,
+        "16:00": 5
       },
       "bound": {
         "episodes_per_session": [
@@ -297,36 +457,40 @@
         "page": "TBR p.24; JR p.3",
         "claim_kind": "literal"
       },
-      "in_bound": true,
-      "violations": [],
-      "diagnosis": null,
+      "in_bound": false,
+      "violations": [
+        "episodes_per_session",
+        "pass_rate",
+        "session_frequency"
+      ],
+      "diagnosis": "violations=['episodes_per_session', 'pass_rate', 'session_frequency'] hottest_stage=context. This note is not a waiver.",
       "printed_zone_fixture_count": null
     },
     {
       "branch": "extension_reaction",
       "sessions": 15,
-      "episodes": 14,
-      "pass": 3,
-      "fail": 11,
+      "episodes": 30,
+      "pass": 9,
+      "fail": 21,
       "unknown": 0,
-      "pass_rate": 0.21428571428571427,
-      "episodes_per_session": 0.9333333333333333,
-      "sessions_with_pass": 3,
-      "session_pass_fraction": 0.2,
+      "pass_rate": 0.3,
+      "episodes_per_session": 2.0,
+      "sessions_with_pass": 8,
+      "session_pass_fraction": 0.5333333333333333,
       "stages": {
         "context": {
-          "pass": 14,
+          "pass": 30,
           "fail": 0,
           "unknown": 0
         },
         "reference": {
-          "pass": 14,
+          "pass": 30,
           "fail": 0,
           "unknown": 0
         },
         "location": {
           "pass": 14,
-          "fail": 0,
+          "fail": 16,
           "unknown": 0
         },
         "trigger": {
@@ -335,15 +499,33 @@
           "unknown": 0
         },
         "confirmation": {
-          "pass": 3,
-          "fail": 11,
+          "pass": 9,
+          "fail": 5,
+          "unknown": 0
+        },
+        "risk": {
+          "pass": 9,
+          "fail": 0,
+          "unknown": 0
+        },
+        "objective": {
+          "pass": 9,
+          "fail": 0,
+          "unknown": 0
+        },
+        "management": {
+          "pass": 9,
+          "fail": 0,
           "unknown": 0
         }
       },
       "time_of_entry_histogram_30m_et": {
-        "10:00": 1,
-        "10:30": 1,
-        "13:00": 1
+        "10:00": 3,
+        "10:30": 2,
+        "12:30": 1,
+        "13:00": 1,
+        "13:30": 1,
+        "14:30": 1
       },
       "bound": {
         "episodes_per_session": [
@@ -366,43 +548,66 @@
     {
       "branch": "other_session",
       "sessions": 15,
-      "episodes": 116,
-      "pass": 1,
-      "fail": 115,
+      "episodes": 856,
+      "pass": 374,
+      "fail": 482,
       "unknown": 0,
-      "pass_rate": 0.008620689655172414,
-      "episodes_per_session": 7.733333333333333,
-      "sessions_with_pass": 1,
-      "session_pass_fraction": 0.06666666666666667,
+      "pass_rate": 0.4369158878504673,
+      "episodes_per_session": 57.06666666666667,
+      "sessions_with_pass": 15,
+      "session_pass_fraction": 1.0,
       "stages": {
         "context": {
-          "pass": 116,
+          "pass": 856,
           "fail": 0,
           "unknown": 0
         },
         "reference": {
-          "pass": 116,
+          "pass": 856,
           "fail": 0,
           "unknown": 0
         },
         "location": {
-          "pass": 116,
-          "fail": 0,
+          "pass": 562,
+          "fail": 294,
           "unknown": 0
         },
         "trigger": {
-          "pass": 90,
-          "fail": 26,
+          "pass": 562,
+          "fail": 0,
           "unknown": 0
         },
         "confirmation": {
-          "pass": 1,
-          "fail": 89,
+          "pass": 374,
+          "fail": 188,
+          "unknown": 0
+        },
+        "risk": {
+          "pass": 374,
+          "fail": 0,
+          "unknown": 0
+        },
+        "objective": {
+          "pass": 374,
+          "fail": 0,
+          "unknown": 0
+        },
+        "management": {
+          "pass": 374,
+          "fail": 0,
           "unknown": 0
         }
       },
       "time_of_entry_histogram_30m_et": {
-        "04:00": 1
+        "02:00": 18,
+        "02:30": 35,
+        "03:00": 112,
+        "03:30": 90,
+        "04:00": 60,
+        "04:30": 30,
+        "05:00": 18,
+        "05:30": 7,
+        "06:00": 4
       },
       "bound": {
         "episodes_per_session": [
@@ -421,53 +626,72 @@
         "page": "JR pp.50, 63-64; RR-04",
         "claim_kind": "literal"
       },
-      "in_bound": true,
-      "violations": [],
-      "diagnosis": null,
+      "in_bound": false,
+      "violations": [
+        "episodes_per_session",
+        "session_frequency",
+        "passes_per_side"
+      ],
+      "diagnosis": "violations=['episodes_per_session', 'session_frequency', 'passes_per_side'] hottest_stage=context. This note is not a waiver.",
       "printed_zone_fixture_count": null
     },
     {
       "branch": "timed_pzone_reversal",
       "sessions": 15,
-      "episodes": 4,
-      "pass": 4,
+      "episodes": 18,
+      "pass": 18,
       "fail": 0,
       "unknown": 0,
       "pass_rate": 1.0,
-      "episodes_per_session": 0.26666666666666666,
+      "episodes_per_session": 1.2,
       "sessions_with_pass": 1,
       "session_pass_fraction": 0.06666666666666667,
       "stages": {
+        "context": {
+          "pass": 18,
+          "fail": 0,
+          "unknown": 0
+        },
         "reference": {
-          "pass": 4,
+          "pass": 18,
           "fail": 0,
           "unknown": 0
         },
         "location": {
-          "pass": 4,
+          "pass": 18,
           "fail": 0,
           "unknown": 0
         },
         "trigger": {
-          "pass": 4,
+          "pass": 18,
           "fail": 0,
           "unknown": 0
         },
         "confirmation": {
-          "pass": 4,
+          "pass": 18,
           "fail": 0,
           "unknown": 0
         },
         "risk": {
-          "pass": 4,
+          "pass": 18,
+          "fail": 0,
+          "unknown": 0
+        },
+        "objective": {
+          "pass": 18,
+          "fail": 0,
+          "unknown": 0
+        },
+        "management": {
+          "pass": 18,
           "fail": 0,
           "unknown": 0
         }
       },
       "time_of_entry_histogram_30m_et": {
         "09:00": 1,
-        "09:30": 2,
-        "10:00": 1
+        "09:30": 10,
+        "10:00": 7
       },
       "bound": {
         "episodes_per_session": [

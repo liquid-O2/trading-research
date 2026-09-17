@@ -1,8 +1,8 @@
 {
-  "baseline": "B0.2-2026-09-15",
+  "baseline": "B0.3-2026-09-17",
   "branches": {
     "golden_pocket_continuation": {
-      "asia_passes": 0,
+      "asia_passes": 9,
       "bound": {
         "episodes_per_session": [
           0,
@@ -17,159 +17,141 @@
       },
       "branch": "golden_pocket_continuation",
       "diagnosis": null,
-      "episodes": 15,
-      "episodes_per_session": 1.0,
-      "fail": 14,
+      "episodes": 68,
+      "episodes_per_session": 4.5333,
+      "fail": 21,
       "family": "GB-SCALP",
-      "in_bound": true,
-      "london_passes": 0,
-      "monday_passes": 0,
-      "pass": 1,
-      "pass_rate": 0.0667,
+      "in_bound": false,
+      "london_passes": 9,
+      "monday_passes": 19,
+      "pass": 47,
+      "pass_rate": 0.6912,
       "sessions": 15,
-      "sessions_with_pass": 1,
+      "sessions_with_pass": 12,
       "stage_counts": {
         "confirmation": {
-          "fail": 3,
-          "pass": 2
+          "fail": 13,
+          "pass": 55
         },
         "context": {
-          "pass": 15
+          "pass": 68
         },
         "location": {
-          "fail": 10,
-          "pass": 5
+          "fail": 9,
+          "pass": 59
         },
         "management": {
-          "fail": 1,
-          "pass": 1
+          "fail": 21,
+          "pass": 47
         },
         "objective": {
-          "fail": 1,
-          "pass": 1
+          "fail": 13,
+          "pass": 55
         },
         "reference": {
-          "fail": 10,
-          "pass": 5
+          "pass": 68
         },
         "risk": {
-          "pass": 2
+          "fail": 13,
+          "pass": 55
         },
         "trigger": {
-          "pass": 5
+          "fail": 9,
+          "pass": 59
         }
       },
       "stage_never_fails_while_varies": [
         {
           "stage": "context",
           "varying_operands": [
-            "decision_ns",
+            "session",
             "bias_direction",
-            "bias_prior_side",
-            "bias_compatible"
+            "reference_live_from"
           ]
         },
         {
-          "stage": "trigger",
+          "stage": "reference",
           "varying_operands": [
-            "sweep_at_ns",
-            "sweep_depth",
-            "sweep_extreme",
+            "box_low",
+            "box_high",
             "level",
-            "near",
-            "pullback_at_ns"
-          ]
-        },
-        {
-          "stage": "risk",
-          "varying_operands": [
-            "stop",
-            "entry",
-            "stop_points"
+            "live_from"
           ]
         }
       ],
       "stage_value_nunique": {
         "confirmation": {
-          "close_out_of_pocket": 1,
-          "confirm_at_ns": 2,
-          "confirm_close": 3,
-          "continuation_hold": 2,
-          "fail_to_continue": 1,
-          "fail_window_end_ns": 1,
-          "far": 4,
-          "inside_box": 1,
-          "mode_od": 1,
-          "near": 5,
-          "ny_pullback": 1,
-          "pocket_high": 2,
-          "pocket_low": 2,
-          "sweep_depth": 2,
-          "through_level": 1
+          "entry": 48
         },
         "context": {
-          "bias_box_side": 1,
-          "bias_compatible": 2,
-          "bias_direction": 2,
-          "bias_prior_side": 2,
-          "decision_ns": 2,
-          "session": 1,
-          "source_session_allowed": 1
+          "bias_direction": 3,
+          "bias_rule": 1,
+          "no_entry_window_filter": 1,
+          "reference_live_from": 27,
+          "session": 6
         },
         "location": {
-          "box_high": 2,
-          "box_low": 2,
-          "distance_beyond_edge": 2,
-          "kind": 1,
-          "level": 2,
-          "near": 3,
-          "pocket_high": 3,
-          "pocket_low": 3,
-          "pocket_touch": 1,
-          "sweep_extreme": 2
+          "cycle": 1,
+          "edge": 2,
+          "level": 41,
+          "pocket_high": 27,
+          "pocket_low": 27,
+          "sweep_depth": 2,
+          "sweep_extreme": 19
         },
         "management": {
-          "derived_quantity": 2,
-          "ladder_rungs": 1,
-          "ladder_spacing": 1,
-          "risk_dollars": 1,
-          "stop_points": 2
+          "derived_quantity": 35,
+          "ladder_rungs": 10,
+          "ladder_spacing": 1
         },
         "objective": {
-          "entry": 2,
-          "first_rung": 2,
-          "opposite_edge": 2,
-          "target": 2
+          "far_objective": 27,
+          "first_objective": 27,
+          "next_drawn_level": 18,
+          "rule": 1
         },
         "reference": {
-          "box_high": 2,
-          "box_low": 2,
+          "box_high": 27,
+          "box_low": 27,
           "kind": 1,
-          "known_at": 2,
-          "level": 2,
-          "not_9_10_box": 1,
-          "pocket_high": 3,
-          "pocket_low": 3
+          "level": 41,
+          "live_from": 27,
+          "scope": 1
         },
         "risk": {
-          "entry": 2,
+          "buffer_points": 1,
+          "entry": 48,
           "risk_dollars": 1,
-          "stop": 2,
-          "stop_points": 2
+          "stop": 27,
+          "stop_points": 36
         },
         "trigger": {
-          "level": 2,
-          "near": 3,
-          "pocket_touch": 1,
-          "pullback_at_ns": 3,
-          "side": 1,
-          "sweep_at_ns": 2,
-          "sweep_depth": 2,
-          "sweep_extreme": 2
+          "bars_sweep_to_fail": 6,
+          "fail_close": 43,
+          "fail_window_bars": 1,
+          "status": 4
         }
       },
       "time_of_entry_histogram_et_30m": {
-        "09:30": 1
+        "00:00": 1,
+        "01:30": 2,
+        "02:00": 1,
+        "03:30": 2,
+        "04:00": 3,
+        "08:00": 2,
+        "09:00": 2,
+        "09:30": 3,
+        "10:00": 13,
+        "13:00": 2,
+        "14:30": 1,
+        "15:00": 1,
+        "18:00": 3,
+        "19:30": 2,
+        "20:00": 1,
+        "20:30": 2,
+        "21:00": 2,
+        "21:30": 3,
+        "23:00": 1
       },
       "unknown": 0
     }

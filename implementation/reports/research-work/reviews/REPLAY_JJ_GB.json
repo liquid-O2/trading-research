@@ -5,9 +5,17 @@
   "n_examples": 43,
   "n_inside": 40,
   "n_outside": 9,
-  "n_detected": 18,
-  "n_detected_strict": 7,
-  "n_detected_3bars": 22,
+  "n_detected": 32,
+  "n_detected_strict_10": 28,
+  "n_detected_strict": 24,
+  "n_detected_3bars": 33,
+  "n_selected_strict_10": 3,
+  "n_selected_strict": 3,
+  "n_selected_3bars": 4,
+  "n_selected_risk": 4,
+  "n_selected_strict_if_play_known": 7,
+  "n_selected_risk_if_play_known": 10,
+  "n_primary_play_matches_author": 15,
   "examples": [
     {
       "example_id": "JJ-2025-01-28",
@@ -36,6 +44,12 @@
           "strict_points": 5.0,
           "no_printed_level": false,
           "detected": true,
+          "accepted_by_owner": null,
+          "framework_entry": 21242.0,
+          "framework_delta_points": 0.25,
+          "framework_bars": 0.2,
+          "framework_mode": "signature_close",
+          "detected_strict_10": true,
           "detected_strict": true,
           "detected_within_3_bars": true,
           "our_entry": 21242.0,
@@ -48,7 +62,15 @@
           "play_matches": true,
           "delta_points": 0.25,
           "bars_from_printed": 0.2,
-          "n_pass_episodes": 22,
+          "n_pass_episodes": 33,
+          "bars_allowed": 3.0,
+          "fills_tested": [
+            "at_level",
+            "pullback_to_internal",
+            "rejection_close",
+            "signature_close"
+          ],
+          "matched_fill": "signature_close",
           "day_read": {
             "classification": "double_break",
             "classification_pre_open": "double_break",
@@ -97,9 +119,87 @@
               "sister_index_relative_strength",
               "news_calendar"
             ],
+            "read_inputs_missing": [],
+            "prior_value_unavailable_reason": null,
             "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
           },
-          "divergence": ""
+          "divergence": "",
+          "selected_trades": [
+            {
+              "branch": "judas_reversal",
+              "side": "short",
+              "mode": "at_level",
+              "at_et": "09:08",
+              "entry": 21283.75,
+              "stop": 21288.25,
+              "outcome": "stop"
+            },
+            {
+              "branch": "judas_outbound",
+              "side": "long",
+              "mode": "pullback_to_internal",
+              "at_et": "09:32",
+              "entry": 21295.875,
+              "stop": 21252.75,
+              "outcome": "stop"
+            },
+            {
+              "branch": "judas_reversal",
+              "side": "short",
+              "mode": "at_level",
+              "at_et": "11:08",
+              "entry": 21460.575,
+              "stop": 21477.5,
+              "outcome": "stop"
+            }
+          ],
+          "n_selected": 3,
+          "selected_primary_play": "double_break",
+          "selected_our_entry": 21295.875,
+          "selected_our_branch": "judas_outbound",
+          "selected_our_mode": "pullback_to_internal",
+          "selected_delta_points": 54.125,
+          "selected_bars_from_printed": 4.2,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "double_break",
+          "primary_play_matches_author": true,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "judas_reversal",
+              "side": "short",
+              "mode": "at_level",
+              "at_et": "09:08",
+              "entry": 21283.75,
+              "stop": 21288.25,
+              "outcome": "stop"
+            },
+            {
+              "branch": "judas_outbound",
+              "side": "long",
+              "mode": "pullback_to_internal",
+              "at_et": "09:32",
+              "entry": 21295.875,
+              "stop": 21252.75,
+              "outcome": "stop"
+            },
+            {
+              "branch": "judas_reversal",
+              "side": "short",
+              "mode": "at_level",
+              "at_et": "11:08",
+              "entry": 21460.575,
+              "stop": 21477.5,
+              "outcome": "stop"
+            }
+          ],
+          "selected_strict_if_play_known": false,
+          "selected_detected_if_play_known": false,
+          "selected_entry_if_play_known": 21295.875,
+          "selected_delta_if_play_known": 54.125,
+          "selected_bars_if_play_known": 4.2
         }
       ],
       "other_fills": [
@@ -159,6 +259,8 @@
             "sister_index_relative_strength",
             "news_calendar"
           ],
+          "read_inputs_missing": [],
+          "prior_value_unavailable_reason": null,
           "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
         }
       },
@@ -191,6 +293,12 @@
           "strict_points": 5.0,
           "no_printed_level": false,
           "detected": true,
+          "accepted_by_owner": null,
+          "framework_entry": 21107.25,
+          "framework_delta_points": 1.25,
+          "framework_bars": 0.8,
+          "framework_mode": "absorption",
+          "detected_strict_10": true,
           "detected_strict": true,
           "detected_within_3_bars": true,
           "our_entry": 21107.25,
@@ -204,6 +312,13 @@
           "delta_points": 1.25,
           "bars_from_printed": 0.8,
           "n_pass_episodes": 9,
+          "bars_allowed": 3.0,
+          "fills_tested": [
+            "absorption",
+            "orderblock",
+            "rejection_block"
+          ],
+          "matched_fill": "absorption",
           "day_read": {
             "classification": "single_break",
             "classification_pre_open": "single_break",
@@ -252,9 +367,69 @@
               "sister_index_relative_strength",
               "news_calendar"
             ],
+            "read_inputs_missing": [],
+            "prior_value_unavailable_reason": null,
             "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
           },
-          "divergence": ""
+          "divergence": "",
+          "selected_trades": [
+            {
+              "branch": "single_extended",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "09:28",
+              "entry": 20843.0625,
+              "stop": 20825.75,
+              "outcome": "stop"
+            },
+            {
+              "branch": "single_purged",
+              "side": "short",
+              "mode": "two_minute_close",
+              "at_et": "09:32",
+              "entry": 20838.75,
+              "stop": 20881.0,
+              "outcome": "stop"
+            },
+            {
+              "branch": "single_extended",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "10:21",
+              "entry": 20920.9375,
+              "stop": 20914.25,
+              "outcome": "stop"
+            }
+          ],
+          "n_selected": 3,
+          "selected_primary_play": "single_break",
+          "selected_our_entry": null,
+          "selected_our_branch": null,
+          "selected_our_mode": null,
+          "selected_delta_points": null,
+          "selected_bars_from_printed": null,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "london",
+          "primary_play_matches_author": false,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "other_session",
+              "side": "long",
+              "mode": "rejection_block",
+              "at_et": "03:14",
+              "entry": 21173.25,
+              "stop": 21162.75,
+              "outcome": "target"
+            }
+          ],
+          "selected_strict_if_play_known": false,
+          "selected_detected_if_play_known": false,
+          "selected_entry_if_play_known": 21173.25,
+          "selected_delta_if_play_known": 64.75,
+          "selected_bars_if_play_known": 10.8
         }
       ],
       "other_fills": [
@@ -320,6 +495,8 @@
             "sister_index_relative_strength",
             "news_calendar"
           ],
+          "read_inputs_missing": [],
+          "prior_value_unavailable_reason": null,
           "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
         }
       },
@@ -350,9 +527,15 @@
           "compare_field": "reference_level",
           "tolerance_points": 27.0,
           "strict_points": 5.0,
-          "no_printed_level": false,
-          "detected": false,
-          "detected_strict": false,
+          "no_printed_level": true,
+          "detected": true,
+          "accepted_by_owner": null,
+          "framework_entry": 23747.245,
+          "framework_delta_points": 3.745,
+          "framework_bars": 2.2,
+          "framework_mode": "orderblock",
+          "detected_strict_10": true,
+          "detected_strict": true,
           "detected_within_3_bars": true,
           "our_entry": 23747.245,
           "our_entry_ns": 1757429160000000000,
@@ -364,7 +547,16 @@
           "play_matches": true,
           "delta_points": 3.745,
           "bars_from_printed": 2.2,
-          "n_pass_episodes": 41,
+          "n_pass_episodes": 61,
+          "bars_allowed": 3.0,
+          "fills_tested": [
+            "at_level",
+            "orderblock",
+            "pullback_to_internal",
+            "rejection_close",
+            "signature_close"
+          ],
+          "matched_fill": "orderblock",
           "day_read": {
             "classification": "double_break",
             "classification_pre_open": "double_break",
@@ -413,9 +605,87 @@
               "sister_index_relative_strength",
               "news_calendar"
             ],
+            "read_inputs_missing": [],
+            "prior_value_unavailable_reason": null,
             "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
           },
-          "divergence": "entry 2.2 five-minute bars from the printed time"
+          "divergence": "",
+          "selected_trades": [
+            {
+              "branch": "judas_reversal",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "09:03",
+              "entry": 23832.75,
+              "stop": 23830.25,
+              "outcome": "stop"
+            },
+            {
+              "branch": "judas_outbound",
+              "side": "long",
+              "mode": "pullback_to_internal",
+              "at_et": "09:32",
+              "entry": 23836.0,
+              "stop": 23806.75,
+              "outcome": "stop"
+            },
+            {
+              "branch": "extension_reaction",
+              "side": "long",
+              "mode": "orderblock",
+              "at_et": "10:46",
+              "entry": 23762.75,
+              "stop": 23725.75,
+              "outcome": "target"
+            }
+          ],
+          "n_selected": 3,
+          "selected_primary_play": "double_break",
+          "selected_our_entry": 23747.245,
+          "selected_our_branch": "extension_reaction",
+          "selected_our_mode": "orderblock",
+          "selected_delta_points": 3.745,
+          "selected_bars_from_printed": 2.2,
+          "selected_strict_10": true,
+          "selected_strict": true,
+          "selected_detected": true,
+          "selected_within_3_bars": true,
+          "author_play": "double_break",
+          "primary_play_matches_author": true,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "judas_reversal",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "09:03",
+              "entry": 23832.75,
+              "stop": 23830.25,
+              "outcome": "stop"
+            },
+            {
+              "branch": "judas_outbound",
+              "side": "long",
+              "mode": "pullback_to_internal",
+              "at_et": "09:32",
+              "entry": 23836.0,
+              "stop": 23806.75,
+              "outcome": "stop"
+            },
+            {
+              "branch": "extension_reaction",
+              "side": "long",
+              "mode": "orderblock",
+              "at_et": "10:46",
+              "entry": 23762.75,
+              "stop": 23725.75,
+              "outcome": "target"
+            }
+          ],
+          "selected_strict_if_play_known": true,
+          "selected_detected_if_play_known": true,
+          "selected_entry_if_play_known": 23747.245,
+          "selected_delta_if_play_known": 3.745,
+          "selected_bars_if_play_known": 2.2
         }
       ],
       "other_fills": [
@@ -475,6 +745,8 @@
             "sister_index_relative_strength",
             "news_calendar"
           ],
+          "read_inputs_missing": [],
+          "prior_value_unavailable_reason": null,
           "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
         }
       },
@@ -517,12 +789,18 @@
           "compare_field": "reference_level",
           "tolerance_points": 27.0,
           "strict_points": 5.0,
-          "no_printed_level": false,
+          "no_printed_level": true,
           "detected": true,
-          "detected_strict": false,
+          "accepted_by_owner": null,
+          "framework_entry": 24837.0,
+          "framework_delta_points": 8.0,
+          "framework_bars": 1.4,
+          "framework_mode": "at_level",
+          "detected_strict_10": true,
+          "detected_strict": true,
           "detected_within_3_bars": true,
           "our_entry": 24837.0,
-          "our_entry_ns": 1759326600000000000,
+          "our_entry_ns": 1759325880000000000,
           "our_branch": "judas_reversal",
           "our_mode": "at_level",
           "our_reference": "asia_high",
@@ -530,8 +808,17 @@
           "expected_play": "double_break",
           "play_matches": true,
           "delta_points": 8.0,
-          "bars_from_printed": 1.0,
-          "n_pass_episodes": 25,
+          "bars_from_printed": 1.4,
+          "n_pass_episodes": 37,
+          "bars_allowed": 3.0,
+          "fills_tested": [
+            "at_level",
+            "orderblock",
+            "pullback_to_internal",
+            "rejection_close",
+            "signature_close"
+          ],
+          "matched_fill": "at_level",
           "day_read": {
             "classification": "double_break",
             "classification_pre_open": "double_break",
@@ -580,9 +867,69 @@
               "sister_index_relative_strength",
               "news_calendar"
             ],
+            "read_inputs_missing": [],
+            "prior_value_unavailable_reason": null,
             "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
           },
-          "divergence": ""
+          "divergence": "",
+          "selected_trades": [
+            {
+              "branch": "judas_reversal",
+              "side": "short",
+              "mode": "at_level",
+              "at_et": "09:09",
+              "entry": 24782.25,
+              "stop": 24790.75,
+              "outcome": "stop"
+            },
+            {
+              "branch": "judas_reversal",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "09:29",
+              "entry": 24763.5,
+              "stop": 24758.5,
+              "outcome": "target"
+            }
+          ],
+          "n_selected": 2,
+          "selected_primary_play": "double_break",
+          "selected_our_entry": 24782.25,
+          "selected_our_branch": "judas_reversal",
+          "selected_our_mode": "at_level",
+          "selected_delta_points": 62.75,
+          "selected_bars_from_printed": 7.2,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "double_break",
+          "primary_play_matches_author": true,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "judas_reversal",
+              "side": "short",
+              "mode": "at_level",
+              "at_et": "09:09",
+              "entry": 24782.25,
+              "stop": 24790.75,
+              "outcome": "stop"
+            },
+            {
+              "branch": "judas_reversal",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "09:29",
+              "entry": 24763.5,
+              "stop": 24758.5,
+              "outcome": "target"
+            }
+          ],
+          "selected_strict_if_play_known": false,
+          "selected_detected_if_play_known": false,
+          "selected_entry_if_play_known": 24782.25,
+          "selected_delta_if_play_known": 62.75,
+          "selected_bars_if_play_known": 7.2
         }
       ],
       "other_fills": [],
@@ -635,6 +982,8 @@
             "sister_index_relative_strength",
             "news_calendar"
           ],
+          "read_inputs_missing": [],
+          "prior_value_unavailable_reason": null,
           "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
         }
       },
@@ -667,19 +1016,34 @@
           "strict_points": 5.0,
           "no_printed_level": false,
           "detected": true,
-          "detected_strict": false,
+          "accepted_by_owner": null,
+          "framework_entry": 25088.5,
+          "framework_delta_points": 2.95,
+          "framework_bars": 1.8,
+          "framework_mode": "signature_close",
+          "detected_strict_10": true,
+          "detected_strict": true,
           "detected_within_3_bars": true,
-          "our_entry": 25079.25,
-          "our_entry_ns": 1759500840000000000,
+          "our_entry": 25088.5,
+          "our_entry_ns": 1759500060000000000,
           "our_branch": "judas_reversal",
           "our_mode": "signature_close",
-          "our_reference": "minus_0.33",
+          "our_reference": "box_low",
           "our_play": "double_break",
           "expected_play": "double_break",
           "play_matches": true,
-          "delta_points": 12.2,
-          "bars_from_printed": 0.8,
-          "n_pass_episodes": 21,
+          "delta_points": 2.95,
+          "bars_from_printed": 1.8,
+          "n_pass_episodes": 31,
+          "bars_allowed": 3.0,
+          "fills_tested": [
+            "absorption",
+            "at_level",
+            "pullback_to_internal",
+            "rejection_close",
+            "signature_close"
+          ],
+          "matched_fill": "signature_close",
           "day_read": {
             "classification": "single_break",
             "classification_pre_open": "single_break",
@@ -728,9 +1092,87 @@
               "sister_index_relative_strength",
               "news_calendar"
             ],
+            "read_inputs_missing": [],
+            "prior_value_unavailable_reason": null,
             "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
           },
-          "divergence": ""
+          "divergence": "",
+          "selected_trades": [
+            {
+              "branch": "single_extended",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "09:08",
+              "entry": 25126.375,
+              "stop": 25116.0,
+              "outcome": "stop"
+            },
+            {
+              "branch": "single_purged",
+              "side": "long",
+              "mode": "two_minute_close",
+              "at_et": "09:44",
+              "entry": 25130.0,
+              "stop": 25108.5,
+              "outcome": "stop"
+            },
+            {
+              "branch": "single_purged",
+              "side": "long",
+              "mode": "two_minute_close",
+              "at_et": "11:16",
+              "entry": 25127.0,
+              "stop": 25115.5,
+              "outcome": "stop"
+            }
+          ],
+          "n_selected": 3,
+          "selected_primary_play": "single_break",
+          "selected_our_entry": null,
+          "selected_our_branch": null,
+          "selected_our_mode": null,
+          "selected_delta_points": null,
+          "selected_bars_from_printed": null,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "double_break",
+          "primary_play_matches_author": false,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "judas_outbound",
+              "side": "long",
+              "mode": "pullback_to_internal",
+              "at_et": "09:32",
+              "entry": 25149.75,
+              "stop": 25098.0,
+              "outcome": "stop"
+            },
+            {
+              "branch": "judas_reversal",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "10:01",
+              "entry": 25103.0,
+              "stop": 25076.25,
+              "outcome": "stop"
+            },
+            {
+              "branch": "judas_reversal",
+              "side": "short",
+              "mode": "at_level",
+              "at_et": "10:18",
+              "entry": 25095.0,
+              "stop": 25109.25,
+              "outcome": "stop"
+            }
+          ],
+          "selected_strict_if_play_known": false,
+          "selected_detected_if_play_known": true,
+          "selected_entry_if_play_known": 25103.0,
+          "selected_delta_if_play_known": 11.55,
+          "selected_bars_if_play_known": 1.8
         }
       ],
       "other_fills": [
@@ -826,6 +1268,8 @@
             "sister_index_relative_strength",
             "news_calendar"
           ],
+          "read_inputs_missing": [],
+          "prior_value_unavailable_reason": null,
           "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
         }
       },
@@ -856,21 +1300,34 @@
           "compare_field": "reference_level",
           "tolerance_points": 27.0,
           "strict_points": 5.0,
-          "no_printed_level": false,
-          "detected": false,
-          "detected_strict": false,
+          "no_printed_level": true,
+          "detected": true,
+          "accepted_by_owner": null,
+          "framework_entry": 25068.25,
+          "framework_delta_points": 2.25,
+          "framework_bars": 3.0,
+          "framework_mode": "rejection_block",
+          "detected_strict_10": true,
+          "detected_strict": true,
           "detected_within_3_bars": true,
-          "our_entry": 25069.375,
-          "our_entry_ns": 1759737240000000000,
+          "our_entry": 25068.25,
+          "our_entry_ns": 1759737300000000000,
           "our_branch": "other_session",
-          "our_mode": "orderblock",
-          "our_reference": "minus_0.5",
+          "our_mode": "rejection_block",
+          "our_reference": "midnight_low",
           "our_play": "london",
           "expected_play": "london",
           "play_matches": true,
-          "delta_points": 3.375,
-          "bars_from_printed": 2.8,
-          "n_pass_episodes": 16,
+          "delta_points": 2.25,
+          "bars_from_printed": 3.0,
+          "n_pass_episodes": 18,
+          "bars_allowed": 3.0,
+          "fills_tested": [
+            "absorption",
+            "orderblock",
+            "rejection_block"
+          ],
+          "matched_fill": "rejection_block",
           "day_read": {
             "classification": "single_break",
             "classification_pre_open": "single_break",
@@ -919,9 +1376,69 @@
               "sister_index_relative_strength",
               "news_calendar"
             ],
+            "read_inputs_missing": [],
+            "prior_value_unavailable_reason": null,
             "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
           },
-          "divergence": "entry 2.8 five-minute bars from the printed time"
+          "divergence": "",
+          "selected_trades": [
+            {
+              "branch": "single_extended",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "09:05",
+              "entry": 25182.875,
+              "stop": 25174.25,
+              "outcome": "stop"
+            },
+            {
+              "branch": "single_extended",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "09:38",
+              "entry": 25182.875,
+              "stop": 25169.25,
+              "outcome": "stop"
+            },
+            {
+              "branch": "single_purged",
+              "side": "long",
+              "mode": "two_minute_close",
+              "at_et": "09:48",
+              "entry": 25167.75,
+              "stop": 25140.5,
+              "outcome": "stop"
+            }
+          ],
+          "n_selected": 3,
+          "selected_primary_play": "single_break",
+          "selected_our_entry": null,
+          "selected_our_branch": null,
+          "selected_our_mode": null,
+          "selected_delta_points": null,
+          "selected_bars_from_printed": null,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "london",
+          "primary_play_matches_author": false,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "other_session",
+              "side": "short",
+              "mode": "rejection_block",
+              "at_et": "03:06",
+              "entry": 25098.5,
+              "stop": 25104.75,
+              "outcome": "target"
+            }
+          ],
+          "selected_strict_if_play_known": false,
+          "selected_detected_if_play_known": false,
+          "selected_entry_if_play_known": null,
+          "selected_delta_if_play_known": null,
+          "selected_bars_if_play_known": null
         }
       ],
       "other_fills": [],
@@ -974,6 +1491,8 @@
             "sister_index_relative_strength",
             "news_calendar"
           ],
+          "read_inputs_missing": [],
+          "prior_value_unavailable_reason": null,
           "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
         }
       },
@@ -1004,9 +1523,15 @@
           "compare_field": "reference_level",
           "tolerance_points": 27.0,
           "strict_points": 5.0,
-          "no_printed_level": false,
-          "detected": false,
-          "detected_strict": false,
+          "no_printed_level": true,
+          "detected": true,
+          "accepted_by_owner": null,
+          "framework_entry": 25138.0,
+          "framework_delta_points": 2.0,
+          "framework_bars": 1.8,
+          "framework_mode": "rejection_block",
+          "detected_strict_10": true,
+          "detected_strict": true,
           "detected_within_3_bars": true,
           "our_entry": 25138.0,
           "our_entry_ns": 1759826340000000000,
@@ -1019,6 +1544,11 @@
           "delta_points": 2.0,
           "bars_from_printed": 1.8,
           "n_pass_episodes": 7,
+          "bars_allowed": 3.0,
+          "fills_tested": [
+            "rejection_block"
+          ],
+          "matched_fill": "rejection_block",
           "day_read": {
             "classification": "single_break",
             "classification_pre_open": "single_break",
@@ -1067,9 +1597,60 @@
               "sister_index_relative_strength",
               "news_calendar"
             ],
+            "read_inputs_missing": [],
+            "prior_value_unavailable_reason": null,
             "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
           },
-          "divergence": "entry 1.8 five-minute bars from the printed time"
+          "divergence": "",
+          "selected_trades": [
+            {
+              "branch": "single_extended",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "09:19",
+              "entry": 25235.625,
+              "stop": 25229.25,
+              "outcome": "stop"
+            },
+            {
+              "branch": "single_purged",
+              "side": "long",
+              "mode": "two_minute_close",
+              "at_et": "09:36",
+              "entry": 25245.0,
+              "stop": 25212.0,
+              "outcome": "stop"
+            }
+          ],
+          "n_selected": 2,
+          "selected_primary_play": "single_break",
+          "selected_our_entry": null,
+          "selected_our_branch": null,
+          "selected_our_mode": null,
+          "selected_delta_points": null,
+          "selected_bars_from_printed": null,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "london",
+          "primary_play_matches_author": false,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "other_session",
+              "side": "long",
+              "mode": "rejection_block",
+              "at_et": "02:50",
+              "entry": 25159.75,
+              "stop": 25153.0,
+              "outcome": "target"
+            }
+          ],
+          "selected_strict_if_play_known": false,
+          "selected_detected_if_play_known": false,
+          "selected_entry_if_play_known": 25157.5,
+          "selected_delta_if_play_known": 17.5,
+          "selected_bars_if_play_known": 20.0
         }
       ],
       "other_fills": [],
@@ -1122,6 +1703,8 @@
             "sister_index_relative_strength",
             "news_calendar"
           ],
+          "read_inputs_missing": [],
+          "prior_value_unavailable_reason": null,
           "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
         }
       },
@@ -1152,9 +1735,15 @@
           "compare_field": "reference_level",
           "tolerance_points": 27.0,
           "strict_points": 5.0,
-          "no_printed_level": false,
+          "no_printed_level": true,
           "detected": true,
-          "detected_strict": false,
+          "accepted_by_owner": null,
+          "framework_entry": 25045.5,
+          "framework_delta_points": 17.5,
+          "framework_bars": 0.0,
+          "framework_mode": "rejection_block",
+          "detected_strict_10": true,
+          "detected_strict": true,
           "detected_within_3_bars": true,
           "our_entry": 25045.5,
           "our_entry_ns": 1759907160000000000,
@@ -1167,6 +1756,12 @@
           "delta_points": 17.5,
           "bars_from_printed": 0.0,
           "n_pass_episodes": 7,
+          "bars_allowed": 3.0,
+          "fills_tested": [
+            "absorption",
+            "rejection_block"
+          ],
+          "matched_fill": "rejection_block",
           "day_read": {
             "classification": "double_break",
             "classification_pre_open": "double_break",
@@ -1215,9 +1810,69 @@
               "sister_index_relative_strength",
               "news_calendar"
             ],
+            "read_inputs_missing": [],
+            "prior_value_unavailable_reason": null,
             "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
           },
-          "divergence": ""
+          "divergence": "",
+          "selected_trades": [
+            {
+              "branch": "judas_reversal",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "09:21",
+              "entry": 25086.5,
+              "stop": 25080.5,
+              "outcome": "target"
+            }
+          ],
+          "n_selected": 1,
+          "selected_primary_play": "double_break",
+          "selected_our_entry": null,
+          "selected_our_branch": null,
+          "selected_our_mode": null,
+          "selected_delta_points": null,
+          "selected_bars_from_printed": null,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "london",
+          "primary_play_matches_author": false,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "other_session",
+              "side": "long",
+              "mode": "rejection_block",
+              "at_et": "03:06",
+              "entry": 25051.25,
+              "stop": 25042.25,
+              "outcome": "stop"
+            },
+            {
+              "branch": "other_session",
+              "side": "short",
+              "mode": "rejection_block",
+              "at_et": "03:14",
+              "entry": 25053.25,
+              "stop": 25062.0,
+              "outcome": "stop"
+            },
+            {
+              "branch": "other_session",
+              "side": "long",
+              "mode": "rejection_block",
+              "at_et": "03:26",
+              "entry": 25067.25,
+              "stop": 25051.25,
+              "outcome": "target"
+            }
+          ],
+          "selected_strict_if_play_known": true,
+          "selected_detected_if_play_known": true,
+          "selected_entry_if_play_known": 25045.5,
+          "selected_delta_if_play_known": 17.5,
+          "selected_bars_if_play_known": 0.0
         }
       ],
       "other_fills": [],
@@ -1270,6 +1925,8 @@
             "sister_index_relative_strength",
             "news_calendar"
           ],
+          "read_inputs_missing": [],
+          "prior_value_unavailable_reason": null,
           "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
         }
       },
@@ -1301,20 +1958,34 @@
           "tolerance_points": 27.0,
           "strict_points": 5.0,
           "no_printed_level": false,
-          "detected": false,
-          "detected_strict": false,
-          "detected_within_3_bars": false,
-          "our_entry": 24877.75,
+          "detected": true,
+          "accepted_by_owner": null,
+          "framework_entry": 24850.0,
+          "framework_delta_points": 1.5,
+          "framework_bars": 1.4,
+          "framework_mode": "signature_close",
+          "detected_strict_10": true,
+          "detected_strict": true,
+          "detected_within_3_bars": true,
+          "our_entry": 24850.0,
           "our_entry_ns": 1760361120000000000,
           "our_branch": "judas_reversal",
-          "our_mode": "at_level",
+          "our_mode": "signature_close",
           "our_reference": "box_high",
           "our_play": "double_break",
           "expected_play": "double_break",
           "play_matches": true,
-          "delta_points": 29.25,
+          "delta_points": 1.5,
           "bars_from_printed": 1.4,
-          "n_pass_episodes": 16,
+          "n_pass_episodes": 26,
+          "bars_allowed": 3.0,
+          "fills_tested": [
+            "at_level",
+            "pullback_to_internal",
+            "rejection_close",
+            "signature_close"
+          ],
+          "matched_fill": "signature_close",
           "day_read": {
             "classification": "double_break",
             "classification_pre_open": "double_break",
@@ -1363,9 +2034,87 @@
               "sister_index_relative_strength",
               "news_calendar"
             ],
+            "read_inputs_missing": [],
+            "prior_value_unavailable_reason": null,
             "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
           },
-          "divergence": "entry 1.4 five-minute bars from the printed time"
+          "divergence": "",
+          "selected_trades": [
+            {
+              "branch": "judas_reversal",
+              "side": "short",
+              "mode": "at_level",
+              "at_et": "09:03",
+              "entry": 24855.5,
+              "stop": 24862.25,
+              "outcome": "stop"
+            },
+            {
+              "branch": "judas_reversal",
+              "side": "short",
+              "mode": "at_level",
+              "at_et": "09:14",
+              "entry": 24853.25,
+              "stop": 24862.25,
+              "outcome": "stop"
+            },
+            {
+              "branch": "judas_outbound",
+              "side": "long",
+              "mode": "pullback_to_internal",
+              "at_et": "09:32",
+              "entry": 24841.5625,
+              "stop": 24728.0,
+              "outcome": "stop"
+            }
+          ],
+          "n_selected": 3,
+          "selected_primary_play": "double_break",
+          "selected_our_entry": 24853.25,
+          "selected_our_branch": "judas_reversal",
+          "selected_our_mode": "at_level",
+          "selected_delta_points": 4.75,
+          "selected_bars_from_printed": 1.8,
+          "selected_strict_10": true,
+          "selected_strict": true,
+          "selected_detected": true,
+          "selected_within_3_bars": true,
+          "author_play": "double_break",
+          "primary_play_matches_author": true,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "judas_reversal",
+              "side": "short",
+              "mode": "at_level",
+              "at_et": "09:03",
+              "entry": 24855.5,
+              "stop": 24862.25,
+              "outcome": "stop"
+            },
+            {
+              "branch": "judas_reversal",
+              "side": "short",
+              "mode": "at_level",
+              "at_et": "09:14",
+              "entry": 24853.25,
+              "stop": 24862.25,
+              "outcome": "stop"
+            },
+            {
+              "branch": "judas_outbound",
+              "side": "long",
+              "mode": "pullback_to_internal",
+              "at_et": "09:32",
+              "entry": 24841.5625,
+              "stop": 24728.0,
+              "outcome": "stop"
+            }
+          ],
+          "selected_strict_if_play_known": true,
+          "selected_detected_if_play_known": true,
+          "selected_entry_if_play_known": 24853.25,
+          "selected_delta_if_play_known": 4.75,
+          "selected_bars_if_play_known": 1.8
         },
         {
           "example_id": "JJ-2025-10-13",
@@ -1386,10 +2135,16 @@
           "strict_points": 5.0,
           "no_printed_level": false,
           "detected": true,
+          "accepted_by_owner": null,
+          "framework_entry": 24773.75,
+          "framework_delta_points": 5.25,
+          "framework_bars": 0.8,
+          "framework_mode": "at_level",
+          "detected_strict_10": true,
           "detected_strict": false,
           "detected_within_3_bars": true,
           "our_entry": 24773.75,
-          "our_entry_ns": 1760363040000000000,
+          "our_entry_ns": 1760362560000000000,
           "our_branch": "judas_reversal",
           "our_mode": "at_level",
           "our_reference": "midnight_low",
@@ -1398,7 +2153,15 @@
           "play_matches": true,
           "delta_points": 5.25,
           "bars_from_printed": 0.8,
-          "n_pass_episodes": 8,
+          "n_pass_episodes": 15,
+          "bars_allowed": 3.0,
+          "fills_tested": [
+            "at_level",
+            "pullback_to_internal",
+            "rejection_close",
+            "signature_close"
+          ],
+          "matched_fill": "at_level",
           "day_read": {
             "classification": "double_break",
             "classification_pre_open": "double_break",
@@ -1447,9 +2210,87 @@
               "sister_index_relative_strength",
               "news_calendar"
             ],
+            "read_inputs_missing": [],
+            "prior_value_unavailable_reason": null,
             "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
           },
-          "divergence": ""
+          "divergence": "",
+          "selected_trades": [
+            {
+              "branch": "judas_reversal",
+              "side": "short",
+              "mode": "at_level",
+              "at_et": "09:03",
+              "entry": 24855.5,
+              "stop": 24862.25,
+              "outcome": "stop"
+            },
+            {
+              "branch": "judas_reversal",
+              "side": "short",
+              "mode": "at_level",
+              "at_et": "09:14",
+              "entry": 24853.25,
+              "stop": 24862.25,
+              "outcome": "stop"
+            },
+            {
+              "branch": "judas_outbound",
+              "side": "long",
+              "mode": "pullback_to_internal",
+              "at_et": "09:32",
+              "entry": 24841.5625,
+              "stop": 24728.0,
+              "outcome": "stop"
+            }
+          ],
+          "n_selected": 3,
+          "selected_primary_play": "double_break",
+          "selected_our_entry": 24841.5625,
+          "selected_our_branch": "judas_outbound",
+          "selected_our_mode": "pullback_to_internal",
+          "selected_delta_points": 73.0625,
+          "selected_bars_from_printed": 1.6,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "double_break",
+          "primary_play_matches_author": true,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "judas_reversal",
+              "side": "short",
+              "mode": "at_level",
+              "at_et": "09:03",
+              "entry": 24855.5,
+              "stop": 24862.25,
+              "outcome": "stop"
+            },
+            {
+              "branch": "judas_reversal",
+              "side": "short",
+              "mode": "at_level",
+              "at_et": "09:14",
+              "entry": 24853.25,
+              "stop": 24862.25,
+              "outcome": "stop"
+            },
+            {
+              "branch": "judas_outbound",
+              "side": "long",
+              "mode": "pullback_to_internal",
+              "at_et": "09:32",
+              "entry": 24841.5625,
+              "stop": 24728.0,
+              "outcome": "stop"
+            }
+          ],
+          "selected_strict_if_play_known": false,
+          "selected_detected_if_play_known": false,
+          "selected_entry_if_play_known": 24841.5625,
+          "selected_delta_if_play_known": 73.0625,
+          "selected_bars_if_play_known": 1.6
         }
       ],
       "other_fills": [],
@@ -1502,6 +2343,8 @@
             "sister_index_relative_strength",
             "news_calendar"
           ],
+          "read_inputs_missing": [],
+          "prior_value_unavailable_reason": null,
           "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
         }
       },
@@ -1532,8 +2375,14 @@
           "compare_field": "reference_level",
           "tolerance_points": 27.0,
           "strict_points": 5.0,
-          "no_printed_level": false,
+          "no_printed_level": true,
           "detected": true,
+          "accepted_by_owner": null,
+          "framework_entry": 25632.15,
+          "framework_delta_points": 2.85,
+          "framework_bars": 0.0,
+          "framework_mode": "rejection_block",
+          "detected_strict_10": true,
           "detected_strict": true,
           "detected_within_3_bars": true,
           "our_entry": 25632.15,
@@ -1546,7 +2395,15 @@
           "play_matches": true,
           "delta_points": 2.85,
           "bars_from_printed": 0.0,
-          "n_pass_episodes": 13,
+          "n_pass_episodes": 17,
+          "bars_allowed": 3.0,
+          "fills_tested": [
+            "at_level",
+            "rejection_block",
+            "rejection_close",
+            "signature_close"
+          ],
+          "matched_fill": "rejection_block",
           "day_read": {
             "classification": "single_break",
             "classification_pre_open": "single_break",
@@ -1595,9 +2452,87 @@
               "sister_index_relative_strength",
               "news_calendar"
             ],
+            "read_inputs_missing": [],
+            "prior_value_unavailable_reason": null,
             "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
           },
-          "divergence": ""
+          "divergence": "",
+          "selected_trades": [
+            {
+              "branch": "single_extended",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "09:01",
+              "entry": 25545.25,
+              "stop": 25536.5,
+              "outcome": "stop"
+            },
+            {
+              "branch": "single_extended",
+              "side": "short",
+              "mode": "at_level",
+              "at_et": "09:11",
+              "entry": 25545.25,
+              "stop": 25552.5,
+              "outcome": "stop"
+            },
+            {
+              "branch": "single_extended",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "09:30",
+              "entry": 25545.25,
+              "stop": 25527.25,
+              "outcome": "ambiguous"
+            }
+          ],
+          "n_selected": 3,
+          "selected_primary_play": "single_break",
+          "selected_our_entry": null,
+          "selected_our_branch": null,
+          "selected_our_mode": null,
+          "selected_delta_points": null,
+          "selected_bars_from_printed": null,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "double_break",
+          "primary_play_matches_author": false,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "judas_reversal",
+              "side": "short",
+              "mode": "at_level",
+              "at_et": "09:33",
+              "entry": 25577.15,
+              "stop": 25582.75,
+              "outcome": "stop"
+            },
+            {
+              "branch": "extension_reaction",
+              "side": "short",
+              "mode": "rejection_block",
+              "at_et": "10:15",
+              "entry": 25624.5,
+              "stop": 25651.5,
+              "outcome": "stop"
+            },
+            {
+              "branch": "judas_reversal",
+              "side": "short",
+              "mode": "at_level",
+              "at_et": "10:54",
+              "entry": 25559.0,
+              "stop": 25560.75,
+              "outcome": "target"
+            }
+          ],
+          "selected_strict_if_play_known": true,
+          "selected_detected_if_play_known": true,
+          "selected_entry_if_play_known": 25632.15,
+          "selected_delta_if_play_known": 2.85,
+          "selected_bars_if_play_known": 0.0
         }
       ],
       "other_fills": [],
@@ -1650,6 +2585,8 @@
             "sister_index_relative_strength",
             "news_calendar"
           ],
+          "read_inputs_missing": [],
+          "prior_value_unavailable_reason": null,
           "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
         }
       },
@@ -1680,8 +2617,14 @@
           "compare_field": "reference_level",
           "tolerance_points": 27.0,
           "strict_points": 5.0,
-          "no_printed_level": false,
+          "no_printed_level": true,
           "detected": true,
+          "accepted_by_owner": null,
+          "framework_entry": 24423.7575,
+          "framework_delta_points": 3.7575,
+          "framework_bars": 0.6,
+          "framework_mode": "absorption",
+          "detected_strict_10": true,
           "detected_strict": true,
           "detected_within_3_bars": true,
           "our_entry": 24423.7575,
@@ -1694,7 +2637,16 @@
           "play_matches": true,
           "delta_points": 3.7575,
           "bars_from_printed": 0.6,
-          "n_pass_episodes": 13,
+          "n_pass_episodes": 23,
+          "bars_allowed": 3.0,
+          "fills_tested": [
+            "absorption",
+            "at_level",
+            "pullback_to_internal",
+            "rejection_close",
+            "signature_close"
+          ],
+          "matched_fill": "absorption",
           "day_read": {
             "classification": "single_break",
             "classification_pre_open": "single_break",
@@ -1743,9 +2695,87 @@
               "sister_index_relative_strength",
               "news_calendar"
             ],
+            "read_inputs_missing": [],
+            "prior_value_unavailable_reason": null,
             "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
           },
-          "divergence": ""
+          "divergence": "",
+          "selected_trades": [
+            {
+              "branch": "single_extended",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "09:02",
+              "entry": 24748.125,
+              "stop": 24731.25,
+              "outcome": "stop"
+            },
+            {
+              "branch": "single_extended",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "09:31",
+              "entry": 24748.125,
+              "stop": 24700.0,
+              "outcome": "stop"
+            },
+            {
+              "branch": "single_purged",
+              "side": "short",
+              "mode": "two_minute_close",
+              "at_et": "09:32",
+              "entry": 24670.25,
+              "stop": 24763.75,
+              "outcome": "stop"
+            }
+          ],
+          "n_selected": 3,
+          "selected_primary_play": "single_break",
+          "selected_our_entry": null,
+          "selected_our_branch": null,
+          "selected_our_mode": null,
+          "selected_delta_points": null,
+          "selected_bars_from_printed": null,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "double_break",
+          "primary_play_matches_author": false,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "judas_reversal",
+              "side": "short",
+              "mode": "at_level",
+              "at_et": "09:05",
+              "entry": 24741.75,
+              "stop": 24753.25,
+              "outcome": "stop"
+            },
+            {
+              "branch": "judas_outbound",
+              "side": "long",
+              "mode": "pullback_to_internal",
+              "at_et": "09:32",
+              "entry": 24703.8125,
+              "stop": 24654.5,
+              "outcome": "stop"
+            },
+            {
+              "branch": "extension_reaction",
+              "side": "long",
+              "mode": "absorption",
+              "at_et": "11:03",
+              "entry": 24395.25,
+              "stop": 24383.0,
+              "outcome": "stop"
+            }
+          ],
+          "selected_strict_if_play_known": true,
+          "selected_detected_if_play_known": true,
+          "selected_entry_if_play_known": 24423.7575,
+          "selected_delta_if_play_known": 3.7575,
+          "selected_bars_if_play_known": 0.6
         }
       ],
       "other_fills": [],
@@ -1798,6 +2828,8 @@
             "sister_index_relative_strength",
             "news_calendar"
           ],
+          "read_inputs_missing": [],
+          "prior_value_unavailable_reason": null,
           "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
         }
       },
@@ -1830,10 +2862,16 @@
           "strict_points": 5.0,
           "no_printed_level": false,
           "detected": true,
+          "accepted_by_owner": null,
+          "framework_entry": 25691.25,
+          "framework_delta_points": 1.25,
+          "framework_bars": 2.8,
+          "framework_mode": "at_level",
+          "detected_strict_10": true,
           "detected_strict": true,
           "detected_within_3_bars": true,
           "our_entry": 25691.25,
-          "our_entry_ns": 1767106200000000000,
+          "our_entry_ns": 1767105060000000000,
           "our_branch": "judas_reversal",
           "our_mode": "at_level",
           "our_reference": "box_low",
@@ -1841,8 +2879,16 @@
           "expected_play": "double_break",
           "play_matches": true,
           "delta_points": 1.25,
-          "bars_from_printed": 0.6,
-          "n_pass_episodes": 24,
+          "bars_from_printed": 2.8,
+          "n_pass_episodes": 39,
+          "bars_allowed": 3.0,
+          "fills_tested": [
+            "at_level",
+            "pullback_to_internal",
+            "rejection_close",
+            "signature_close"
+          ],
+          "matched_fill": "at_level",
           "day_read": {
             "classification": "double_break",
             "classification_pre_open": "double_break",
@@ -1894,9 +2940,51 @@
               "sister_index_relative_strength",
               "news_calendar"
             ],
+            "read_inputs_missing": [],
+            "prior_value_unavailable_reason": null,
             "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
           },
-          "divergence": ""
+          "divergence": "",
+          "selected_trades": [
+            {
+              "branch": "judas_reversal",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "09:31",
+              "entry": 25691.25,
+              "stop": 25674.0,
+              "outcome": "target"
+            }
+          ],
+          "n_selected": 1,
+          "selected_primary_play": "double_break",
+          "selected_our_entry": 25691.25,
+          "selected_our_branch": "judas_reversal",
+          "selected_our_mode": "at_level",
+          "selected_delta_points": 1.25,
+          "selected_bars_from_printed": 2.8,
+          "selected_strict_10": true,
+          "selected_strict": true,
+          "selected_detected": true,
+          "selected_within_3_bars": true,
+          "author_play": "double_break",
+          "primary_play_matches_author": true,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "judas_reversal",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "09:31",
+              "entry": 25691.25,
+              "stop": 25674.0,
+              "outcome": "target"
+            }
+          ],
+          "selected_strict_if_play_known": true,
+          "selected_detected_if_play_known": true,
+          "selected_entry_if_play_known": 25691.25,
+          "selected_delta_if_play_known": 1.25,
+          "selected_bars_if_play_known": 2.8
         }
       ],
       "other_fills": [],
@@ -1952,6 +3040,8 @@
             "sister_index_relative_strength",
             "news_calendar"
           ],
+          "read_inputs_missing": [],
+          "prior_value_unavailable_reason": null,
           "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
         }
       },
@@ -1982,21 +3072,35 @@
           "compare_field": "reference_level",
           "tolerance_points": 27.0,
           "strict_points": 5.0,
-          "no_printed_level": false,
-          "detected": false,
-          "detected_strict": false,
-          "detected_within_3_bars": false,
+          "no_printed_level": true,
+          "detected": true,
+          "accepted_by_owner": null,
+          "framework_entry": 25663.0,
+          "framework_delta_points": 0.0,
+          "framework_bars": 2.8,
+          "framework_mode": "rejection_close",
+          "detected_strict_10": true,
+          "detected_strict": true,
+          "detected_within_3_bars": true,
           "our_entry": 25663.0,
-          "our_entry_ns": 1767364680000000000,
+          "our_entry_ns": 1767364560000000000,
           "our_branch": "timed_pzone_reversal",
-          "our_mode": "at_level",
+          "our_mode": "rejection_close",
           "our_reference": "pzone",
           "our_play": "pzone",
           "expected_play": "pzone",
           "play_matches": true,
           "delta_points": 0.0,
-          "bars_from_printed": 3.2,
-          "n_pass_episodes": 4,
+          "bars_from_printed": 2.8,
+          "n_pass_episodes": 7,
+          "bars_allowed": 3.0,
+          "fills_tested": [
+            "at_level",
+            "rejection_close",
+            "signature_close",
+            "zone_limit"
+          ],
+          "matched_fill": "rejection_close",
           "day_read": {
             "classification": "single_break",
             "classification_pre_open": "single_break",
@@ -2048,9 +3152,69 @@
               "sister_index_relative_strength",
               "news_calendar"
             ],
+            "read_inputs_missing": [],
+            "prior_value_unavailable_reason": null,
             "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
           },
-          "divergence": "entry 3.2 five-minute bars from the printed time"
+          "divergence": "",
+          "selected_trades": [
+            {
+              "branch": "single_extended",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "09:01",
+              "entry": 25695.125,
+              "stop": 25683.75,
+              "outcome": "stop"
+            },
+            {
+              "branch": "single_extended",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "09:29",
+              "entry": 25695.125,
+              "stop": 25678.5,
+              "outcome": "stop"
+            },
+            {
+              "branch": "single_purged",
+              "side": "long",
+              "mode": "two_minute_close",
+              "at_et": "09:32",
+              "entry": 25711.75,
+              "stop": 25672.25,
+              "outcome": "stop"
+            }
+          ],
+          "n_selected": 3,
+          "selected_primary_play": "single_break",
+          "selected_our_entry": null,
+          "selected_our_branch": null,
+          "selected_our_mode": null,
+          "selected_delta_points": null,
+          "selected_bars_from_printed": null,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "pzone",
+          "primary_play_matches_author": false,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "timed_pzone_reversal",
+              "side": "short",
+              "mode": "at_level",
+              "at_et": "09:32",
+              "entry": 25721.5,
+              "stop": 25733.75,
+              "outcome": "target"
+            }
+          ],
+          "selected_strict_if_play_known": false,
+          "selected_detected_if_play_known": false,
+          "selected_entry_if_play_known": null,
+          "selected_delta_if_play_known": null,
+          "selected_bars_if_play_known": null
         }
       ],
       "other_fills": [],
@@ -2106,6 +3270,8 @@
             "sister_index_relative_strength",
             "news_calendar"
           ],
+          "read_inputs_missing": [],
+          "prior_value_unavailable_reason": null,
           "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
         }
       },
@@ -2138,6 +3304,12 @@
           "strict_points": 5.0,
           "no_printed_level": false,
           "detected": true,
+          "accepted_by_owner": null,
+          "framework_entry": 25660.0,
+          "framework_delta_points": 4.25,
+          "framework_bars": 0.8,
+          "framework_mode": "at_level",
+          "detected_strict_10": true,
           "detected_strict": true,
           "detected_within_3_bars": true,
           "our_entry": 25660.0,
@@ -2150,7 +3322,15 @@
           "play_matches": true,
           "delta_points": 4.25,
           "bars_from_printed": 0.8,
-          "n_pass_episodes": 2,
+          "n_pass_episodes": 5,
+          "bars_allowed": 1.0,
+          "fills_tested": [
+            "at_level",
+            "rejection_close",
+            "signature_close",
+            "zone_limit"
+          ],
+          "matched_fill": "at_level",
           "day_read": {
             "classification": "double_break",
             "classification_pre_open": "double_break",
@@ -2202,9 +3382,60 @@
               "sister_index_relative_strength",
               "news_calendar"
             ],
+            "read_inputs_missing": [],
+            "prior_value_unavailable_reason": null,
             "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
           },
-          "divergence": ""
+          "divergence": "",
+          "selected_trades": [
+            {
+              "branch": "judas_reversal",
+              "side": "short",
+              "mode": "at_level",
+              "at_et": "09:06",
+              "entry": 25803.0,
+              "stop": 25806.75,
+              "outcome": "target"
+            }
+          ],
+          "n_selected": 1,
+          "selected_primary_play": "double_break",
+          "selected_our_entry": null,
+          "selected_our_branch": null,
+          "selected_our_mode": null,
+          "selected_delta_points": null,
+          "selected_bars_from_printed": null,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "pzone",
+          "primary_play_matches_author": false,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "timed_pzone_reversal",
+              "side": "long",
+              "mode": "rejection_close",
+              "at_et": "09:34",
+              "entry": 25684.75,
+              "stop": 25648.25,
+              "outcome": "stop"
+            },
+            {
+              "branch": "timed_pzone_reversal",
+              "side": "long",
+              "mode": "zone_limit",
+              "at_et": "10:09",
+              "entry": 25632.5,
+              "stop": 25624.75,
+              "outcome": "target"
+            }
+          ],
+          "selected_strict_if_play_known": false,
+          "selected_detected_if_play_known": true,
+          "selected_entry_if_play_known": 25684.75,
+          "selected_delta_if_play_known": 20.5,
+          "selected_bars_if_play_known": 0.4
         }
       ],
       "other_fills": [
@@ -2273,6 +3504,8 @@
             "sister_index_relative_strength",
             "news_calendar"
           ],
+          "read_inputs_missing": [],
+          "prior_value_unavailable_reason": null,
           "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
         }
       },
@@ -2303,12 +3536,18 @@
           "compare_field": "reference_level",
           "tolerance_points": 27.0,
           "strict_points": 5.0,
-          "no_printed_level": false,
+          "no_printed_level": true,
           "detected": true,
+          "accepted_by_owner": null,
+          "framework_entry": 24795.0,
+          "framework_delta_points": 0.0,
+          "framework_bars": 1.2,
+          "framework_mode": "at_level",
+          "detected_strict_10": true,
           "detected_strict": true,
           "detected_within_3_bars": true,
           "our_entry": 24795.0,
-          "our_entry_ns": 1771944120000000000,
+          "our_entry_ns": 1771943520000000000,
           "our_branch": "judas_reversal",
           "our_mode": "at_level",
           "our_reference": "asia_low",
@@ -2316,8 +3555,15 @@
           "expected_play": "double_break",
           "play_matches": true,
           "delta_points": 0.0,
-          "bars_from_printed": 0.8,
-          "n_pass_episodes": 22,
+          "bars_from_printed": 1.2,
+          "n_pass_episodes": 30,
+          "bars_allowed": 3.0,
+          "fills_tested": [
+            "at_level",
+            "rejection_close",
+            "signature_close"
+          ],
+          "matched_fill": "at_level",
           "day_read": {
             "classification": "double_break",
             "classification_pre_open": "double_break",
@@ -2369,9 +3615,51 @@
               "sister_index_relative_strength",
               "news_calendar"
             ],
+            "read_inputs_missing": [],
+            "prior_value_unavailable_reason": null,
             "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
           },
-          "divergence": ""
+          "divergence": "",
+          "selected_trades": [
+            {
+              "branch": "judas_reversal",
+              "side": "short",
+              "mode": "at_level",
+              "at_et": "09:05",
+              "entry": 24868.5,
+              "stop": 24869.0,
+              "outcome": "target"
+            }
+          ],
+          "n_selected": 1,
+          "selected_primary_play": "double_break",
+          "selected_our_entry": null,
+          "selected_our_branch": null,
+          "selected_our_mode": null,
+          "selected_delta_points": null,
+          "selected_bars_from_printed": null,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "double_break",
+          "primary_play_matches_author": true,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "judas_reversal",
+              "side": "short",
+              "mode": "at_level",
+              "at_et": "09:05",
+              "entry": 24868.5,
+              "stop": 24869.0,
+              "outcome": "target"
+            }
+          ],
+          "selected_strict_if_play_known": false,
+          "selected_detected_if_play_known": false,
+          "selected_entry_if_play_known": null,
+          "selected_delta_if_play_known": null,
+          "selected_bars_if_play_known": null
         }
       ],
       "other_fills": [],
@@ -2427,6 +3715,8 @@
             "sister_index_relative_strength",
             "news_calendar"
           ],
+          "read_inputs_missing": [],
+          "prior_value_unavailable_reason": null,
           "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
         }
       },
@@ -2459,19 +3749,31 @@
           "strict_points": 5.0,
           "no_printed_level": false,
           "detected": false,
+          "accepted_by_owner": null,
+          "framework_entry": 30098.5,
+          "framework_delta_points": 32.0,
+          "framework_bars": 1.0,
+          "framework_mode": "rejection_block",
+          "detected_strict_10": false,
           "detected_strict": false,
           "detected_within_3_bars": false,
-          "our_entry": 30105.0,
-          "our_entry_ns": 1780642920000000000,
+          "our_entry": 30098.5,
+          "our_entry_ns": 1780644240000000000,
           "our_branch": "other_session",
-          "our_mode": "absorption",
-          "our_reference": "london_low",
+          "our_mode": "rejection_block",
+          "our_reference": "minus_0.33",
           "our_play": "london",
           "expected_play": "london",
           "play_matches": true,
-          "delta_points": 38.5,
-          "bars_from_printed": 3.6,
-          "n_pass_episodes": 10,
+          "delta_points": 32.0,
+          "bars_from_printed": 1.0,
+          "n_pass_episodes": 11,
+          "bars_allowed": 3.0,
+          "fills_tested": [
+            "absorption",
+            "rejection_block"
+          ],
+          "matched_fill": "rejection_block",
           "day_read": {
             "classification": "single_break",
             "classification_pre_open": "single_break",
@@ -2520,9 +3822,51 @@
               "sister_index_relative_strength",
               "news_calendar"
             ],
+            "read_inputs_missing": [],
+            "prior_value_unavailable_reason": null,
             "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
           },
-          "divergence": "entry 3.6 five-minute bars from the printed time"
+          "divergence": "entry 32.0 points from the printed fill (tolerance 27.0)",
+          "selected_trades": [
+            {
+              "branch": "single_extended",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "09:32",
+              "entry": 30090.875,
+              "stop": 30006.75,
+              "outcome": "stop"
+            }
+          ],
+          "n_selected": 1,
+          "selected_primary_play": "single_break",
+          "selected_our_entry": null,
+          "selected_our_branch": null,
+          "selected_our_mode": null,
+          "selected_delta_points": null,
+          "selected_bars_from_printed": null,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "london",
+          "primary_play_matches_author": false,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "other_session",
+              "side": "long",
+              "mode": "rejection_block",
+              "at_et": "03:24",
+              "entry": 30098.5,
+              "stop": 30061.75,
+              "outcome": "target"
+            }
+          ],
+          "selected_strict_if_play_known": false,
+          "selected_detected_if_play_known": false,
+          "selected_entry_if_play_known": 30098.5,
+          "selected_delta_if_play_known": 32.0,
+          "selected_bars_if_play_known": 1.0
         }
       ],
       "other_fills": [
@@ -2594,6 +3938,8 @@
             "sister_index_relative_strength",
             "news_calendar"
           ],
+          "read_inputs_missing": [],
+          "prior_value_unavailable_reason": null,
           "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
         }
       },
@@ -2636,21 +3982,36 @@
           "compare_field": "reference_level",
           "tolerance_points": 27.0,
           "strict_points": 5.0,
-          "no_printed_level": false,
-          "detected": false,
-          "detected_strict": false,
-          "detected_within_3_bars": false,
-          "our_entry": 30011.25,
-          "our_entry_ns": 1783348920000000000,
-          "our_branch": "judas_reversal",
-          "our_mode": "at_level",
-          "our_reference": "onh",
+          "no_printed_level": true,
+          "detected": true,
+          "accepted_by_owner": null,
+          "framework_entry": 30061.3525,
+          "framework_delta_points": 3.6475,
+          "framework_bars": 2.8,
+          "framework_mode": "absorption",
+          "detected_strict_10": true,
+          "detected_strict": true,
+          "detected_within_3_bars": true,
+          "our_entry": 30061.3525,
+          "our_entry_ns": 1783349880000000000,
+          "our_branch": "extension_reaction",
+          "our_mode": "absorption",
+          "our_reference": "extension_band",
           "our_play": "double_break",
           "expected_play": "double_break",
           "play_matches": true,
-          "delta_points": 53.75,
-          "bars_from_printed": 0.6,
-          "n_pass_episodes": 33,
+          "delta_points": 3.6475,
+          "bars_from_printed": 2.8,
+          "n_pass_episodes": 45,
+          "bars_allowed": 3.0,
+          "fills_tested": [
+            "absorption",
+            "at_level",
+            "pullback_to_internal",
+            "rejection_close",
+            "signature_close"
+          ],
+          "matched_fill": "absorption",
           "day_read": {
             "classification": "double_break",
             "classification_pre_open": "single_break",
@@ -2699,9 +4060,87 @@
               "sister_index_relative_strength",
               "news_calendar"
             ],
+            "read_inputs_missing": [],
+            "prior_value_unavailable_reason": null,
             "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
           },
-          "divergence": "entry 53.75 points from the printed fill (tolerance 27.0)"
+          "divergence": "",
+          "selected_trades": [
+            {
+              "branch": "judas_reversal",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "09:04",
+              "entry": 29896.0,
+              "stop": 29890.25,
+              "outcome": "stop"
+            },
+            {
+              "branch": "judas_reversal",
+              "side": "short",
+              "mode": "at_level",
+              "at_et": "09:15",
+              "entry": 29858.25,
+              "stop": 29862.0,
+              "outcome": "stop"
+            },
+            {
+              "branch": "judas_outbound",
+              "side": "long",
+              "mode": "pullback_to_internal",
+              "at_et": "09:32",
+              "entry": 29888.875,
+              "stop": 29836.75,
+              "outcome": "stop"
+            }
+          ],
+          "n_selected": 3,
+          "selected_primary_play": "double_break",
+          "selected_our_entry": 29858.25,
+          "selected_our_branch": "judas_reversal",
+          "selected_our_mode": "at_level",
+          "selected_delta_points": 206.75,
+          "selected_bars_from_printed": 17.8,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "double_break",
+          "primary_play_matches_author": true,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "judas_reversal",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "09:04",
+              "entry": 29896.0,
+              "stop": 29890.25,
+              "outcome": "stop"
+            },
+            {
+              "branch": "judas_reversal",
+              "side": "short",
+              "mode": "at_level",
+              "at_et": "09:15",
+              "entry": 29858.25,
+              "stop": 29862.0,
+              "outcome": "stop"
+            },
+            {
+              "branch": "judas_outbound",
+              "side": "long",
+              "mode": "pullback_to_internal",
+              "at_et": "09:32",
+              "entry": 29888.875,
+              "stop": 29836.75,
+              "outcome": "stop"
+            }
+          ],
+          "selected_strict_if_play_known": false,
+          "selected_detected_if_play_known": false,
+          "selected_entry_if_play_known": 29858.25,
+          "selected_delta_if_play_known": 206.75,
+          "selected_bars_if_play_known": 17.8
         }
       ],
       "other_fills": [],
@@ -2754,6 +4193,8 @@
             "sister_index_relative_strength",
             "news_calendar"
           ],
+          "read_inputs_missing": [],
+          "prior_value_unavailable_reason": null,
           "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
         }
       },
@@ -2785,20 +4226,34 @@
           "tolerance_points": 27.0,
           "strict_points": 5.0,
           "no_printed_level": false,
-          "detected": false,
-          "detected_strict": false,
-          "detected_within_3_bars": false,
-          "our_entry": 29819.25,
-          "our_entry_ns": 1783689600000000000,
+          "detected": true,
+          "accepted_by_owner": null,
+          "framework_entry": 29808.0,
+          "framework_delta_points": 1.0,
+          "framework_bars": 0.4,
+          "framework_mode": "two_minute_close",
+          "detected_strict_10": true,
+          "detected_strict": true,
+          "detected_within_3_bars": true,
+          "our_entry": 29808.0,
+          "our_entry_ns": 1783695720000000000,
           "our_branch": "internal_rotation",
-          "our_mode": "rejection_block",
+          "our_mode": "two_minute_close",
           "our_reference": "q25",
           "our_play": "big_range_eq",
           "expected_play": "big_range_eq",
           "play_matches": true,
-          "delta_points": 10.25,
-          "bars_from_printed": 21.0,
-          "n_pass_episodes": 2,
+          "delta_points": 1.0,
+          "bars_from_printed": 0.4,
+          "n_pass_episodes": 74,
+          "bars_allowed": 3.0,
+          "fills_tested": [
+            "at_level",
+            "next_bar_open",
+            "orderblock",
+            "two_minute_close"
+          ],
+          "matched_fill": "two_minute_close",
           "day_read": {
             "classification": "double_break",
             "classification_pre_open": "double_break",
@@ -2847,9 +4302,60 @@
               "sister_index_relative_strength",
               "news_calendar"
             ],
+            "read_inputs_missing": [],
+            "prior_value_unavailable_reason": null,
             "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
           },
-          "divergence": "entry 21.0 five-minute bars from the printed time"
+          "divergence": "",
+          "selected_trades": [
+            {
+              "branch": "judas_reversal",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "09:04",
+              "entry": 29804.25,
+              "stop": 29801.25,
+              "outcome": "stop"
+            },
+            {
+              "branch": "judas_outbound",
+              "side": "long",
+              "mode": "pullback_to_internal",
+              "at_et": "09:32",
+              "entry": 29858.625,
+              "stop": 29766.25,
+              "outcome": "target"
+            }
+          ],
+          "n_selected": 2,
+          "selected_primary_play": "double_break",
+          "selected_our_entry": null,
+          "selected_our_branch": null,
+          "selected_our_mode": null,
+          "selected_delta_points": null,
+          "selected_bars_from_printed": null,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "big_range_eq",
+          "primary_play_matches_author": false,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "internal_rotation",
+              "side": "long",
+              "mode": "two_minute_close",
+              "at_et": "09:32",
+              "entry": 29881.25,
+              "stop": 29807.5,
+              "outcome": "target"
+            }
+          ],
+          "selected_strict_if_play_known": false,
+          "selected_detected_if_play_known": false,
+          "selected_entry_if_play_known": 29881.25,
+          "selected_delta_if_play_known": 72.25,
+          "selected_bars_if_play_known": 18.4
         }
       ],
       "other_fills": [
@@ -2909,6 +4415,8 @@
             "sister_index_relative_strength",
             "news_calendar"
           ],
+          "read_inputs_missing": [],
+          "prior_value_unavailable_reason": null,
           "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
         }
       },
@@ -2933,27 +4441,46 @@
           "printed_price": 29451.5,
           "printed_reference": null,
           "printed_stop": null,
-          "expected_branch": "judas_outbound",
-          "reference": "sweep of 29525 at the open",
+          "expected_branch": "single_extended",
+          "reference": "EQ 29,460 rejection after the open spike to 29,485 into the prior value low (chart re-read 2026-09-17: the single-break read, not the outbound trade)",
           "marked_by": "narration",
           "compare_field": "entry",
           "tolerance_points": 27.0,
           "strict_points": 5.0,
           "no_printed_level": false,
-          "detected": false,
+          "detected": true,
+          "accepted_by_owner": {
+            "decision": "2026-09-17",
+            "reason": "the 9.6-point delta is an intrabar market fill: his 29,451.50 lies inside the 09:34 bar (O 29,475.25, H 29,482.25, L 29,429.75, C 29,433.50), on the correct side of the EQ, at the right minute on the close-labelled NinjaTrader clock. Counted as a match; no tolerance changes elsewhere."
+          },
+          "framework_entry": 29457.0,
+          "framework_delta_points": 5.5,
+          "framework_bars": 1.6,
+          "framework_mode": "two_minute_close",
+          "detected_strict_10": true,
           "detected_strict": false,
-          "detected_within_3_bars": false,
-          "our_entry": null,
-          "our_entry_ns": null,
-          "our_branch": null,
-          "our_mode": null,
-          "our_reference": null,
-          "our_play": null,
-          "expected_play": "double_break",
-          "play_matches": null,
-          "delta_points": null,
-          "bars_from_printed": null,
-          "n_pass_episodes": 0,
+          "detected_within_3_bars": true,
+          "our_entry": 29457.0,
+          "our_entry_ns": 1784208360000000000,
+          "our_branch": "single_extended",
+          "our_mode": "two_minute_close",
+          "our_reference": "eq",
+          "our_play": "single_break",
+          "expected_play": "single_break",
+          "play_matches": true,
+          "delta_points": 5.5,
+          "bars_from_printed": 1.6,
+          "n_pass_episodes": 144,
+          "bars_allowed": 3.0,
+          "fills_tested": [
+            "absorption",
+            "at_level",
+            "next_bar_open",
+            "orderblock",
+            "rejection_block",
+            "two_minute_close"
+          ],
+          "matched_fill": "two_minute_close",
           "day_read": {
             "classification": "single_break",
             "classification_pre_open": "single_break",
@@ -3002,9 +4529,87 @@
               "sister_index_relative_strength",
               "news_calendar"
             ],
+            "read_inputs_missing": [],
+            "prior_value_unavailable_reason": null,
             "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
           },
-          "divergence": "no passing episode on the author's play and side"
+          "divergence": "",
+          "selected_trades": [
+            {
+              "branch": "single_extended",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "09:01",
+              "entry": 29411.0625,
+              "stop": 29382.75,
+              "outcome": "stop"
+            },
+            {
+              "branch": "single_purged",
+              "side": "short",
+              "mode": "two_minute_close",
+              "at_et": "09:40",
+              "entry": 29384.75,
+              "stop": 29445.0,
+              "outcome": "stop"
+            },
+            {
+              "branch": "single_purged",
+              "side": "short",
+              "mode": "two_minute_close",
+              "at_et": "10:12",
+              "entry": 29459.0,
+              "stop": 29500.75,
+              "outcome": "stop"
+            }
+          ],
+          "n_selected": 3,
+          "selected_primary_play": "single_break",
+          "selected_our_entry": 29384.75,
+          "selected_our_branch": "single_purged",
+          "selected_our_mode": "rejection_block",
+          "selected_delta_points": 66.75,
+          "selected_bars_from_printed": 1.2,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "single_break",
+          "primary_play_matches_author": true,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "single_extended",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "09:01",
+              "entry": 29411.0625,
+              "stop": 29382.75,
+              "outcome": "stop"
+            },
+            {
+              "branch": "single_purged",
+              "side": "short",
+              "mode": "two_minute_close",
+              "at_et": "09:40",
+              "entry": 29384.75,
+              "stop": 29445.0,
+              "outcome": "stop"
+            },
+            {
+              "branch": "single_purged",
+              "side": "short",
+              "mode": "two_minute_close",
+              "at_et": "10:12",
+              "entry": 29459.0,
+              "stop": 29500.75,
+              "outcome": "stop"
+            }
+          ],
+          "selected_strict_if_play_known": false,
+          "selected_detected_if_play_known": false,
+          "selected_entry_if_play_known": 29384.75,
+          "selected_delta_if_play_known": 66.75,
+          "selected_bars_if_play_known": 1.2
         }
       ],
       "other_fills": [
@@ -3070,6 +4675,8 @@
             "sister_index_relative_strength",
             "news_calendar"
           ],
+          "read_inputs_missing": [],
+          "prior_value_unavailable_reason": null,
           "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
         }
       },
@@ -3088,33 +4695,47 @@
           "source": "JR p.38",
           "family": "JJ-TBR",
           "session_date": "2026-07-27",
-          "printed_time_et": "09:35",
+          "printed_time_et": "09:02",
           "printed_date": "2026-07-27",
           "printed_side": "short",
-          "printed_price": null,
-          "printed_reference": null,
+          "printed_price": 28685.75,
+          "printed_reference": 28693.625,
           "printed_stop": null,
           "expected_branch": "single_extended",
-          "reference": "range mid (EQ)",
-          "marked_by": "narration",
-          "compare_field": "reference_level",
+          "reference": "EQ 28,693.625 of the 06:00-09:00 box 28,629.25-28,758.00; the range low was broken 07:30-08:10 and the open sits below it",
+          "marked_by": "ticket",
+          "compare_field": "entry",
           "tolerance_points": 27.0,
           "strict_points": 5.0,
-          "no_printed_level": true,
-          "detected": false,
-          "detected_strict": false,
-          "detected_within_3_bars": false,
-          "our_entry": null,
-          "our_entry_ns": null,
-          "our_branch": null,
-          "our_mode": null,
-          "our_reference": null,
-          "our_play": null,
+          "no_printed_level": false,
+          "detected": true,
+          "accepted_by_owner": null,
+          "framework_entry": 28683.0,
+          "framework_delta_points": 2.75,
+          "framework_bars": 0.2,
+          "framework_mode": "next_bar_open",
+          "detected_strict_10": true,
+          "detected_strict": true,
+          "detected_within_3_bars": true,
+          "our_entry": 28683.0,
+          "our_entry_ns": 1785157320000000000,
+          "our_branch": "single_extended",
+          "our_mode": "next_bar_open",
+          "our_reference": "eq",
+          "our_play": "single_break",
           "expected_play": "single_break",
-          "play_matches": null,
-          "delta_points": null,
-          "bars_from_printed": null,
-          "n_pass_episodes": 0,
+          "play_matches": true,
+          "delta_points": 2.75,
+          "bars_from_printed": 0.2,
+          "n_pass_episodes": 11,
+          "bars_allowed": 3.0,
+          "fills_tested": [
+            "at_level",
+            "next_bar_open",
+            "rejection_block",
+            "two_minute_close"
+          ],
+          "matched_fill": "next_bar_open",
           "day_read": {
             "classification": "single_break",
             "classification_pre_open": "single_break",
@@ -3163,12 +4784,109 @@
               "sister_index_relative_strength",
               "news_calendar"
             ],
+            "read_inputs_missing": [],
+            "prior_value_unavailable_reason": null,
             "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
           },
-          "divergence": "no passing episode on the author's play and side"
+          "divergence": "",
+          "selected_trades": [
+            {
+              "branch": "single_extended",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "09:01",
+              "entry": 28693.625,
+              "stop": 28678.25,
+              "outcome": "stop"
+            },
+            {
+              "branch": "single_extended",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "09:15",
+              "entry": 28661.4375,
+              "stop": 28655.5,
+              "outcome": "stop"
+            },
+            {
+              "branch": "single_purged",
+              "side": "long",
+              "mode": "two_minute_close",
+              "at_et": "09:52",
+              "entry": 28495.0,
+              "stop": 28417.75,
+              "outcome": "stop"
+            }
+          ],
+          "n_selected": 3,
+          "selected_primary_play": "single_break",
+          "selected_our_entry": null,
+          "selected_our_branch": null,
+          "selected_our_mode": null,
+          "selected_delta_points": null,
+          "selected_bars_from_printed": null,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "single_break",
+          "primary_play_matches_author": true,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "single_extended",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "09:01",
+              "entry": 28693.625,
+              "stop": 28678.25,
+              "outcome": "stop"
+            },
+            {
+              "branch": "single_extended",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "09:15",
+              "entry": 28661.4375,
+              "stop": 28655.5,
+              "outcome": "stop"
+            },
+            {
+              "branch": "single_purged",
+              "side": "long",
+              "mode": "two_minute_close",
+              "at_et": "09:52",
+              "entry": 28495.0,
+              "stop": 28417.75,
+              "outcome": "stop"
+            }
+          ],
+          "selected_strict_if_play_known": false,
+          "selected_detected_if_play_known": false,
+          "selected_entry_if_play_known": null,
+          "selected_delta_if_play_known": null,
+          "selected_bars_if_play_known": null
         }
       ],
-      "other_fills": [],
+      "other_fills": [
+        {
+          "time_et": "09:33",
+          "action": "add",
+          "price": 28578.0,
+          "note": "14:33 UK"
+        },
+        {
+          "time_et": "09:33",
+          "action": "add",
+          "price": 28550.0,
+          "note": "14:33 UK, 28,55x"
+        },
+        {
+          "time_et": "09:35",
+          "action": "buy",
+          "price": 28490.75,
+          "note": "cover at L2 = the -1.0 projection 28,500.50 (14:35 UK)"
+        }
+      ],
       "day_reads": {
         "2026-07-27": {
           "classification": "single_break",
@@ -3218,6 +4936,8 @@
             "sister_index_relative_strength",
             "news_calendar"
           ],
+          "read_inputs_missing": [],
+          "prior_value_unavailable_reason": null,
           "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
         }
       },
@@ -3250,19 +4970,35 @@
           "strict_points": 5.0,
           "no_printed_level": true,
           "detected": true,
-          "detected_strict": false,
+          "accepted_by_owner": null,
+          "framework_entry": 27940.5,
+          "framework_delta_points": null,
+          "framework_bars": 0.4,
+          "framework_mode": "two_minute_close",
+          "detected_strict_10": true,
+          "detected_strict": true,
           "detected_within_3_bars": true,
-          "our_entry": 27894.375,
-          "our_entry_ns": 1785246000000000000,
+          "our_entry": 27940.5,
+          "our_entry_ns": 1785245520000000000,
           "our_branch": "single_purged",
-          "our_mode": "orderblock",
-          "our_reference": "q25",
+          "our_mode": "two_minute_close",
+          "our_reference": "eq",
           "our_play": "single_break",
           "expected_play": "single_break",
           "play_matches": true,
           "delta_points": null,
-          "bars_from_printed": 1.0,
-          "n_pass_episodes": 3,
+          "bars_from_printed": 0.4,
+          "n_pass_episodes": 67,
+          "bars_allowed": 3.0,
+          "fills_tested": [
+            "absorption",
+            "at_level",
+            "next_bar_open",
+            "orderblock",
+            "rejection_block",
+            "two_minute_close"
+          ],
+          "matched_fill": "two_minute_close",
           "day_read": {
             "classification": "single_break",
             "classification_pre_open": "double_break",
@@ -3311,9 +5047,87 @@
               "sister_index_relative_strength",
               "news_calendar"
             ],
+            "read_inputs_missing": [],
+            "prior_value_unavailable_reason": null,
             "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
           },
-          "divergence": ""
+          "divergence": "",
+          "selected_trades": [
+            {
+              "branch": "single_extended",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "09:01",
+              "entry": 27986.625,
+              "stop": 27980.0,
+              "outcome": "stop"
+            },
+            {
+              "branch": "single_extended",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "09:24",
+              "entry": 27986.625,
+              "stop": 27981.0,
+              "outcome": "stop"
+            },
+            {
+              "branch": "single_extended",
+              "side": "short",
+              "mode": "at_level",
+              "at_et": "09:31",
+              "entry": 27986.625,
+              "stop": 27997.0,
+              "outcome": "target"
+            }
+          ],
+          "n_selected": 3,
+          "selected_primary_play": "single_break",
+          "selected_our_entry": 27986.625,
+          "selected_our_branch": "single_extended",
+          "selected_our_mode": "at_level",
+          "selected_delta_points": null,
+          "selected_bars_from_printed": 0.6,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": true,
+          "selected_within_3_bars": true,
+          "author_play": "single_break",
+          "primary_play_matches_author": true,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "single_extended",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "09:01",
+              "entry": 27986.625,
+              "stop": 27980.0,
+              "outcome": "stop"
+            },
+            {
+              "branch": "single_extended",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "09:24",
+              "entry": 27986.625,
+              "stop": 27981.0,
+              "outcome": "stop"
+            },
+            {
+              "branch": "single_extended",
+              "side": "short",
+              "mode": "at_level",
+              "at_et": "09:31",
+              "entry": 27986.625,
+              "stop": 27997.0,
+              "outcome": "target"
+            }
+          ],
+          "selected_strict_if_play_known": false,
+          "selected_detected_if_play_known": true,
+          "selected_entry_if_play_known": 27986.625,
+          "selected_delta_if_play_known": null,
+          "selected_bars_if_play_known": 0.6
         }
       ],
       "other_fills": [],
@@ -3366,6 +5180,8 @@
             "sister_index_relative_strength",
             "news_calendar"
           ],
+          "read_inputs_missing": [],
+          "prior_value_unavailable_reason": null,
           "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
         }
       },
@@ -3398,19 +5214,34 @@
           "strict_points": 5.0,
           "no_printed_level": false,
           "detected": true,
-          "detected_strict": false,
+          "accepted_by_owner": null,
+          "framework_entry": 29593.25,
+          "framework_delta_points": 1.25,
+          "framework_bars": 1.0,
+          "framework_mode": "at_level",
+          "detected_strict_10": true,
+          "detected_strict": true,
           "detected_within_3_bars": true,
-          "our_entry": 29600.0,
-          "our_entry_ns": 1787924160000000000,
+          "our_entry": 29593.25,
+          "our_entry_ns": 1787924100000000000,
           "our_branch": "judas_reversal",
-          "our_mode": "signature_close",
-          "our_reference": "onl",
+          "our_mode": "at_level",
+          "our_reference": "box_low",
           "our_play": "double_break",
           "expected_play": "double_break",
           "play_matches": true,
-          "delta_points": 8.0,
+          "delta_points": 1.25,
           "bars_from_printed": 1.0,
-          "n_pass_episodes": 19,
+          "n_pass_episodes": 31,
+          "bars_allowed": 3.0,
+          "fills_tested": [
+            "at_level",
+            "pullback_to_internal",
+            "rejection_block",
+            "rejection_close",
+            "signature_close"
+          ],
+          "matched_fill": "at_level",
           "day_read": {
             "classification": "double_break",
             "classification_pre_open": "single_break",
@@ -3459,9 +5290,51 @@
               "sister_index_relative_strength",
               "news_calendar"
             ],
+            "read_inputs_missing": [],
+            "prior_value_unavailable_reason": null,
             "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
           },
-          "divergence": ""
+          "divergence": "",
+          "selected_trades": [
+            {
+              "branch": "judas_reversal",
+              "side": "short",
+              "mode": "at_level",
+              "at_et": "09:03",
+              "entry": 29670.5,
+              "stop": 29682.0,
+              "outcome": "target"
+            }
+          ],
+          "n_selected": 1,
+          "selected_primary_play": "double_break",
+          "selected_our_entry": null,
+          "selected_our_branch": null,
+          "selected_our_mode": null,
+          "selected_delta_points": null,
+          "selected_bars_from_printed": null,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "double_break",
+          "primary_play_matches_author": true,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "judas_reversal",
+              "side": "short",
+              "mode": "at_level",
+              "at_et": "09:03",
+              "entry": 29670.5,
+              "stop": 29682.0,
+              "outcome": "target"
+            }
+          ],
+          "selected_strict_if_play_known": false,
+          "selected_detected_if_play_known": false,
+          "selected_entry_if_play_known": null,
+          "selected_delta_if_play_known": null,
+          "selected_bars_if_play_known": null
         }
       ],
       "other_fills": [
@@ -3527,6 +5400,8 @@
             "sister_index_relative_strength",
             "news_calendar"
           ],
+          "read_inputs_missing": [],
+          "prior_value_unavailable_reason": null,
           "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
         }
       },
@@ -3558,20 +5433,33 @@
           "tolerance_points": 27.0,
           "strict_points": 5.0,
           "no_printed_level": false,
-          "detected": false,
-          "detected_strict": false,
-          "detected_within_3_bars": false,
-          "our_entry": 29122.25,
-          "our_entry_ns": 1788269460000000000,
+          "detected": true,
+          "accepted_by_owner": null,
+          "framework_entry": 29077.535,
+          "framework_delta_points": 3.285,
+          "framework_bars": 1.2,
+          "framework_mode": "at_level",
+          "detected_strict_10": true,
+          "detected_strict": true,
+          "detected_within_3_bars": true,
+          "our_entry": 29077.535,
+          "our_entry_ns": 1788269580000000000,
           "our_branch": "judas_reversal",
           "our_mode": "at_level",
-          "our_reference": "box_low",
+          "our_reference": "minus_0.33",
           "our_play": "double_break",
           "expected_play": "double_break",
           "play_matches": true,
-          "delta_points": 48.0,
-          "bars_from_printed": 1.8,
-          "n_pass_episodes": 16,
+          "delta_points": 3.285,
+          "bars_from_printed": 1.2,
+          "n_pass_episodes": 20,
+          "bars_allowed": 3.0,
+          "fills_tested": [
+            "at_level",
+            "rejection_close",
+            "signature_close"
+          ],
+          "matched_fill": "at_level",
           "day_read": {
             "classification": "single_break",
             "classification_pre_open": "single_break",
@@ -3620,9 +5508,51 @@
               "sister_index_relative_strength",
               "news_calendar"
             ],
+            "read_inputs_missing": [],
+            "prior_value_unavailable_reason": null,
             "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
           },
-          "divergence": "entry 1.8 five-minute bars from the printed time"
+          "divergence": "",
+          "selected_trades": [
+            {
+              "branch": "single_extended",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "09:46",
+              "entry": 29090.375,
+              "stop": 29069.75,
+              "outcome": "target"
+            }
+          ],
+          "n_selected": 1,
+          "selected_primary_play": "single_break",
+          "selected_our_entry": null,
+          "selected_our_branch": null,
+          "selected_our_mode": null,
+          "selected_delta_points": null,
+          "selected_bars_from_printed": null,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "double_break",
+          "primary_play_matches_author": false,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "judas_reversal",
+              "side": "long",
+              "mode": "at_level",
+              "at_et": "09:30",
+              "entry": 29122.25,
+              "stop": 29110.5,
+              "outcome": "stop"
+            }
+          ],
+          "selected_strict_if_play_known": false,
+          "selected_detected_if_play_known": false,
+          "selected_entry_if_play_known": 29122.25,
+          "selected_delta_if_play_known": 48.0,
+          "selected_bars_if_play_known": 1.8
         }
       ],
       "other_fills": [
@@ -3724,6 +5654,8 @@
             "sister_index_relative_strength",
             "news_calendar"
           ],
+          "read_inputs_missing": [],
+          "prior_value_unavailable_reason": null,
           "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest"
         }
       },
@@ -3767,7 +5699,12 @@
           "strict_points": 5.0,
           "no_printed_level": false,
           "detected": true,
+          "detected_strict_10": false,
           "detected_strict": false,
+          "framework_entry": 25291.5,
+          "framework_delta_points": 10.25,
+          "framework_bars": 0.6,
+          "framework_mode": "at_level",
           "detected_within_3_bars": true,
           "our_entry": 25291.5,
           "our_entry_ns": 1763650920000000000,
@@ -3779,7 +5716,15 @@
           "play_matches": true,
           "delta_points": 10.25,
           "bars_from_printed": 0.6,
-          "n_pass_episodes": 6,
+          "n_pass_episodes": 30,
+          "bars_allowed": 3.0,
+          "fills_tested": [
+            "at_level",
+            "failure_close_1m",
+            "five_minute_close",
+            "next_bar_open"
+          ],
+          "matched_fill": "at_level",
           "day_read": {
             "day_model": "pullback_continuation",
             "primary_play": "asia_fade",
@@ -3792,7 +5737,8 @@
               "overnight_reclaim",
               "pocket_continuation",
               "previous_hour_fail",
-              "vwap_continuation"
+              "vwap_continuation",
+              "weekly_level"
             ],
             "bias": null,
             "bias_rule": "recorded, never a filter (G10)",
@@ -3813,7 +5759,83 @@
             },
             "rule": "the overnight names the reference: a PDL/PDH sweep-and-reclaim puts the prior-day level in play, an Asia-edge sweep puts the Asia box in play; an open held beyond both session boxes makes the NY session a pullback/continuation day, otherwise it is a sweep-and-fail day"
           },
-          "divergence": ""
+          "divergence": "",
+          "selected_trades": [
+            {
+              "branch": "asia_box",
+              "side": "short",
+              "mode": "five_minute_close",
+              "at_et": "21:10",
+              "entry": 25148.0,
+              "stop": 25171.0,
+              "outcome": "stop"
+            },
+            {
+              "branch": "asia_box",
+              "side": "short",
+              "mode": "next_bar_open",
+              "at_et": "22:02",
+              "entry": 25170.25,
+              "stop": 25194.75,
+              "outcome": "stop"
+            },
+            {
+              "branch": "asia_box",
+              "side": "short",
+              "mode": "five_minute_close",
+              "at_et": "22:25",
+              "entry": 25192.75,
+              "stop": 25198.0,
+              "outcome": "stop"
+            }
+          ],
+          "n_selected": 3,
+          "selected_primary_play": "asia_fade",
+          "selected_our_entry": null,
+          "selected_our_branch": null,
+          "selected_our_mode": null,
+          "selected_delta_points": null,
+          "selected_bars_from_printed": null,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "ny_box_fail",
+          "primary_play_matches_author": false,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "nyam_box",
+              "side": "short",
+              "mode": "next_bar_open",
+              "at_et": "18:02",
+              "entry": 24976.25,
+              "stop": 25112.75,
+              "outcome": "stop"
+            },
+            {
+              "branch": "nyam_box",
+              "side": "long",
+              "mode": "five_minute_close",
+              "at_et": "09:40",
+              "entry": 25209.25,
+              "stop": 25169.75,
+              "outcome": "stop"
+            },
+            {
+              "branch": "nyam_box",
+              "side": "long",
+              "mode": "five_minute_close",
+              "at_et": "09:45",
+              "entry": 25211.5,
+              "stop": 25144.0,
+              "outcome": "stop"
+            }
+          ],
+          "selected_strict_if_play_known": false,
+          "selected_detected_if_play_known": false,
+          "selected_entry_if_play_known": 24976.25,
+          "selected_delta_if_play_known": 325.5,
+          "selected_bars_if_play_known": 192.6
         }
       ],
       "other_fills": [
@@ -3837,7 +5859,8 @@
             "overnight_reclaim",
             "pocket_continuation",
             "previous_hour_fail",
-            "vwap_continuation"
+            "vwap_continuation",
+            "weekly_level"
           ],
           "bias": null,
           "bias_rule": "recorded, never a filter (G10)",
@@ -3874,21 +5897,26 @@
           "source": "GB p.31",
           "family": "GB-FAIL",
           "session_date": "2025-11-19",
-          "printed_time_et": "10:00",
+          "printed_time_et": "09:35",
           "printed_date": "2025-11-19",
           "printed_side": "long",
           "printed_price": 24625.0,
           "printed_reference": null,
           "printed_stop": null,
           "expected_branch": "prior_week_level",
-          "reference": "PWL 24625",
+          "reference": "PWL 24625 swept on the 09:30 bar, long on the reclaim retest (chart re-read 2026-09-17)",
           "marked_by": "narration",
           "tolerance_points": 27.0,
           "strict_points": 5.0,
           "no_printed_level": false,
-          "detected": false,
-          "detected_strict": false,
-          "detected_within_3_bars": false,
+          "detected": true,
+          "detected_strict_10": true,
+          "detected_strict": true,
+          "framework_entry": 24626.0,
+          "framework_delta_points": 1.0,
+          "framework_bars": 0.8,
+          "framework_mode": "post_open_retest",
+          "detected_within_3_bars": true,
           "our_entry": 24626.0,
           "our_entry_ns": 1763562660000000000,
           "our_branch": "prior_week_level",
@@ -3898,19 +5926,30 @@
           "expected_play": "weekly_level",
           "play_matches": true,
           "delta_points": 1.0,
-          "bars_from_printed": 5.8,
-          "n_pass_episodes": 16,
+          "bars_from_printed": 0.8,
+          "n_pass_episodes": 22,
+          "bars_allowed": 3.0,
+          "fills_tested": [
+            "at_level",
+            "failure_close_1m",
+            "five_minute_close",
+            "next_bar_open",
+            "post_open_retest"
+          ],
+          "matched_fill": "post_open_retest",
           "day_read": {
             "day_model": "sweep_and_fail",
             "primary_play": "asia_fade",
             "plays": [
               "asia_fade",
+              "break_and_hold",
               "cash_open",
               "london_reclaim",
               "ny_box_fail",
               "overnight_reclaim",
               "pocket_continuation",
               "previous_hour_fail",
+              "vwap_continuation",
               "weekly_level"
             ],
             "bias": null,
@@ -3931,7 +5970,83 @@
             },
             "rule": "the overnight names the reference: a PDL/PDH sweep-and-reclaim puts the prior-day level in play, an Asia-edge sweep puts the Asia box in play; an open held beyond both session boxes makes the NY session a pullback/continuation day, otherwise it is a sweep-and-fail day"
           },
-          "divergence": "entry 5.8 five-minute bars from the printed time"
+          "divergence": "",
+          "selected_trades": [
+            {
+              "branch": "asia_box",
+              "side": "short",
+              "mode": "five_minute_close",
+              "at_et": "21:30",
+              "entry": 24625.0,
+              "stop": 24635.5,
+              "outcome": "stop"
+            },
+            {
+              "branch": "asia_box",
+              "side": "short",
+              "mode": "next_bar_open",
+              "at_et": "21:33",
+              "entry": 24638.5,
+              "stop": 24649.75,
+              "outcome": "stop"
+            },
+            {
+              "branch": "asia_box",
+              "side": "short",
+              "mode": "next_bar_open",
+              "at_et": "22:03",
+              "entry": 24646.25,
+              "stop": 24657.5,
+              "outcome": "stop"
+            }
+          ],
+          "n_selected": 3,
+          "selected_primary_play": "asia_fade",
+          "selected_our_entry": null,
+          "selected_our_branch": null,
+          "selected_our_mode": null,
+          "selected_delta_points": null,
+          "selected_bars_from_printed": null,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "weekly_level",
+          "primary_play_matches_author": false,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "prior_week_level",
+              "side": "long",
+              "mode": "next_bar_open",
+              "at_et": "18:02",
+              "entry": 24550.5,
+              "stop": 24538.75,
+              "outcome": "stop"
+            },
+            {
+              "branch": "prior_week_level",
+              "side": "long",
+              "mode": "next_bar_open",
+              "at_et": "22:17",
+              "entry": 24613.25,
+              "stop": 24523.5,
+              "outcome": "stop"
+            },
+            {
+              "branch": "prior_week_level",
+              "side": "long",
+              "mode": "post_open_retest",
+              "at_et": "09:31",
+              "entry": 24626.0,
+              "stop": 24621.5,
+              "outcome": "stop"
+            }
+          ],
+          "selected_strict_if_play_known": true,
+          "selected_detected_if_play_known": true,
+          "selected_entry_if_play_known": 24626.0,
+          "selected_delta_if_play_known": 1.0,
+          "selected_bars_if_play_known": 0.8
         }
       ],
       "other_fills": [],
@@ -3941,12 +6056,14 @@
           "primary_play": "asia_fade",
           "plays": [
             "asia_fade",
+            "break_and_hold",
             "cash_open",
             "london_reclaim",
             "ny_box_fail",
             "overnight_reclaim",
             "pocket_continuation",
             "previous_hour_fail",
+            "vwap_continuation",
             "weekly_level"
           ],
           "bias": null,
@@ -3995,11 +6112,16 @@
           "tolerance_points": 27.0,
           "strict_points": 5.0,
           "no_printed_level": true,
-          "detected": true,
+          "detected": false,
+          "detected_strict_10": false,
           "detected_strict": false,
-          "detected_within_3_bars": true,
-          "our_entry": 27094.5,
-          "our_entry_ns": 1776963300000000000,
+          "framework_entry": null,
+          "framework_delta_points": null,
+          "framework_bars": null,
+          "framework_mode": null,
+          "detected_within_3_bars": false,
+          "our_entry": 27145.75,
+          "our_entry_ns": 1776958500000000000,
           "our_branch": "previous_hour",
           "our_mode": "five_minute_close",
           "our_reference": "trailing_hour",
@@ -4007,19 +6129,28 @@
           "expected_play": "previous_hour_fail",
           "play_matches": true,
           "delta_points": null,
-          "bars_from_printed": 1.0,
-          "n_pass_episodes": 31,
+          "bars_from_printed": 17.0,
+          "n_pass_episodes": 16,
+          "bars_allowed": 1.0,
+          "fills_tested": [
+            "failure_close_1m",
+            "five_minute_close",
+            "next_bar_open"
+          ],
+          "matched_fill": "five_minute_close",
           "day_read": {
             "day_model": "sweep_and_fail",
             "primary_play": "overnight_reclaim",
             "plays": [
               "asia_fade",
+              "break_and_hold",
               "cash_open",
               "london_reclaim",
               "ny_box_fail",
               "overnight_reclaim",
               "pocket_continuation",
               "previous_hour_fail",
+              "vwap_continuation",
               "weekly_level"
             ],
             "bias": "short",
@@ -4040,7 +6171,83 @@
             },
             "rule": "the overnight names the reference: a PDL/PDH sweep-and-reclaim puts the prior-day level in play, an Asia-edge sweep puts the Asia box in play; an open held beyond both session boxes makes the NY session a pullback/continuation day, otherwise it is a sweep-and-fail day"
           },
-          "divergence": ""
+          "divergence": "entry 17.0 five-minute bars from the printed time",
+          "selected_trades": [
+            {
+              "branch": "prior_day_level",
+              "side": "short",
+              "mode": "five_minute_close",
+              "at_et": "18:05",
+              "entry": 27079.5,
+              "stop": 27095.5,
+              "outcome": "stop"
+            },
+            {
+              "branch": "prior_day_level",
+              "side": "short",
+              "mode": "five_minute_close",
+              "at_et": "18:25",
+              "entry": 27090.75,
+              "stop": 27100.0,
+              "outcome": "stop"
+            },
+            {
+              "branch": "prior_day_level",
+              "side": "long",
+              "mode": "post_open_retest",
+              "at_et": "09:49",
+              "entry": 27093.0,
+              "stop": 27088.75,
+              "outcome": "stop"
+            }
+          ],
+          "n_selected": 3,
+          "selected_primary_play": "overnight_reclaim",
+          "selected_our_entry": null,
+          "selected_our_branch": null,
+          "selected_our_mode": null,
+          "selected_delta_points": null,
+          "selected_bars_from_printed": null,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "previous_hour_fail",
+          "primary_play_matches_author": false,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "previous_hour",
+              "side": "short",
+              "mode": "five_minute_close",
+              "at_et": "11:05",
+              "entry": 27105.25,
+              "stop": 27115.75,
+              "outcome": "stop"
+            },
+            {
+              "branch": "previous_hour",
+              "side": "short",
+              "mode": "next_bar_open",
+              "at_et": "11:12",
+              "entry": 27121.0,
+              "stop": 27134.75,
+              "outcome": "stop"
+            },
+            {
+              "branch": "previous_hour",
+              "side": "short",
+              "mode": "next_bar_open",
+              "at_et": "11:19",
+              "entry": 27132.0,
+              "stop": 27143.5,
+              "outcome": "stop"
+            }
+          ],
+          "selected_strict_if_play_known": false,
+          "selected_detected_if_play_known": false,
+          "selected_entry_if_play_known": 27132.0,
+          "selected_delta_if_play_known": null,
+          "selected_bars_if_play_known": 20.2
         }
       ],
       "other_fills": [
@@ -4057,12 +6264,14 @@
           "primary_play": "overnight_reclaim",
           "plays": [
             "asia_fade",
+            "break_and_hold",
             "cash_open",
             "london_reclaim",
             "ny_box_fail",
             "overnight_reclaim",
             "pocket_continuation",
             "previous_hour_fail",
+            "vwap_continuation",
             "weekly_level"
           ],
           "bias": "short",
@@ -4112,19 +6321,32 @@
           "strict_points": 5.0,
           "no_printed_level": true,
           "detected": false,
+          "detected_strict_10": false,
           "detected_strict": false,
+          "framework_entry": null,
+          "framework_delta_points": null,
+          "framework_bars": null,
+          "framework_mode": null,
           "detected_within_3_bars": false,
-          "our_entry": 27073.5,
-          "our_entry_ns": 1777387200000000000,
+          "our_entry": 27112.5,
+          "our_entry_ns": 1777387020000000000,
           "our_branch": "nyam_box",
-          "our_mode": "five_minute_close",
-          "our_reference": "ny_box_09_10",
+          "our_mode": "next_bar_open",
+          "our_reference": "ny_box_10_11_running",
           "our_play": "ny_box_fail",
           "expected_play": "ny_box_fail",
           "play_matches": true,
           "delta_points": null,
-          "bars_from_printed": 14.0,
-          "n_pass_episodes": 23,
+          "bars_from_printed": 13.4,
+          "n_pass_episodes": 51,
+          "bars_allowed": 3.0,
+          "fills_tested": [
+            "at_level",
+            "failure_close_1m",
+            "five_minute_close",
+            "next_bar_open"
+          ],
+          "matched_fill": "next_bar_open",
           "day_read": {
             "day_model": "pullback_continuation",
             "primary_play": "asia_fade",
@@ -4157,7 +6379,83 @@
             },
             "rule": "the overnight names the reference: a PDL/PDH sweep-and-reclaim puts the prior-day level in play, an Asia-edge sweep puts the Asia box in play; an open held beyond both session boxes makes the NY session a pullback/continuation day, otherwise it is a sweep-and-fail day"
           },
-          "divergence": "entry 14.0 five-minute bars from the printed time"
+          "divergence": "entry 13.4 five-minute bars from the printed time",
+          "selected_trades": [
+            {
+              "branch": "asia_box",
+              "side": "long",
+              "mode": "five_minute_close",
+              "at_et": "21:10",
+              "entry": 27456.25,
+              "stop": 27448.0,
+              "outcome": "stop"
+            },
+            {
+              "branch": "asia_box",
+              "side": "long",
+              "mode": "next_bar_open",
+              "at_et": "21:52",
+              "entry": 27446.5,
+              "stop": 27432.0,
+              "outcome": "stop"
+            },
+            {
+              "branch": "asia_box",
+              "side": "long",
+              "mode": "next_bar_open",
+              "at_et": "22:02",
+              "entry": 27420.25,
+              "stop": 27409.5,
+              "outcome": "stop"
+            }
+          ],
+          "n_selected": 3,
+          "selected_primary_play": "asia_fade",
+          "selected_our_entry": null,
+          "selected_our_branch": null,
+          "selected_our_mode": null,
+          "selected_delta_points": null,
+          "selected_bars_from_printed": null,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "ny_box_fail",
+          "primary_play_matches_author": false,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "nyam_box",
+              "side": "short",
+              "mode": "next_bar_open",
+              "at_et": "18:02",
+              "entry": 27436.75,
+              "stop": 27503.5,
+              "outcome": "stop"
+            },
+            {
+              "branch": "nyam_box",
+              "side": "short",
+              "mode": "five_minute_close",
+              "at_et": "22:00",
+              "entry": 27421.75,
+              "stop": 27453.25,
+              "outcome": "open"
+            },
+            {
+              "branch": "nyam_box",
+              "side": "short",
+              "mode": "five_minute_close",
+              "at_et": "22:20",
+              "entry": 27434.75,
+              "stop": 27437.5,
+              "outcome": "stop"
+            }
+          ],
+          "selected_strict_if_play_known": false,
+          "selected_detected_if_play_known": false,
+          "selected_entry_if_play_known": null,
+          "selected_delta_if_play_known": null,
+          "selected_bars_if_play_known": null
         },
         {
           "example_id": "GB-2026-04-28",
@@ -4176,20 +6474,33 @@
           "tolerance_points": 27.0,
           "strict_points": 5.0,
           "no_printed_level": true,
-          "detected": false,
-          "detected_strict": false,
-          "detected_within_3_bars": false,
-          "our_entry": null,
-          "our_entry_ns": null,
-          "our_branch": null,
-          "our_mode": null,
-          "our_reference": null,
-          "our_play": null,
+          "detected": true,
+          "detected_strict_10": true,
+          "detected_strict": true,
+          "framework_entry": 27166.75,
+          "framework_delta_points": null,
+          "framework_bars": 1.0,
+          "framework_mode": "five_minute_close",
+          "detected_within_3_bars": true,
+          "our_entry": 27166.75,
+          "our_entry_ns": 1777383600000000000,
+          "our_branch": "nyam_box",
+          "our_mode": "five_minute_close",
+          "our_reference": "ny_box_09_10_running",
+          "our_play": "ny_box_fail",
           "expected_play": "ny_box_fail",
-          "play_matches": null,
+          "play_matches": true,
           "delta_points": null,
-          "bars_from_printed": null,
-          "n_pass_episodes": 0,
+          "bars_from_printed": 1.0,
+          "n_pass_episodes": 46,
+          "bars_allowed": 3.0,
+          "fills_tested": [
+            "at_level",
+            "failure_close_1m",
+            "five_minute_close",
+            "next_bar_open"
+          ],
+          "matched_fill": "five_minute_close",
           "day_read": {
             "day_model": "pullback_continuation",
             "primary_play": "asia_fade",
@@ -4222,7 +6533,83 @@
             },
             "rule": "the overnight names the reference: a PDL/PDH sweep-and-reclaim puts the prior-day level in play, an Asia-edge sweep puts the Asia box in play; an open held beyond both session boxes makes the NY session a pullback/continuation day, otherwise it is a sweep-and-fail day"
           },
-          "divergence": "no passing episode on the author's play and side"
+          "divergence": "",
+          "selected_trades": [
+            {
+              "branch": "asia_box",
+              "side": "long",
+              "mode": "five_minute_close",
+              "at_et": "21:10",
+              "entry": 27456.25,
+              "stop": 27448.0,
+              "outcome": "stop"
+            },
+            {
+              "branch": "asia_box",
+              "side": "long",
+              "mode": "next_bar_open",
+              "at_et": "21:52",
+              "entry": 27446.5,
+              "stop": 27432.0,
+              "outcome": "stop"
+            },
+            {
+              "branch": "asia_box",
+              "side": "long",
+              "mode": "next_bar_open",
+              "at_et": "22:02",
+              "entry": 27420.25,
+              "stop": 27409.5,
+              "outcome": "stop"
+            }
+          ],
+          "n_selected": 3,
+          "selected_primary_play": "asia_fade",
+          "selected_our_entry": null,
+          "selected_our_branch": null,
+          "selected_our_mode": null,
+          "selected_delta_points": null,
+          "selected_bars_from_printed": null,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "ny_box_fail",
+          "primary_play_matches_author": false,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "nyam_box",
+              "side": "short",
+              "mode": "next_bar_open",
+              "at_et": "18:02",
+              "entry": 27436.75,
+              "stop": 27503.5,
+              "outcome": "stop"
+            },
+            {
+              "branch": "nyam_box",
+              "side": "short",
+              "mode": "five_minute_close",
+              "at_et": "22:00",
+              "entry": 27421.75,
+              "stop": 27453.25,
+              "outcome": "open"
+            },
+            {
+              "branch": "nyam_box",
+              "side": "short",
+              "mode": "five_minute_close",
+              "at_et": "22:20",
+              "entry": 27434.75,
+              "stop": 27437.5,
+              "outcome": "stop"
+            }
+          ],
+          "selected_strict_if_play_known": false,
+          "selected_detected_if_play_known": false,
+          "selected_entry_if_play_known": 27434.75,
+          "selected_delta_if_play_known": null,
+          "selected_bars_if_play_known": 137.0
         }
       ],
       "other_fills": [],
@@ -4287,20 +6674,33 @@
           "tolerance_points": 27.0,
           "strict_points": 5.0,
           "no_printed_level": false,
-          "detected": false,
+          "detected": true,
+          "detected_strict_10": true,
           "detected_strict": false,
-          "detected_within_3_bars": false,
-          "our_entry": 29393.25,
-          "our_entry_ns": 1783985100000000000,
+          "framework_entry": 29420.75,
+          "framework_delta_points": 6.5,
+          "framework_bars": 2.0,
+          "framework_mode": "five_minute_close",
+          "detected_within_3_bars": true,
+          "our_entry": 29420.75,
+          "our_entry_ns": 1783989000000000000,
           "our_branch": "prior_day_level",
           "our_mode": "five_minute_close",
           "our_reference": "prior_day",
           "our_play": "overnight_reclaim",
           "expected_play": "overnight_reclaim",
           "play_matches": true,
-          "delta_points": 21.0,
-          "bars_from_printed": 273.0,
-          "n_pass_episodes": 18,
+          "delta_points": 6.5,
+          "bars_from_printed": 2.0,
+          "n_pass_episodes": 25,
+          "bars_allowed": 3.0,
+          "fills_tested": [
+            "at_level",
+            "failure_close_1m",
+            "five_minute_close",
+            "next_bar_open"
+          ],
+          "matched_fill": "five_minute_close",
           "day_read": {
             "day_model": "pullback_continuation",
             "primary_play": "overnight_reclaim",
@@ -4334,7 +6734,65 @@
             },
             "rule": "the overnight names the reference: a PDL/PDH sweep-and-reclaim puts the prior-day level in play, an Asia-edge sweep puts the Asia box in play; an open held beyond both session boxes makes the NY session a pullback/continuation day, otherwise it is a sweep-and-fail day"
           },
-          "divergence": "entry 273.0 five-minute bars from the printed time"
+          "divergence": "",
+          "selected_trades": [
+            {
+              "branch": "prior_day_level",
+              "side": "short",
+              "mode": "next_bar_open",
+              "at_et": "18:02",
+              "entry": 29472.0,
+              "stop": 29481.5,
+              "outcome": "stop"
+            },
+            {
+              "branch": "prior_day_level",
+              "side": "long",
+              "mode": "five_minute_close",
+              "at_et": "22:30",
+              "entry": 29401.0,
+              "stop": 29371.0,
+              "outcome": "stop"
+            }
+          ],
+          "n_selected": 2,
+          "selected_primary_play": "overnight_reclaim",
+          "selected_our_entry": 29401.0,
+          "selected_our_branch": "prior_day_level",
+          "selected_our_mode": "five_minute_close",
+          "selected_delta_points": 13.25,
+          "selected_bars_from_printed": 22.0,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "overnight_reclaim",
+          "primary_play_matches_author": true,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "prior_day_level",
+              "side": "short",
+              "mode": "next_bar_open",
+              "at_et": "18:02",
+              "entry": 29472.0,
+              "stop": 29481.5,
+              "outcome": "stop"
+            },
+            {
+              "branch": "prior_day_level",
+              "side": "long",
+              "mode": "five_minute_close",
+              "at_et": "22:30",
+              "entry": 29401.0,
+              "stop": 29371.0,
+              "outcome": "stop"
+            }
+          ],
+          "selected_strict_if_play_known": false,
+          "selected_detected_if_play_known": false,
+          "selected_entry_if_play_known": 29401.0,
+          "selected_delta_if_play_known": 13.25,
+          "selected_bars_if_play_known": 22.0
         }
       ],
       "other_fills": [],
@@ -4388,32 +6846,43 @@
           "source": "GB pp.51-52",
           "family": "GB-FAIL",
           "session_date": "2026-07-30",
-          "printed_time_et": "23:20",
+          "printed_time_et": "22:20",
           "printed_date": "2026-07-29",
           "printed_side": "short",
           "printed_price": 27644.5,
           "printed_reference": null,
           "printed_stop": 27717.5,
           "expected_branch": "golden_pocket",
-          "reference": "0.5-0.618 of 27760->27190",
+          "reference": "0.5-0.618 of the leg from the prior RTH high to the 18:00 low; 27,644 prints 22:20-22:35 on our tape (the 23:20 is chart-read)",
           "marked_by": "rr_tool",
           "tolerance_points": 73.0,
           "strict_points": 5.0,
           "no_printed_level": false,
           "detected": false,
+          "detected_strict_10": false,
           "detected_strict": false,
+          "framework_entry": null,
+          "framework_delta_points": null,
+          "framework_bars": null,
+          "framework_mode": null,
           "detected_within_3_bars": false,
-          "our_entry": null,
-          "our_entry_ns": null,
-          "our_branch": null,
-          "our_mode": null,
-          "our_reference": null,
-          "our_play": null,
+          "our_entry": 27650.75,
+          "our_entry_ns": 1785373740000000000,
+          "our_branch": "golden_pocket",
+          "our_mode": "pocket_near_limit",
+          "our_reference": "golden_pocket",
+          "our_play": "pocket_continuation",
           "expected_play": "pocket_continuation",
-          "play_matches": null,
-          "delta_points": null,
-          "bars_from_printed": null,
-          "n_pass_episodes": 0,
+          "play_matches": true,
+          "delta_points": 6.25,
+          "bars_from_printed": 14.2,
+          "n_pass_episodes": 4,
+          "bars_allowed": 1.0,
+          "fills_tested": [
+            "pocket_far_limit",
+            "pocket_near_limit"
+          ],
+          "matched_fill": "pocket_near_limit",
           "day_read": {
             "day_model": "pullback_continuation",
             "primary_play": "overnight_reclaim",
@@ -4448,7 +6917,47 @@
             },
             "rule": "the overnight names the reference: a PDL/PDH sweep-and-reclaim puts the prior-day level in play, an Asia-edge sweep puts the Asia box in play; an open held beyond both session boxes makes the NY session a pullback/continuation day, otherwise it is a sweep-and-fail day"
           },
-          "divergence": "no passing episode on the author's play and side"
+          "divergence": "entry 14.2 five-minute bars from the printed time",
+          "selected_trades": [
+            {
+              "branch": "prior_day_level",
+              "side": "long",
+              "mode": "five_minute_close",
+              "at_et": "18:05",
+              "entry": 27352.25,
+              "stop": 27200.0,
+              "outcome": "target"
+            }
+          ],
+          "n_selected": 1,
+          "selected_primary_play": "overnight_reclaim",
+          "selected_our_entry": null,
+          "selected_our_branch": null,
+          "selected_our_mode": null,
+          "selected_delta_points": null,
+          "selected_bars_from_printed": null,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "pocket_continuation",
+          "primary_play_matches_author": false,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "golden_pocket",
+              "side": "short",
+              "mode": "pocket_near_limit",
+              "at_et": "21:09",
+              "entry": 27650.75,
+              "stop": 27758.655,
+              "outcome": "stop"
+            }
+          ],
+          "selected_strict_if_play_known": false,
+          "selected_detected_if_play_known": false,
+          "selected_entry_if_play_known": 27650.75,
+          "selected_delta_if_play_known": 6.25,
+          "selected_bars_if_play_known": 14.2
         },
         {
           "example_id": "GB-2026-07-29-30",
@@ -4467,20 +6976,33 @@
           "tolerance_points": 27.0,
           "strict_points": 5.0,
           "no_printed_level": false,
-          "detected": false,
+          "detected": true,
+          "detected_strict_10": true,
           "detected_strict": false,
-          "detected_within_3_bars": false,
-          "our_entry": null,
-          "our_entry_ns": null,
-          "our_branch": null,
-          "our_mode": null,
-          "our_reference": null,
-          "our_play": null,
+          "framework_entry": 27351.25,
+          "framework_delta_points": 8.5,
+          "framework_bars": 0.8,
+          "framework_mode": "at_level",
+          "detected_within_3_bars": true,
+          "our_entry": 27351.25,
+          "our_entry_ns": 1785398640000000000,
+          "our_branch": "london_box",
+          "our_mode": "at_level",
+          "our_reference": "london_box_running",
+          "our_play": "london_reclaim",
           "expected_play": "london_reclaim",
-          "play_matches": null,
-          "delta_points": null,
-          "bars_from_printed": null,
-          "n_pass_episodes": 0,
+          "play_matches": true,
+          "delta_points": 8.5,
+          "bars_from_printed": 0.8,
+          "n_pass_episodes": 15,
+          "bars_allowed": 3.0,
+          "fills_tested": [
+            "at_level",
+            "failure_close_1m",
+            "five_minute_close",
+            "next_bar_open"
+          ],
+          "matched_fill": "at_level",
           "day_read": {
             "day_model": "pullback_continuation",
             "primary_play": "overnight_reclaim",
@@ -4515,7 +7037,65 @@
             },
             "rule": "the overnight names the reference: a PDL/PDH sweep-and-reclaim puts the prior-day level in play, an Asia-edge sweep puts the Asia box in play; an open held beyond both session boxes makes the NY session a pullback/continuation day, otherwise it is a sweep-and-fail day"
           },
-          "divergence": "no passing episode on the author's play and side"
+          "divergence": "",
+          "selected_trades": [
+            {
+              "branch": "prior_day_level",
+              "side": "long",
+              "mode": "five_minute_close",
+              "at_et": "18:05",
+              "entry": 27352.25,
+              "stop": 27200.0,
+              "outcome": "target"
+            }
+          ],
+          "n_selected": 1,
+          "selected_primary_play": "overnight_reclaim",
+          "selected_our_entry": null,
+          "selected_our_branch": null,
+          "selected_our_mode": null,
+          "selected_delta_points": null,
+          "selected_bars_from_printed": null,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "london_reclaim",
+          "primary_play_matches_author": false,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "london_box",
+              "side": "short",
+              "mode": "five_minute_close",
+              "at_et": "03:10",
+              "entry": 27471.5,
+              "stop": 27523.0,
+              "outcome": "stop"
+            },
+            {
+              "branch": "london_box",
+              "side": "short",
+              "mode": "five_minute_close",
+              "at_et": "04:35",
+              "entry": 27507.5,
+              "stop": 27526.75,
+              "outcome": "stop"
+            },
+            {
+              "branch": "london_box",
+              "side": "short",
+              "mode": "five_minute_close",
+              "at_et": "04:40",
+              "entry": 27493.5,
+              "stop": 27529.25,
+              "outcome": "stop"
+            }
+          ],
+          "selected_strict_if_play_known": false,
+          "selected_detected_if_play_known": false,
+          "selected_entry_if_play_known": null,
+          "selected_delta_if_play_known": null,
+          "selected_bars_if_play_known": null
         }
       ],
       "other_fills": [
@@ -4590,19 +7170,32 @@
           "strict_points": 5.0,
           "no_printed_level": false,
           "detected": false,
+          "detected_strict_10": false,
           "detected_strict": false,
+          "framework_entry": null,
+          "framework_delta_points": null,
+          "framework_bars": null,
+          "framework_mode": null,
           "detected_within_3_bars": false,
-          "our_entry": 29887.25,
-          "our_entry_ns": 1786543560000000000,
+          "our_entry": 29650.5,
+          "our_entry_ns": 1786493700000000000,
           "our_branch": "nyam_box",
-          "our_mode": "failure_close_1m",
-          "our_reference": "ny_box_09_10",
+          "our_mode": "five_minute_close",
+          "our_reference": "prev_ny_box_09_10",
           "our_play": "ny_box_fail",
           "expected_play": "ny_box_fail",
           "play_matches": true,
-          "delta_points": 251.5,
-          "bars_from_printed": 449.2,
-          "n_pass_episodes": 28,
+          "delta_points": 14.75,
+          "bars_from_printed": 5.0,
+          "n_pass_episodes": 73,
+          "bars_allowed": 1.0,
+          "fills_tested": [
+            "at_level",
+            "failure_close_1m",
+            "five_minute_close",
+            "next_bar_open"
+          ],
+          "matched_fill": "five_minute_close",
           "day_read": {
             "day_model": "pullback_continuation",
             "primary_play": "asia_fade",
@@ -4635,7 +7228,74 @@
             },
             "rule": "the overnight names the reference: a PDL/PDH sweep-and-reclaim puts the prior-day level in play, an Asia-edge sweep puts the Asia box in play; an open held beyond both session boxes makes the NY session a pullback/continuation day, otherwise it is a sweep-and-fail day"
           },
-          "divergence": "entry 449.2 five-minute bars from the printed time"
+          "divergence": "entry 5.0 five-minute bars from the printed time",
+          "selected_trades": [
+            {
+              "branch": "asia_box",
+              "side": "short",
+              "mode": "five_minute_close",
+              "at_et": "21:10",
+              "entry": 29680.0,
+              "stop": 29683.0,
+              "outcome": "stop"
+            },
+            {
+              "branch": "asia_box",
+              "side": "short",
+              "mode": "five_minute_close",
+              "at_et": "21:55",
+              "entry": 29671.0,
+              "stop": 29685.5,
+              "outcome": "stop"
+            },
+            {
+              "branch": "asia_box",
+              "side": "short",
+              "mode": "next_bar_open",
+              "at_et": "22:32",
+              "entry": 29683.75,
+              "stop": 29695.25,
+              "outcome": "stop"
+            }
+          ],
+          "n_selected": 3,
+          "selected_primary_play": "asia_fade",
+          "selected_our_entry": null,
+          "selected_our_branch": null,
+          "selected_our_mode": null,
+          "selected_delta_points": null,
+          "selected_bars_from_printed": null,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "ny_box_fail",
+          "primary_play_matches_author": false,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "nyam_box",
+              "side": "long",
+              "mode": "next_bar_open",
+              "at_et": "18:02",
+              "entry": 29650.5,
+              "stop": 29624.75,
+              "outcome": "stop"
+            },
+            {
+              "branch": "nyam_box",
+              "side": "long",
+              "mode": "five_minute_close",
+              "at_et": "20:10",
+              "entry": 29633.75,
+              "stop": 29622.5,
+              "outcome": "target"
+            }
+          ],
+          "selected_strict_if_play_known": false,
+          "selected_detected_if_play_known": false,
+          "selected_entry_if_play_known": 29633.75,
+          "selected_delta_if_play_known": 2.0,
+          "selected_bars_if_play_known": 6.0
         }
       ],
       "other_fills": [],
@@ -4688,20 +7348,25 @@
           "source": "GB p.54",
           "family": "GB-FAIL",
           "session_date": "2026-08-13",
-          "printed_time_et": "11:45",
+          "printed_time_et": "11:30",
           "printed_date": "2026-08-13",
           "printed_side": "short",
           "printed_price": 30227.5,
           "printed_reference": null,
           "printed_stop": 30238.75,
           "expected_branch": "previous_hour",
-          "reference": "double top 30260 / 30238.75 made above the 10:00-11:00 box high in the 11:00 hour (coordinator guidance G-E, 2026-09-17)",
+          "reference": "trailing-hour equal highs 30,235 poked to 30,238 at 11:30 (2-minute chart; the stop 30,238.75 sits on the poke)",
           "marked_by": "rr_tool",
           "tolerance_points": 11.25,
           "strict_points": 5.0,
           "no_printed_level": false,
           "detected": false,
+          "detected_strict_10": false,
           "detected_strict": false,
+          "framework_entry": null,
+          "framework_delta_points": null,
+          "framework_bars": null,
+          "framework_mode": null,
           "detected_within_3_bars": false,
           "our_entry": 30192.75,
           "our_entry_ns": 1786638720000000000,
@@ -4712,8 +7377,16 @@
           "expected_play": "previous_hour_fail",
           "play_matches": true,
           "delta_points": 34.75,
-          "bars_from_printed": 9.4,
-          "n_pass_episodes": 163,
+          "bars_from_printed": 12.4,
+          "n_pass_episodes": 73,
+          "bars_allowed": 1.0,
+          "fills_tested": [
+            "at_level",
+            "failure_close_1m",
+            "five_minute_close",
+            "next_bar_open"
+          ],
+          "matched_fill": "failure_close_1m",
           "day_read": {
             "day_model": "pullback_continuation",
             "primary_play": "asia_fade",
@@ -4726,7 +7399,8 @@
               "overnight_reclaim",
               "pocket_continuation",
               "previous_hour_fail",
-              "vwap_continuation"
+              "vwap_continuation",
+              "weekly_level"
             ],
             "bias": null,
             "bias_rule": "recorded, never a filter (G10)",
@@ -4746,7 +7420,83 @@
             },
             "rule": "the overnight names the reference: a PDL/PDH sweep-and-reclaim puts the prior-day level in play, an Asia-edge sweep puts the Asia box in play; an open held beyond both session boxes makes the NY session a pullback/continuation day, otherwise it is a sweep-and-fail day"
           },
-          "divergence": "entry 9.4 five-minute bars from the printed time"
+          "divergence": "entry 12.4 five-minute bars from the printed time",
+          "selected_trades": [
+            {
+              "branch": "asia_box",
+              "side": "short",
+              "mode": "five_minute_close",
+              "at_et": "22:05",
+              "entry": 29860.75,
+              "stop": 29871.25,
+              "outcome": "stop"
+            },
+            {
+              "branch": "asia_box",
+              "side": "short",
+              "mode": "next_bar_open",
+              "at_et": "22:44",
+              "entry": 29872.5,
+              "stop": 29879.75,
+              "outcome": "stop"
+            },
+            {
+              "branch": "asia_box",
+              "side": "short",
+              "mode": "five_minute_close",
+              "at_et": "23:40",
+              "entry": 29876.0,
+              "stop": 29882.0,
+              "outcome": "stop"
+            }
+          ],
+          "n_selected": 3,
+          "selected_primary_play": "asia_fade",
+          "selected_our_entry": null,
+          "selected_our_branch": null,
+          "selected_our_mode": null,
+          "selected_delta_points": null,
+          "selected_bars_from_printed": null,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "previous_hour_fail",
+          "primary_play_matches_author": false,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "previous_hour",
+              "side": "long",
+              "mode": "next_bar_open",
+              "at_et": "11:35",
+              "entry": 30173.75,
+              "stop": 30141.25,
+              "outcome": "stop"
+            },
+            {
+              "branch": "previous_hour",
+              "side": "long",
+              "mode": "five_minute_close",
+              "at_et": "11:40",
+              "entry": 30151.75,
+              "stop": 30126.25,
+              "outcome": "stop"
+            },
+            {
+              "branch": "previous_hour",
+              "side": "long",
+              "mode": "five_minute_close",
+              "at_et": "11:50",
+              "entry": 30139.75,
+              "stop": 30124.0,
+              "outcome": "stop"
+            }
+          ],
+          "selected_strict_if_play_known": false,
+          "selected_detected_if_play_known": false,
+          "selected_entry_if_play_known": null,
+          "selected_delta_if_play_known": null,
+          "selected_bars_if_play_known": null
         }
       ],
       "other_fills": [],
@@ -4763,7 +7513,8 @@
             "overnight_reclaim",
             "pocket_continuation",
             "previous_hour_fail",
-            "vwap_continuation"
+            "vwap_continuation",
+            "weekly_level"
           ],
           "bias": null,
           "bias_rule": "recorded, never a filter (G10)",
@@ -4812,7 +7563,12 @@
           "strict_points": 5.0,
           "no_printed_level": false,
           "detected": true,
+          "detected_strict_10": false,
           "detected_strict": false,
+          "framework_entry": 29597.5,
+          "framework_delta_points": 16.25,
+          "framework_bars": 1.0,
+          "framework_mode": "five_minute_close",
           "detected_within_3_bars": true,
           "our_entry": 29597.5,
           "our_entry_ns": 1787844300000000000,
@@ -4824,18 +7580,28 @@
           "play_matches": true,
           "delta_points": 16.25,
           "bars_from_printed": 1.0,
-          "n_pass_episodes": 33,
+          "n_pass_episodes": 49,
+          "bars_allowed": 1.0,
+          "fills_tested": [
+            "at_level",
+            "failure_close_1m",
+            "five_minute_close",
+            "next_bar_open"
+          ],
+          "matched_fill": "five_minute_close",
           "day_read": {
             "day_model": "sweep_and_fail",
             "primary_play": "asia_fade",
             "plays": [
               "asia_fade",
+              "break_and_hold",
               "cash_open",
               "london_reclaim",
               "ny_box_fail",
               "overnight_reclaim",
               "pocket_continuation",
               "previous_hour_fail",
+              "vwap_continuation",
               "weekly_level"
             ],
             "bias": null,
@@ -4855,7 +7621,74 @@
             },
             "rule": "the overnight names the reference: a PDL/PDH sweep-and-reclaim puts the prior-day level in play, an Asia-edge sweep puts the Asia box in play; an open held beyond both session boxes makes the NY session a pullback/continuation day, otherwise it is a sweep-and-fail day"
           },
-          "divergence": ""
+          "divergence": "",
+          "selected_trades": [
+            {
+              "branch": "asia_tdo_case",
+              "side": "long",
+              "mode": "five_minute_close",
+              "at_et": "00:20",
+              "entry": 29544.5,
+              "stop": 29526.25,
+              "outcome": "stop"
+            },
+            {
+              "branch": "asia_box",
+              "side": "long",
+              "mode": "five_minute_close",
+              "at_et": "02:00",
+              "entry": 29438.75,
+              "stop": 29426.5,
+              "outcome": "stop"
+            },
+            {
+              "branch": "asia_box",
+              "side": "long",
+              "mode": "five_minute_close",
+              "at_et": "02:15",
+              "entry": 29432.5,
+              "stop": 29399.75,
+              "outcome": "open"
+            }
+          ],
+          "n_selected": 3,
+          "selected_primary_play": "asia_fade",
+          "selected_our_entry": null,
+          "selected_our_branch": null,
+          "selected_our_mode": null,
+          "selected_delta_points": null,
+          "selected_bars_from_printed": null,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "ny_box_fail",
+          "primary_play_matches_author": false,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "nyam_box",
+              "side": "short",
+              "mode": "next_bar_open",
+              "at_et": "18:03",
+              "entry": 29558.25,
+              "stop": 29630.5,
+              "outcome": "stop"
+            },
+            {
+              "branch": "nyam_box",
+              "side": "long",
+              "mode": "next_bar_open",
+              "at_et": "09:37",
+              "entry": 29473.5,
+              "stop": 29441.0,
+              "outcome": "target"
+            }
+          ],
+          "selected_strict_if_play_known": false,
+          "selected_detected_if_play_known": false,
+          "selected_entry_if_play_known": 29558.25,
+          "selected_delta_if_play_known": 55.5,
+          "selected_bars_if_play_known": 209.4
         },
         {
           "example_id": "GB-2026-08-27",
@@ -4875,30 +7708,45 @@
           "strict_points": 5.0,
           "no_printed_level": false,
           "detected": false,
+          "detected_strict_10": false,
           "detected_strict": false,
+          "framework_entry": null,
+          "framework_delta_points": null,
+          "framework_bars": null,
+          "framework_mode": null,
           "detected_within_3_bars": false,
-          "our_entry": 29623.5,
-          "our_entry_ns": 1787848680000000000,
+          "our_entry": 29639.0,
+          "our_entry_ns": 1787848860000000000,
           "our_branch": "nyam_box",
-          "our_mode": "at_level",
+          "our_mode": "next_bar_open",
           "our_reference": "ny_box_10_11",
           "our_play": "ny_box_fail",
           "expected_play": "ny_box_fail",
           "play_matches": true,
-          "delta_points": 18.75,
-          "bars_from_printed": 4.4,
-          "n_pass_episodes": 33,
+          "delta_points": 3.25,
+          "bars_from_printed": 3.8,
+          "n_pass_episodes": 49,
+          "bars_allowed": 1.0,
+          "fills_tested": [
+            "at_level",
+            "failure_close_1m",
+            "five_minute_close",
+            "next_bar_open"
+          ],
+          "matched_fill": "next_bar_open",
           "day_read": {
             "day_model": "sweep_and_fail",
             "primary_play": "asia_fade",
             "plays": [
               "asia_fade",
+              "break_and_hold",
               "cash_open",
               "london_reclaim",
               "ny_box_fail",
               "overnight_reclaim",
               "pocket_continuation",
               "previous_hour_fail",
+              "vwap_continuation",
               "weekly_level"
             ],
             "bias": null,
@@ -4918,7 +7766,74 @@
             },
             "rule": "the overnight names the reference: a PDL/PDH sweep-and-reclaim puts the prior-day level in play, an Asia-edge sweep puts the Asia box in play; an open held beyond both session boxes makes the NY session a pullback/continuation day, otherwise it is a sweep-and-fail day"
           },
-          "divergence": "entry 4.4 five-minute bars from the printed time"
+          "divergence": "entry 3.8 five-minute bars from the printed time",
+          "selected_trades": [
+            {
+              "branch": "asia_tdo_case",
+              "side": "long",
+              "mode": "five_minute_close",
+              "at_et": "00:20",
+              "entry": 29544.5,
+              "stop": 29526.25,
+              "outcome": "stop"
+            },
+            {
+              "branch": "asia_box",
+              "side": "long",
+              "mode": "five_minute_close",
+              "at_et": "02:00",
+              "entry": 29438.75,
+              "stop": 29426.5,
+              "outcome": "stop"
+            },
+            {
+              "branch": "asia_box",
+              "side": "long",
+              "mode": "five_minute_close",
+              "at_et": "02:15",
+              "entry": 29432.5,
+              "stop": 29399.75,
+              "outcome": "open"
+            }
+          ],
+          "n_selected": 3,
+          "selected_primary_play": "asia_fade",
+          "selected_our_entry": null,
+          "selected_our_branch": null,
+          "selected_our_mode": null,
+          "selected_delta_points": null,
+          "selected_bars_from_printed": null,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "ny_box_fail",
+          "primary_play_matches_author": false,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "nyam_box",
+              "side": "short",
+              "mode": "next_bar_open",
+              "at_et": "18:03",
+              "entry": 29558.25,
+              "stop": 29630.5,
+              "outcome": "stop"
+            },
+            {
+              "branch": "nyam_box",
+              "side": "long",
+              "mode": "next_bar_open",
+              "at_et": "09:37",
+              "entry": 29473.5,
+              "stop": 29441.0,
+              "outcome": "target"
+            }
+          ],
+          "selected_strict_if_play_known": false,
+          "selected_detected_if_play_known": false,
+          "selected_entry_if_play_known": 29558.25,
+          "selected_delta_if_play_known": 84.0,
+          "selected_bars_if_play_known": 227.4
         }
       ],
       "other_fills": [],
@@ -4928,12 +7843,14 @@
           "primary_play": "asia_fade",
           "plays": [
             "asia_fade",
+            "break_and_hold",
             "cash_open",
             "london_reclaim",
             "ny_box_fail",
             "overnight_reclaim",
             "pocket_continuation",
             "previous_hour_fail",
+            "vwap_continuation",
             "weekly_level"
           ],
           "bias": null,
@@ -4982,7 +7899,12 @@
           "strict_points": 5.0,
           "no_printed_level": false,
           "detected": true,
+          "detected_strict_10": false,
           "detected_strict": false,
+          "framework_entry": 29629.0,
+          "framework_delta_points": 45.25,
+          "framework_bars": 0.0,
+          "framework_mode": "five_minute_close",
           "detected_within_3_bars": true,
           "our_entry": 29687.25,
           "our_entry_ns": 1787925660000000000,
@@ -4994,18 +7916,30 @@
           "play_matches": true,
           "delta_points": 13.0,
           "bars_from_printed": 0.8,
-          "n_pass_episodes": 13,
+          "n_pass_episodes": 79,
+          "bars_allowed": 1.0,
+          "fills_tested": [
+            "at_level",
+            "failure_close_1m",
+            "five_minute_close",
+            "next_bar_open",
+            "post_open_retest"
+          ],
+          "matched_fill": "failure_close_1m",
           "day_read": {
             "day_model": "sweep_and_fail",
             "primary_play": "overnight_reclaim",
             "plays": [
               "asia_fade",
+              "break_and_hold",
               "cash_open",
               "london_reclaim",
               "ny_box_fail",
               "overnight_reclaim",
               "pocket_continuation",
-              "previous_hour_fail"
+              "previous_hour_fail",
+              "vwap_continuation",
+              "weekly_level"
             ],
             "bias": "short",
             "bias_rule": "recorded, never a filter (G10)",
@@ -5025,7 +7959,83 @@
             },
             "rule": "the overnight names the reference: a PDL/PDH sweep-and-reclaim puts the prior-day level in play, an Asia-edge sweep puts the Asia box in play; an open held beyond both session boxes makes the NY session a pullback/continuation day, otherwise it is a sweep-and-fail day"
           },
-          "divergence": ""
+          "divergence": "",
+          "selected_trades": [
+            {
+              "branch": "prior_day_level",
+              "side": "long",
+              "mode": "next_bar_open",
+              "at_et": "18:03",
+              "entry": 29616.0,
+              "stop": 29598.0,
+              "outcome": "stop"
+            },
+            {
+              "branch": "prior_day_level",
+              "side": "short",
+              "mode": "five_minute_close",
+              "at_et": "23:30",
+              "entry": 29700.25,
+              "stop": 29709.0,
+              "outcome": "stop"
+            },
+            {
+              "branch": "prior_day_level",
+              "side": "short",
+              "mode": "five_minute_close",
+              "at_et": "10:40",
+              "entry": 29680.0,
+              "stop": 29715.0,
+              "outcome": "stop"
+            }
+          ],
+          "n_selected": 3,
+          "selected_primary_play": "overnight_reclaim",
+          "selected_our_entry": null,
+          "selected_our_branch": null,
+          "selected_our_mode": null,
+          "selected_delta_points": null,
+          "selected_bars_from_printed": null,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "ny_box_fail",
+          "primary_play_matches_author": false,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "nyam_box",
+              "side": "short",
+              "mode": "next_bar_open",
+              "at_et": "18:02",
+              "entry": 29626.5,
+              "stop": 29646.75,
+              "outcome": "stop"
+            },
+            {
+              "branch": "nyam_box",
+              "side": "short",
+              "mode": "five_minute_close",
+              "at_et": "01:20",
+              "entry": 29617.75,
+              "stop": 29629.5,
+              "outcome": "stop"
+            },
+            {
+              "branch": "nyam_box",
+              "side": "long",
+              "mode": "five_minute_close",
+              "at_et": "09:40",
+              "entry": 29651.25,
+              "stop": 29583.75,
+              "outcome": "target"
+            }
+          ],
+          "selected_strict_if_play_known": false,
+          "selected_detected_if_play_known": false,
+          "selected_entry_if_play_known": 29617.75,
+          "selected_delta_if_play_known": 56.5,
+          "selected_bars_if_play_known": 105.0
         }
       ],
       "other_fills": [],
@@ -5035,12 +8045,15 @@
           "primary_play": "overnight_reclaim",
           "plays": [
             "asia_fade",
+            "break_and_hold",
             "cash_open",
             "london_reclaim",
             "ny_box_fail",
             "overnight_reclaim",
             "pocket_continuation",
-            "previous_hour_fail"
+            "previous_hour_fail",
+            "vwap_continuation",
+            "weekly_level"
           ],
           "bias": "short",
           "bias_rule": "recorded, never a filter (G10)",
@@ -5088,31 +8101,45 @@
           "tolerance_points": 28.25,
           "strict_points": 5.0,
           "no_printed_level": false,
-          "detected": false,
-          "detected_strict": false,
-          "detected_within_3_bars": false,
-          "our_entry": 29465.25,
-          "our_entry_ns": 1788183300000000000,
+          "detected": true,
+          "detected_strict_10": true,
+          "detected_strict": true,
+          "framework_entry": 29506.75,
+          "framework_delta_points": 3.75,
+          "framework_bars": 0.0,
+          "framework_mode": "next_bar_open",
+          "detected_within_3_bars": true,
+          "our_entry": 29506.75,
+          "our_entry_ns": 1788183180000000000,
           "our_branch": "cash_open_reclaim_case",
-          "our_mode": "failure_close_1m",
+          "our_mode": "next_bar_open",
           "our_reference": "cash_open",
           "our_play": "cash_open",
           "expected_play": "cash_open",
           "play_matches": true,
-          "delta_points": 45.25,
-          "bars_from_printed": 0.4,
-          "n_pass_episodes": 5,
+          "delta_points": 3.75,
+          "bars_from_printed": 0.0,
+          "n_pass_episodes": 13,
+          "bars_allowed": 1.0,
+          "fills_tested": [
+            "at_level",
+            "failure_close_1m",
+            "next_bar_open"
+          ],
+          "matched_fill": "next_bar_open",
           "day_read": {
             "day_model": "sweep_and_fail",
             "primary_play": "overnight_reclaim",
             "plays": [
               "asia_fade",
+              "break_and_hold",
               "cash_open",
               "london_reclaim",
               "ny_box_fail",
               "overnight_reclaim",
               "pocket_continuation",
               "previous_hour_fail",
+              "vwap_continuation",
               "weekly_level"
             ],
             "bias": "long",
@@ -5133,7 +8160,65 @@
             },
             "rule": "the overnight names the reference: a PDL/PDH sweep-and-reclaim puts the prior-day level in play, an Asia-edge sweep puts the Asia box in play; an open held beyond both session boxes makes the NY session a pullback/continuation day, otherwise it is a sweep-and-fail day"
           },
-          "divergence": "entry 45.25 points from the printed fill (tolerance 28.25)"
+          "divergence": "",
+          "selected_trades": [
+            {
+              "branch": "prior_day_level",
+              "side": "short",
+              "mode": "next_bar_open",
+              "at_et": "18:02",
+              "entry": 29503.0,
+              "stop": 29548.25,
+              "outcome": "open"
+            },
+            {
+              "branch": "prior_day_level",
+              "side": "long",
+              "mode": "five_minute_close",
+              "at_et": "18:40",
+              "entry": 29446.75,
+              "stop": 29430.5,
+              "outcome": "stop"
+            },
+            {
+              "branch": "prior_day_level",
+              "side": "long",
+              "mode": "five_minute_close",
+              "at_et": "18:45",
+              "entry": 29436.75,
+              "stop": 29426.0,
+              "outcome": "stop"
+            }
+          ],
+          "n_selected": 3,
+          "selected_primary_play": "overnight_reclaim",
+          "selected_our_entry": null,
+          "selected_our_branch": null,
+          "selected_our_mode": null,
+          "selected_delta_points": null,
+          "selected_bars_from_printed": null,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "cash_open",
+          "primary_play_matches_author": false,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "cash_open_reclaim_case",
+              "side": "long",
+              "mode": "failure_close_1m",
+              "at_et": "09:31",
+              "entry": 29480.5,
+              "stop": 29415.5,
+              "outcome": "target"
+            }
+          ],
+          "selected_strict_if_play_known": false,
+          "selected_detected_if_play_known": false,
+          "selected_entry_if_play_known": null,
+          "selected_delta_if_play_known": null,
+          "selected_bars_if_play_known": null
         }
       ],
       "other_fills": [],
@@ -5143,12 +8228,14 @@
           "primary_play": "overnight_reclaim",
           "plays": [
             "asia_fade",
+            "break_and_hold",
             "cash_open",
             "london_reclaim",
             "ny_box_fail",
             "overnight_reclaim",
             "pocket_continuation",
             "previous_hour_fail",
+            "vwap_continuation",
             "weekly_level"
           ],
           "bias": "long",
@@ -5198,7 +8285,12 @@
           "strict_points": 5.0,
           "no_printed_level": false,
           "detected": true,
+          "detected_strict_10": false,
           "detected_strict": false,
+          "framework_entry": 29273.5,
+          "framework_delta_points": 19.75,
+          "framework_bars": 0.6,
+          "framework_mode": "at_level",
           "detected_within_3_bars": true,
           "our_entry": 29273.5,
           "our_entry_ns": 1788277320000000000,
@@ -5210,7 +8302,16 @@
           "play_matches": true,
           "delta_points": 19.75,
           "bars_from_printed": 0.6,
-          "n_pass_episodes": 33,
+          "n_pass_episodes": 44,
+          "bars_allowed": 1.0,
+          "fills_tested": [
+            "at_level",
+            "failure_close_1m",
+            "five_minute_close",
+            "next_bar_open",
+            "post_open_retest"
+          ],
+          "matched_fill": "post_open_retest",
           "day_read": {
             "day_model": "pullback_continuation",
             "primary_play": "overnight_reclaim",
@@ -5245,7 +8346,83 @@
             },
             "rule": "the overnight names the reference: a PDL/PDH sweep-and-reclaim puts the prior-day level in play, an Asia-edge sweep puts the Asia box in play; an open held beyond both session boxes makes the NY session a pullback/continuation day, otherwise it is a sweep-and-fail day"
           },
-          "divergence": ""
+          "divergence": "",
+          "selected_trades": [
+            {
+              "branch": "prior_day_level",
+              "side": "long",
+              "mode": "next_bar_open",
+              "at_et": "18:02",
+              "entry": 29510.0,
+              "stop": 29489.0,
+              "outcome": "stop"
+            },
+            {
+              "branch": "prior_day_level",
+              "side": "long",
+              "mode": "five_minute_close",
+              "at_et": "02:00",
+              "entry": 29561.5,
+              "stop": 29540.0,
+              "outcome": "stop"
+            },
+            {
+              "branch": "prior_day_level",
+              "side": "short",
+              "mode": "five_minute_close",
+              "at_et": "02:10",
+              "entry": 29545.75,
+              "stop": 29560.0,
+              "outcome": "open"
+            }
+          ],
+          "n_selected": 3,
+          "selected_primary_play": "overnight_reclaim",
+          "selected_our_entry": 29545.75,
+          "selected_our_branch": "prior_day_level",
+          "selected_our_mode": "five_minute_close",
+          "selected_delta_points": 292.0,
+          "selected_bars_from_printed": 115.0,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "overnight_reclaim",
+          "primary_play_matches_author": true,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "prior_day_level",
+              "side": "long",
+              "mode": "next_bar_open",
+              "at_et": "18:02",
+              "entry": 29510.0,
+              "stop": 29489.0,
+              "outcome": "stop"
+            },
+            {
+              "branch": "prior_day_level",
+              "side": "long",
+              "mode": "five_minute_close",
+              "at_et": "02:00",
+              "entry": 29561.5,
+              "stop": 29540.0,
+              "outcome": "stop"
+            },
+            {
+              "branch": "prior_day_level",
+              "side": "short",
+              "mode": "five_minute_close",
+              "at_et": "02:10",
+              "entry": 29545.75,
+              "stop": 29560.0,
+              "outcome": "open"
+            }
+          ],
+          "selected_strict_if_play_known": false,
+          "selected_detected_if_play_known": false,
+          "selected_entry_if_play_known": 29545.75,
+          "selected_delta_if_play_known": 292.0,
+          "selected_bars_if_play_known": 115.0
         }
       ],
       "other_fills": [],
@@ -5313,30 +8490,46 @@
           "strict_points": 5.0,
           "no_printed_level": false,
           "detected": false,
+          "detected_strict_10": false,
           "detected_strict": false,
+          "framework_entry": null,
+          "framework_delta_points": null,
+          "framework_bars": null,
+          "framework_mode": null,
           "detected_within_3_bars": true,
           "our_entry": 29227.75,
           "our_entry_ns": 1788409800000000000,
           "our_branch": "asia_tdo_case",
-          "our_mode": "five_minute_close",
-          "our_reference": "tdo",
+          "our_mode": "tdo_close",
+          "our_reference": "asia_box",
           "our_play": "asia_fade",
           "expected_play": "asia_fade",
           "play_matches": true,
           "delta_points": 10.5,
           "bars_from_printed": 3.0,
-          "n_pass_episodes": 9,
+          "n_pass_episodes": 15,
+          "bars_allowed": 1.0,
+          "fills_tested": [
+            "at_level",
+            "failure_close_1m",
+            "five_minute_close",
+            "next_bar_open",
+            "tdo_close"
+          ],
+          "matched_fill": "tdo_close",
           "day_read": {
             "day_model": "sweep_and_fail",
             "primary_play": "asia_fade",
             "plays": [
               "asia_fade",
+              "break_and_hold",
               "cash_open",
               "london_reclaim",
               "ny_box_fail",
               "overnight_reclaim",
               "pocket_continuation",
               "previous_hour_fail",
+              "vwap_continuation",
               "weekly_level"
             ],
             "bias": null,
@@ -5356,7 +8549,47 @@
             },
             "rule": "the overnight names the reference: a PDL/PDH sweep-and-reclaim puts the prior-day level in play, an Asia-edge sweep puts the Asia box in play; an open held beyond both session boxes makes the NY session a pullback/continuation day, otherwise it is a sweep-and-fail day"
           },
-          "divergence": "entry 3.0 five-minute bars from the printed time"
+          "divergence": "entry 3.0 five-minute bars from the printed time",
+          "selected_trades": [
+            {
+              "branch": "asia_box",
+              "side": "long",
+              "mode": "five_minute_close",
+              "at_et": "22:05",
+              "entry": 29147.25,
+              "stop": 29130.75,
+              "outcome": "target"
+            }
+          ],
+          "n_selected": 1,
+          "selected_primary_play": "asia_fade",
+          "selected_our_entry": null,
+          "selected_our_branch": null,
+          "selected_our_mode": null,
+          "selected_delta_points": null,
+          "selected_bars_from_printed": null,
+          "selected_strict_10": false,
+          "selected_strict": false,
+          "selected_detected": false,
+          "selected_within_3_bars": false,
+          "author_play": "asia_fade",
+          "primary_play_matches_author": true,
+          "selected_trades_if_play_known": [
+            {
+              "branch": "asia_box",
+              "side": "long",
+              "mode": "five_minute_close",
+              "at_et": "22:05",
+              "entry": 29147.25,
+              "stop": 29130.75,
+              "outcome": "target"
+            }
+          ],
+          "selected_strict_if_play_known": false,
+          "selected_detected_if_play_known": false,
+          "selected_entry_if_play_known": null,
+          "selected_delta_if_play_known": null,
+          "selected_bars_if_play_known": null
         }
       ],
       "other_fills": [],
@@ -5366,12 +8599,14 @@
           "primary_play": "asia_fade",
           "plays": [
             "asia_fade",
+            "break_and_hold",
             "cash_open",
             "london_reclaim",
             "ny_box_fail",
             "overnight_reclaim",
             "pocket_continuation",
             "previous_hour_fail",
+            "vwap_continuation",
             "weekly_level"
           ],
           "bias": null,

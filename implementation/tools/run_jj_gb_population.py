@@ -203,6 +203,8 @@ def main(argv=None) -> int:
     range_bins = Counter()
     open_locations = Counter()
     causality = 0
+    omission_totals: Counter = Counter()
+    scan_errors: list[dict] = []
     opportunity_totals = Counter()
     failures = []
     peak = 0
@@ -227,6 +229,22 @@ def main(argv=None) -> int:
                 per_date_seconds.append(result["load_seconds"] + result["scan_seconds"])
                 peak = max(peak, result["peak_rss_bytes"])
                 causality += result["causality_violations"]
+                for family, rows in (result.get("omissions") or {}).items():
+                    for row in rows:
+                        reason = row.get("reason")
+                        omission_totals[f"{family}:{reason}"] += 1
+                        # An error must be attributable: a bare count of eleven
+                        # scan errors is not evidence of anything. Record the
+                        # session, the branch and the exception text for each.
+                        if reason == "scan_error":
+                            scan_errors.append(
+                                {
+                                    "date": day,
+                                    "family": family,
+                                    "branch": row.get("branch"),
+                                    "error": row.get("error"),
+                                }
+                            )
                 for key, value in (result.get("opportunities") or {}).items():
                     opportunity_totals[key] += value
                 for key, value in result["counts"].items():
@@ -268,6 +286,11 @@ def main(argv=None) -> int:
         "seconds_per_session_mean": (sum(per_date_seconds) / len(per_date_seconds)) if per_date_seconds else None,
         "peak_rss_bytes_worker": peak,
         "causality_violations": causality,
+        # Every omission a scan recorded, summed across the population: a branch
+        # that never ran, a reference that could not be measured and a scan that
+        # raised are all visible here rather than only inside the per-session row.
+        "omission_reasons": dict(sorted(omission_totals.items())),
+        "scan_errors": scan_errors,
         "branch_counts": {key: value for key, value in sorted(totals.items())},
         "opportunities": dict(opportunity_totals),
         "entries_per_session": {
@@ -302,6 +325,10 @@ def render(summary) -> str:
         f"- wall: {summary['wall_seconds']:.1f}s on {summary['workers']} workers; {summary['seconds_per_session_mean']:.2f}s per session per worker",
         f"- worker peak RSS: {summary['peak_rss_bytes_worker'] / 2**30:.2f} GB",
         f"- causality violations (decision_at < max stage at_ns): {summary['causality_violations']}",
+        f"- scan errors (each attributable): {len(summary['scan_errors'])}"
+        + (f" -- {summary['scan_errors'][0]['date']} {summary['scan_errors'][0]['branch']}: {str(summary['scan_errors'][0]['error'])[:90]}" if summary["scan_errors"] else ""),
+        f"- omissions recorded: {sum(summary['omission_reasons'].values())} "
+        f"({', '.join(f'{k}={v}' for k, v in list(summary['omission_reasons'].items())[:8]) or 'none'})",
         f"- SessionStat envelope computed: {summary['sessionstat_computed']}",
         "",
         "## Branch population",

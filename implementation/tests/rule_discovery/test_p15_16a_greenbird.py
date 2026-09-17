@@ -308,7 +308,9 @@ def test_g11_selection_is_at_most_three_entries_and_stops_after_a_full_objective
     day = DAY
     bars = [bar(day, "10:00", 100, 130, 100, 130), bar(day, "10:01", 130, 130, 130, 130)]
     first = episode(bars[0]["start"] - 1, "100", "90", "120")
-    later = [episode(bars[0]["start"] + n, "100", "90", "120") for n in range(1, 5)]
+    # Distinct prices, so the later setups are skipped for the reason under test
+    # (the objective was reached) and not as near-duplicate fills of the first.
+    later = [episode(bars[0]["start"] + n, str(100 + 5 * n), "90", "120") for n in range(1, 5)]
     result = select_session_trades([first] + later, bars=bars, clock=None, max_entries=3)
     assert result["n_entries"] == 1
     assert result["entries"][0]["outcome"] == "target"
@@ -431,7 +433,13 @@ def test_scan_document_keeps_the_pipeline_contract():
 def test_rules_table_is_keyed_by_rule_id_with_a_source_and_a_line():
     for rule_id, row in gb.RULES.items():
         assert row["source"], rule_id
-        assert row["kind"] in {"literal", "OD"}
+        # "fitted" is a third, deliberately visible kind: a rule the sources
+        # state qualitatively but never quantify, whose threshold was set on
+        # named tickets. It must say which ones.
+        assert row["kind"] in {"literal", "OD", "fitted"}, rule_id
+        if row["kind"] == "fitted":
+            assert row.get("fitted") is True, rule_id
+            assert row.get("fitted_on"), rule_id
         assert row["file_line"].startswith("green_b02.py"), rule_id
     assert set(FAIL_RULES) <= set(gb.RULES)
     assert set(VWAP_RULES) <= set(gb.RULES)
@@ -445,7 +453,16 @@ def test_author_examples_2026_09_17_is_a_superset_of_the_pinned_file():
     for row in pinned["examples"]:
         after = by_id[row["id"]]
         for key, value in row.items():
-            if key in {"actions", "n_proper_entries"}:
+            if key in {"actions", "n_proper_entries", "expected_detection"}:
+                continue
+            if isinstance(value, dict):
+                # A superset may ADD measurements to a level block (the
+                # 2026-07-27 chart re-read adds the 06:00-09:00 box, its EQ and
+                # the -1.0/-1.33 projections) but may not contradict a pinned
+                # one.
+                assert isinstance(after[key], dict), (row["id"], key)
+                for sub_key, sub_value in value.items():
+                    assert after[key].get(sub_key) == sub_value, (row["id"], key, sub_key)
                 continue
             assert after[key] == value, (row["id"], key)
     marked = [
@@ -455,4 +472,103 @@ def test_author_examples_2026_09_17_is_a_superset_of_the_pinned_file():
         if action.get("proper_entry")
     ]
     assert marked
-    assert all(action.get("marked_by") in {"rr_tool", "narration"} for action in marked)
+    assert all(action.get("marked_by") in {"rr_tool", "narration", "ticket"} for action in marked)
+
+
+# --------------------------------------------------------------------------- round 3
+
+
+def test_trailing_hour_window_excludes_the_bar_it_is_cut_at():
+    """Coordinator round 3 (G-E): the trailing-hour high at bar t is the highest
+    high over [t-60min, t) and must EXCLUDE the bar at t.
+
+    2026-08-27: the 12:55 reference is 29,660 and the 13:00 bar spikes to
+    29,675 before failing back; 2026-08-13: the 11:30 reference is 30,235 and
+    the 11:35 bar pokes 30,238. If the sweeping bar's own high sat inside its
+    own window the level would rise with the spike and could never be swept, so
+    neither of the author's fills could exist.
+    """
+    day = DAY
+    rows: list = []
+    rows += flat_series(day, "18:00", 360, 100, offset=-1)
+    rows += flat_series(day, "00:00", 60 * 11, 100)
+    rows += [bar(day, "11:15", 100, 120, 100, 100)]        # the trailing-hour high
+    rows += flat_series(day, "11:16", 44, 100)             # to 12:00
+    rows += [bar(day, "12:00", 100, 130, 100, 105)]        # the sweep of 120, closing back below
+    rows += flat_series(day, "12:01", 4 * 60 - 1, 105)
+    market = FakeMarket(str(day), rows, prior_day=None, prior_week=None, prior_sessions=[])
+
+    at_1200 = market.at("12:00")
+    exclusive = gb._range(market, at_1200 - gb.HOUR, at_1200, "exclusive")
+    inclusive = gb._range(market, at_1200 - gb.HOUR, at_1200 + gb.MINUTE, "inclusive")
+    assert exclusive["high"] == Decimal("120"), "the 11:15 high is the reference"
+    assert inclusive["high"] == Decimal("130"), "including the sweep bar hides the sweep"
+
+    # and the same rule as the branch cuts it: the reference the scanner offers
+    # at 12:00 is 120, so the 12:00 bar's 130 is a sweep of it.
+    refs, _omissions = gb.session_references(market)
+    gb._scan_previous_hour(market, refs, gb.objective_levels(market, refs))
+    rolling = [
+        ref
+        for ref in gb._trailing_hour_references(market)
+        if int(ref["known_at"]) == at_1200
+    ] if hasattr(gb, "_trailing_hour_references") else []
+    if rolling:
+        assert rolling[0]["high"] == Decimal("120")
+
+
+def test_the_at_level_limit_rests_until_the_level_is_invalidated():
+    """Coordinator round 3 (G-A): the retest fill is not bounded by a fixed
+    window -- 2026-07-13's PDL retest fills 100 minutes after the 19:01 failure
+    close. The limit dies only when price takes the sweep extreme back out.
+    """
+    day = DAY
+    rows: list = []
+    rows += flat_series(day, "18:00", 60, 100, offset=-1)
+    rows += [bar(day, "19:00", 100, 100, 80, 82, offset=-1)]   # sweeps 90, extreme 80
+    rows += [bar(day, "19:01", 82, 95, 82, 95, offset=-1)]     # closes back above 90
+    rows += flat_series(day, "19:02", 98, 95, offset=-1)       # 98 minutes away from the level
+    rows += [bar(day, "20:40", 95, 95, 88, 92, offset=-1)]     # the retest of 90
+    rows += flat_series(day, "20:41", 199, 100, offset=-1)
+    rows += flat_series(day, "00:00", 16 * 60, 100)
+    market = FakeMarket(str(day), rows, prior_day=None, prior_week=None, prior_sessions=[])
+
+    cycle = {
+        "sweep": rows[60],
+        "sweep_at": market.at("19:00", -1),
+        "extreme": Decimal("80"),
+        "fail": rows[61],
+        "fail_at": market.at("19:01", -1) + gb.MINUTE,
+        "status": "failed",
+    }
+    fill = gb.at_level_fill(market, level=Decimal("90"), side="long", cycle=cycle, end=market.at("16:00"))
+    assert fill is not None, "a retest 100 minutes after the failure close is still the author's fill"
+    assert fill["entry"] == Decimal("90")
+    assert fill["decision_at"] >= market.at("20:40", -1)
+
+
+def test_the_at_level_limit_dies_when_the_sweep_extreme_is_taken_out():
+    """The negative control for the unbounded retest: once price gaps beyond the
+    sweep extreme without ever coming back to the level, the level is no longer
+    holding and no fill is reported, however long the session still runs."""
+    day = DAY
+    rows: list = []
+    rows += flat_series(day, "18:00", 60, 100, offset=-1)
+    rows += [bar(day, "19:00", 100, 100, 80, 82, offset=-1)]
+    rows += [bar(day, "19:01", 82, 95, 82, 95, offset=-1)]
+    rows += [bar(day, "19:02", 95, 96, 94, 95, offset=-1)]
+    rows += [bar(day, "19:03", 75, 75, 70, 72, offset=-1)]     # a gap straight through the 80 extreme
+    rows += flat_series(day, "19:04", 96, 72, offset=-1)
+    rows += [bar(day, "20:40", 72, 95, 72, 92, offset=-1)]     # a later touch of 90
+    rows += flat_series(day, "20:41", 199, 100, offset=-1)
+    rows += flat_series(day, "00:00", 16 * 60, 100)
+    market = FakeMarket(str(day), rows, prior_day=None, prior_week=None, prior_sessions=[])
+    cycle = {
+        "sweep": rows[60],
+        "sweep_at": market.at("19:00", -1),
+        "extreme": Decimal("80"),
+        "fail": rows[61],
+        "fail_at": market.at("19:01", -1) + gb.MINUTE,
+        "status": "failed",
+    }
+    assert gb.at_level_fill(market, level=Decimal("90"), side="long", cycle=cycle, end=market.at("16:00")) is None

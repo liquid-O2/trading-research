@@ -60,7 +60,7 @@ def family_document() -> dict[str, Any]:
 
 def outbound_expiry_ns(market, day_open_ns: int | None = None) -> int:
     """Unchanged outbound respects the 09:40 expiry."""
-    return int(market.at("09:40"))
+    return int(_at(market, "09:40"))
 
 
 def one_source_opening(episode: Mapping[str, Any]) -> bool:
@@ -119,12 +119,12 @@ def confirm_at_contact(market, *, branch, contact, reference, formation=None, ch
     target = hi if side == "long" else lo
     deadline = min(int(market.end), int(trigger["end"]) + 30 * MINUTE)
     if branch in {"judas_reversal", "judas_reversal_deferred"}:
-        deadline = min(deadline, int(market.at("09:50")))
+        deadline = min(deadline, int(_at(market, "09:50")))
     if branch == "judas_outbound":
-        openbars = market.bars(market.at("09:30"), market.at("09:30") + 1_000_000_000, 1)
+        openbars = market.bars(_at(market, "09:30"), _at(market, "09:30") + 1_000_000_000, 1)
         from trading_research.research.method_pack.historical_flow import batches
 
-        opening = batches(market.local(market.at("09:30"), market.at("09:30") + 1_000_000_000))
+        opening = batches(market.local(_at(market, "09:30"), _at(market, "09:30") + 1_000_000_000))
         first = opening[0] if opening else None
         prices = {row["price"] for row in first[1]} if first else set()
         ok = True if len(prices) == 1 else None
@@ -144,7 +144,7 @@ def confirm_at_contact(market, *, branch, contact, reference, formation=None, ch
     confirm_at = confirm["known_at"] if confirm else None
     ctx = _context(market)
     pw = ctx.get("prior_width")
-    context_at = int(market.at("09:30"))
+    context_at = int(_at(market, "09:30"))
     if branch == "judas_outbound":
         context_fixed = ctx.get("direction") == side if ctx.get("direction") else None
     elif branch == "other_session":
@@ -170,7 +170,7 @@ def confirm_at_contact(market, *, branch, contact, reference, formation=None, ch
     }
     if branch == "judas_outbound":
         values["directional_context"] = context_fixed
-        values["at_rth_open"] = first is not None and market.at("09:30") <= first[0] < market.at("09:30") + 1_000_000_000
+        values["at_rth_open"] = first is not None and _at(market, "09:30") <= first[0] < _at(market, "09:30") + 1_000_000_000
         values["objective_is_selected_exhaustion"] = True if width is not None else None
         values["exit_window_recorded"] = True
     elif branch in {"judas_reversal", "judas_reversal_deferred"}:
@@ -180,9 +180,9 @@ def confirm_at_contact(market, *, branch, contact, reference, formation=None, ch
         values["reversal_context"] = None if pw is None else (width is not None and width > 0)
         values["edge_swept"] = swept
         values["sweep_at"] = touch
-        values["source_time_window"] = market.at("09:30") <= int(touch) < market.at("09:50")
+        values["source_time_window"] = _at(market, "09:30") <= int(touch) < _at(market, "09:50")
         values["objective_is_opposing_draw"] = True if target is not None else None
-        values["entry_in_reversal_window"] = market.at("09:40") <= int(decision) < market.at("09:50")
+        values["entry_in_reversal_window"] = _at(market, "09:40") <= int(decision) < _at(market, "09:50")
     elif branch == "single_extended":
         values["extended_context"] = None if pw is None else True
         values["entry_at_eq_or_quadrant"] = True
@@ -257,6 +257,7 @@ from trading_research.research.rule_discovery.source_adapters.session_levels imp
 )
 from trading_research.research.rule_discovery.source_adapters.trade_selection import (
     MAX_ENTRIES_PER_SESSION,
+    MODE_PREFERENCE,
     select_session_trades,
 )
 
@@ -313,6 +314,10 @@ RANGE_BINS = (
 )
 SINGLE_BREAK_MIN_BIN = Decimal("0.3")
 LEVEL_COINCIDENCE = Decimal("5")
+#: FITTED, shared with the Green Bird spike turn: the share of a tagging bar's
+#: own range it must close back from the extreme it made for the turn to be
+#: tradeable. See green_b02.SPIKE_GIVE_BACK for the tickets it was fitted on.
+SPIKE_GIVE_BACK = Decimal("0.15")
 
 AUTHOR_EXAMPLES_PATH = Path(__file__).resolve().parents[6] / "planning/phase-1-5/AUTHOR_EXAMPLES_2026-09-17.json"
 
@@ -670,7 +675,15 @@ def _plays_for(location, pct, purge, *, pzone: bool) -> tuple[str, list[str]]:
     )
     decisive_trend = bool(aligned and pct is not None and pct >= DOUBLE_BREAK_MAX_PCT)
     if pct is None or location is None:
-        return "unknown", ["london"]
+        # The read is unknown, not the day: an unreadable classifier input
+        # (2026 holidays and the 53 sessions whose prior value area is not
+        # measurable) removes the PRIMARY play, never the plays. Every play the
+        # author runs stays available and the missing input is recorded on the
+        # context stage as read_inputs_missing.
+        unknown_plays = ["london", "double_break", "single_break", "big_range_eq"]
+        if pzone:
+            unknown_plays.append("pzone")
+        return "unknown", unknown_plays
     classification = "single_break" if aligned else "double_break"
     # J-C: the plays are observed, not switched by a threshold. Every play the
     # author runs is available every day; the classification chooses which is
@@ -751,6 +764,21 @@ def session_read(market, context: Mapping[str, Any]) -> dict[str, Any]:
             },
         },
         "unavailable_inputs": ["sister_index_relative_strength", "news_calendar"],
+        # An input the classifier needs but could not read is NAMED, so an
+        # "unknown" classification can be told apart from an unremarkable day.
+        # The plays stay available either way (see _plays_for).
+        "read_inputs_missing": [
+            name
+            for name, present in (
+                ("range_pct", pct is not None),
+                ("open_location", pre_location is not None),
+                ("rth_open_location", post_location is not None),
+                ("prior_value_area", bool(context.get("prior_value")) and context["prior_value"].get("val") is not None),
+                ("overnight_purge", bool(purge.get("available"))),
+            )
+            if not present
+        ],
+        "prior_value_unavailable_reason": (context.get("prior_value") or {}).get("unavailable"),
         "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest",
     }
 
@@ -1387,7 +1415,12 @@ def _context_stage(context: Mapping[str, Any], at_ns: int, **extra: Any) -> dict
 FILL_MODES = ("at_level", "signature_close", "rejection_close")
 
 
-def _fill_modes(confirmed: Mapping[str, Any] | None, level: Decimal) -> list[tuple[str, Decimal | None, int | None]]:
+def _fill_modes(
+    confirmed: Mapping[str, Any] | None,
+    level: Decimal,
+    *,
+    limit_at: int | None = None,
+) -> list[tuple[str, Decimal | None, int | None]]:
     """The two fills of one signature: the limit at the level, and the market
     fill at the signature's own close.
 
@@ -1398,7 +1431,15 @@ def _fill_modes(confirmed: Mapping[str, Any] | None, level: Decimal) -> list[tup
     """
     if confirmed is None:
         return [(mode, None, None) for mode in FILL_MODES]
-    out = [("at_level", level, confirmed["at"]), ("signature_close", confirmed["entry"], confirmed["at"])]
+    # A resting limit is filled when price TOUCHES it, which is earlier than the
+    # candle that confirms the signature -- but never earlier than the evidence
+    # that put the order there. ``limit_at`` is that touch, measured from the
+    # sweep by the caller; without it the limit falls back to the confirmation
+    # stamp rather than being dated before its own evidence.
+    out = [
+        ("at_level", level, int(limit_at) if limit_at is not None else confirmed["at"]),
+        ("signature_close", confirmed["entry"], confirmed["at"]),
+    ]
     # J-B round 2: the author is filled on the rejection candle itself
     # (2025-10-13: the 09:03-09:05 rejection at the HIGH closes about 24,850
     # and his ticket is 24,848.50), not only on the candle that confirms it.
@@ -1427,7 +1468,12 @@ def _judas_episode(
     ladder = objective_ladder(box, side)
     in_modal = contact is not None and modal_lo <= int(contact["start"]) < modal_hi
     out: list[dict[str, Any]] = []
-    for mode, entry, at_ns in _fill_modes(confirmed, level):
+    limit_from = None if contact is None else int(contact["end"])
+    limit_touch = None
+    if limit_from is not None and confirmed is not None:
+        touch = first_touch(market, level=level, begin=limit_from, end=int(confirmed["at"]))
+        limit_touch = None if touch is None else int(touch["known_at"])
+    for mode, entry, at_ns in _fill_modes(confirmed, level, limit_at=limit_touch):
         stop = None if confirmed is None else confirmed["stop"]
         anchor = entry if entry is not None else level
         forward = [row for row in ladder if sign(side) * (row["price"] - anchor) > 0]
@@ -1648,8 +1694,15 @@ def _scan_judas_outbound(market) -> tuple[list[dict[str, Any]], list[dict[str, A
             target = box["ladder"]["minus_0.5" if direction == "short" else "plus_0.5"]
             for internal in internals:
                 price = internal["price"]
-                if sign(direction) * (price - level) > 0:
-                    continue  # the pullback is back toward the level, not beyond it
+                # The outbound trade runs WITH the break: after the drive takes
+                # the level the fill is the first box internal the move reaches
+                # beyond it, and the risk sits back above (below) the level it
+                # broke. The test was inverted -- it kept the internals on the
+                # wrong side of the level and then put the stop on the entry's
+                # own side, so the risk stage failed on all 8,313 episodes and
+                # the branch never produced a setup.
+                if sign(direction) * (price - level) <= 0:
+                    continue
                 fill = first_touch(market, level=price, begin=int(break_bar["end"]), end=window_end)
                 key = (direction, internal["kind"], str(price))
                 if key in seen:
@@ -1657,7 +1710,7 @@ def _scan_judas_outbound(market) -> tuple[list[dict[str, Any]], list[dict[str, A
                 seen.add(key)
                 at_ns = None if fill is None else int(fill["known_at"])
                 entry = None if fill is None else price
-                stop = level
+                stop = level + LEVEL_COINCIDENCE if direction == "short" else level - LEVEL_COINCIDENCE
                 stages = [
                     _context_stage(context, open_ns, branch="judas_outbound", broken_level=level, broken_kind=item["kind"]),
                     _stage("reference", "pass", box["known_at"], id=box["id"], level=level, kind=item["kind"], internal=internal["kind"]),
@@ -1877,6 +1930,70 @@ def _scan_other_session(market) -> tuple[list[dict[str, Any]], list[dict[str, An
     return episodes, []
 
 
+def _spike_turn(market, *, level: Decimal, side: str, bar: Mapping[str, Any], end: int) -> dict[str, Any] | None:
+    """The tagging bar turns; the fill is the open of the bar after it.
+
+    FITTED, shared with the Green Bird spike turn: the bar must reach beyond the
+    level and close at least ``SPIKE_GIVE_BACK`` of its own range back from the
+    extreme it made. Fitted on 2026-07-27 09:00 (gives back 12.6% ... see the
+    rules table) and the two Green Bird tickets; not a source constant.
+    """
+    hi, lo, close = _d(bar.get("H")), _d(bar.get("L")), _d(bar.get("C"))
+    if hi is None or lo is None or close is None:
+        return None
+    beyond = hi > level if side == "short" else lo < level
+    if not beyond:
+        return None
+    span = hi - lo
+    if span <= 0:
+        return None
+    give_back = (hi - close) if side == "short" else (close - lo)
+    if give_back < span * SPIKE_GIVE_BACK:
+        return None
+    following = _bars(market, int(bar["end"]), min(int(end), int(bar["end"]) + 5 * NS_MINUTE), 60)
+    if not following:
+        return None
+    entry = _d(following[0].get("O"))
+    if entry is None:
+        return None
+    stop = (hi + LEVEL_COINCIDENCE) if side == "short" else (lo - LEVEL_COINCIDENCE)
+    return {"entry": entry, "at": int(following[0].get("known_at") or following[0].get("end")), "stop": stop, "give_back": give_back / span}
+
+
+def _two_minute_reclaim(market, *, level: Decimal, side: str, begin: int, end: int) -> dict[str, Any] | None:
+    """The first two-minute candle that closes back through the line.
+
+    The author's confirmation clock is the two-minute chart (audit 1.1,
+    "Confirmation"). He reads a FIXED two-minute grid, so the candle is the grid
+    bar that ends after the test -- not a bar re-anchored to the moment the
+    level was touched. 2026-07-10: the 11:00 dip through the lower quadrant is
+    confirmed by the 11:00-11:02 candle closing 29,810.75 (his 29,809).
+    """
+    grid_origin = _at(market, "09:00")
+    step = 2 * NS_MINUTE
+    first = grid_origin + ((max(int(begin), grid_origin) - grid_origin) // step) * step
+    # The risk sits beyond the excursion the confirming candle rejected: the
+    # highest high seen so far for a short, the lowest low for a long.
+    band_high = None
+    band_low = None
+    for start in range(first, min(int(end), first + CONFIRM_HORIZON_MIN * NS_MINUTE), step):
+        rows = _bars(market, start, start + step, 60)
+        highs = [_d(row.get("H")) for row in rows if _d(row.get("H")) is not None]
+        lows = [_d(row.get("L")) for row in rows if _d(row.get("L")) is not None]
+        closes = [_d(row.get("C")) for row in rows if _d(row.get("C")) is not None]
+        if not closes or not highs or not lows:
+            continue
+        bar_hi, bar_lo, close = max(highs), min(lows), closes[-1]
+        band_high = bar_hi if band_high is None else max(band_high, bar_hi)
+        band_low = bar_lo if band_low is None else min(band_low, bar_lo)
+        if int(start + step) <= int(begin):
+            continue
+        if (close < level) if side == "short" else (close > level):
+            band = band_high if side == "short" else band_low
+            return {"entry": close, "at": int(start + step), "extreme": band}
+    return None
+
+
 def _eq_locations(market, box: Mapping[str, Any], branch: str) -> list[dict[str, Any]]:
     """EQ, the quadrants, the range open and -- J3 -- the 15-minute opening range."""
     rows = [
@@ -1888,6 +2005,18 @@ def _eq_locations(market, box: Mapping[str, Any], branch: str) -> list[dict[str,
     if branch == "internal_rotation":
         rows.append({"kind": "box_low", "price": box["low"], "known_at": box["known_at"]})
         rows.append({"kind": "box_high", "price": box["high"], "known_at": box["known_at"]})
+        # The rotation play is "open inside prior RTH value: range scalps", and
+        # the author quotes the prior value edges beside his own box: 2026-07-10
+        # buys "after the test of pRTHVAL / R-Lo" (JR p.42, pRTHVAL 29,790,
+        # R-Lo 29,770). The value area is already read for the day's context, so
+        # its edges and POC are locations of this play too.
+        value = prior_value_area(market)
+        if value:
+            known = int(value.get("known_at") or market.start)
+            for kind, key in (("prth_val", "val"), ("prth_vah", "vah"), ("prth_poc", "poc")):
+                price = _d(value.get(key))
+                if price is not None:
+                    rows.append({"kind": kind, "price": price, "known_at": known})
     if branch in {"single_extended", "single_purged"}:
         span = _span(_bars(market, _at(market, "09:30"), _at(market, "09:45"), 60), known_at=_at(market, "09:45"))
         if span is not None:
@@ -1955,13 +2084,21 @@ def _scan_eq_branch(market, branch: str) -> tuple[list[dict[str, Any]], list[dic
     size = context["range_class"]
     sides = _context_sides(branch, context)
     if branch == "single_extended":
-        # the open location is the branch's own input, so the window starts at
-        # the open; "out by 10:00" is carried on the management stage
-        begin, end = _at(market, "09:30"), _at(market, "10:30")
+        # J2: "the author enters from 09:00". 2026-07-27's execution trace sells
+        # 28,685.75 at 09:02 ET on the EQ tag of the 06:00-09:00 box, half an
+        # hour before the RTH open; the read that admits it is the 09:00 one
+        # (the range low broken 07:30-08:10, price below it at 09:00), which
+        # _context_sides already falls back to. "Out by 10:00" is carried on the
+        # management stage.
+        begin, end = _at(market, "09:00"), _at(market, "10:30")
     elif branch == "single_purged":
         begin, end = _at(market, "09:30"), _at(market, "12:00")
     else:
-        begin, end = _at(market, "09:00"), _at(market, "16:00")
+        # The rotation play is defined by where the RTH OPEN sits -- "open
+        # inside prior RTH value: range scalps" -- so it cannot trade before
+        # that open. Starting at 09:00 let it fill at 09:02 and 09:04, half an
+        # hour before the input that admits it exists.
+        begin, end = _at(market, "09:30"), _at(market, "16:00")
     episodes: list[dict[str, Any]] = []
     modal_lo, modal_hi = _at(market, MODAL_WINDOW[0]), _at(market, MODAL_WINDOW[1])
     for row in _eq_locations(market, box, branch):
@@ -2031,6 +2168,112 @@ def _scan_eq_branch(market, branch: str) -> tuple[list[dict[str, Any]], list[dic
                      geometry={"first_objective": target},
                  )
              )
+             # J-B / round 3: the author confirms on the TWO-minute clock and
+             # sells the close of the candle that puts price back through the
+             # line. 2026-07-16: the 09:30 spike runs above the EQ 29,460 into
+             # the prior value low and the two-minute candle closing back below
+             # the EQ by 09:35 is his fill at 29,451.50 (JR p.41).
+             if touch is not None:
+                 two_min = _two_minute_reclaim(market, level=row["price"], side=side, begin=int(touch["end"]), end=end)
+                 if two_min is not None:
+                     tm_stop = two_min["extreme"] + LEVEL_COINCIDENCE if side == "short" else two_min["extreme"] - LEVEL_COINCIDENCE
+                     episodes.append(
+                         _episode(
+                             market,
+                             branch=branch,
+                             side=side,
+                             stages=[
+                                 stages[0],
+                                 stages[1],
+                                 stages[2],
+                                 _stage("trigger", "pass", int(touch["start"]), add_window=list(MODAL_WINDOW), in_add_window=in_add_window, mode="two_minute_close"),
+                                 _stage("confirmation", "pass", two_min["at"], kind="two_minute_close", clock_seconds=120, close=two_min["entry"], rule="the two-minute candle closes back through the line"),
+                                 _stage("risk", "pass" if sign(side) * (two_min["entry"] - tm_stop) > 0 else "fail", two_min["at"], entry=two_min["entry"], stop=tm_stop),
+                                 _stage("objective", "pass" if sign(side) * (target - two_min["entry"]) > 0 else "fail", two_min["at"], target=target, label="projection" if branch == "single_purged" else "range edge"),
+                                 _stage("management", "pass", two_min["at"], reduced_expectations=two_min["at"] >= _at(market, "10:00"), out_by_1000=branch == "single_extended"),
+                             ],
+                             decision_at=two_min["at"],
+                             entry=two_min["entry"],
+                             stop=tm_stop,
+                             target=target,
+                             reference=box,
+                             trigger=touch,
+                             values={"reference_px": row["price"], "reference_kind": row["kind"], "cycle": contact_index, "confirmation_mode": "two_minute_close", "range_bin": size.get("bin"), "in_add_window": in_add_window},
+                             geometry={"first_objective": target},
+                         )
+                     )
+             # The turn of the tagging bar itself, filled at the next bar's
+             # open. 2026-07-27: the 09:00 bar tags the EQ 28,693.625 (H
+             # 28,700.00) and closes back below it at 28,683.75; the execution
+             # trace prints Sell 5 @ 28,685.75 and the 09:01 open is 28,683.00.
+             # Same stated criterion as the Green Bird spike turn -- the bar
+             # gives back SPIKE_GIVE_BACK of its own range from the extreme it
+             # made -- and the same FITTED status.
+             if touch is not None:
+                 turn = _spike_turn(market, level=row["price"], side=side, bar=touch, end=end)
+                 if turn is not None:
+                     episodes.append(
+                         _episode(
+                             market,
+                             branch=branch,
+                             side=side,
+                             stages=[
+                                 stages[0],
+                                 stages[1],
+                                 stages[2],
+                                 _stage("trigger", "pass", int(touch["start"]), add_window=list(MODAL_WINDOW), in_add_window=in_add_window, mode="next_bar_open"),
+                                 _stage("confirmation", "pass", turn["at"], kind="next_bar_open", give_back=str(turn["give_back"]), rule="the tagging bar turns and the fill is the next bar's open"),
+                                 _stage("risk", "pass" if sign(side) * (turn["entry"] - turn["stop"]) > 0 else "fail", turn["at"], entry=turn["entry"], stop=turn["stop"]),
+                                 _stage("objective", "pass" if sign(side) * (target - turn["entry"]) > 0 else "fail", turn["at"], target=target, label="projection" if branch == "single_purged" else "range edge"),
+                                 _stage("management", "pass", turn["at"], reduced_expectations=turn["at"] >= _at(market, "10:00"), out_by_1000=branch == "single_extended"),
+                             ],
+                             decision_at=turn["at"],
+                             entry=turn["entry"],
+                             stop=turn["stop"],
+                             target=target,
+                             reference=box,
+                             trigger=touch,
+                             values={"reference_px": row["price"], "reference_kind": row["kind"], "cycle": contact_index, "confirmation_mode": "next_bar_open", "range_bin": size.get("bin"), "in_add_window": in_add_window},
+                             geometry={"first_objective": target},
+                         )
+                     )
+             # R4 (coordinator round 3): the author rests a limit AT each line
+             # the move reaches, not only at the line his commentary names, and
+             # takes the fill at the line rather than at the confirming close.
+             # 2026-07-10 the 11:05 dip to 29,785 fills the q25 limit 29,812
+             # (his 29,809); 2026-07-16 the 09:30 spike fills the EQ limit
+             # 29,461.125 (his 29,451.50). Any rung the session reaches counts.
+             if touch is not None:
+                 limit_at = int(touch.get("known_at") or touch.get("end"))
+                 t_hi, t_lo = _d(touch.get("H")), _d(touch.get("L"))
+                 limit_stop = None
+                 if t_hi is not None and t_lo is not None:
+                     limit_stop = (t_hi + LEVEL_COINCIDENCE) if side == "short" else (t_lo - LEVEL_COINCIDENCE)
+                 episodes.append(
+                     _episode(
+                         market,
+                         branch=branch,
+                         side=side,
+                         stages=[
+                             stages[0],
+                             stages[1],
+                             stages[2],
+                             _stage("trigger", "pass", int(touch["start"]), add_window=list(MODAL_WINDOW), in_add_window=in_add_window, mode="at_level"),
+                             _stage("confirmation", "pass", limit_at, kind="at_level", rule="the limit rests at the line"),
+                             _stage("risk", "pass" if limit_stop is not None and sign(side) * (row["price"] - limit_stop) > 0 else "fail", limit_at, entry=row["price"], stop=limit_stop),
+                             _stage("objective", "pass" if sign(side) * (target - row["price"]) > 0 else "fail", limit_at, target=target, label="projection" if branch == "single_purged" else "range edge"),
+                             _stage("management", "pass", limit_at, reduced_expectations=limit_at >= _at(market, "10:00"), out_by_1000=branch == "single_extended"),
+                         ],
+                         decision_at=limit_at,
+                         entry=row["price"],
+                         stop=limit_stop,
+                         target=target,
+                         reference=box,
+                         trigger=touch,
+                         values={"reference_px": row["price"], "reference_kind": row["kind"], "cycle": contact_index, "confirmation_mode": "at_level", "range_bin": size.get("bin"), "in_add_window": in_add_window},
+                         geometry={"first_objective": target},
+                     )
+                 )
     return episodes, []
 
 
@@ -2217,6 +2460,42 @@ def _scan_b02_impl(market, rec, *, overrides=None) -> dict[str, Any]:
 
 
 RULES = {
+    "JJ-CONFIRM-two-minute-grid": {
+        "kind": "literal",
+        "source": "audit 1.1 'Confirmation' (the 2/3/5-minute clocks); JR p.42, 2026-07-10 buy 29,809 at 11:05 -- the fixed-grid 11:00-11:02 candle closes 29,808.00",
+        "finding": "J-B",
+        "parameters": {"clock_seconds": 120, "grid_origin": "09:00", "fill": "the candle's close"},
+        "note": "round 3: the candle is the one on the chart's fixed two-minute grid, not a two-minute window re-anchored to the touch",
+        "_fn": _two_minute_reclaim,
+    },
+    "JJ-LOC-prior-rth-value": {
+        "kind": "literal",
+        "source": "JR p.42 'after the test of pRTHVAL / R-Lo' (pRTHVAL 29,790, R-Lo 29,770); the MGLevels panel draws pRTHVAH / pRTHVAL / POC",
+        "finding": "J-C",
+        "parameters": {"levels": ["prth_vah", "prth_val", "prth_poc"], "play": "internal_rotation"},
+        "_fn": _eq_locations,
+    },
+    "JJ-FILL-limit-at-the-line": {
+        "kind": "literal",
+        "source": "JR p.42 (the 11:05 quadrant fill) and p.41 (the EQ rejection); the author rests a limit at each drawn line the move reaches",
+        "finding": "J-A",
+        "parameters": {"lines": ["eq", "q25", "q75", "range_open", "or15_*", "prth_*"], "fill_time": "the touch, after the evidence that placed the order"},
+        "note": "round 3: a resting limit is filled when price touches it, never before the evidence that put it there",
+        "_fn": _fill_modes,
+    },
+    "JJ-OUTBOUND-geometry": {
+        "kind": "literal",
+        "source": "audit 1.1 'Trade #1'; coordinator J-E 2026-09-17: the opening drive takes a drawn level and the trade runs with the break to the +/-0.5 projection",
+        "finding": "J-E",
+        "parameters": {
+            "fill": "the first box internal beyond the broken level, in the break direction",
+            "stop": "back on the far side of the broken level",
+            "objective": "the opposite edge plus the half projection",
+            "expiry": MODAL_WINDOW[0],
+        },
+        "note": "round 3: the internal filter and the stop were both on the wrong side, so this branch passed 0 of 8,313 episodes",
+        "_fn": _scan_judas_outbound,
+    },
     "JJ-BOX-06-09-and-ladder": {
         "kind": "literal",
         "source": "audit 1.1; JR pp.16-18, 71; charts 2025-01-28, 2025-10-01, 2025-10-14",
@@ -2417,6 +2696,8 @@ def proper_entries(example: Mapping[str, Any]) -> list[dict[str, Any]]:
                 "branch": row.get("branch"),
                 "reference": row.get("reference"),
                 "marked_by": row.get("marked_by"),
+                "chart_clock": example.get("chart_clock"),
+                "accepted_by_owner": row.get("accepted_by_owner"),
             }
         )
     return out
@@ -2443,16 +2724,21 @@ def _entry_ns(market, date_text, time_et) -> int | None:
         return None
     session_day = _as_day(market)
     day = session_day
+    dated = False
     if date_text:
         try:
             day = date.fromisoformat(str(date_text)[:10])
+            dated = True
         except ValueError:
             day = session_day
     offset = (day - session_day).days
-    if hour >= 18:
+    # An evening stamp belongs to the session that OPENS that evening. When the
+    # example carries its own calendar date that is already in the offset above;
+    # shifting again put the stamp a full day before its session.
+    if hour >= 18 and not dated:
         offset -= 1
     try:
-        return int(market.at(f"{hour:02d}:{minute:02d}", offset))
+        return int(_at(market, f"{hour:02d}:{minute:02d}", offset))
     except Exception:
         return None
 
@@ -2485,6 +2771,42 @@ def _printed_window_ns(market, date_text, time_et) -> tuple[int, int] | None:
     return first, last
 
 
+def _printed_window_for(market, entry: Mapping[str, Any]) -> tuple[int, int] | None:
+    """The printed window, shifted for charts that label bars by their close.
+
+    NinjaTrader labels a bar with the time it ENDS, so a fill the author marks
+    at 09:35 traded inside the bar that opens 09:34. TradingView labels bars by
+    their open and needs no shift. Without this the NinjaTrader examples are
+    read one minute late and every match is pushed a bar out.
+    """
+    window = _printed_window_ns(market, entry.get("date"), entry.get("time_et"))
+    if window is None:
+        return None
+    clock_text = str(entry.get("chart_clock") or "").lower()
+    if "ninjatrader" in clock_text:
+        shift = 60 * 1_000_000_000
+        return window[0] - shift, window[1] - shift
+    return window
+
+
+#: Owner decision, 2026-09-17: the fill tolerance for a reproduced entry.
+STRICT_10_POINTS = Decimal("10")
+
+
+def _mode_supported(branch: str | None, mode: str | None) -> bool:
+    """Is this fill mode one the source or the tickets support for this branch?
+
+    ``MODE_PREFERENCE`` is the order read off the author's own tickets. Where a
+    branch has an order, only those modes count; where the tickets are silent
+    the branch has no order and every mode the scanner emits is admissible --
+    silence is not evidence against a mode.
+    """
+    order = MODE_PREFERENCE.get(str(branch)) or ()
+    if not order:
+        return True
+    return str(mode) in order
+
+
 def match_entry(market, episodes, entry, *, strict_points: Decimal = REPLAY_LEVEL_TOLERANCE) -> dict[str, Any]:
     """Does any episode produce this narrated entry, on this side, at this time?
 
@@ -2492,7 +2814,7 @@ def match_entry(market, episodes, entry, *, strict_points: Decimal = REPLAY_LEVE
     Where the post narrates the trade without printing a fill, the comparison is
     our reference level to the level the post names.
     """
-    window = _printed_window_ns(market, entry.get("date"), entry.get("time_et"))
+    window = _printed_window_for(market, entry)
     want_ns = None if window is None else window[0]
     price = entry.get("price")
     compare_to = price if price is not None else entry.get("reference_price")
@@ -2549,7 +2871,38 @@ def match_entry(market, episodes, entry, *, strict_points: Decimal = REPLAY_LEVE
         )
     best = scored[0] if scored else None
     ok_time = best is not None and best["bars_from_printed"] is not None and best["bars_from_printed"] <= bars_allowed
-    no_price = compare_to is None
+    # The owner's rule: strict wherever a PRICE is printed, play + side + time
+    # where the ticket prints none. A narrated reference level is still compared
+    # and reported (``delta_points`` against ``compare_to``), but it is a
+    # diagnostic -- it is not a fill, so it cannot make or break a strict match.
+    no_price = price is None
+    accepted = entry.get("accepted_by_owner")
+    # Owner decision, 2026-09-17: an entry counts as reproduced when the fill is
+    # within TEN points of the printed price on the right bar AND follows the
+    # author's framework -- same play, same branch, same side, and a fill mode
+    # the source or the tickets support. A coincidental fill from another branch
+    # or an unsupported mode inside ten points is NOT a match. The old +/-5
+    # count is kept beside it so the change stays visible.
+    framework = [
+        row
+        for row in rows
+        if row["branch"] == want_branch and _mode_supported(row["branch"], row["mode"])
+    ]
+    framework_in_time = [
+        row for row in framework if row["bars_from_printed"] is not None and row["bars_from_printed"] <= bars_allowed
+    ]
+    framework_best = min(
+        framework_in_time,
+        key=lambda row: Decimal("1e9") if row["delta_points"] is None else row["delta_points"],
+        default=None,
+    )
+
+    def _framework_hit(points: Decimal) -> bool:
+        if framework_best is None:
+            return False
+        if no_price:
+            return True
+        return framework_best["delta_points"] is not None and framework_best["delta_points"] <= points
     return {
         "printed_time_et": entry.get("time_et"),
         "printed_price": None if price is None else float(price),
@@ -2568,13 +2921,16 @@ def match_entry(market, episodes, entry, *, strict_points: Decimal = REPLAY_LEVE
             and (no_price or (best["delta_points"] is not None and best["delta_points"] <= tolerance))
             and PLAY_OF_BRANCH.get(best["branch"]) == PLAY_OF_BRANCH.get(entry.get("branch"))
         ),
-        "detected_strict": bool(
-            best
-            and ok_time
-            and best["delta_points"] is not None
-            and best["delta_points"] <= strict_points
-            and PLAY_OF_BRANCH.get(best["branch"]) == PLAY_OF_BRANCH.get(entry.get("branch"))
-        ),
+        # R3 rule A: where the ticket prints no price the match is play + side +
+        # time; there is no price to be strict about, so the strict column is
+        # the same test as the detected column rather than an automatic miss.
+        "accepted_by_owner": accepted,
+        "framework_entry": None if framework_best is None else float(framework_best["value"]),
+        "framework_delta_points": None if framework_best is None or framework_best["delta_points"] is None else float(framework_best["delta_points"]),
+        "framework_bars": None if framework_best is None else framework_best["bars_from_printed"],
+        "framework_mode": None if framework_best is None else framework_best["mode"],
+        "detected_strict_10": _framework_hit(STRICT_10_POINTS),
+        "detected_strict": _framework_hit(strict_points),
         "detected_within_3_bars": bool(
             best
             and best["bars_from_printed"] is not None

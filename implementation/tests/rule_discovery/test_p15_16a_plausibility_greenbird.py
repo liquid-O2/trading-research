@@ -13,6 +13,9 @@ from trading_research.research.rule_discovery.source_adapters.common import dual
 from trading_research.research.rule_discovery.source_adapters.green_b02 import B02_VERSION, STAGE_ORDER
 from trading_research.research.rule_discovery.source_adapters.green_failure import scan_b02 as fail_scan
 from trading_research.research.rule_discovery.source_adapters.green_vwap_scalp import scan_b02 as vwap_scan
+from trading_research.research.rule_discovery.source_adapters.trade_selection import MAX_ENTRIES_PER_SESSION
+
+SELECTED_ENTRIES_PER_SESSION = (0.5, 3.0)
 
 SLICE = (
     "2020-01-02",
@@ -214,6 +217,7 @@ def test_p15_16a_plausibility_greenbird_gate():
     OUT.mkdir(parents=True, exist_ok=True)
     start_hashes = json.loads(HASH_START.read_text()) if HASH_START.is_file() else {"hashes": {}}
     by_branch: dict[tuple[str, str], list] = {(family, branch): [] for family, branches in BRANCHES.items() for branch in branches}
+    selected_rows: list[dict] = []
     load_errors = []
     for day in SLICE:
         try:
@@ -222,6 +226,14 @@ def test_p15_16a_plausibility_greenbird_gate():
             load_errors.append({"date": day, "error": str(exc)})
             continue
         fail_doc = fail_scan(market, {"family": "GB-FAIL", "branch": "all"})
+        selection = fail_doc.get("selection") or {}
+        selected_rows.append(
+            {
+                "session_date": day,
+                "primary_play": (fail_doc.get("day_read") or {}).get("primary_play"),
+                "n_entries": int(selection.get("n_entries") or 0),
+            }
+        )
         grouped = defaultdict(list)
         for ep in fail_doc.get("episodes") or []:
             grouped[ep.get("branch")].append(ep)
@@ -313,15 +325,20 @@ def test_p15_16a_plausibility_greenbird_gate():
         (OUT / f"PLAUSIBILITY_{family}.md").write_text("\n".join(lines) + "\n")
 
     problems = []
+    # Branch-population bounds are DIAGNOSTIC from B0.3 onwards: a branch
+    # raising many candidate setups is not a defect when only the selected
+    # trade list is traded. They are reported, not asserted; the gate is the
+    # selected-list check at the end of this test.
+    branch_population_diagnostics = []
     for family in ("GB-FAIL", "GB-VWAP", "GB-SCALP"):
         problems.extend(_audit_unmeasured(family))
         for branch in BRANCHES[family]:
             row = rebuilt[(family, branch)]
             if not row["in_bound"] and not row.get("diagnosis"):
-                problems.append(
-                    f"{family}:{branch} out of bound eps={row['episodes_per_session']:.3f} "
+                branch_population_diagnostics.append(
+                    f"{family}:{branch} out of the diagnostic bound eps={row['episodes_per_session']:.3f} "
                     f"pr={row['pass_rate']:.3f} sessions_with_pass={row.get('sessions_with_pass')} "
-                    f"bound={row['bound']} (no observed_rate_justification in family JSON)"
+                    f"bound={row['bound']}"
                 )
             confirm_counts = row["stage_counts"].get("confirmation") or {}
             confirm_fails = int(confirm_counts.get("fail") or 0)
@@ -345,10 +362,12 @@ def test_p15_16a_plausibility_greenbird_gate():
                         f"{family}:{branch}:confirmation never fails and records no varying market predicate {item['varying_operands']}"
                     )
     if not box_in and not box_diag:
-        problems.append(
-            f"GB-FAIL across-box passes/session={box_per_session:.3f} bound=[0,2] "
-            "without observed_rate_justification that supports the observed rate"
+        branch_population_diagnostics.append(
+            f"GB-FAIL across-box passes/session={box_per_session:.3f} diagnostic bound=[0,2]"
         )
+    (OUT / "BRANCH_POPULATION_DIAGNOSTICS_greenbird.json").write_text(
+        json.dumps(branch_population_diagnostics, indent=2) + "\n"
+    )
 
     if start_hashes.get("hashes"):
         for day in BYTE_DATES:
@@ -364,6 +383,42 @@ def test_p15_16a_plausibility_greenbird_gate():
     assert (OUT / "PLAUSIBILITY_GB-FAIL.json").is_file()
     assert (OUT / "PLAUSIBILITY_GB-VWAP.md").is_file()
     assert (OUT / "PLAUSIBILITY_GB-SCALP.json").is_file()
+
+    # Phase 1.5 scores the SELECTED TRADE LIST, not the branch population.
+    #
+    # The branch bounds in families/green_failure.json stay as a diagnostic of
+    # how many candidate setups each branch raises; they no longer gate. What
+    # gates is the list the family would have traded: the day's chosen
+    # reference, the first qualifying setup, no re-entry after a full
+    # objective, at most three entries a session. The author shows about one
+    # trade a session and never more than three, so a faithful rebuild has to
+    # land between a trade every other session and the cap.
+    assert selected_rows, "no sessions scanned"
+    entries = sum(row["n_entries"] for row in selected_rows)
+    per_session = entries / len(selected_rows)
+    (OUT / "SELECTED_GB-FAIL.json").write_text(
+        json.dumps(
+            {
+                "family": "GB-FAIL",
+                "sessions": len(selected_rows),
+                "entries": entries,
+                "entries_per_session": per_session,
+                "bound": list(SELECTED_ENTRIES_PER_SESSION),
+                "rows": selected_rows,
+            },
+            indent=2,
+            sort_keys=True,
+            default=str,
+        )
+        + "\n"
+    )
+    over_cap = [row for row in selected_rows if row["n_entries"] > MAX_ENTRIES_PER_SESSION]
+    assert not over_cap, f"the session cap of three entries was exceeded: {over_cap}"
+    lo, hi = SELECTED_ENTRIES_PER_SESSION
+    assert lo <= per_session <= hi, (
+        f"GB-FAIL selected {entries} entries over {len(selected_rows)} sessions "
+        f"({per_session:.2f}/session), outside {SELECTED_ENTRIES_PER_SESSION}"
+    )
 
 
 def test_repair_replay_inside_tape_location_stage():

@@ -130,8 +130,14 @@ def prior_value_area(market, fraction: str = ".70") -> dict[str, Any] | None:  #
                 "scope": "prior_rth_profile_0.70",
             }
             if result["vah"] is None or result["val"] is None:
-                result = None
-    except Exception:
-        result = None
+                result = {"unavailable": "profile_returned_no_value_area"}
+        else:
+            result = {"unavailable": "no_prior_session_window"}
+    except Exception as exc:
+        # Never a silent None: the reason the value area could not be measured
+        # is carried so the day read can record read_inputs_missing and the
+        # population can count it, instead of 53 sessions quietly losing their
+        # open location.
+        result = {"unavailable": f"{type(exc).__name__}: {exc}"}
     setattr(market, "_prior_value_cache", result)
     return result

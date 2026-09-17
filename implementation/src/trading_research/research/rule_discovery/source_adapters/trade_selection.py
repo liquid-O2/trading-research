@@ -20,6 +20,52 @@ from typing import Any, Iterable, Mapping, Sequence
 
 MAX_ENTRIES_PER_SESSION = 3
 
+#: Which fill of one opportunity the author actually took.
+#:
+#: The branch scans emit every fill the rules admit -- the limit at the level,
+#: the close of the candle that failed it, the open of the bar after the
+#: rejection candle -- as alternative fills of ONE opportunity. Selecting the
+#: earliest of them always picks the most aggressive (the resting limit), which
+#: on 2026-07-16 puts the EQ short on the 09:30 bar's dip, before the spike that
+#: made the setup, and against the next 71 points of tape.
+#:
+#: The order below is read off the replay of the author's own tickets: for each
+#: strict match among the 40 inside-tape proper entries, which mode reproduced
+#: it. It is published as "Fill modes that reproduced the author's tickets" in
+#: REBUILD_JJ_GB_2026-09-17.md. Modes not in a branch's list, and branches not
+#: listed here, fall back to the earliest decision and are recorded as such --
+#: no order is invented where the tickets are silent.
+MODE_PREFERENCE: dict[str, tuple[str, ...]] = {
+    # --- read off the replay of the author's tickets (strict matches, 2026-09-17)
+    "judas_reversal": ("at_level", "signature_close"),            # 4 + 3 tickets
+    "other_session": ("rejection_block", "absorption"),           # 2 + 1
+    "extension_reaction": ("absorption", "orderblock", "rejection_block"),  # 2 + 1 + 1
+    "timed_pzone_reversal": ("rejection_close", "at_level"),      # 1 + 1
+    "internal_rotation": ("two_minute_close",),                   # 1 (2026-07-10)
+    "single_purged": ("two_minute_close",),                       # 1 (2026-07-28)
+    # The ticket-evidenced mode first, then the mode the SOURCE TEXT names for
+    # the same failure trade -- "wait for the 5 min close back below the PDL
+    # after sweeping above it", then "low risk entry on any retracement with
+    # stops above PDL" (GB p.3). That rule is written for the failure family as
+    # a whole, so the retracement limit is supported on every failure branch,
+    # not only on the ones a ticket happens to show it on.
+    "prior_week_level": ("post_open_retest", "five_minute_close", "at_level"),   # ticket 2025-11-19
+    "previous_hour": ("five_minute_close", "at_level"),                         # ticket 2026-04-23
+    "nyam_box": ("five_minute_close", "at_level"),                              # ticket 2026-08-28
+    # --- no ticket reproduced these branches strictly; the order is the one the
+    # --- SOURCE TEXT names for the Green Bird failure trade -- "wait for the
+    # --- 5-minute close through the level", then "low risk entry on any
+    # --- retracement with stops above PDL" (GB p.3) -- and nothing more.
+    "prior_day_level": ("five_minute_close", "at_level"),
+    "asia_box": ("five_minute_close", "at_level"),
+    "london_box": ("five_minute_close", "at_level"),
+    "asia_tdo_case": ("five_minute_close", "at_level"),
+}
+
+#: Branches whose preference order the tickets do not determine. Recorded in the
+#: selection payload so the report can say which ones are still "earliest".
+UNEVIDENCED_FALLBACK = "earliest_decision"
+
 
 def _d(value: Any) -> Decimal | None:
     if value is None:
@@ -118,14 +164,47 @@ def select_session_trades(
         rows.append((int(decision), episode, entry, stop, _d(geometry.get("target"))))
     rows.sort(key=lambda item: (item[0], str(item[1].get("branch")), str(item[1].get("side"))))
 
+    # One opportunity is one (branch, side, reference, cycle). Among its
+    # alternative fills the author's own tickets decide which one he took; only
+    # where they are silent does the earliest decision win.
+    best_by_key: dict[tuple, tuple] = {}
+    fallbacks: set[str] = set()
+    for row in rows:
+        episode = row[1]
+        key = _episode_key(episode)
+        order = MODE_PREFERENCE.get(str(episode.get("branch"))) or ()
+        if not order:
+            fallbacks.add(str(episode.get("branch")))
+        mode = str((episode.get("values") or {}).get("confirmation_mode"))
+        rank = order.index(mode) if mode in order else len(order)
+        current = best_by_key.get(key)
+        if current is None or (rank, row[0]) < (current[0], current[1][0]):
+            best_by_key[key] = (rank, row)
+    rows = [item[1] for item in best_by_key.values()]
+    rows.sort(key=lambda item: (item[0], str(item[1].get("branch")), str(item[1].get("side"))))
+
     taken: list[dict[str, Any]] = []
     seen_keys: set[tuple] = set()
     busy_until: int | None = None
     finished = False
     skipped = {"duplicate": 0, "position_open": 0, "after_objective": 0, "max_entries": 0}
+    NEAR_PRICE = Decimal("2")
+    NEAR_NS = 10 * 60 * 1_000_000_000
     for decision, episode, entry, stop, target in rows:
         key = _episode_key(episode)
         if key in seen_keys:
+            skipped["duplicate"] += 1
+            continue
+        # Two fills at the same price, on the same branch and side, minutes
+        # apart are one trade however the reference ids differ: 2026-07-10
+        # otherwise takes 29,804.25 twice, at 09:04 and 09:05.
+        if any(
+            row["branch"] == episode.get("branch")
+            and row["side"] == episode.get("side")
+            and abs(row["entry"] - entry) <= NEAR_PRICE
+            and abs(int(row["decision_at"]) - decision) <= NEAR_NS
+            for row in taken
+        ):
             skipped["duplicate"] += 1
             continue
         if finished:
@@ -166,6 +245,7 @@ def select_session_trades(
     return {
         "entries": taken,
         "n_entries": len(taken),
+        "mode_preference_fallback": sorted(fallbacks),
         "n_candidates": len(rows),
         "skipped": skipped,
         "max_entries": max_entries,

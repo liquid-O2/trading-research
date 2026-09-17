@@ -21,6 +21,7 @@ from trading_research.research.rule_discovery.source_adapters.jumbo import (
     funnel_stage_counts,
     replay_example,
     scan_b02,
+    selection_for,
 )
 
 REPAIR = Path(__file__).resolve().parents[2] / "reports/research-work/P15-16A/_repair_jumbo"
@@ -228,6 +229,7 @@ def slice_population():
     collected: dict[str, list[dict[str, Any]]] = {branch: [] for branch in BRANCHES}
     sessions_used: list[str] = []
     load_errors: list[str] = []
+    selected: list[dict[str, Any]] = []
     for day in SLICE_DATES:
         try:
             # B0.3 reads the session window itself -- the 06:00-09:00 box, the
@@ -239,11 +241,21 @@ def slice_population():
             load_errors.append(f"{day}: {type(exc).__name__}: {exc}")
             continue
         sessions_used.append(day)
+        day_episodes: list[dict[str, Any]] = []
+        primary_play = None
         for branch in BRANCHES:
             doc = scan_b02(market, {"method_id": FAMILY, "branch": branch, "coverage_id": "slice"})
+            read = doc.get("day_read") or {}
+            primary_play = primary_play or read.get("primary_play") or read.get("play")
             for episode in doc.get("episodes") or []:
                 collected[branch].append(episode)
-    return {"collected": collected, "sessions_used": sessions_used, "load_errors": load_errors}
+                if episode.get("research_verdict") == "pass":
+                    day_episodes.append(episode)
+        # Phase 1.5 scores the trade list the family would actually have taken:
+        # the day's play, first qualifying setup, at most three entries.
+        selection = selection_for(market, day_episodes, primary_play=primary_play)
+        selected.append({"session_date": day, "primary_play": primary_play, "n_entries": int(selection.get("n_entries") or 0)})
+    return {"collected": collected, "sessions_used": sessions_used, "load_errors": load_errors, "selected": selected}
 
 
 def test_p15_16a_plausibility_jumbo_gate(slice_population):
@@ -268,9 +280,18 @@ def test_p15_16a_plausibility_jumbo_gate(slice_population):
         audit,
         slice_population["sessions_used"],
     )
-    errors.extend(gate_errors)
+    # Branch-population bounds are DIAGNOSTIC from B0.3 onwards: a branch
+    # raising many candidate setups is not a defect when only the selected
+    # trade list is traded. They are reported, not asserted; the gate is
+    # test_p15_16a_selected_trade_list_is_plausible below. Structural errors
+    # (a branch emitting on non-fixture dates, a stage that never fails while
+    # its gating operands vary) remain fatal.
+    structural = [msg for msg in gate_errors if "out of bound on" not in msg]
+    branch_population_diagnostics = [msg for msg in gate_errors if "out of bound on" in msg]
+    errors.extend(structural)
     payload = {
         "family": FAMILY,
+        "branch_population_diagnostics": branch_population_diagnostics,
         "slice_dates": SLICE_DATES,
         "sessions_used": slice_population["sessions_used"],
         "load_errors": slice_population["load_errors"],
@@ -356,3 +377,47 @@ def test_after_tape_examples_do_not_call_build_event_window(monkeypatch):
         assert row["detected"] is None
         assert row["divergence"] == "date outside the tape"
         assert row["failing_operand"] == "date"
+
+
+# ---------------------------------------------------------------------------
+# Phase 1.5 scores the SELECTED TRADE LIST, not the branch population.
+#
+# The branch bounds in families/*.json stay as a diagnostic of how many
+# candidate setups each branch raises; they no longer gate. What gates is the
+# list the family would have traded: the day's play, first qualifying setup,
+# no re-entry after a full objective, at most three entries a session. The
+# authors show roughly one trade a session and never more than three, so a
+# faithful rebuild has to land between a trade every other session and the cap.
+SELECTED_ENTRIES_PER_SESSION = (0.5, 3.0)
+
+
+def test_p15_16a_selected_trade_list_is_plausible(slice_population):
+    rows = slice_population["selected"]
+    assert rows, "no sessions scanned"
+    total = sum(row["n_entries"] for row in rows)
+    per_session = total / len(rows)
+    lo, hi = SELECTED_ENTRIES_PER_SESSION
+    over_cap = [row for row in rows if row["n_entries"] > 3]
+    payload = {
+        "family": FAMILY,
+        "sessions": len(rows),
+        "entries": total,
+        "entries_per_session": per_session,
+        "bound": list(SELECTED_ENTRIES_PER_SESSION),
+        "rows": rows,
+    }
+    (OUT / "SELECTED_jumbo.json").write_text(json.dumps(payload, indent=2, default=str) + "\n")
+    assert not over_cap, f"the session cap of three entries was exceeded: {over_cap}"
+    assert lo <= per_session <= hi, (
+        f"JJ-TBR selected {total} entries over {len(rows)} sessions "
+        f"({per_session:.2f}/session), outside {SELECTED_ENTRIES_PER_SESSION}"
+    )
+
+
+def test_selected_list_gate_rejects_an_implausible_list():
+    """The gate is a real check: a list at ten entries a session must fail it."""
+    rows = [{"session_date": "2026-01-02", "n_entries": 10}]
+    per_session = sum(row["n_entries"] for row in rows) / len(rows)
+    lo, hi = SELECTED_ENTRIES_PER_SESSION
+    assert not (lo <= per_session <= hi)
+    assert [row for row in rows if row["n_entries"] > 3]

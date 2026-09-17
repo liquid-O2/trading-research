@@ -474,7 +474,13 @@ def test_rules_table_is_keyed_by_rule_id_with_a_source():
     assert {row["rule_id"] for row in rows} == set(jj.RULES)
     for row in rows:
         assert row["source"]
-        assert row["kind"] in {"literal", "OD"}
+        # "fitted" is a third, deliberately visible kind: a rule the sources
+        # state qualitatively but never quantify, whose threshold was set on
+        # named tickets. It must say which ones.
+        assert row["kind"] in {"literal", "OD", "fitted"}, rule_id
+        if row["kind"] == "fitted":
+            assert row.get("fitted") is True, rule_id
+            assert row.get("fitted_on"), rule_id
         assert row["file_line"].startswith("source_adapters/jumbo.py")
 
 
