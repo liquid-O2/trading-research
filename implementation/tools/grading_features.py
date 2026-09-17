@@ -461,3 +461,71 @@ def context_profile_features(market, level: Decimal, side: str, at_ns: int) -> d
         out["eth_mid_distance"] = None
         out["rth_open_inside_eth_value"] = None
     return out
+
+
+# --------------------------------------------------------------------------- the weekly delta print band
+#
+# S1 ledger (Jumbo): "prior-day and weekly delta-print bands (the price bands
+# where large one-sided delta printed)"; Sires: the delta print is the highest
+# point of the delta profile (DELTA p.7). The weekly band is the delta profile
+# over the prior five sessions' footprints, its print price and the band of
+# prices holding the same-signed delta around it.
+
+
+def weekly_delta_print(market, n: int = 5) -> dict | None:
+    """The prior ``n`` sessions' merged delta profile: its print price, sign
+    and the contiguous band of same-signed delta around it (points)."""
+    from datetime import date as _date, timedelta as _td
+
+    from trading_research.research.rule_discovery.source_adapters.common import load_source_market, require_native_session
+
+    merged: dict[Decimal, float] = {}
+    day = _date.fromisoformat(str(market.day)) if not isinstance(market.day, _date) else market.day
+    probe, got, tries = day, 0, 0
+    while got < n and tries < 14:
+        probe -= _td(days=1)
+        tries += 1
+        key = f"delta:{probe.isoformat()}"
+        prof = _PRIOR_CACHE.get(key)
+        if key not in _PRIOR_CACHE:
+            try:
+                require_native_session(probe.isoformat())
+                prior = load_source_market(probe.isoformat())
+                prof = delta_profile(prior, int(prior.start), int(prior.end))
+            except Exception:
+                prof = None
+            _PRIOR_CACHE[key] = prof
+        if prof:
+            got += 1
+            for px, v in prof.items():
+                merged[px] = merged.get(px, 0.0) + v
+    if not merged:
+        return None
+    px, value = delta_print(merged)
+    if px is None:
+        return None
+    sign = 1 if value > 0 else -1
+    prices = sorted(merged)
+    i = prices.index(px)
+    lo = hi = px
+    j = i
+    while j - 1 >= 0 and merged[prices[j - 1]] * sign > 0:
+        j -= 1
+        lo = prices[j]
+    j = i
+    while j + 1 < len(prices) and merged[prices[j + 1]] * sign > 0:
+        j += 1
+        hi = prices[j]
+    return {"print": px, "delta": value, "band": (lo, hi)}
+
+
+def weekly_delta_features(market, level: Decimal, side: str) -> dict:
+    w = weekly_delta_print(market)
+    if w is None or level is None:
+        return {"weekly_delta_print_distance": None, "weekly_delta_print_with_side": None, "weekly_delta_band_contains": None}
+    lo, hi = w["band"]
+    return {
+        "weekly_delta_print_distance": float(abs(w["print"] - level)),
+        "weekly_delta_print_with_side": bool((w["delta"] > 0) == (side == "long")),
+        "weekly_delta_band_contains": bool(lo - NEAR <= level <= hi + NEAR),
+    }
