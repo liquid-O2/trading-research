@@ -72,22 +72,18 @@ def adaptive_big(orders, *, quantile: float, lookback_s: int, floor: int):
     """Orders whose size sits in the top ``1 - quantile`` of the aggressor orders
     of the trailing ``lookback_s`` seconds (causal; the author adjusts the
     bubble scale "with the session's volume", BIG p.3). ``floor`` keeps a
-    quiet overnight from admitting five-lot orders as big trades."""
+    quiet overnight from admitting five-lot orders as big trades. The rolling
+    quantile is taken on a time index (pandas), closed on the left so the
+    order itself is not in its own window."""
     import numpy as np
+    import pandas as pd
     o = orders.sort_values("t").reset_index(drop=True)
-    t = o["t"].to_numpy()
-    size = o["size"].to_numpy()
-    keep = np.zeros(len(o), dtype=bool)
-    thresholds = np.zeros(len(o))
-    left = 0
-    for i in range(len(o)):
-        while t[left] < t[i] - lookback_s * NS:
-            left += 1
-        window = size[left:i] if i > left else size[:1]
-        thr = max(float(np.quantile(window, quantile)) if len(window) >= 50 else float(floor), float(floor))
-        thresholds[i] = thr
-        keep[i] = size[i] >= thr
-    o = o.assign(threshold=thresholds)
+    idx = pd.to_datetime(o["t"].to_numpy(), unit="ns")
+    s = pd.Series(o["size"].to_numpy(dtype=float), index=idx)
+    roll = s.rolling(f"{lookback_s}s", closed="left", min_periods=50).quantile(quantile)
+    thr = np.maximum(roll.fillna(float(floor)).to_numpy(), float(floor))
+    keep = o["size"].to_numpy() >= thr
+    o = o.assign(threshold=thr)
     return o[keep]
 
 
