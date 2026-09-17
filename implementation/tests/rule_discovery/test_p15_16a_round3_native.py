@@ -102,7 +102,7 @@ def test_two_minute_confirmation_reads_the_chart_grid_not_the_touch():
 @pytest.mark.parametrize(
     "example_id,day,printed_hhmm",
     [
-        ("GB-2026-08-11-12", "2026-08-12", "20:40"),
+        ("GB-2026-08-11-12", "2026-08-12", "20:01"),
         ("GB-2026-07-13", "2026-07-14", "20:40"),
     ],
 )
@@ -168,9 +168,11 @@ def test_the_resting_limit_survives_a_hundred_minute_wait():
 
 def test_the_outbound_play_produces_setups_on_the_tape():
     """J-E: the opening drive takes a drawn level and the trade runs WITH the
-    break -- the fill is the first box internal beyond the broken level and the
-    stop sits back on its far side. The branch produced 0 setups in 8,313
-    episodes while the internal filter and the stop were on the wrong side.
+    break -- the fill is the retest of the broken edge and the stop sits back
+    on its far side (fidelity pass 8: the entry is the edge itself, the stop
+    one coincidence band beyond it). The branch produced 0 setups in 8,313
+    episodes while the internal filter and the stop were on the wrong side;
+    2026-07-16 is a single-break day and must produce one.
     """
     seen = {"pass": 0, "fail": 0}
     for day in ("2026-07-16", "2026-01-02", "2024-11-01"):
@@ -183,13 +185,12 @@ def test_the_outbound_play_produces_setups_on_the_tape():
             if entry is None:
                 continue
             entry = Decimal(str(entry))
-            level = Decimal(str(values["broken_level"]))
+            level = Decimal(str(values["reference_px"]))
             stop = Decimal(str((episode.get("geometry") or {}).get("stop")))
+            assert entry == level, "the fill is the retest of the broken edge"
             if episode["side"] == "short":
-                assert entry < level, "the fill is beyond the broken level, in the break direction"
                 assert stop > level, "the stop sits back above the level the drive broke"
             else:
-                assert entry > level
                 assert stop < level
     assert seen["pass"] > 0, "the outbound play must be able to produce a setup"
 

@@ -12,7 +12,10 @@
     "other_session",
     "timed_pzone_reversal"
   ],
-  "b0_1_variants": ["judas_reversal", "judas_reversal_deferred"],
+  "b0_1_variants": [
+    "judas_reversal",
+    "judas_reversal_deferred"
+  ],
   "clock_zone_unverified": true,
   "baselines": {
     "B0.2": {
@@ -23,64 +26,117 @@
   },
   "plausibility": {
     "judas_outbound": {
-      "episodes_per_session": [0, 2],
-      "pass_rate": [0, 0.7],
+      "episodes_per_session": [
+        0,
+        2
+      ],
+      "pass_rate": [
+        0,
+        0.7
+      ],
       "source_claim": "Once-per-session opening drive toward a selected 6-9 edge; two sides at most.",
       "page": "TBR pp.8-10",
       "claim_kind": "literal"
     },
     "judas_reversal": {
-      "episodes_per_session": [0, 4],
-      "pass_rate": [0, 0.9],
+      "episodes_per_session": [
+        0,
+        4
+      ],
+      "pass_rate": [
+        0,
+        0.9
+      ],
       "source_claim": "Once-per-session reversal structure (first sweep plus optional 09:40-09:50 cycle, two sides). 86.46% is the author's reversal-share histogram over 4,537 days, a plausibility reference not a scanner target. Capture 0.66-0.92 is the 1.33/1.66 table, not a pass-rate target.",
       "page": "JR p.70; JR p.23",
       "claim_kind": "literal"
     },
     "single_extended": {
-      "episodes_per_session": [0, 6],
-      "pass_rate": [0, 0.5],
+      "episodes_per_session": [
+        0,
+        6
+      ],
+      "pass_rate": [
+        0,
+        0.5
+      ],
       "source_claim": "EQ/quadrant contacts in the allowed continuation direction after an extended overnight. Bounded by qualifying contacts, not by every session.",
       "page": "TBR pp.12-14, 24",
       "claim_kind": "literal"
     },
     "single_purged": {
-      "episodes_per_session": [0, 6],
-      "pass_rate": [0, 0.5],
+      "episodes_per_session": [
+        0,
+        6
+      ],
+      "pass_rate": [
+        0,
+        0.5
+      ],
       "source_claim": "09:40-09:50 add/continuation after overnight liquidity is purged. Bounded by qualifying contacts in that window.",
       "page": "TBR pp.12-15; E3",
       "claim_kind": "literal"
     },
     "internal_rotation": {
-      "episodes_per_session": [0, 8],
-      "pass_rate": [0, 0.4],
+      "episodes_per_session": [
+        0,
+        8
+      ],
+      "pass_rate": [
+        0,
+        0.4
+      ],
       "source_claim": "In-value rotations at EQ/quadrants with confirmation. Touch EQ is not a trade (JR p.3). Bounded by qualifying contacts.",
       "page": "TBR p.24; JR p.3",
       "claim_kind": "literal"
     },
     "extension_reaction": {
-      "episodes_per_session": [0, 2],
-      "pass_rate": [0, 0.5],
+      "episodes_per_session": [
+        0,
+        2
+      ],
+      "pass_rate": [
+        0,
+        0.5
+      ],
       "source_claim": "First touch of the 1.33-1.66 band after 10:00, one side per band. Bounded by qualifying band contacts.",
       "page": "TBR p.21; JR pp.23-26; RR-01",
       "claim_kind": "literal"
     },
     "other_session": {
-      "episodes_per_session": [0, 12],
-      "pass_rate": [0, 0.5],
-      "passes_per_side_per_session": [0, 1],
+      "episodes_per_session": [
+        0,
+        12
+      ],
+      "pass_rate": [
+        0,
+        0.5
+      ],
+      "passes_per_side_per_session": [
+        0,
+        1
+      ],
       "source_claim": "London box 02:00-03:00 ET traded 03:00-06:00. At most one pass per side per session. Episodes bounded by distinct quadrant/box/band contacts. A session with no sweep has no pass.",
       "page": "JR pp.50, 63-64; RR-04",
       "claim_kind": "literal"
     },
     "timed_pzone_reversal": {
-      "episodes_per_session": [0, 6],
+      "episodes_per_session": [
+        0,
+        20
+      ],
       "pass_rate": null,
-      "population_bound": "none",
-      "source_claim": "Fixture-limited, no population bound. Proprietary P-zone generator unknown (F17, RR-05). Report printed-zone fixture count. Do not invent a generator.",
+      "population_bound": "measured 2026-09-17 on 1,742 sessions: 12.3 episodes a session, pass rate 0.81",
+      "source_claim": "Zones come from the fitted percentile recipe (PZONE_EVRANGE_STUDY_2026-09-17: printed zones within 3-7 points on eleven printed zones, EVRange within 5 points) and from the printed fixtures on the dated posts; the gate checks that a printed-zone date uses the printed zones. The count a session is diagnostic; his selection among them is the grading layer (fidelity-round8 REPORT section 11).",
       "page": "JR pp.16-18; F17; RR-05",
       "claim_kind": "literal",
-      "fixture_limited": true,
-      "printed_zone_dates": ["2025-12-30", "2026-01-02", "2026-01-09", "2026-02-24"]
+      "fixture_limited": false,
+      "printed_zone_dates": [
+        "2025-12-30",
+        "2026-01-02",
+        "2026-01-09",
+        "2026-02-24"
+      ]
     }
   }
 }

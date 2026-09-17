@@ -20,11 +20,13 @@ from trading_research.research.rule_discovery.source_adapters.trade_selection im
 # parent package, so the shared fake-market helper is imported both ways.
 try:  # pragma: no cover - the path taken depends on how the module is loaded
     from .fake_market import FakeMarket, bar, flat_series
+    from .selection_invariants import assert_one_position_at_a_time
 except ImportError:  # pragma: no cover
     import sys as _sys
 
     _sys.path.insert(0, str(Path(__file__).resolve().parent))
     from fake_market import FakeMarket, bar, flat_series
+    from selection_invariants import assert_one_position_at_a_time
 
 REPO = Path(__file__).resolve().parents[3]
 EXAMPLES = REPO / "planning/phase-1-5/AUTHOR_EXAMPLES_2026-09-17.json"
@@ -184,17 +186,24 @@ def test_j2_modal_window_is_recorded_when_the_sweep_is_inside_it():
 
 def test_j3_opening_range_retracement_is_a_sibling_of_the_single_break_case():
     """Audit 1.3 J3: the 15-minute OR mid / quadrant retracement (2026-02-24,
-    2026-07-16, 2026-07-21) had no branch."""
+    2026-07-16, 2026-07-21) had no branch. Fidelity pass 8 (JR: "range mid
+    provided the entry area", 2026-07-27 09:02): the single-break case from
+    09:00 trades the EQ, the purged case from 09:30 adds the quadrants, the
+    range open and the 15-minute opening-range lines; the rotation play trades
+    the range edges and the prior value edges, never the opening range."""
     market = _session()
-    box = jj.box_geometry(market, "ny")
-    kinds = {row["kind"] for row in jj._eq_locations(market, box, "single_extended")}
-    assert {"or15_mid", "or15_q25", "or15_q75"} <= kinds
-    assert {"eq", "q25", "q75", "range_open"} <= kinds
-    rotation = {row["kind"] for row in jj._eq_locations(market, box, "internal_rotation")}
-    assert "or15_mid" not in rotation
+    extended, omissions = jj._eq_lines(market, "single_extended")
+    assert not omissions
+    assert {kind for kind, _px in extended["lines"]} == {"eq"}
+    purged, _omissions = jj._eq_lines(market, "single_purged")
+    kinds = {kind for kind, _px in purged["lines"]}
+    assert {"eq", "q25", "q75", "range_open", "or15_mid", "or15_q25", "or15_q75"} <= kinds
+    rotation, _omissions = jj._eq_lines(market, "internal_rotation")
+    rotation_kinds = {kind for kind, _px in rotation["lines"]}
+    assert not any(kind.startswith("or15") for kind in rotation_kinds)
     # "open inside prior RTH value: range scalps" (2026-07-10): the in-value day
     # is scalped at the range edges too.
-    assert {"box_low", "box_high"} <= rotation
+    assert {"box_low", "box_high"} <= rotation_kinds
 
 
 # --------------------------------------------------------------------------- J4
@@ -223,21 +232,25 @@ def test_j5_sweep_depth_is_classified_against_the_mean_reversal_band(depth_fract
     assert jj.depth_class(width * depth_fraction, width) == expected
 
 
-def test_j5_a_one_tick_poke_does_not_reach_the_exhaustion_area():
-    """The negative control: a sweep that stops one tick beyond the edge is not
-    the author's location."""
-    market = _session(sweep_to=21257)  # a single tick below the 21258 low
+def test_j5_a_shallow_poke_is_still_the_raid_and_its_depth_is_an_operand():
+    """JR p.20 (fidelity pass 8): the Judas is any raid of the 6-9 edge that
+    fails; how deep it went is recorded for the grading layer, not gated. The
+    earlier negative control (a poke short of the 0.33-0.66 band failed at the
+    location stage) is retired with that reading."""
+    market = _session(sweep_to=21257)  # a poke just below the 21258 low
     document = jj.scan_b02(market, {"branch": "judas_reversal"})
     swept = [
         ep
         for ep in document["episodes"]
-        if ep["values"].get("location_kind") == "swept_liquidity" and ep["values"].get("reference_kind") == "box_low"
+        if ep["values"].get("location_kind") == "edge_sweep" and ep["values"].get("reference_kind") == "box_low"
     ]
     assert swept
-    assert all(ep["research_verdict"] != "pass" for ep in swept)
     stage = next(row for row in swept[0]["stages"] if row["stage"] == "location")
-    assert stage["verdict"] == "fail"
-    assert stage["operands"]["reason"] == "sweep_short_of_exhaustion_area"
+    assert stage["verdict"] == "pass"
+    assert stage["operands"]["reason"] is None
+    width = Decimal(str(jj.box_geometry(market, "ny")["width"]))
+    assert Decimal(str(stage["operands"]["depth_points"])) < width / 3
+    assert stage["operands"]["depth_class"] == "inside_0_0.33"
 
 
 # --------------------------------------------------------------------------- J6 and the day read
@@ -254,8 +267,12 @@ def test_j6_the_day_read_is_recorded_with_its_inputs_and_gates_the_plays():
     document = jj.scan_b02(market, {"branch": "all"})
     plays = {ep["values"]["play"] for ep in document["episodes"]}
     assert plays <= set(read["plays"])
-    skipped = {row["play"] for row in document["omissions"] if row.get("reason") == "play_not_in_the_day_read"}
-    assert skipped.isdisjoint(set(read["plays"]))
+    # J-C: every play stays available; a branch is left out only by the read
+    # condition it needs, and the omission names that condition.
+    reasons = {row.get("reason") for row in document["omissions"]}
+    assert "play_not_in_the_day_read" not in reasons
+    assert ("read_has_no_break_direction" in reasons) == (read["trend_direction"] is None)
+    assert ("rotation_needs_inside_value_or_big_range" in reasons) == (not (read["open_inside_value"] or read["big_range"]))
 
 
 def test_j6_the_classification_chooses_the_primary_play_and_never_empties_the_day():
@@ -281,15 +298,15 @@ def test_j_c_the_single_break_side_follows_the_break_the_session_shows():
     """2026-07-27: "single break behaviour through A period, range mid provided
     the entry area" -- one edge gone, the other untouched, and the trade is the
     break's own direction."""
-    market = _session()
-    box = jj.box_geometry(market, "ny")
-    after_sweep = jj.break_state(market, box, market.at("10:00"))
-    assert after_sweep["broke_low"] is True
-    assert after_sweep["broke_high"] is False
-    assert after_sweep["single_break"] is True
-    assert after_sweep["side"] == "short"
-    before = jj.break_state(market, box, market.at("09:10"))
-    assert before["single_break"] is False
+    trend = _session(box_low=21000, box_high=21500, open_price=20900, rth_open=20900, prior_low=21200, prior_high=21600, val=21250, vah=21550)
+    read = jj.session_context(trend)["read"]
+    assert read["classification"] == "single_break"
+    assert read["trend_direction"] == "short"
+    purged, _omissions = jj._eq_lines(trend, "single_purged")
+    assert purged["sides"] == ("short",), "the purged case runs the break's own way"
+    extended, _omissions = jj._eq_lines(trend, "single_extended")
+    assert extended["sides"] == ("long", "short"), "the pre-open EQ case waits for the tape to show the break"
+    assert jj.session_context(_session())["read"]["trend_direction"] is None
 
 
 # --------------------------------------------------------------------------- J7 and J8
@@ -303,18 +320,22 @@ def test_j7_london_confirmation_accepts_any_of_the_2m_3m_5m_signatures():
     assert set(rule["parameters"]["signatures"]) == {"orderblock", "rejection_block", "absorption"}
 
 
-def test_j8_london_records_the_edge_raid_and_does_not_require_it():
-    """Audit 1.3 J8: the author's London entries on 2025-10-07 and 2025-10-08
-    came at the 25% line with no box-edge sweep. This is why the old branch
-    produced 12,918 failures and 162 passes."""
+def test_j8_london_trades_the_raid_of_the_london_range_edge():
+    """Audit 1.3 J8 read the 2025-10-07 and 2025-10-08 London entries as
+    25%-line fills with no edge sweep; on the tape (REPLAY_JJ, fidelity round
+    8) both reproduce at the sweep of the London high within 10 points. The
+    location is the London edge (or a drawn level live from 02:00), and a
+    failure at the location stage never blames the raid itself."""
     market = _session()
     episodes, _omissions = jj._scan_other_session(market)
     assert episodes
+    kinds = set()
     for episode in episodes:
         stage = next(row for row in episode["stages"] if row["stage"] == "location")
-        assert "box_edge_swept" in stage["operands"]
-        if stage["verdict"] == "fail":
-            assert stage["operands"]["reason"] != "box_edge_swept"
+        kinds.add(stage["operands"]["kind"])
+        assert "box_edge_swept" not in stage["operands"]
+        assert stage["operands"]["reason"] != "box_edge_swept"
+    assert kinds & {"london_high", "london_low"}
 
 
 # --------------------------------------------------------------------------- J9
@@ -348,14 +369,26 @@ def test_j9_the_range_size_bin_is_recorded_on_every_episode_and_in_the_read():
 # --------------------------------------------------------------------------- J10 / J11 / J12
 
 
-def test_j10_single_purged_admits_both_directions_in_the_purge_direction():
-    """Audit 1.3 J10: the old branch admitted only opens below value. The purge
-    continues -- 2026-07-28 opened below the prior RTH value low with the
-    overnight low already taken and the author's day was "continuation down"."""
-    assert jj._context_sides("single_purged", {"open_location": "below_val", "purge": {"available": True, "purged_low": True}}) == ("short",)
-    assert jj._context_sides("single_purged", {"open_location": "above_vah", "purge": {"available": True, "purged_high": True}}) == ("long",)
-    assert jj._context_sides("single_purged", {"open_location": "below_val", "purge": {"available": True, "purged_low": True, "purged_high": True}}) == ("long", "short")
-    assert jj._context_sides("single_purged", {"open_location": "below_val", "purge": {"available": False}}) == ()
+@pytest.mark.parametrize(
+    "location,purge,expected",
+    [
+        ("below_val", {"available": True, "purged_low": True, "purged_high": False}, "short"),
+        ("above_vah", {"available": True, "purged_high": True, "purged_low": False}, "long"),
+        ("below_val", {"available": True, "purged_low": True, "purged_high": True}, "short"),
+        ("inside_value", {"available": True, "purged_low": True, "purged_high": True}, None),
+        ("below_val", {"available": False}, "short"),
+    ],
+)
+def test_j10_the_single_break_direction_is_the_purged_side_then_the_open_side(location, purge, expected):
+    """Audit 1.3 J10 / JR p.34: the purge continues -- 2026-07-28 opened below
+    the prior RTH value low with the overnight low already taken and the day
+    was "continuation down". One side purged names the direction; both purged
+    or none leaves it to the side of the open outside value; an open inside
+    value has no break direction to follow."""
+    context = {"range_class": {"pct": Decimal("1.5"), "bin": "1.2+"}, "purge": purge, "open_location": location, "rth_open_location": location, "levels": []}
+    read = jj.session_read(_session(), context)
+    assert read["classification"] == "single_break"
+    assert read["trend_direction"] == expected
 
 
 def test_j11_single_purged_window_is_the_am_with_0940_0950_as_the_add_window():
@@ -370,13 +403,16 @@ def test_j12_single_purged_objective_is_the_projection_not_the_range_edge():
     """Audit 1.3 J12: targets at the -1 / -1.33 / -1.66 projections."""
     market = _session(box_low=21000, box_high=21500, open_price=20900, rth_open=20900, prior_low=21200, prior_high=21600, val=21250, vah=21550)
     box = jj.box_geometry(market, "ny")
-    document = jj.scan_b02(market, {"branch": "single_purged"})
-    episodes = [ep for ep in document["episodes"] if ep["branch"] == "single_purged"]
-    for episode in episodes:
-        target = Decimal(str(episode["geometry"]["target"]))
-        expected = box["ladder"]["plus_1.33" if episode["side"] == "long" else "minus_1.33"]
-        assert target == expected
-        assert target not in {box["low"], box["high"]}
+    plan, _omissions = jj._eq_lines(market, "single_purged")
+    assert plan["sides"] == ("short",)
+    ladder = plan["objective"]["short"]
+    names = [rung["name"] for rung in ladder]
+    assert {"minus_1", "minus_1.33"} <= set(names)
+    assert names[-1] == "minus_1.33", "the far objective is a projection"
+    prices = [Decimal(str(rung["price"])) for rung in ladder]
+    assert prices == sorted(prices, reverse=True)
+    assert prices[-1] == box["ladder"]["minus_1.33"]
+    assert prices[-1] not in {box["low"], box["high"]}
 
 
 # --------------------------------------------------------------------------- J13
@@ -399,17 +435,24 @@ def test_j13_sessionstat_is_computed_from_the_tape_when_asked():
 # --------------------------------------------------------------------------- frequency
 
 
-def test_frequency_selection_takes_the_chosen_play_first_and_caps_at_three():
+def test_frequency_selection_takes_the_chosen_play_first_and_keeps_one_position():
     """Audit 1.1 'Sizing and frequency': one thesis per session, one to four
-    round trips."""
+    round trips. Fidelity pass 8: the candidate list holds every admitted
+    opportunity once (bounded per segment), the executed list is one position
+    at a time with adds and flips, and the day's play leads in New York. The
+    author's density itself is the grading layer (fidelity-round8 REPORT
+    section 11) and is gated in the plausibility test."""
     market = _session()
     document = jj.scan_b02(market, {"branch": "all"})
     selection = document["selection"]
-    assert selection["n_entries"] <= 3
     assert selection["primary_play"] == document["day_read"]["primary_play"]
-    if selection["n_entries"] and not selection["fallback_play_used"]:
-        taken = {jj.PLAY_OF_BRANCH[row["branch"]] for row in selection["entries"]}
-        assert taken == {selection["primary_play"]}
+    assert selection["n_entries"] <= jj.NY_ROUND_TRIPS + jj.LONDON_ROUND_TRIPS
+    executed = selection["executed"]
+    assert executed["n_round_trips"] <= executed["n_entries"]
+    assert_one_position_at_a_time(executed["entries"])
+    new_york = [row for row in selection["entries"] if row["branch"] != "other_session"]
+    if new_york and not selection["fallback_play_used"]:
+        assert jj.PLAY_OF_BRANCH[new_york[0]["branch"]] == selection["primary_play"], "the day's play leads"
 
 
 # --------------------------------------------------------------------------- causality

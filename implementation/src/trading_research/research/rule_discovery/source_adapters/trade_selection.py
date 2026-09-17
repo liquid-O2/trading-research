@@ -71,6 +71,8 @@ MODE_PREFERENCE: dict[str, tuple[str, ...]] = {
 UNEVIDENCED_FALLBACK = "earliest_decision"
 
 
+OPEN_UNTIL = 2**62  # an unresolved position is live until the clock ends
+
 def _d(value: Any) -> Decimal | None:
     if value is None:
         return None
@@ -340,8 +342,11 @@ def select_session_trades(
         if not is_add:
             round_trips += 1
         per_line.append((str(episode.get("side")), line_px, line_tag))
-        if busy_until is None or result["at_ns"] is None or (busy_until is not None and result["at_ns"] > busy_until):
-            busy_until = result["at_ns"]
+        # A position still open at the end of the bars is live for the rest of
+        # the clock: nothing but an add or a flip may follow it.
+        resolved_at = result["at_ns"] if result["at_ns"] is not None else (int(clock[1]) if clock is not None else OPEN_UNTIL)
+        if busy_until is None or resolved_at > busy_until:
+            busy_until = resolved_at
         busy_side = str(episode.get("side"))
         busy_line = line_px
         if result["outcome"] == "target" and stop_after_target:

@@ -1927,7 +1927,19 @@ def _line_episodes(
                 reason=None if (trigger is not None and location_ok) else (location_reason or "line_not_taken_in_the_window"),
                 **{k: v for k, v in (extra_location or {}).items()},
             ),
-            _stage("trigger", "pass" if trigger is not None else "fail", None if trigger is None else int(trigger.get("known_at") or trigger.get("end"))),
+            _stage(
+                "trigger",
+                "pass" if trigger is not None else "fail",
+                None if trigger is None else int(trigger.get("known_at") or trigger.get("end")),
+                **(
+                    {
+                        "modal_window": list(MODAL_WINDOW),
+                        "in_modal_window": None if trigger is None else bool(_at(market, MODAL_WINDOW[0]) <= int(trigger["start"]) < _at(market, MODAL_WINDOW[1])),
+                    }
+                    if branch == "judas_reversal"
+                    else {}
+                ),
+            ),
             _stage(
                 "confirmation",
                 "pass" if fill is not None else "fail",
@@ -2135,7 +2147,7 @@ def _scan_judas_outbound(market) -> tuple[list[dict[str, Any]], list[dict[str, A
         return [], []
     direction = read.get("trend_direction")
     if read.get("classification") != "single_break" or direction is None:
-        return [], [{"reason": "play_not_in_the_day_read", "branch": "judas_outbound", "play": "single_break"}]
+        return [], [{"reason": "read_has_no_break_direction", "branch": "judas_outbound", "play": "single_break"}]
     open_ns, end = _at(market, "09:30"), min(_at(market, "10:30"), int(market.end))
     edge = box["low"] if direction == "short" else box["high"]
     rows = _bars(market, open_ns, end, 60)
@@ -2154,25 +2166,14 @@ def _scan_judas_outbound(market) -> tuple[list[dict[str, Any]], list[dict[str, A
     ), []
 
 
-def _scan_eq_branch(market, branch: str) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
-    """The plays traded at the box internals and the prior value area.
-
-    single_extended: the single-break day, from 09:00 -- the EQ / quadrant /
-    range-open retest in the break direction after the line is taken and fails
-    (2026-07-27 sells the EQ tag at 09:02; 2026-07-16 sells the failure of the
-    EQ at 09:35), objective the far edge then the projections.
-    single_purged: the same lines from 09:30 on a day that opens outside prior
-    value on the purged side (2026-07-28 "RTH open below the prior RTH value
-    low"), objective the projection (J12), the 15-minute opening range mid and
-    quartiles added (J3).
-    internal_rotation: "open inside prior RTH value: range scalps" (2026-07-10)
-    -- the box edges and the prior value edges, both ways, from 09:30; on a big
-    6-9 range (>=0.8%, 2026-09-02) the EQ and quadrants join it."""
+def _eq_lines(market, branch: str) -> tuple[dict[str, Any] | None, list[dict[str, Any]]]:
+    """The lines, sides, window and objective ladder of one EQ play on the day,
+    or the omission that gates it (the plan `_scan_eq_branch` runs)."""
     context = session_context(market)
     box = context.get("box")
     read = context.get("read") or {}
     if box is None:
-        return [], []
+        return None, []
     direction = read.get("trend_direction")
     if branch in {"single_extended", "single_purged"}:
         sides = ("long", "short") if branch == "single_extended" or direction is None else (direction,)
@@ -2204,7 +2205,28 @@ def _scan_eq_branch(market, branch: str) -> tuple[list[dict[str, Any]], list[dic
         objective = {"long": [{"name": "eq", "price": box["eq"]}, {"name": "box_high", "price": box["high"]}, {"name": "plus_0.5", "price": box["ladder"]["plus_0.5"]}],
                      "short": [{"name": "eq", "price": box["eq"]}, {"name": "box_low", "price": box["low"]}, {"name": "minus_0.5", "price": box["ladder"]["minus_0.5"]}]}
         if not (read.get("open_inside_value") or read.get("big_range")):
-            return [], [{"reason": "play_not_in_the_day_read", "branch": branch, "play": "big_range_eq"}]
+            return None, [{"reason": "rotation_needs_inside_value_or_big_range", "branch": branch, "play": "big_range_eq"}]
+    return {"context": context, "sides": sides, "begin": begin, "end": end, "lines": lines, "objective": objective, "direction": direction}, []
+
+
+def _scan_eq_branch(market, branch: str) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """The plays traded at the box internals and the prior value area.
+
+    single_extended: the single-break day, from 09:00 -- the EQ / quadrant /
+    range-open retest in the break direction after the line is taken and fails
+    (2026-07-27 sells the EQ tag at 09:02; 2026-07-16 sells the failure of the
+    EQ at 09:35), objective the far edge then the projections.
+    single_purged: the same lines from 09:30 on a day that opens outside prior
+    value on the purged side (2026-07-28 "RTH open below the prior RTH value
+    low"), objective the projection (J12), the 15-minute opening range mid and
+    quartiles added (J3).
+    internal_rotation: "open inside prior RTH value: range scalps" (2026-07-10)
+    -- the box edges and the prior value edges, both ways, from 09:30; on a big
+    6-9 range (>=0.8%, 2026-09-02) the EQ and quadrants join it."""
+    plan, omissions = _eq_lines(market, branch)
+    if plan is None:
+        return [], omissions
+    context, sides, begin, end, lines, objective, direction = (plan[key] for key in ("context", "sides", "begin", "end", "lines", "objective", "direction"))
     episodes: list[dict[str, Any]] = []
     for kind, level in lines:
         if level is None:
@@ -2225,16 +2247,6 @@ def _scan_eq_branch(market, branch: str) -> tuple[list[dict[str, Any]], list[dic
                     )
                 )
     return episodes, []
-
-
-def _eq_locations(market, box: Mapping[str, Any], branch: str) -> list[dict[str, Any]]:
-    """The internals the EQ plays trade (kept for the rules table)."""
-    return [
-        {"kind": "eq", "price": box["eq"], "known_at": box["known_at"]},
-        {"kind": "q25", "price": box["q25"], "known_at": box["known_at"]},
-        {"kind": "q75", "price": box["q75"], "known_at": box["known_at"]},
-        {"kind": "range_open", "price": box["range_open"], "known_at": box["known_at"]},
-    ]
 
 
 def _scan_other_session(market) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
@@ -2534,7 +2546,7 @@ RULES = {
         "source": "JR p.42 'after the test of pRTHVAL / R-Lo' (pRTHVAL 29,790, R-Lo 29,770); the MGLevels panel draws pRTHVAH / pRTHVAL / POC",
         "finding": "J-C",
         "parameters": {"levels": ["prth_vah", "prth_val", "prth_poc"], "play": "internal_rotation"},
-        "_fn": _eq_locations,
+        "_fn": _eq_lines,
     },
     "JJ-FILL-limit-at-the-line": {
         "kind": "literal",
@@ -2683,7 +2695,7 @@ def rules_payload() -> list[dict[str, Any]]:
         "JJ-LONDON-no-edge-raid-required": _scan_other_session,
         "JJ-SINGLE-PURGED-am-window-and-projection-objective": _scan_eq_branch,
         "JJ-SINGLE-EXTENDED-out-by-1000": _scan_eq_branch,
-        "JJ-OR15-retracement": _eq_locations,
+        "JJ-OR15-retracement": _eq_lines,
         "JJ-SESSIONSTAT-computed": sessionstat_envelope,
         "JJ-EXTENSION-after-1000": _scan_extension_reaction,
         "JJ-PZONE-unsupported-input": _scan_pzone,

@@ -1021,6 +1021,11 @@ def at_level_fill(market, *, level: Decimal, side: str, cycle: Mapping[str, Any]
         lo, hi = _d(row.get("L")), _d(row.get("H"))
         if lo is None or hi is None or int(row.get("start") or 0) < from_ns:
             continue
+        # A bar that OPENS beyond the sweep extreme never traded the level on
+        # the way there: the level is invalidated before the limit could fill.
+        open_px = _d(row.get("O"))
+        if extreme is not None and open_px is not None and ((open_px > extreme) if side == "short" else (open_px < extreme)):
+            return None
         if (hi >= level - LIMIT_INSIDE) if side == "short" else (lo <= level + LIMIT_INSIDE):
             return {
                 "entry": level,

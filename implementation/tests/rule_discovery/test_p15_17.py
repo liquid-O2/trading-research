@@ -1183,6 +1183,11 @@ def _oracle(day: str) -> dict:
     return _json.loads(_gzip.open(PARITY_FIXTURES / f"{day}.json.gz", "rb").read())
 
 
+@pytest.mark.xfail(
+    strict=True,
+    reason="the fidelity rebuild (reviews/fidelity-round8) changed the Green Bird asia_tdo_case documents deliberately; "
+    "the oracle is P15-17's recorded evidence and stays as recorded until a P15-17 re-run pins the new engine (AUDIT_S1 requires that re-run)",
+)
 @pytest.mark.parametrize("day", PARITY_DAYS)
 def test_every_job_document_is_byte_identical_to_the_recorded_engine(day):
     """The whole bank on a real session, every document, against the documents

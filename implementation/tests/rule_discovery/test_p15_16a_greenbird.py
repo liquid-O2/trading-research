@@ -28,11 +28,13 @@ from trading_research.research.rule_discovery.source_adapters.trade_selection im
 # parent package, so the shared fake-market helper is imported both ways.
 try:  # pragma: no cover - the path taken depends on how the module is loaded
     from .fake_market import FakeMarket, bar, flat_series
+    from .selection_invariants import assert_one_position_at_a_time
 except ImportError:  # pragma: no cover
     import sys as _sys
 
     _sys.path.insert(0, str(Path(__file__).resolve().parent))
     from fake_market import FakeMarket, bar, flat_series
+    from selection_invariants import assert_one_position_at_a_time
 
 REPO = Path(__file__).resolve().parents[3]
 EXAMPLES = REPO / "planning/phase-1-5/AUTHOR_EXAMPLES_2026-09-17.json"
@@ -287,12 +289,17 @@ def test_g10_bias_is_recorded_and_never_filters_the_baseline():
 # --------------------------------------------------------------------------- G11
 
 
-def test_g11_selection_is_at_most_three_entries_and_stops_after_a_full_objective():
+def test_g11_selection_is_one_position_at_a_time_and_stops_after_a_full_objective():
     """Audit 2.3 G11 and 2.1 'Frequency': one to three trades a day, 'One
-    opportunity at a time', 'Two trades were enough'."""
+    opportunity at a time', 'Two trades were enough'. Fidelity pass 8: the
+    candidate list holds every admitted opportunity once; the executed list is
+    one position at a time (adds on the same line, flips); his one to three a
+    day is the grading layer, gated in the plausibility test."""
     market = _session()
     document, _passes_ = _passes(market)
-    assert document["selection"]["n_entries"] <= 3
+    executed = document["selection"]["executed"]
+    assert executed["n_round_trips"] <= executed["n_entries"]
+    assert_one_position_at_a_time(executed["entries"])
 
     def episode(decision_at, entry, stop, target, branch="nyam_box"):
         return {
@@ -527,8 +534,8 @@ def test_the_at_level_limit_rests_until_the_level_is_invalidated():
     rows += flat_series(day, "18:00", 60, 100, offset=-1)
     rows += [bar(day, "19:00", 100, 100, 80, 82, offset=-1)]   # sweeps 90, extreme 80
     rows += [bar(day, "19:01", 82, 95, 82, 95, offset=-1)]     # closes back above 90
-    rows += flat_series(day, "19:02", 98, 95, offset=-1)       # 98 minutes away from the level
-    rows += [bar(day, "20:40", 95, 95, 88, 92, offset=-1)]     # the retest of 90
+    rows += flat_series(day, "19:02", 98, 100, offset=-1)      # 98 minutes away from the level (beyond the inside limit)
+    rows += [bar(day, "20:40", 100, 100, 88, 92, offset=-1)]   # the retest of 90
     rows += flat_series(day, "20:41", 199, 100, offset=-1)
     rows += flat_series(day, "00:00", 16 * 60, 100)
     market = FakeMarket(str(day), rows, prior_day=None, prior_week=None, prior_sessions=[])
@@ -556,7 +563,7 @@ def test_the_at_level_limit_dies_when_the_sweep_extreme_is_taken_out():
     rows += flat_series(day, "18:00", 60, 100, offset=-1)
     rows += [bar(day, "19:00", 100, 100, 80, 82, offset=-1)]
     rows += [bar(day, "19:01", 82, 95, 82, 95, offset=-1)]
-    rows += [bar(day, "19:02", 95, 96, 94, 95, offset=-1)]
+    rows += [bar(day, "19:02", 100, 101, 99, 100, offset=-1)]
     rows += [bar(day, "19:03", 75, 75, 70, 72, offset=-1)]     # a gap straight through the 80 extreme
     rows += flat_series(day, "19:04", 96, 72, offset=-1)
     rows += [bar(day, "20:40", 72, 95, 72, 92, offset=-1)]     # a later touch of 90
