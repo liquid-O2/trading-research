@@ -1040,12 +1040,48 @@ def sweep_cycles(market, *, level: Decimal, side: str, begin: int, end: int, max
     return cycles
 
 
+MAX_CONTACTS_PER_LEVEL = 3
+
+
 def first_touch(market, *, level: Decimal, begin: int, end: int) -> dict[str, Any] | None:
     for row in _bars(market, begin, end, 60):
         lo, hi = _d(row.get("L")), _d(row.get("H"))
         if lo is not None and hi is not None and lo <= level <= hi:
             return row
     return None
+
+
+def level_contacts(
+    market,
+    *,
+    level: Decimal,
+    begin: int,
+    end: int,
+    departure: Decimal,
+    max_contacts: int = MAX_CONTACTS_PER_LEVEL,
+) -> list[dict[str, Any]]:
+    """Each distinct test of a level, not only the first.
+
+    The author trades a level whenever it is tested: 2025-10-07 buys the London
+    quadrant at 04:30 after the session had already traded through it, and
+    2026-06-05 buys R-Lo at 05:03 after two earlier round trips. A re-touch
+    counts once price has left the level by ``departure``.
+    """
+    out: list[dict[str, Any]] = []
+    ready = True
+    for row in _bars(market, begin, end, 60):
+        lo, hi = _d(row.get("L")), _d(row.get("H"))
+        if lo is None or hi is None:
+            continue
+        if lo <= level <= hi:
+            if ready:
+                out.append(row)
+                ready = False
+                if len(out) >= max_contacts:
+                    break
+        elif lo > level + departure or hi < level - departure:
+            ready = True
+    return out
 
 
 def depth_class(depth: Decimal | None, width: Decimal | None) -> str | None:
@@ -1479,26 +1515,30 @@ def _scan_judas_reversal(market) -> tuple[list[dict[str, Any]], list[dict[str, A
         ("minus_0.66", "long"),
     ):
         price = box["ladder"][name]
-        touch = first_touch(market, level=price, begin=begin, end=end)
-        episodes.extend(
-            _judas_episode(
-                market, context, box,
-                side=side, level=price, kind=name, location_kind="exhaustion_projection",
-                contact=touch, pack=confirm_at(touch, side, price), begin=begin,
-                extra_location={"reason": None if touch is not None else "projection_not_reached"},
+        touches = level_contacts(market, level=price, begin=begin, end=end, departure=box["width"] / 20)
+        for index, touch in enumerate(touches or [None]):
+            episodes.extend(
+                _judas_episode(
+                    market, context, box,
+                    side=side, level=price, kind=name, location_kind="exhaustion_projection",
+                    contact=touch, pack=confirm_at(touch, side, price), begin=begin,
+                    extra_values={"cycle": index},
+                    extra_location={"reason": None if touch is not None else "projection_not_reached"},
+                )
             )
-        )
 
     # 2. the box edge on the first rejection printed there
     for name, side, price in (("box_high", "short", box["high"]), ("box_low", "long", box["low"])):
-        touch = first_touch(market, level=price, begin=begin, end=end)
-        episodes.extend(
-            _judas_episode(
-                market, context, box,
-                side=side, level=price, kind=name, location_kind="edge_rejection",
-                contact=touch, pack=confirm_at(touch, side, price), begin=begin,
+        touches = level_contacts(market, level=price, begin=begin, end=end, departure=box["width"] / 20)
+        for index, touch in enumerate(touches or [None]):
+            episodes.extend(
+                _judas_episode(
+                    market, context, box,
+                    side=side, level=price, kind=name, location_kind="edge_rejection",
+                    contact=touch, pack=confirm_at(touch, side, price), begin=begin,
+                    extra_values={"cycle": index},
+                )
             )
-        )
 
     # 3. a drawn liquidity level swept into the exhaustion area
     for level_row in context["levels"]:
@@ -1749,18 +1789,20 @@ def _scan_other_session(market) -> tuple[list[dict[str, Any]], list[dict[str, An
         side, level = row["side"], row["price"]
         start = max(int(row.get("from") or begin), int(row["known_at"]))
         box_frozen = london is not None and start >= int(london["known_at"])
-        touch = first_touch(market, level=level, begin=start, end=end)
-        pack = (
+        width = (london["width"] if london is not None else Decimal("40"))
+        touches = level_contacts(market, level=level, begin=start, end=end, departure=width / 20)
+        for contact_index, touch in enumerate(touches or [None]):
+          pack = (
             confirm_pack(market, int(touch["end"]), side, level, min(end, int(touch["end"]) + CONFIRM_HORIZON_MIN * NS_MINUTE))
             if touch is not None
             else {"verdict": "fail", "confirmed": None, "ob_2m": None, "ob_3m": None, "ob_5m": None, "rejection_block": None, "absorption": None}
-        )
-        confirmed = pack.get("confirmed")
-        entry = None if confirmed is None else confirmed["entry"]
-        at_ns = None if confirmed is None else confirmed["at"]
-        stop = None if confirmed is None else confirmed["stop"]
-        target = None
-        if entry is not None:
+          )
+          confirmed = pack.get("confirmed")
+          entry = None if confirmed is None else confirmed["entry"]
+          at_ns = None if confirmed is None else confirmed["at"]
+          stop = None if confirmed is None else confirmed["stop"]
+          target = None
+          if entry is not None:
             if box_frozen:
                 ladder = objective_ladder(london, side)
                 target = next((item["price"] for item in ladder if sign(side) * (item["price"] - entry) > 0), None)
@@ -1772,42 +1814,42 @@ def _scan_other_session(market) -> tuple[list[dict[str, Any]], list[dict[str, An
                     if item["known_at"] <= at_ns and sign(side) * (item["price"] - entry) > 0
                 ]
                 target = (min(forward) if side == "long" else max(forward)) if forward else None
-        stages = [
-            _context_stage(context, start, branch="other_session", session="london", box_edge_swept=edge_swept, box_frozen=box_frozen),
-            _stage(
-                "reference",
-                "pass",
-                int(row["known_at"]),
-                id=None if london is None else london["id"],
-                level=level,
-                kind=row["kind"],
-                box_low=None if not box_frozen else london["low"],
-                box_high=None if not box_frozen else london["high"],
-                box_frozen=box_frozen,
-            ),
-            _stage("location", "pass" if touch is not None else "fail", None if touch is None else int(touch["start"]), level=level, contact=None if touch is None else "touch", box_edge_swept=edge_swept, reason=None if touch is not None else "level_not_contacted_in_the_london_window"),
-            _stage("trigger", "pass" if touch is not None else "fail", None if touch is None else int(touch["start"])),
-            _stage("confirmation", pack["verdict"], at_ns, ob_2m=pack["ob_2m"], ob_3m=pack["ob_3m"], ob_5m=pack["ob_5m"], rejection_block=pack["rejection_block"], absorption=pack["absorption"], kind=None if confirmed is None else confirmed["kind"], any_of_2m_3m_5m=True),
-            _stage("risk", "pass" if entry is not None and stop is not None and sign(side) * (entry - stop) > 0 else "fail", at_ns, entry=entry, stop=stop),
-            _stage("objective", "pass" if entry is not None and target is not None and sign(side) * (target - entry) > 0 else "fail", at_ns, target=target, source="london ladder" if box_frozen else "next drawn level"),
-            _stage("management", "pass", at_ns),
-        ]
-        episodes.append(
-            _episode(
-                market,
-                branch="other_session",
-                side=side,
-                stages=stages,
-                decision_at=at_ns,
-                entry=entry,
-                stop=stop,
-                target=target,
-                reference=london or {"id": f"jj-london-levels:{market.instrument_id}:{market.day}"},
-                trigger=touch,
-                values={"reference_px": level, "reference_kind": row["kind"], "cycle": 0, "confirmation_mode": None if confirmed is None else confirmed["kind"], "box_edge_swept": edge_swept, "box_frozen": box_frozen},
-                geometry={"first_objective": target},
-            )
-        )
+          stages = [
+              _context_stage(context, start, branch="other_session", session="london", box_edge_swept=edge_swept, box_frozen=box_frozen),
+              _stage(
+                  "reference",
+                  "pass",
+                  int(row["known_at"]),
+                  id=None if london is None else london["id"],
+                  level=level,
+                  kind=row["kind"],
+                  box_low=None if not box_frozen else london["low"],
+                  box_high=None if not box_frozen else london["high"],
+                  box_frozen=box_frozen,
+              ),
+              _stage("location", "pass" if touch is not None else "fail", None if touch is None else int(touch["start"]), level=level, contact=None if touch is None else "touch", box_edge_swept=edge_swept, reason=None if touch is not None else "level_not_contacted_in_the_london_window"),
+              _stage("trigger", "pass" if touch is not None else "fail", None if touch is None else int(touch["start"])),
+              _stage("confirmation", pack["verdict"], at_ns, ob_2m=pack["ob_2m"], ob_3m=pack["ob_3m"], ob_5m=pack["ob_5m"], rejection_block=pack["rejection_block"], absorption=pack["absorption"], kind=None if confirmed is None else confirmed["kind"], any_of_2m_3m_5m=True),
+              _stage("risk", "pass" if entry is not None and stop is not None and sign(side) * (entry - stop) > 0 else "fail", at_ns, entry=entry, stop=stop),
+              _stage("objective", "pass" if entry is not None and target is not None and sign(side) * (target - entry) > 0 else "fail", at_ns, target=target, source="london ladder" if box_frozen else "next drawn level"),
+              _stage("management", "pass", at_ns),
+          ]
+          episodes.append(
+              _episode(
+                  market,
+                  branch="other_session",
+                  side=side,
+                  stages=stages,
+                  decision_at=at_ns,
+                  entry=entry,
+                  stop=stop,
+                  target=target,
+                  reference=london or {"id": f"jj-london-levels:{market.instrument_id}:{market.day}"},
+                  trigger=touch,
+                  values={"reference_px": level, "reference_kind": row["kind"], "cycle": contact_index, "confirmation_mode": None if confirmed is None else confirmed["kind"], "box_edge_swept": edge_swept, "box_frozen": box_frozen},
+                  geometry={"first_objective": target},
+              )
+          )
     return episodes, []
 
 
@@ -1901,67 +1943,68 @@ def _scan_eq_branch(market, branch: str) -> tuple[list[dict[str, Any]], list[dic
     for row in _eq_locations(market, box, branch):
         for side in sides:
             start = max(begin, int(row["known_at"]))
-            touch = first_touch(market, level=row["price"], begin=start, end=end)
-            state = break_state(market, box, int(touch["start"])) if touch is not None else {"single_break": None, "side": None, "broke_high": None, "broke_low": None}
-            if branch == "single_extended" and touch is not None and state["side"] != side:
+            touches = level_contacts(market, level=row["price"], begin=start, end=end, departure=box["width"] / 20)
+            for contact_index, touch in enumerate(touches or [None]):
+             state = break_state(market, box, int(touch["start"])) if touch is not None else {"single_break": None, "side": None, "broke_high": None, "broke_low": None}
+             if branch == "single_extended" and touch is not None and state["side"] != side:
                 continue
-            pack = (
-                confirm_pack(market, int(touch["end"]), side, row["price"], min(end, int(touch["end"]) + CONFIRM_HORIZON_MIN * NS_MINUTE))
-                if touch is not None
-                else {"verdict": "fail", "confirmed": None, "ob_2m": None, "ob_3m": None, "ob_5m": None, "rejection_block": None, "absorption": None}
-            )
-            confirmed = pack.get("confirmed")
-            entry = None if confirmed is None else confirmed["entry"]
-            at_ns = None if confirmed is None else confirmed["at"]
-            stop = None if confirmed is None else confirmed["stop"]
-            if branch == "single_purged":
-                # J12: the objective is the projection, not the range edge.
-                target = box["ladder"]["plus_1.33" if side == "long" else "minus_1.33"]
-            else:
-                target = box["high"] if side == "long" else box["low"]
-            in_add_window = touch is not None and modal_lo <= int(touch["start"]) < modal_hi
-            reduced = at_ns is not None and at_ns >= _at(market, "10:00")
-            stages = [
-                _context_stage(
-                    context,
-                    begin,
-                    branch=branch,
-                    range_gate=">=0.3% for the single-break cases" if branch.startswith("single") else "inside prior value",
-                    evrange=context.get("evrange"),
-                ),
-                _stage("reference", "pass", max(int(box["known_at"]), int(row["known_at"])), id=box["id"], level=row["price"], kind=row["kind"], box_low=box["low"], box_high=box["high"], width=box["width"]),
-                _stage(
-                    "location",
-                    "pass" if touch is not None else "fail",
-                    None if touch is None else int(touch["start"]),
-                    level=row["price"],
-                    single_break=state["single_break"],
-                    broke_high=state["broke_high"],
-                    broke_low=state["broke_low"],
-                    reason=None if touch is not None else "level_not_contacted_in_window",
-                ),
-                _stage("trigger", "pass" if touch is not None else "fail", None if touch is None else int(touch["start"]), add_window=list(MODAL_WINDOW), in_add_window=in_add_window),
-                _stage("confirmation", pack["verdict"], at_ns, ob_2m=pack["ob_2m"], ob_3m=pack["ob_3m"], ob_5m=pack["ob_5m"], rejection_block=pack["rejection_block"], absorption=pack["absorption"], kind=None if confirmed is None else confirmed["kind"]),
-                _stage("risk", "pass" if entry is not None and stop is not None and sign(side) * (entry - stop) > 0 else "fail", at_ns, entry=entry, stop=stop),
-                _stage("objective", "pass" if entry is not None and sign(side) * (target - entry) > 0 else "fail", at_ns, target=target, label="projection" if branch == "single_purged" else "range edge"),
-                _stage("management", "pass", at_ns, reduced_expectations=reduced, out_by_1000=branch == "single_extended"),
-            ]
-            episodes.append(
-                _episode(
-                    market,
-                    branch=branch,
-                    side=side,
-                    stages=stages,
-                    decision_at=at_ns,
-                    entry=entry,
-                    stop=stop,
-                    target=target,
-                    reference=box,
-                    trigger=touch,
-                    values={"reference_px": row["price"], "reference_kind": row["kind"], "cycle": 0, "confirmation_mode": None if confirmed is None else confirmed["kind"], "range_bin": size.get("bin"), "in_add_window": in_add_window},
-                    geometry={"first_objective": target},
-                )
-            )
+             pack = (
+                 confirm_pack(market, int(touch["end"]), side, row["price"], min(end, int(touch["end"]) + CONFIRM_HORIZON_MIN * NS_MINUTE))
+                 if touch is not None
+                 else {"verdict": "fail", "confirmed": None, "ob_2m": None, "ob_3m": None, "ob_5m": None, "rejection_block": None, "absorption": None}
+             )
+             confirmed = pack.get("confirmed")
+             entry = None if confirmed is None else confirmed["entry"]
+             at_ns = None if confirmed is None else confirmed["at"]
+             stop = None if confirmed is None else confirmed["stop"]
+             if branch == "single_purged":
+                 # J12: the objective is the projection, not the range edge.
+                 target = box["ladder"]["plus_1.33" if side == "long" else "minus_1.33"]
+             else:
+                 target = box["high"] if side == "long" else box["low"]
+             in_add_window = touch is not None and modal_lo <= int(touch["start"]) < modal_hi
+             reduced = at_ns is not None and at_ns >= _at(market, "10:00")
+             stages = [
+                 _context_stage(
+                     context,
+                     begin,
+                     branch=branch,
+                     range_gate=">=0.3% for the single-break cases" if branch.startswith("single") else "inside prior value",
+                     evrange=context.get("evrange"),
+                 ),
+                 _stage("reference", "pass", max(int(box["known_at"]), int(row["known_at"])), id=box["id"], level=row["price"], kind=row["kind"], box_low=box["low"], box_high=box["high"], width=box["width"]),
+                 _stage(
+                     "location",
+                     "pass" if touch is not None else "fail",
+                     None if touch is None else int(touch["start"]),
+                     level=row["price"],
+                     single_break=state["single_break"],
+                     broke_high=state["broke_high"],
+                     broke_low=state["broke_low"],
+                     reason=None if touch is not None else "level_not_contacted_in_window",
+                 ),
+                 _stage("trigger", "pass" if touch is not None else "fail", None if touch is None else int(touch["start"]), add_window=list(MODAL_WINDOW), in_add_window=in_add_window),
+                 _stage("confirmation", pack["verdict"], at_ns, ob_2m=pack["ob_2m"], ob_3m=pack["ob_3m"], ob_5m=pack["ob_5m"], rejection_block=pack["rejection_block"], absorption=pack["absorption"], kind=None if confirmed is None else confirmed["kind"]),
+                 _stage("risk", "pass" if entry is not None and stop is not None and sign(side) * (entry - stop) > 0 else "fail", at_ns, entry=entry, stop=stop),
+                 _stage("objective", "pass" if entry is not None and sign(side) * (target - entry) > 0 else "fail", at_ns, target=target, label="projection" if branch == "single_purged" else "range edge"),
+                 _stage("management", "pass", at_ns, reduced_expectations=reduced, out_by_1000=branch == "single_extended"),
+             ]
+             episodes.append(
+                 _episode(
+                     market,
+                     branch=branch,
+                     side=side,
+                     stages=stages,
+                     decision_at=at_ns,
+                     entry=entry,
+                     stop=stop,
+                     target=target,
+                     reference=box,
+                     trigger=touch,
+                     values={"reference_px": row["price"], "reference_kind": row["kind"], "cycle": contact_index, "confirmation_mode": None if confirmed is None else confirmed["kind"], "range_bin": size.get("bin"), "in_add_window": in_add_window},
+                     geometry={"first_objective": target},
+                 )
+             )
     return episodes, []
 
 

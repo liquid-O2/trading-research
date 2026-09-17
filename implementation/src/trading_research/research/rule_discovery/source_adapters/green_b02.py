@@ -1371,14 +1371,20 @@ def _fail_branch_episodes(market, refs: Sequence[Mapping[str, Any]], objectives:
             level = _dec(ref[edge])
             if _dec(ref["low"]) == _dec(ref["high"]) and edge == "high":
                 continue  # a single-price reference (the True Day Open) has one level
+            # "fail back inside the range" is the test when the level is the
+            # reference's own edge on that side. When the author fades the far
+            # edge -- "the 5 min close back below the PDL after sweeping above
+            # it" -- the close he waits for is outside the prior day's range,
+            # so only the close-through-the-level test applies.
+            matching_edge = (side, edge) in {("short", "high"), ("long", "low")}
             for cycle in sweep_cycles(
                 market,
                 level=level,
                 side=side,
                 begin=begin,
                 end=end,
-                box_low=_dec(ref["low"]),
-                box_high=_dec(ref["high"]),
+                box_low=_dec(ref["low"]) if matching_edge else None,
+                box_high=_dec(ref["high"]) if matching_edge else None,
             ):
                 fail = cycle.get("fail")
                 close_entry = None if fail is None else _d(fail.get("C"))
