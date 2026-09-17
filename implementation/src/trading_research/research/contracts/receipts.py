@@ -595,6 +595,59 @@ class _VerifyState:
         self._parsed_bytes = 0
         self._receipt_results: dict[tuple[str, tuple[str, ...], tuple[str, ...]], VerificationResult] = {}
         self._predecessor_results: dict[tuple[str, str, str, str], VerificationResult] = {}
+        # Successor verifications run in a child state with an empty visiting
+        # stack, so their outcome does not depend on the search that asked
+        # for them. The memo is shared by every child of one top-level call.
+        self._successors: dict[str, Any] = {"ok": {}, "in_progress": set(), "guard_hits": 0}
+
+    def child_state(self) -> "_VerifyState":
+        """A state for one standalone successor verification: same roots,
+        graph, amendments and receipt index; its own visiting stack and
+        result memos; the successor memo shared with the parent."""
+        child = _VerifyState(
+            receipts_root=self.receipts_root,
+            graph=self.graph,
+            amendments_path=self.amendments_path,
+        )
+        child._amendments = self._amendments
+        child._amendments_loaded = self._amendments_loaded
+        child._all_receipts = self._all_receipts
+        child._receipts_by_task = self._receipts_by_task
+        child._receipt_buckets = self._receipt_buckets
+        child._successors = self._successors
+        return child
+
+    def successor_verifies(self, candidate: Path) -> bool:
+        """Does ``candidate`` verify on its own? Memoized per candidate path.
+
+        A candidate that is already being verified higher up the stack cannot
+        be concluded here (the guard returns False); a negative outcome that
+        was reached while the guard fired is not memoized, because it may be
+        an artifact of the recursion rather than of the receipt.
+        """
+        shared = self._successors
+        key = str(candidate)
+        if key in shared["ok"]:
+            return bool(shared["ok"][key])
+        if key in shared["in_progress"]:
+            shared["guard_hits"] += 1
+            return False
+        hits_before = shared["guard_hits"]
+        shared["in_progress"].add(key)
+        try:
+            result = verify_task_receipt(
+                candidate,
+                graph=self.graph,
+                receipts_root=self.receipts_root,
+                amendments_path=self.amendments_path,
+                _state=self.child_state(),
+            )
+        finally:
+            shared["in_progress"].discard(key)
+        ok = bool(result.ok)
+        if ok or shared["guard_hits"] == hits_before:
+            shared["ok"][key] = ok
+        return ok
 
     def receipt_memo_key(self, resolved: str) -> tuple[str, tuple[str, ...], tuple[str, ...]]:
         """Memo key for one receipt result.
@@ -862,10 +915,14 @@ def _code_superseded_by_successor(
         synthetic = {"predecessor_receipts": predecessors, "artifact_manifest": []}
         if _receipt_lists_predecessor(synthetic, other_doc_path, current_id, current_digest, state):
             return True
-    for candidate in state.all_receipts():
-        cand = str(candidate)
-        if cand == str(receipt_path) or cand in state.visiting:
-            continue
+    # A later receipt that verifies on its own, pins the live bytes and lists
+    # this receipt as a predecessor supersedes the stale pin. Candidates are
+    # tried newest first (the latest re-issue is the one meant to excuse the
+    # drift) and verified standalone, so the outcome does not depend on the
+    # order of the search or on what is on the visiting stack.
+    candidates = [candidate for candidate in state.all_receipts() if str(candidate) != str(receipt_path)]
+    candidates.sort(key=_receipt_recency, reverse=True)
+    for candidate in candidates:
         document, failures = load_json_document(candidate)
         if failures or not isinstance(document, dict):
             continue
@@ -876,20 +933,16 @@ def _code_superseded_by_successor(
         # them before walking their (often shared) predecessor DAG.
         if not _receipt_lists_predecessor(document, candidate, current_id, current_digest, state):
             continue
-        state.pending_ok.add(str(receipt_path))
-        try:
-            result = verify_task_receipt(
-                candidate,
-                graph=state.graph,
-                receipts_root=state.receipts_root,
-                amendments_path=state.amendments_path,
-                _state=state,
-            )
-        finally:
-            state.pending_ok.discard(str(receipt_path))
-        if result.ok:
+        if state.successor_verifies(candidate):
             return True
     return False
+
+
+def _receipt_recency(path: Path) -> int:
+    try:
+        return int(path.stat().st_mtime_ns)
+    except OSError:
+        return 0
 
 
 def _command_excused(command: Mapping[str, Any], unresolved: list[Any]) -> bool:
