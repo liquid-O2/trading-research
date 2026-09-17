@@ -237,3 +237,28 @@ Dataset `grading/rows.csv`: 876 admitted opportunities on the 36 sessions with a
 | Green Bird | 14 | 13 | 0.00 (0.05) | 0.00 (0.08) | 0.00 / 0.07 / 0.14 | 27 of 37 | five-minute close (−), previous-day 10–11 box (−), running 12:00 hour box (+), at-level fill (+), 11:00 hour box (+), Asia box (−), 10–11 box (+), London box (−) |
 
 Chance is what admitting that many candidates a day at random would recover (two of 17.3 for Jumbo, two of 36.8 for Green Bird). Read plainly: for Jumbo the stated features carry part of his choice (the ticket is in our top five on seven of thirteen days, and the weights are his own words: the Judas fires on the day the read is *not* aligned, the single-break play on the range-size read, shallow sweeps), but at his density of two a day the fitted scorer recovers three of thirteen tickets. For Green Bird the fitted scorer does not recover his ticket on any day at any of the tested densities; the median rank of his ticket is 27 of 37, worse than chance, and the weights are box names, which is memorisation of thirteen days, not a rule. The features the dataset carries (which box, which mode, confluence with the drawn levels, cycle index, minutes from the open, side with the overnight bias, the day model, reward available) do not contain what he grades on. That is the result, not an error to tune away: what separates his one trade from the thirty-six admitted on a Green Bird day is not in the levels-and-time description, which points at the Phase 3 objects he shows on every chart (the volume profile and delta bands beside the box, the "nice" 9–10 box against a "messy" one) and at the post's own narrative features (which side the overnight session reclaimed and how, which box the previous hour closed against). Sires and Saint rows (level-and-flow features from the order-level boxes) go into the same fit next; a Refill-style feature set (memory of the level, construction, location in the day's range, flow at the touch) is the working hypothesis for both families, since that is the decomposition the authors' own paper found to carry the sign.
+
+## 12. Phase 1.5, first results on the rebuilt baseline (2026-09-17 night)
+
+The programme is `planning/phase-1-5/PHASE_1_5_REBUILT_2026-09-17.md`; the machinery is the population runner's selection variants and scanner overrides and `evaluate_variants.py` (calendar-year test folds, the frozen block bootstrap of `refinement.py`, Holm across a family's candidates in a fold). Files: `phase15/selection-v1/`.
+
+### 12.1 The B0.3 executed list on 1,742 sessions (points a contract, no costs)
+
+| family | trades a session | win rate | net points a session |
+| --- | ---: | ---: | ---: |
+| Jumbo | 11.46 | 0.442 | +67.7 |
+| Green Bird (failure family) | 17.22 | 0.259 | +3.5 |
+
+These are the capped candidate lists traded one position at a time with adds and flips, not the authors' one to three trades; costs (commission and slippage per trade) are not yet applied and at 11 to 17 trades a session they matter (a half-point round trip is 6 to 9 points a session).
+
+### 12.2 Selection candidates (one axis each), judged against B0.3 on the test folds 2022-2026
+
+| family | candidate | mean daily difference | folds promoted (Holm 0.05) | reading |
+| --- | --- | ---: | --- | --- |
+| Jumbo | round trips a segment 1 / 2 / 3 / 4 (from 8) | -49 / -37 / -25 / -18 | none; worse on every fold | the first candidates of the day are not the best ones: trading fewer of them in time order loses; the authors' density has to come from grading, not from a cap |
+| Jumbo | one entry a line; no adds | -44; -41 | none | adds on the lines carry much of the result |
+| Jumbo | no flips; time order instead of edge first | +1.1; +0.3 | none (not significant) | indifferent |
+| Green Bird | round trips 1 / 2 / 3 (from 6); one entry a line; no adds; adds on any line; no flips | -8 to -2 | none | as for Jumbo |
+| Green Bird | **no re-entry at a line that has just stopped the trade** | **+23.7** | **2022, 2023, 2024, 2026 promoted (p 0.004, 0.004, 0.04, 0.02); 2025 not** | the one candidate that beats B0.3 out of sample; it is the audit's own reading of his behaviour ("after a failed idea the author flips", no ticket shows a second entry at a line that just stopped him out), which the rebuild had relaxed to reproduce a second retest |
+
+The stratum-conditional policy (per day-read stratum the best fit-year variant) adds nothing significant for Jumbo (mean differences within a few points, p 0.26 to 0.63). The re-entry candidate's recall of the pinned Green Bird tickets is being checked (`replay_jj_gb.py --overrides`); a candidate that loses a ticket is reported as departing from the source, not promoted silently. The rescan candidates (23, one axis each: Judas window, contact memory, confirmation horizon, coincidence band; previous-hour start, retest window, inside limit, failure margin, approach distance, cycle cap, failure window) run in a sequential queue, about 35 minutes each.

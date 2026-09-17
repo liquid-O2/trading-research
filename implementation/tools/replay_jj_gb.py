@@ -685,7 +685,15 @@ def main(argv=None) -> int:
         action="store_true",
         help="re-render REPLAY_JJ_GB.md from the REPLAY_JJ_GB.json already in --out, without rescanning",
     )
+    parser.add_argument("--overrides", default=None, help='JSON of module constants, e.g. {"green_b02.REENTER_SAME_LINE": false}: the ticket recall of a Phase 1.5 candidate')
     args = parser.parse_args(argv)
+    if args.overrides:
+        import importlib.util as _ilu
+
+        spec = _ilu.spec_from_file_location("run_jj_gb_population", Path(__file__).resolve().parent / "run_jj_gb_population.py")
+        runner = _ilu.module_from_spec(spec)
+        spec.loader.exec_module(runner)
+        runner.apply_overrides(json.loads(args.overrides))
     if args.render_only:
         out_dir = Path(args.out)
         payload = json.loads((out_dir / "REPLAY_JJ_GB.json").read_text())
