@@ -1,13 +1,13 @@
 # Sires and Saint ticket replay on the drawn levels
 
-19 of 20 ticketed fills reproduced within 10 points on the right bar (one five-minute bar) by a source-supported fill at one of the author's drawn levels, on his side.
+20 of 20 ticketed fills reproduced within 10 points on the right bar (one five-minute bar) by a source-supported fill at one of the author's drawn levels, on his side.
 
 | ticket | side | printed | our fill | mode / play | level | d | bars | ok |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | `SI-2026-07-08` 10:47 | short | 29246.5 | 29246.0 at 10:47 | stop_at_line / failure | absorbed_aggression_boxes[0] 29246.0 | 0.5 | 0.0 | yes |
 | `SI-2026-07-09` 09:35 | long | 29812.25 | 29811.5 at 09:36 | break_stop / break | ofm_line 29811.25 | 0.75 | 0.0 | yes |
-| `SI-2026-07-09` 09:51 | long | 29856.0 | 29859.25 at 09:46 | next_bar_open / failure | second_entry_box 29846.0 | 3.25 | 1.0 | yes |
-| `SI-2026-07-10` 10:18-10:19 | short | 29901.75 | 29903.5 at 10:24 | band_defence_close / defence | sq_c 29908.64 | 1.75 | 0.8 | yes |
+| `SI-2026-07-09` 09:51 | long | 29856.0 | 29857.5 at 09:46 | break_retest_extreme / break | second_entry_box 29850.0 | 1.5 | 1.0 | yes |
+| `SI-2026-07-10` 10:18-10:19 | short | 29901.75 | 29903.5 at 10:24 | break_retest_close / break | sq_c 29908.64 | 1.75 | 0.8 | yes |
 | `SI-2026-07-10` 10:24 | short | 29909.75 | 29908.64 at 10:25 | retest_limit_line / failure | sq_c 29908.64 | 1.11 | 0.0 | yes |
 | `SI-2026-07-14` 09:37 | long | 29757.25 | 29757.25 at 09:38 | break_stop / break | refill_zone 29757.0 | 0.0 | 0.0 | yes |
 | `SI-2026-07-14` 10:15 | short | 29608.5 | 29605.5 at 10:17 | break_retest_close / break | support_band 29614.0 | 3.0 | 0.2 | yes |
@@ -23,4 +23,4 @@
 | `SI-2026-08-06` 09:52-10:04 | short | 29550.0 | 29548.75 at 10:08 | band_defence_next_open / defence | pm_boxes[0] 29548.0 | 1.25 | 0.6 | yes |
 | `SI-2026-08-06` 10:04 | long | 29500.0 | 29506.25 at 10:06 | break_retest_extreme / break | pm_boxes[2] 29493.0 | 6.25 | 0.2 | yes |
 | `SI-2026-08-19` 09:35 | short | 29665.0 | 29672.5 at 09:31 | band_defence_close / defence | refill_zone 29720.0 | 7.5 | 0.8 | yes |
-| `SA-2026-08-10-ASIA` 19:51 | short | 29729.25 | 29689.75 at 19:56 | break_stop / break | intraday_levels[4] 29690.0 | 39.5 | 0.8 | no |
+| `SA-2026-08-10-ASIA` 19:51 | short | 29729.25 | 29726.75 at 19:48 | break_retest_extreme / break | intraday_levels[3] 29740.0 | 2.5 | 0.6 | yes |

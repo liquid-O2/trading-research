@@ -280,22 +280,35 @@ def break_stop_fills(rows: list[dict], level: Decimal, side: str, *, max_breaks:
             continue
         trig = level + STOP_BEYOND if side == "long" else level - STOP_BEYOND
         out.append({"mode": "break_stop", "entry": trig, "at": bar["end"], "cycle": n})
-        # the retest: after the break, the first bar that comes back within
-        # fifteen points of the level from the broken side without closing
-        # back through it
+        # the retest: after the break, price first leaves the level (fifteen
+        # points or more away: "wait again for price to come back", TRAP p.6),
+        # then the first bar that comes back within fifteen points of it from
+        # the broken side without closing back through it
+        # (a retest needs a real departure -- twenty-five points, half the
+        # spacing of his intraday levels -- and each new departure allows one
+        # more retest; 2026-08-10 retests the broken 29,740 at 19:0x and again
+        # at 19:47 after the 19:23 low, and the second is the ticket)
+        departed = False
+        retests = 0
         for j in range(i + 1, min(len(rows), i + 1 + retest_window)):
             b = rows[j]
             back_through = (b["C"] < level - FAIL_MARGIN) if side == "long" else (b["C"] > level + FAIL_MARGIN)
             if back_through:
                 break
-            near = (b["L"] <= level + RETEST_INSIDE * 7) if side == "long" else (b["H"] >= level - RETEST_INSIDE * 7)
+            away = (b["H"] >= level + RETEST_INSIDE * 12) if side == "long" else (b["L"] <= level - RETEST_INSIDE * 12)
+            if away:
+                departed = True
+            near = departed and ((b["L"] <= level + RETEST_INSIDE * 7) if side == "long" else (b["H"] >= level - RETEST_INSIDE * 7))
             if near:
                 extreme = b["L"] if side == "long" else b["H"]
-                out.append({"mode": "break_retest_extreme", "entry": extreme, "at": b["end"], "cycle": n})
-                out.append({"mode": "break_retest_close", "entry": b["C"], "at": b["end"], "cycle": n})
+                out.append({"mode": "break_retest_extreme", "entry": extreme, "at": b["end"], "cycle": n, "retest": retests})
+                out.append({"mode": "break_retest_close", "entry": b["C"], "at": b["end"], "cycle": n, "retest": retests})
                 if j + 1 < len(rows):
-                    out.append({"mode": "break_retest_next_open", "entry": rows[j + 1]["O"], "at": rows[j + 1]["start"] + MINUTE, "cycle": n})
-                break
+                    out.append({"mode": "break_retest_next_open", "entry": rows[j + 1]["O"], "at": rows[j + 1]["start"] + MINUTE, "cycle": n, "retest": retests})
+                retests += 1
+                departed = False
+                if retests >= 3:
+                    break
         n += 1
         # the next break needs a re-entry: a close back on the inside
         i += 1

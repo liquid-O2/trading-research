@@ -2207,6 +2207,8 @@ def _scan_eq_branch(market, branch: str) -> tuple[list[dict[str, Any]], list[dic
             return [], [{"reason": "play_not_in_the_day_read", "branch": branch, "play": "big_range_eq"}]
     episodes: list[dict[str, Any]] = []
     for kind, level in lines:
+        if level is None:
+            continue  # a line the day did not draw (no 15-minute opening range, no prior value)
         for side in sides:
             if side is None:
                 continue
