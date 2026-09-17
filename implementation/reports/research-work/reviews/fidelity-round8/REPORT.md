@@ -105,3 +105,30 @@ What his words do not give: which edge of the 6–9 he takes first on a double-b
 | "Partials every 25 points ... stop to breakeven ... runners" | GB p.8 | management, not selection |
 
 What his words do not give: which of the drawn levels' failures he takes when several occur in a session (the A+ grade is "confluence ... you're always scoring and rating a setup"), and the exact Asia clock ("not stated; he only says Asia high / Asia low").
+
+## 9. Population re-run on the rebuilt adapters (1,742 sessions, 2026-09-17 evening)
+
+`tools/run_jj_gb_population.py --workers 12`: 1,742 of 1,742 sessions, 19 minutes wall, 7.9 s a session, 3.9 GB peak per worker, no failures. Three scan errors (a Jumbo internal line the day had not drawn, fixed) and 85 causality flags (the Asia TDO-close mode's trigger was stamped with the level's later failure close, fixed) were found by this run and repaired before the merge. Full tables: `../../P15-16A` style run root in the session scratchpad `pop-round8/POPULATION.md`; the numbers that matter:
+
+| family | candidate list a day (capped: Jumbo 4 London + 8 NY, Green Bird 6 a segment) | executed fills a day | round trips a day | author |
+| --- | ---: | ---: | ---: | --- |
+| Jumbo | 9.6 | 11.4 | 9.1 | 1–3 |
+| Green Bird | 15.5 | 17.5 | 14.5 | 1–2 |
+
+Day reads over the population: Jumbo 1,178 double-break, 511 single-break, 53 unknown (range bins 0–0.3: 347, 0.3–0.5: 531, 0.5–0.8: 455, 0.8–1.2: 230, 1.2+: 153); Green Bird model sweep-and-fail 989, pullback-continuation 753; an overnight PDL/PDH reclaim sets a bias on 696 sessions. The lists are cap-bound on most days (Jumbo round trips cluster at 6–9, Green Bird at 13–14), which is the honest population reading of §5: the framework admits far more than the author takes, and the grading study is what closes that gap.
+
+## 10. Sires and Saint: the ticketed fills on the drawn levels (20 of 20)
+
+Records: the twenty ticketed fills (ten Sires sessions, one Saint session) are now marked as proper entries; two examples have no ticket (07-23's nine attempts, the WIC week). Every ticketed price prints on our NQ tape within three minutes of the ticket time.
+
+`tools/replay_sires.py` reproduces all twenty within 10 points on the right bar (one five-minute bar) on the author's side, with the levels taken from the records (his own boxes and lines, as the P-zone fixtures were for Jumbo) and the sequence read on one-minute bars:
+
+| mechanism (his words) | source | fills | tickets |
+| --- | --- | --- | --- |
+| origin of the move: the squeeze through the line, the failure back, the retest of the failure box ("short on the retest of the failed squeeze, stop above the sellers' aggression") | OFM p.7, p.14; K18 p.6; K2345 p.7; CONT p.7 | failure close, stop at the line, next open, limit at the line or the box's near edge on the retest, stop beyond the retest bar | 07-08 10:47, 07-10 10:18 and 10:24, 07-31 09:35, 08-04 09:37, 08-19 09:35, 07-15 01:01 |
+| refill / defended band ("sellers absorbed at the bottom, no result for the push") | NYAM p.4; BIG p.16 | the close back away from the band, the next open, the limit at the band's near edge | 07-14 09:37, 08-06 09:52 and 10:04, 07-09 09:51 |
+| failed auction / band reclaim ("tag of an older balance's POC, instant rejection") | BIG p.11 | the reclaim close, next open, a stop one tick beyond the edge | 08-06 09:33 and 09:36, 07-31 09:33, 08-04 09:31 |
+| break of a short-term balance or of a band's far edge ("strength to push through a short term microbalance"; the third retest of the support band failing) | K2345 p.7; NYAM p.9 | a stop one tick through the level; the retest of the broken level after a 25-point departure | 07-09 09:35, 07-14 10:15, 10:17 and 10:36 |
+| Saint: the intraday level breaks, price leaves, comes back once ("two waits, not one") | TRAP pp.6–7 | the retest bar's extreme, its close, the next open | 08-10 19:47 (his panel says 19:51; the price he prints is the 19:47 retest high on NQ) |
+
+What this does not yet do, and is the next step for these two families: draw the levels from data. Sires' boxes are aggression clusters (prints of thirty contracts and more absorbed at one area, BIG p.3) and profile shelves, ledges and nodes; Saint's are the higher-timeframe balance and the intraday levels off the open and balance. The trade data on disk covers the sessions (weekly NQ trade files through 2026-08-31). Generating the aggression boxes from the trades and comparing them with the twenty drawn boxes is the Sires equivalent of the P-zone fit, and the profile objects are Phase 3.
