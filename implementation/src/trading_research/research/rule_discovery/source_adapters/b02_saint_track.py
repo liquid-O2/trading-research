@@ -540,7 +540,9 @@ def numbers_from(value) -> list[Decimal]:
     return found
 
 
-def levels_close(a, b, ticks: int = LEVEL_TOLERANCE_TICKS) -> bool:
+def levels_close(a, b, ticks: int | None = None) -> bool:
+    if ticks is None:
+        ticks = LEVEL_TOLERANCE_TICKS  # read at call time so a rescan override reaches it
     if a is None or b is None:
         return False
     return abs(dec(a) - dec(b)) <= Q * ticks

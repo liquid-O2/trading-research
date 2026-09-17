@@ -59,13 +59,15 @@ def _session_span(market, day: date) -> dict[str, Any] | None:
     }
 
 
-def prior_sessions(market, count: int = MAX_LOOKBACK_SESSIONS) -> list[dict[str, Any]]:
+def prior_sessions(market, count: int | None = None) -> list[dict[str, Any]]:
     """The previous ``count`` trading sessions, most recent first.
 
     Each entry is the full 18:00-16:00 CME session the authors' charts draw as
     the D-1 / D-2 / D-3 high and low. Sessions that are not in the owned cache
     are simply absent; the caller reports the gap rather than substituting.
     """
+    if count is None:
+        count = MAX_LOOKBACK_SESSIONS  # read at call time so a rescan override reaches it
     supplied = getattr(market, "b02_prior_sessions", None)
     if supplied is not None:
         return list(supplied)[:count]

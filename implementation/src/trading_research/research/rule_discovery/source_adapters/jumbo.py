@@ -1264,7 +1264,7 @@ def level_contacts(
     begin: int,
     end: int,
     departure: Decimal,
-    max_contacts: int = MAX_CONTACTS_PER_LEVEL,
+    max_contacts: int | None = None,
 ) -> list[dict[str, Any]]:
     """Each distinct test of a level, not only the first.
 
@@ -1273,6 +1273,8 @@ def level_contacts(
     2026-06-05 buys R-Lo at 05:03 after two earlier round trips. A re-touch
     counts once price has left the level by ``departure``.
     """
+    if max_contacts is None:
+        max_contacts = MAX_CONTACTS_PER_LEVEL  # read at call time so a rescan override reaches it
     out: list[dict[str, Any]] = []
     ready = True
     for row in _bars(market, begin, end, 60):
@@ -3043,13 +3045,15 @@ def _expected_plays(entry: Mapping[str, Any]) -> set[str]:
     return {PLAY_OF_BRANCH[branch] for branch in branch_alternatives(entry.get("branch")) if branch in PLAY_OF_BRANCH}
 
 
-def match_entry(market, episodes, entry, *, strict_points: Decimal = REPLAY_LEVEL_TOLERANCE) -> dict[str, Any]:
+def match_entry(market, episodes, entry, *, strict_points: Decimal | None = None) -> dict[str, Any]:
     """Does any episode produce this narrated entry, on this side, at this time?
 
     Where the post prints a fill the comparison is entry price to fill price.
     Where the post narrates the trade without printing a fill, the comparison is
     our reference level to the level the post names.
     """
+    if strict_points is None:
+        strict_points = REPLAY_LEVEL_TOLERANCE  # read at call time so a rescan override reaches it
     window = _printed_window_for(market, entry)
     want_ns = None if window is None else window[0]
     price = entry.get("price")

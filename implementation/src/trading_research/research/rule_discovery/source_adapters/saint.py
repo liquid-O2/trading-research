@@ -502,7 +502,9 @@ VALUE_FRACTION = _D(".68")
 LEVEL_MERGE = _D("2")
 
 
-def _merge_levels(prices, within=LEVEL_MERGE) -> list:
+def _merge_levels(prices, within=None) -> list:
+    if within is None:
+        within = LEVEL_MERGE  # read at call time so a rescan override reaches it
     groups: list[list] = []
     for px in sorted(set(prices)):
         if groups and px - groups[-1][-1] <= within:
