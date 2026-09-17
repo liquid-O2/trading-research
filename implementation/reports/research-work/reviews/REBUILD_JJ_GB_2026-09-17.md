@@ -276,7 +276,8 @@ source page.
 | --- | --- | --- | --- | --- |
 | first rebuild | 4 | 14 | 17 | 40 |
 | after J-A..J-G | 7 | 17 | 21 | 40 |
-| after G-A..G-G and the two defects they surfaced | **7** | **18** | **22** | **40** |
+| after G-A..G-G and the two defects they surfaced | 7 | 18 | 22 | 40 |
+| after the coordinator's round 2 (R1-R4, the examples corrections and the rule fixes) | **17** | **26** | **27** | **40** |
 
 Nine further proper entries (2026-09-08, 09-11, 09-14, 09-15) are outside the
 tape, which ends 2026-09-03, and are carried as printed reference cases.
@@ -359,3 +360,52 @@ which object Phase 1.5 scores -- the branch population, in which case the
 enumeration has to be narrowed and these bounds are the target, or the selected
 trade list, in which case the bounds must be re-cut against it. Either way the
 gate is a live blocker on the old reading and is reported as one.
+
+## 9. Coordinator round 2 (2026-09-17)
+
+Applied in the order the coordinator gave, matcher first.
+
+| rule | change | file |
+| --- | --- | --- |
+| R1 | every fill of the matched opportunity is tested and the matched fill's mode is printed (`fills_tested`, `matched_fill`) | `match_entry` in both adapters |
+| R2 | the time window follows the evidence: `marked_by: rr_tool` keeps one five-minute bar, `marked_by: narration` gets three | `match_entry` |
+| R3 | a printed price of `None` matches on play, side and time alone | `match_entry` |
+| R4 | the Jumbo band ladder is emitted at every rung the sweep reaches and any rung can match | `_scan_judas_reversal` |
+| examples | 2025-11-19 entry 09:35; 2026-08-13 entry 11:30 at the trailing-hour equal highs; 2026-07-16 is the EQ rejection on the single-break read; 2026-07-29 short prints 22:20 on our tape | `AUTHOR_EXAMPLES_2026-09-17.json` |
+| G-A | the retest fill searches from the five-minute close as well as the one-minute read | `at_level_fill` |
+| G-D | the running session extreme is re-cut every fifteen minutes until the box closes | `session_references` |
+| G-E | the trailing sixty-minute swing is re-cut every five minutes | `_scan_previous_hour` |
+| G-8 | the pocket leg's origin is searched back through the prior RTH session | `_impulse_leg` |
+| cash open | the fade fills at the open of the bar after the one-minute rejection candle | `_rejection_fill`, wired into the fail branches too |
+| J-A | the London box carries its 0.33 / 0.5 / 0.66 band rungs | `_scan_other_session` |
+| J-B | the rejection candle's own close is a fill of the same signature | `_rejection_block`, `_three_candle_ob`, `_fill_modes` |
+| J-C | the observed break is context on the single-break play, and the EQ / quadrant play reads six contacts through its window | `_scan_eq_branch` |
+| J-G | a printed P-zone is a resting limit filled on the touch | `_scan_pzone` |
+
+**Result: strict 7 -> 17, ticket-risk 18 -> 26, three-bar 22 -> 27, of 40.**
+
+Newly matched at strict tolerance, with the fill that matched:
+`GB-2025-11-19` 1.0 pt (post-open retest), `JJ-2025-09-09` 3.75 (orderblock),
+`JJ-2025-10-03` 2.95 (signature close), `JJ-2025-10-06` 2.25 and
+`JJ-2025-10-07` 2.0 (rejection block), `JJ-2025-10-13` 09:05 1.5 (signature
+close), `JJ-2026-01-02` 0.0 (rejection close), `JJ-2026-07-06` 3.65
+(absorption), `JJ-2026-08-28` 1.25 (at level), `JJ-2026-09-01` 3.29 (at level --
+the EVRange line is reached through the drawn-level set after all).
+
+Still open after round 2, each with its measured distance:
+
+| example | ours | delta | bars | the rule that is still short |
+| --- | --- | --- | --- | --- |
+| `GB-2026-09-03` 00:45 | 29,227.75 | 10.5 | 3.0 | G-A: the TDO retest at 00:40-00:45 is still not the chosen fill |
+| `GB-2026-08-27` 13:00 | 29,623.50 | 18.75 | 4.4 | G-E: the trailing swing high the spike takes is still not cut at 12:55 |
+| `GB-2026-08-13` 11:30 | 30,192.75 | 34.75 | 12.4 | G-E: same |
+| `GB-2026-08-31` 09:33 | 29,465.25 | 45.25 | 0.4 | the rejection-candle fill is not firing on the spike |
+| `GB-2026-08-11-12` 20:40 | 29,887.25 | 251.5 | 449 | G-F: the previous session's 09:00-10:00 low is not the chosen reference that evening |
+| `GB-2026-07-13` 20:40 | 29,393.25 | 21.0 | 273 | G-A: the later retest of the PDL is not the chosen fill |
+| `GB-2026-07-29` 22:20 | 27,600.00 | 44.5 | 274 | the pocket leg still measures from the wrong origin |
+| `GB-2026-07-30` 04:00 | none | - | - | G-D: the running London low at 27,360 is still not a reference |
+| `GB-2026-04-28` | none / 14 bars | - | - | the 09:00-10:00 box before 10:00 (G13 stands) |
+| `JJ-2026-06-05` 03:20 | 30,098.50 | 32.0 | 0.8 | J-A: the London -0.5 rung is not the chosen level |
+| `JJ-2026-07-10` 11:05 | 29,837.75 | 28.75 | 0.6 | J-C: the 11:05 q25 contact is close but not the chosen one |
+| `JJ-2026-07-16` 09:35 | 29,384.75 | 66.75 | 1.0 | the EQ rejection short is not the chosen episode |
+| `JJ-2026-07-27` 09:35 | none | - | - | open question (the coordinator's own note) |
