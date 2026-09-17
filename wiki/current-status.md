@@ -35,7 +35,8 @@ Report [fidelity-round8 section 13](/workspace/implementation/reports/research-w
 - **Jumbo** P-zone node snap is a queued candidate (recall 44 of 45).
 - **Override plumbing defect**: constants bound as default arguments never received `--scanner-overrides`; two contacts candidates had returned the baseline on every session. Nine bindings now read at call time, a test guards it, and the affected candidates re-run. Rescan results so far: the Judas and single-break window ends are inert (T1, T2, T4, PM windows), the major-level objective loses on every fold.
 - **Machinery lessons**: the seven window-cache identity files must never be edited (an edit re-keyed every window and failed two running populations, since completed on their failed dates); the root overlay holding the scratchpad is 30 GB, so large outputs live under `/workspace/.scratch/`.
-- **In flight**: the exit-policy study (P15-19) on every session's executed trades, the Sires grading fit on generated boxes with the object-layer features, the remaining v1 and v2 rescan candidates.
+- **Exits (P15-19 on the rebuilt entries, report section 14)**: six policies on 1,721 sessions; for Jumbo the author's own management (E5: stop and objective held to the deadline, no expiry) beats the hour expiry by 9.7 points a session, positive on every fold; every expiry and every R-managed policy costs him; Green Bird is neutral to holding.
+- **Merged to main** as 8b219e14 (suite 747 passed, guard 71 of 71). In flight: the Sires grading fit on the population's candidate list, the remaining v1, v2 and v1c rescan candidates, the JJ/GB grading refit on the current object layer.
 
 ## Phase 1.5 progress, 2026-09-16 evening
 
