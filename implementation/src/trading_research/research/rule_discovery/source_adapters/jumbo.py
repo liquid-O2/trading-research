@@ -883,6 +883,8 @@ def _three_candle_ob(bars: list[dict[str, Any]], side: str, level: Decimal | Non
                 "kind": "orderblock",
                 "at": int(third["known_at"]),
                 "entry": t_c,
+                "signal_close": s_c,
+                "signal_at": int(second["known_at"]),
                 "stop": stop,
                 "band": [s_l, s_h],
             }
@@ -915,6 +917,8 @@ def _rejection_block(bars: list[dict[str, Any]], side: str, level: Decimal | Non
                 "kind": "rejection_block",
                 "at": int(close["known_at"]),
                 "entry": c_c,
+                "signal_close": s_c,
+                "signal_at": int(sweep["known_at"]),
                 "stop": stop,
                 "band": band,
             }
@@ -1380,7 +1384,7 @@ def _context_stage(context: Mapping[str, Any], at_ns: int, **extra: Any) -> dict
 # branches
 
 
-FILL_MODES = ("at_level", "signature_close")
+FILL_MODES = ("at_level", "signature_close", "rejection_close")
 
 
 def _fill_modes(confirmed: Mapping[str, Any] | None, level: Decimal) -> list[tuple[str, Decimal | None, int | None]]:
@@ -1394,7 +1398,13 @@ def _fill_modes(confirmed: Mapping[str, Any] | None, level: Decimal) -> list[tup
     """
     if confirmed is None:
         return [(mode, None, None) for mode in FILL_MODES]
-    return [("at_level", level, confirmed["at"]), ("signature_close", confirmed["entry"], confirmed["at"])]
+    out = [("at_level", level, confirmed["at"]), ("signature_close", confirmed["entry"], confirmed["at"])]
+    # J-B round 2: the author is filled on the rejection candle itself
+    # (2025-10-13: the 09:03-09:05 rejection at the HIGH closes about 24,850
+    # and his ticket is 24,848.50), not only on the candle that confirms it.
+    if confirmed.get("signal_close") is not None:
+        out.append(("rejection_close", confirmed["signal_close"], int(confirmed.get("signal_at") or confirmed["at"])))
+    return out
 
 
 def _judas_episode(
@@ -1768,8 +1778,12 @@ def _scan_other_session(market) -> tuple[list[dict[str, Any]], list[dict[str, An
             ("eq", london["eq"], ("long", "short")),
             ("q75", london["q75"], ("long", "short")),
             ("london_high", london["high"], ("short",)),
+            ("minus_0.33", london["ladder"]["minus_0.33"], ("long",)),
             ("minus_0.5", london["ladder"]["minus_0.5"], ("long",)),
+            ("minus_0.66", london["ladder"]["minus_0.66"], ("long",)),
+            ("plus_0.33", london["ladder"]["plus_0.33"], ("short",)),
             ("plus_0.5", london["ladder"]["plus_0.5"], ("short",)),
+            ("plus_0.66", london["ladder"]["plus_0.66"], ("short",)),
             ("minus_1.33", london["ladder"]["minus_1.33"], ("long",)),
             ("minus_1.66", london["ladder"]["minus_1.66"], ("long",)),
             ("plus_1.33", london["ladder"]["plus_1.33"], ("short",)),
@@ -1953,11 +1967,13 @@ def _scan_eq_branch(market, branch: str) -> tuple[list[dict[str, Any]], list[dic
     for row in _eq_locations(market, box, branch):
         for side in sides:
             start = max(begin, int(row["known_at"]))
-            touches = level_contacts(market, level=row["price"], begin=start, end=end, departure=box["width"] / 20)
+            touches = level_contacts(
+                market, level=row["price"], begin=start, end=end, departure=box["width"] / 20, max_contacts=6
+            )
             for contact_index, touch in enumerate(touches or [None]):
              state = break_state(market, box, int(touch["start"])) if touch is not None else {"single_break": None, "side": None, "broke_high": None, "broke_low": None}
-             if branch == "single_extended" and touch is not None and state["side"] != side:
-                continue
+             # J-C round 2: the observed break is recorded, not a gate -- the
+            # 2026-07-16 EQ rejection short fires with both edges still intact.
              pack = (
                  confirm_pack(market, int(touch["end"]), side, row["price"], min(end, int(touch["end"]) + CONFIRM_HORIZON_MIN * NS_MINUTE))
                  if touch is not None
@@ -2045,14 +2061,21 @@ def _scan_pzone(market) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
         )
         confirmed = pack.get("confirmed")
         target = zone.get("target") or (None if box is None else (box["high"] if side == "long" else box["low"]))
-        for mode, entry, at_ns in _fill_modes(confirmed, level):
+        fills = _fill_modes(confirmed, level)
+        if touch is not None:
+            # J-G round 2: the printed zone is a resting limit; the author is
+            # filled on the touch (2026-01-02 at 09:22), not after a signature.
+            fills.append(("zone_limit", level, int(touch["known_at"])))
+        for mode, entry, at_ns in fills:
             stop = None if confirmed is None else confirmed["stop"]
+            if mode == "zone_limit" and touch is not None:
+                stop = (_d(zone["low"]) - TICK) if side == "long" else (_d(zone["high"]) + TICK)
             stages = [
                 _context_stage(context, begin, branch="timed_pzone_reversal", anchor=anchor, pzone_source="author_printed_fixture"),
                 _stage("reference", "pass", begin, zone=[zone["low"], zone["high"]], anchor=anchor),
                 _stage("location", "pass" if touch is not None else "fail", None if touch is None else int(touch["start"]), zone=[zone["low"], zone["high"]]),
                 _stage("trigger", "pass" if touch is not None else "fail", None if touch is None else int(touch["end"])),
-                _stage("confirmation", pack["verdict"], at_ns, mode=mode, kind=None if confirmed is None else confirmed["kind"], absorption=pack["absorption"], timeframe_seconds=None if confirmed is None else confirmed.get("timeframe_seconds")),
+                _stage("confirmation", "pass" if mode == "zone_limit" else pack["verdict"], at_ns, mode=mode, kind="zone_limit" if mode == "zone_limit" else (None if confirmed is None else confirmed["kind"]), absorption=pack["absorption"], timeframe_seconds=None if confirmed is None else confirmed.get("timeframe_seconds")),
                 _stage("risk", "pass" if entry is not None and stop is not None and sign(side) * (entry - stop) > 0 else "fail", at_ns, entry=entry, stop=stop),
                 _stage("objective", "pass" if entry is not None and target is not None and sign(side) * (target - entry) > 0 else "fail", at_ns, target=target),
                 _stage("management", "pass", at_ns),

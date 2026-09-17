@@ -496,24 +496,27 @@ def session_references(market) -> tuple[list[dict[str, Any]], list[dict[str, Any
         # the stated exception ("I wait until after 10AM").
         if running_after is None:
             return
-        running = _range(market, start, running_after, f"{label}-running")
-        if running is None:
-            return
-        refs.append(
-            {
-                "id": f"{kind}_running:{market.instrument_id}:{start}:{running_after}",
-                "kind": f"{kind}_running",
-                "branch": branch,
-                "low": _dec(running["low"]),
-                "high": _dec(running["high"]),
-                "known_at": int(running_after),
-                "live_from": int(running_after),
-                "window": [int(start), int(running_after)],
-                "sides": ("long", "short"),
-                "running": True,
-                "frozen_at": int(end),
-            }
-        )
+        cursor = int(running_after)
+        while cursor <= int(end):
+            running = _range(market, start, cursor, f"{label}-running-{cursor}")
+            cursor += 15 * MINUTE
+            if running is None:
+                continue
+            refs.append(
+                {
+                    "id": f"{kind}_running:{market.instrument_id}:{start}:{cursor}",
+                    "kind": f"{kind}_running",
+                    "branch": branch,
+                    "low": _dec(running["low"]),
+                    "high": _dec(running["high"]),
+                    "known_at": int(cursor),
+                    "live_from": int(cursor),
+                    "window": [int(start), int(cursor)],
+                    "sides": ("long", "short"),
+                    "running": True,
+                    "frozen_at": int(end),
+                }
+            )
 
     a_start, a_end = _box_ns(market, ASIA_BOX)
     add_box("asia_box", "asia_box", a_start, a_end, "asia-box-20:00-00:00", running_after=a_start + HOUR)
@@ -788,6 +791,36 @@ def failure_close(market, *, level: Decimal, side: str, cycle: Mapping[str, Any]
 RETEST_WINDOW_NS = 4 * HOUR
 
 
+def _rejection_fill(market, *, level: Decimal, side: str, cycle: Mapping[str, Any], end: int) -> dict[str, Any] | None:
+    """The author sells as the spike turns.
+
+    Round-2 guidance (2026-08-31): the 09:31 minute closes 29,506.50 with a
+    ten-point upper wick and the 09:32 bar opens 29,506.75; his fill is
+    29,510.50. The fill is the open of the bar after the one-minute rejection
+    candle -- the wick larger than the body, beyond the level -- not the later
+    failure close.
+    """
+    sweep_at = int(cycle["sweep_at"])
+    rows = _safe_bars(market, sweep_at, min(int(end), sweep_at + FAIL_WINDOW_NS))
+    for current, following in zip(rows, rows[1:]):
+        o, c = _d(current.get("O")), _d(current.get("C"))
+        hi, lo = _d(current.get("H")), _d(current.get("L"))
+        if None in (o, c, hi, lo):
+            continue
+        beyond = hi > level if side == "short" else lo < level
+        if not beyond:
+            continue
+        body_hi, body_lo = max(o, c), min(o, c)
+        wick = (hi - body_hi) if side == "short" else (body_lo - lo)
+        if wick <= (body_hi - body_lo):
+            continue
+        entry = _d(following.get("O"))
+        if entry is None:
+            continue
+        return {"entry": entry, "decision_at": int(following.get("known_at") or following.get("end")), "rejection_at": int(current["start"])}
+    return None
+
+
 def at_level_fill(market, *, level: Decimal, side: str, cycle: Mapping[str, Any], end: int) -> dict[str, Any] | None:
     """The resting limit at the level, filled on the retest after the failure.
 
@@ -801,9 +834,13 @@ def at_level_fill(market, *, level: Decimal, side: str, cycle: Mapping[str, Any]
     made the failure observable.
     """
     visible = failure_close(market, level=level, side=side, cycle=cycle, end=end)
-    if visible is None:
+    fail = cycle.get("fail")
+    stamps = [int(visible["decision_at"])] if visible is not None else []
+    if fail is not None:
+        stamps.append(int(fail.get("known_at") or fail.get("end")))
+    if not stamps:
         return None
-    from_ns = int(visible["decision_at"])
+    from_ns = min(stamps)
     for row in _safe_bars(market, from_ns, min(int(end), from_ns + RETEST_WINDOW_NS)):
         lo, hi = _d(row.get("L")), _d(row.get("H"))
         if lo is None or hi is None or int(row.get("start") or 0) < from_ns:
@@ -1414,6 +1451,17 @@ def _fail_branch_episodes(market, refs: Sequence[Mapping[str, Any]], objectives:
                         minute_cycle,
                     )
                 )
+                rejection = _rejection_fill(market, level=level, side=side, cycle=cycle, end=end)
+                modes.append(
+                    (
+                        "next_bar_open",
+                        None if rejection is None else rejection["entry"],
+                        None if rejection is None else rejection["decision_at"],
+                        ("GB-FAIL-one-minute-failure-close",),
+                        None,
+                        minute_cycle,
+                    )
+                )
                 fill = at_level_fill(market, level=level, side=side, cycle=cycle, end=end)
                 modes.append(
                     (
@@ -1492,7 +1540,7 @@ def _scan_previous_hour(market, refs, objectives) -> list[dict[str, Any]]:
         item = dict(ref)
         item["live_from"] = max(int(ref["live_from"]), int(market.at(PREVIOUS_HOUR_FROM)))
         gated.append(item)
-    step = 15 * MINUTE
+    step = 5 * MINUTE
     cursor = int(market.at("11:00"))
     session_end = int(market.at("16:00"))
     while cursor <= session_end:
@@ -1725,9 +1773,11 @@ def _scan_cash_open(market, refs, objectives) -> list[dict[str, Any]]:
             minute = failure_close(market, level=level_px, side=side, cycle=cycle, end=end)
             use_cycle = cycle if minute is None else {**cycle, "fail": minute["bar"], "fail_at": minute["decision_at"], "status": "failed"}
             fill = at_level_fill(market, level=level_px, side=side, cycle=cycle, end=end)
+            rejection = _rejection_fill(market, level=level_px, side=side, cycle=cycle, end=end)
             modes = [
                 ("at_level", None if fill is None else fill["entry"], None if fill is None else fill["decision_at"]),
                 ("failure_close_1m", None if minute is None else minute["entry"], None if minute is None else minute["decision_at"]),
+                ("next_bar_open", None if rejection is None else rejection["entry"], None if rejection is None else rejection["decision_at"]),
             ]
             for mode, entry, at_ns in modes:
                 out.append(
@@ -1771,11 +1821,26 @@ def _scan_cash_open(market, refs, objectives) -> list[dict[str, Any]]:
 def _impulse_leg(market, *, end_ns: int | None = None) -> dict[str, Any] | None:
     """G8: the impulse that made the day's session extreme, either direction.
 
-    The leg runs from the session extreme back to the opposite extreme that
-    preceded it, measured on completed one-minute bars up to ``end_ns``.
+    The leg runs from the session extreme back to the swing extreme that
+    preceded it. Round-2 guidance: that origin is searched back through the
+    prior RTH session -- 2026-07-29's overnight dump measures from the prior
+    RTH high near 27,935 down to the 18:00 low 27,190, and its 61.8% is the
+    author's 27,650 pocket line; a leg confined to 18:00-00:00 cannot produce
+    it.
     """
     end = int(end_ns or market.at("11:00"))
     rows = _safe_bars(market, int(market.start), end)
+    prior_rows: list[dict[str, Any]] = []
+    sessions = prior_sessions(market, 1)
+    if sessions:
+        win = sessions[0].get("window")
+        if win is not None:
+            day = date.fromisoformat(sessions[0]["date"])
+            try:
+                prior_rows = list(win.bars(clock(day, "09:30"), clock(day, "16:00"), 300) or [])
+            except Exception:
+                prior_rows = []
+    rows = prior_rows + list(rows)
     if len(rows) < 10:
         return None
     high_row = max(rows, key=lambda r: _dec(r["H"]) if r.get("H") is not None else Decimal("-1e12"))
