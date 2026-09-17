@@ -23,6 +23,8 @@ Guard and Phase 1.5 machinery (2026-09-17 night): `planning/phase-1-5/FIDELITY_P
 
 Data finding: the NQ trade file is fill-level; aggressor orders (the authors' 30–100+ contract bubbles) appear only after grouping fills by event timestamp and side, and they land on Sires' drawn boxes. Every order-flow object (Sires, Refill) must start from that aggregation.
 
+**Object layer and completeness (2026-09-17 night, merged from `phase15/objective`).** Every author's profile, delta and level objects are now computed once per decision for every family (`implementation/tools/grading_features.py`; definitions cited per author in `planning/phase-1-5/OBJECT_LAYER_2026-09-17.md`; the corpus inventory in `OBJECT_INVENTORY_2026-09-17.md`); the per-family gap ledger `COMPLETENESS_LEDGER_2026-09-17.md` lists what each source names, what is built, and the closing action for every gap. Seven dated sessions were added to the record from the archive's new images and by dating charts on the tape (Green Bird 2026-04-16, 05-01, 05-04; Jumbo 2025-10-14, 2026-05-15, 05-19, 05-20); 71 tickets are pinned. Phase 1.5 first results (report section 12): the B0.3 executed lists on 1,742 sessions (Jumbo +68, Green Bird +3.5, Sires +4.7 points a session before costs); no density cap recovers the authors' one to three trades; the Judas window end is inert; the sourced major-level objective is worse on every fold; grading on the object layer stays within the noise of 13-15 positives a family, so labelled data is the constraint. The rescan queues (23 + 5 candidates) run unattended.
+
 ## Phase 1.5 progress, 2026-09-16 evening
 
 Per-task result cards (question, headline numbers, target met, verdict, lever): [results ledger](results-ledger.md).
