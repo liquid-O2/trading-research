@@ -1,0 +1,65 @@
+{
+ "attempt": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0001",
+ "headline": [
+  {
+   "artifact": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0001/REFINEMENT_BANK.json",
+   "name": "neighbours attempted",
+   "sha256": "7fe7a9f68321c06e85021646b39de73754721708ecbf8900c919edcbd7b00bd5",
+   "support": 217,
+   "unit": "of 217 proposals, 31 duplicates",
+   "value": 186
+  },
+  {
+   "artifact": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0001/REFINEMENT_BANK.json",
+   "name": "distinct neighbour candidates executed",
+   "sha256": "7fe7a9f68321c06e85021646b39de73754721708ecbf8900c919edcbd7b00bd5",
+   "support": 53,
+   "unit": "candidates over 1,742 declared sessions",
+   "value": 53
+  },
+  {
+   "artifact": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0001/SELECTED_RULES_BY_FOLD.json",
+   "name": "refined mechanisms selected",
+   "sha256": "656c23dda2fac45d0f32296d59e6cdd2c7160d3536d698013e56066e7a16b8d4",
+   "support": 45,
+   "unit": "fold-family roles over 5 outer folds",
+   "value": 45
+  },
+  {
+   "artifact": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0001/COMBINATION_RESULTS.json",
+   "name": "combinations attempted",
+   "sha256": "b33c75c4d09f8d5e49b7aad3cae764a16b2952b5b6348bc24dada363ea2051eb",
+   "support": 20,
+   "unit": "of 20 proposals; the rest pair mechanisms on different branches",
+   "value": 10
+  },
+  {
+   "artifact": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0001/TRIALS.jsonl",
+   "name": "trials promoted",
+   "sha256": "8bf8c0ac38406c37754eadbe6a8ef740011f891d5c366aa54477caabc016f23a",
+   "support": 237,
+   "unit": "of 237 ledger rows",
+   "value": 22
+  }
+ ],
+ "label": "definitive",
+ "lever": {
+  "change": "give the refinement a larger resolved-entry population per fold, by re-running the same registered neighbourhoods on Phase 3 locations, rather than adding neighbours the contract caps",
+  "evidence": "the selected refined mechanism's 95% lower bound stays above zero when the entry population roughly doubles, instead of moving with the fold"
+ },
+ "limits": [
+  "Refinement moves a parameter inside a mechanism the breadth screen already chose; it cannot rescue a family whose baseline is retained.",
+  "No number here touches the blind hold-out (2026-04-01 to 2026-09-03)."
+ ],
+ "question": "Inside the two mechanism banks each family kept, does a neighbouring parameter value, or the one permitted combination of two, beat the value the breadth screen selected?",
+ "schema_version": "research-result-card-v1",
+ "target": {
+  "met": "partial",
+  "text": "SEARCH_CONTRACT refinement stage: at most 12 neighbours per bank and 24 per family from the registered neighbourhoods, one combination per family only when each ingredient beats B0.2 on inner tuning, and the shared promotion gates for anything that replaces a baseline"
+ },
+ "task_id": "P15-18",
+ "verdict": {
+  "reason": "The bounded round ran exactly as specified and a few refined mechanisms clear the gates, but they rest on an entry population whose first attribution is still support or location, so the gain is small and fold-dependent.",
+  "value": "needs_upgrade"
+ }
+}

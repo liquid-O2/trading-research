@@ -44,6 +44,7 @@ Receipts prove that software ran and that checks passed; the result card says wh
 
 - `question`: the one question the task answers, in plain words.
 - `headline`: at most five numbers, each with its unit, its interval or support count, and the pointer to the artifact it was read from.
+- `plausibility` (added 2026-09-17): at least one check, each with `check`, `observed`, `expected` (the value or range the requirement or the sampling error implies) and `verdict` in `plausible` or `implausible_pending_audit`. A research task's strongest positive headline always carries a stability check: its per-fold values against their sampling error, and a gate that is unpassable by construction (an attainable p-value floor above the threshold, a support floor no candidate reaches) is itself a check. An implausible check blocks `done_well`, must appear in `limits`, and is audited before the number is used anywhere. The verifier enforces the shape.
 - `target`: the gate or target the task was held to, from the contract, and `met`: yes, no, partial or not_applicable.
 - `verdict`: one of `done_well`, `needs_upgrade`, `not_reaching_target`, `not_applicable`, with one sentence of reason.
 - `lever`: if the verdict is not `done_well`, the single smallest change that would most plausibly improve the result, and what evidence would show it did.

@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from functools import wraps
 from hashlib import sha256
 from pathlib import Path
-from typing import Any, Iterable, Literal, Mapping
+from typing import Any, Callable, Iterable, Literal, Mapping
 import ast
 import json
 import os
@@ -112,6 +112,17 @@ EVIDENCE_STATUSES = frozenset({"pass", "fail", "unsupported", "accepted-limit"})
 ACCEPTED_MATRIX_STATUSES = frozenset({"pass", "accepted-limit"})
 PREDICTOR_EDGE_KEYS = frozenset({"features", "parameters", "parents", "evidence", "predictors"})
 OUTCOME_EDGE_KEYS = frozenset({"outcomes", "outcome", "targets", "outcome_edges"})
+#: The amendment chain is exempt from the PLAN_SNAPSHOT hash comparison: it is
+#: appended to by every amendment and is the document that excuses other plan
+#: drift, so a snapshot of it can never match the live file it is checked against.
+AMENDMENTS_REL = "planning/research-program/AMENDMENTS.json"
+#: The verifier's own files are validated by their test suites and recorded, never
+#: pinned: a receipt that pinned them would fail after every hardening of the checker
+#: and drag every receipt that binds it down with it.
+VERIFIER_FILES = frozenset({
+    "implementation/src/trading_research/research/contracts/receipts.py",
+    "implementation/tools/verify_research_release.py",
+})
 CANONICAL_GRAPH_REL = "planning/research-program/TASK_GRAPH.json"
 CANONICAL_REGISTRY_REL = "planning/research-program/ASSURANCE_CASES.json"
 SCHEMA_CONTENT_MARKERS = {
@@ -521,7 +532,20 @@ def _unique_failures(failures: Iterable[CheckFailure]) -> tuple[CheckFailure, ..
     return tuple(ordered)
 
 
-def _unpinned_owned_paths(owns: Iterable[str], code_files: Mapping[str, Any], workspace: Path) -> list[str]:
+def _unpinned_owned_paths(
+    owns: Iterable[str],
+    code_files: Mapping[str, Any],
+    workspace: Path,
+    *,
+    superseded: Callable[[str, str], bool] | None = None,
+) -> list[str]:
+    """Owned paths a receipt did not pin.
+
+    A file that appeared under an owned directory after the receipt closed is not
+    a failure when a verified later receipt that lists this task as a direct or
+    transitive predecessor pins that path at the live digest -- the same rule the
+    drift check uses for a changed file, applied to an added one.
+    """
     missing: list[str] = []
     for rel in owns:
         if str(rel).endswith("/"):
@@ -535,9 +559,15 @@ def _unpinned_owned_paths(owns: Iterable[str], code_files: Mapping[str, Any], wo
                 if child.suffix == ".pyc" or not child.is_file():
                     continue
                 key = child.relative_to(workspace).as_posix()
-                if key not in code_files:
-                    missing.append(key)
+                if key in code_files:
+                    continue
+                if superseded is not None and superseded(key, file_digest(child)):
+                    continue
+                missing.append(key)
         elif rel not in code_files:
+            path = workspace / str(rel)
+            if superseded is not None and path.is_file() and superseded(str(rel), file_digest(path)):
+                continue
             missing.append(str(rel))
     return missing
 
@@ -902,6 +932,7 @@ RESULT_CARD_NAME = "RESULT_CARD.json"
 RESULT_CARD_SCHEMA = "research-result-card-v1"
 RESULT_CARD_VERDICTS = ("done_well", "needs_upgrade", "not_reaching_target", "not_applicable")
 RESULT_CARD_MET = ("yes", "no", "partial", "not_applicable")
+RESULT_CARD_PLAUSIBILITY = ("plausible", "implausible_pending_audit")
 
 
 def result_card_failures(path: Path) -> list[str]:
@@ -910,7 +941,9 @@ def result_card_failures(path: Path) -> list[str]:
     Shape: schema_version; question (text); headline (1 to 5 rows, each with value, unit, an
     interval or a support count, and an artifact pointer with sha256); target (text and met in
     yes/no/partial/not_applicable); verdict (done_well, needs_upgrade, not_reaching_target,
-    not_applicable) with a reason; lever (required unless the verdict is done_well); limits."""
+    not_applicable) with a reason; lever (required unless the verdict is done_well); limits;
+    plausibility (at least one check with check, observed, expected and a verdict in
+    plausible/implausible_pending_audit; an implausible check forbids done_well)."""
     problems: list[str] = []
     try:
         card = json.loads(path.read_text())
@@ -950,6 +983,24 @@ def result_card_failures(path: Path) -> list[str]:
             problems.append("result card lever (change and evidence) is required unless the verdict is done_well")
     if not isinstance(card.get("limits"), list):
         problems.append("result card limits must be a list")
+    plausibility = card.get("plausibility")
+    if not isinstance(plausibility, list) or not plausibility:
+        problems.append("result card plausibility must list at least one check (check, observed, expected, verdict)")
+    else:
+        implausible = False
+        for index, row in enumerate(plausibility):
+            if not isinstance(row, dict) or not isinstance(row.get("check"), str) or not row["check"].strip():
+                problems.append(f"plausibility[{index}] must be an object naming its check")
+                continue
+            for key in ("observed", "expected"):
+                if not isinstance(row.get(key), (str, int, float)) or isinstance(row.get(key), bool) or row.get(key) == "":
+                    problems.append(f"plausibility[{index}].{key} must be a value or a text")
+            if row.get("verdict") not in RESULT_CARD_PLAUSIBILITY:
+                problems.append(f"plausibility[{index}].verdict must be plausible or implausible_pending_audit")
+            elif row["verdict"] == "implausible_pending_audit":
+                implausible = True
+        if implausible and isinstance(verdict, dict) and verdict.get("value") == "done_well":
+            problems.append("a result card with an implausible_pending_audit check cannot carry the verdict done_well")
     return problems
 
 
@@ -1132,6 +1183,27 @@ def _check_predecessors(
                 str(matched),
                 f"predecessor {dep} file bytes do not match declared digest",
             )
+
+
+def _manifest_path_components(entries: Any) -> set[str]:
+    """Every directory name that appears in a manifest entry's path.
+
+    A required artifact that names a directory is satisfied when the manifest
+    carries the hashed files inside it; the entry's own `.name` is then the file,
+    never the directory.
+    """
+    out: set[str] = set()
+    if not isinstance(entries, list):
+        return out
+    for entry in entries:
+        if not isinstance(entry, dict) or not isinstance(entry.get("path"), str):
+            continue
+        parts = Path(entry["path"]).parts
+        out.update(parts[:-1])
+        for member in entry.get("directory_index") or []:
+            if isinstance(member, dict) and isinstance(member.get("path"), str):
+                out.update(Path(member["path"]).parts[:-1])
+    return out
 
 
 def _manifest_by_name(entries: Any) -> dict[str, dict[str, Any]]:
@@ -1383,6 +1455,11 @@ def _check_declared_source_files(
         _append(failures, FailureCode.IDENTITY, snapshot_path, f"{kind} snapshot files mapping is empty")
         return
     for rel, declared in files.items():
+        if kind == "plan" and str(rel) == AMENDMENTS_REL:
+            # The amendment chain grows with every amendment and is the document
+            # this check reads to excuse other plan drift; it cannot verify
+            # through itself. It is loaded and validated separately.
+            continue
         source = DEFAULT_ROOT / str(rel)
         if not source.is_file():
             _append(failures, FailureCode.ARTIFACT_MISSING, str(source), f"{kind} source {rel} does not exist")
@@ -1392,6 +1469,9 @@ def _check_declared_source_files(
             _append(failures, FailureCode.IDENTITY, snapshot_path, f"{kind} declared hash for {rel} is not a digest")
             continue
         if actual == declared:
+            continue
+        if kind == "code" and str(rel) in VERIFIER_FILES:
+            # The checker checking its own bytes proves nothing; its tests do.
             continue
         superseded = False
         if kind == "plan" and state is not None:
@@ -1640,8 +1720,13 @@ def _check_inventory(receipt: Mapping[str, Any], spec: TaskSpec, graph: TaskGrap
         _append(failures, FailureCode.INVENTORY, str(receipt_path), "artifact_manifest is empty")
         return
     named = _manifest_by_name(entries)
+    components = _manifest_path_components(entries)
     required = list(graph.required_task_artifacts) + list(spec.artifacts)
-    missing = [name for name in required if name not in named]
+    missing = [
+        name
+        for name in required
+        if name not in named and str(name).rstrip("/") not in components
+    ]
     if missing:
         _append(failures, FailureCode.INVENTORY, str(receipt_path), f"required artifacts missing: {missing}")
     for name, entry in named.items():
@@ -1744,7 +1829,16 @@ def _check_identities(
     else:
         spec = graph.require(str(receipt.get("task_id") or ""))
         if spec is not None:
-            missing_code = _unpinned_owned_paths(spec.owns, code_files, DEFAULT_ROOT)
+            def _added_is_superseded(rel: str, live: str, _receipt=receipt, _path=receipt_path) -> bool:
+                if state is None:
+                    return False
+                return _code_superseded_by_successor(
+                    rel, live, receipt_path=_path, receipt=_receipt, state=state
+                )
+
+            missing_code = _unpinned_owned_paths(
+                spec.owns, code_files, DEFAULT_ROOT, superseded=_added_is_superseded
+            )
             if missing_code:
                 _append(
                     failures,

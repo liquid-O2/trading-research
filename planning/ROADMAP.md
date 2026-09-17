@@ -28,6 +28,7 @@ The objective is an adaptive NQ decision process whose context, location and res
 - Search breadth first using a small representative bank, then focus on evidence-supported mechanisms. Preserve opportunity frequency, missed moves and confirmation delay alongside quality. Source matching is a bounded construction check; it is not the optimization objective.
 - Use owned data only. Missing inputs get precise availability dispositions; no paid acquisition proposals or external account actions are part of these packs.
 - The eventual economic objective jointly optimizes profit and downside. The user's ambition is $3,000 per trading day, with less than $1,000/day unacceptable for the eventual system and a $1,000 maximum daily loss measured from day-start. Keep every eligible zero-trade day visible. A historical average cannot substitute for that daily requirement. Phase 1.5/2 component admission is not certification that this objective is achievable.
+- Trade frequency of the final process (added 2026-09-17): at most ten entries per account day as a hard ceiling, with the design aim of three or fewer, in keeping with every source method; a candidate, expert or plan that needs more is not a step toward the target.
 
 ## Retention, failure attribution and revisits
 

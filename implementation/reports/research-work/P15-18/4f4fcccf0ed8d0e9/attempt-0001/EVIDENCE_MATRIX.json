@@ -1,0 +1,498 @@
+{
+ "assurance_version": "research-assurance-2026-09-14-v3",
+ "checks": [
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/refinement.py",
+     "symbol": "propose_combinations"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0001/COMBINATION_RESULTS.json",
+     "selector": "/",
+     "sha256": "b33c75c4d09f8d5e49b7aad3cae764a16b2952b5b6348bc24dada363ea2051eb"
+    },
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0001/TRIALS.jsonl",
+     "selector": "/",
+     "sha256": "8bf8c0ac38406c37754eadbe6a8ef740011f891d5c366aa54477caabc016f23a"
+    }
+   ],
+   "expected": "a proposal whose ingredient does not beat B0.2 on inner tuning returns no combination; a cross-branch pair is recorded not_applicable with its reason",
+   "id": "A01",
+   "observed": "20 proposals: 10 attempted, 10 not_applicable with reason ingredients_on_different_branches; 3 distinct combinations executed",
+   "oracle": "the search contract's combination rule, applied to the fold's own inner scores",
+   "requirement": "A combination exists only when each ingredient individually passes inner selection, and only when both live on one branch so a single scan can carry them.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_18.py::test_a_combination_needs_both_ingredients_to_beat_the_baseline",
+    "implementation/tests/rule_discovery/test_p15_18.py::test_a_combination_whose_ingredients_live_on_different_branches_is_not_applicable"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/refinement.py",
+     "symbol": "select_refined_for_fold"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0001/SELECTED_RULES_BY_FOLD.json",
+     "selector": "/",
+     "sha256": "656c23dda2fac45d0f32296d59e6cdd2c7160d3536d698013e56066e7a16b8d4"
+    }
+   ],
+   "expected": "moving a fold's test days leaves its choice identical; moving the days that are another fold's fit window changes that fold",
+   "id": "A02",
+   "observed": "the 2022 choice is unchanged under the outer move and the 2023 choice moves",
+   "oracle": "a synthetic two-fold series with a controlled perturbation",
+   "requirement": "Outer data never select a neighbour or rescue a failed bank: select_refined_for_fold reads only that fold's fit and tune days.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_18.py::test_a_fold_selects_only_from_its_own_inner_days",
+    "implementation/tests/rule_discovery/test_p15_18.py::test_a_holdout_date_cannot_change_a_refinement_choice"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/refinement.py",
+     "symbol": "support_sensitivity"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0001/TRIALS.jsonl",
+     "selector": "/",
+     "sha256": "8bf8c0ac38406c37754eadbe6a8ef740011f891d5c366aa54477caabc016f23a"
+    }
+   ],
+   "expected": "a candidate below 100 resolved opportunities, 30 days or 3 blocks is inconclusive_support whatever its mean",
+   "id": "A03",
+   "observed": "inconclusive_support rows carry the support sensitivity at half and twice the gate",
+   "oracle": "EVALUATION.md's support gate",
+   "requirement": "A six-example perfect result remains inconclusive: the support gate is unchanged from the breadth stage and its sensitivity at half and twice the gate is reported.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_18.py::test_support_sensitivity_half_and_twice"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/refinement.py",
+     "symbol": "_refinement_trial_rows"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0001/TRIALS.jsonl",
+     "selector": "/",
+     "sha256": "8bf8c0ac38406c37754eadbe6a8ef740011f891d5c366aa54477caabc016f23a"
+    },
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0001/REFINEMENT_BANK.json",
+     "selector": "/",
+     "sha256": "7fe7a9f68321c06e85021646b39de73754721708ecbf8900c919edcbd7b00bd5"
+    }
+   ],
+   "expected": "ledger rows equal the bank's proposals plus the combination proposals",
+   "id": "A04",
+   "observed": "237 rows = 217 neighbour proposals + 20 combination proposals",
+   "oracle": "set reconciliation of REFINEMENT_BANK.json against TRIALS.jsonl",
+   "requirement": "All unsuccessful trials count in reporting and in the multiplicity adjustment: every proposal keeps a ledger row and Holm runs across the stage's candidates.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_18.py::test_a_combination_needs_both_ingredients_to_beat_the_baseline"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/refinement.py",
+     "symbol": "selected_rules_by_fold"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0001/SELECTED_RULES_BY_FOLD.json",
+     "selector": "/",
+     "sha256": "656c23dda2fac45d0f32296d59e6cdd2c7160d3536d698013e56066e7a16b8d4"
+    }
+   ],
+   "expected": "each fold has its own roles and manifest id; the descriptive recommendation is a separate field",
+   "id": "A05",
+   "observed": "5 folds with their own roles; the descriptive recommendation is labelled and separate",
+   "oracle": "the artifact's own structure against EVALUATION.md's causal-stacking rule",
+   "requirement": "The downstream selected role is time-scoped: SELECTED_RULES_BY_FOLD.json carries a per-fold selection manifest id and the all-history descriptive recommendation is labelled separately and never applied backward.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_18.py::test_a_fold_selects_only_from_its_own_inner_days"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/refinement.py",
+     "symbol": "evaluate_refinement"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0001/pytest.log",
+     "selector": "/",
+     "sha256": "fc79efcd4301969159c4578853e53853ebe90a33b05028352f4931efb010aa30"
+    },
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0001/SELF_CHECK.txt",
+     "selector": "/",
+     "sha256": "2fbcef9ba98ecdd11060c0099509190ef83ece181a3a07df8b375772c0f8f201"
+    },
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0001/RUN_META.json",
+     "selector": "/",
+     "sha256": "224e9063f01b5ffe24d2e3c435eaa997c37c732472ca71833abf42fcc39fa3f1"
+    }
+   ],
+   "expected": "a pytest log with exit 0, hashed artifacts and a recomputed central number",
+   "id": "A06",
+   "observed": "the owned suite passes; the self-check recomputes an inner improvement exactly",
+   "oracle": "the executed command log and the attempt's own artifacts",
+   "requirement": "Evidence includes the command exit code, artifact hashes, coverage counts, runtime and inspected output.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_18.py::test_the_value_area_fraction_neighbourhood_is_the_contract_row"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/refinement.py",
+     "symbol": "build_refinement_bank"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0001/REFINEMENT_BANK.json",
+     "selector": "/",
+     "sha256": "7fe7a9f68321c06e85021646b39de73754721708ecbf8900c919edcbd7b00bd5"
+    }
+   ],
+   "expected": "each row names a real test node and a hashed artifact",
+   "id": "A07",
+   "observed": "every row resolves",
+   "oracle": "the verifier's own matrix check",
+   "requirement": "Every acceptance key resolves to code, an executed command and hashed evidence.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_18.py::test_neighbors_respect_the_per_bank_and_per_family_caps"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/refinement.py",
+     "symbol": "neighborhood_values"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0001/pytest.log",
+     "selector": "/",
+     "sha256": "fc79efcd4301969159c4578853e53853ebe90a33b05028352f4931efb010aa30"
+    }
+   ],
+   "expected": "the parent's own value reproduces the parent's scan byte for byte and a contract neighbour value does not",
+   "id": "A08",
+   "observed": "both hold on a native session",
+   "oracle": "serialize_scan_bytes on 2021-06-01",
+   "requirement": "The assigned probes pass with sensitive positive and negative controls, including the native negative control that a refined parameter must change the scan.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_18.py::test_negative_control_a_refined_parameter_must_change_the_scan"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/refinement.py",
+     "symbol": "evaluate_refinement"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0001/SELECTED_RULES_BY_FOLD.json",
+     "selector": "/",
+     "sha256": "656c23dda2fac45d0f32296d59e6cdd2c7160d3536d698013e56066e7a16b8d4"
+    },
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0001/TRIALS.jsonl",
+     "selector": "/",
+     "sha256": "8bf8c0ac38406c37754eadbe6a8ef740011f891d5c366aa54477caabc016f23a"
+    }
+   ],
+   "expected": "112 hold-out dates trimmed from every fold window before scoring, recorded in the ledger rows",
+   "id": "A09",
+   "observed": "holdout_excluded.days_excluded == 112 on every ledger row and in the rules manifest",
+   "oracle": "the split manifest's 2026 test list against the trimmed fold",
+   "requirement": "Refinement neighbourhoods, combinations and the all-history recommendation are chosen without any hold-out date; the ledger records the exclusion.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_18.py::test_a_holdout_date_cannot_change_a_refinement_choice"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/search_run.py",
+     "symbol": "_load_b02_document"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0001/SELF_CHECK.txt",
+     "selector": "/",
+     "sha256": "2fbcef9ba98ecdd11060c0099509190ef83ece181a3a07df8b375772c0f8f201"
+    }
+   ],
+   "expected": "the recorded pairing sha256 recomputes from the P15-16A bytes and the entry id is present in that job's episodes",
+   "id": "S07",
+   "observed": "recomputed sha256 matches; entry id present; net points recompute exactly",
+   "oracle": "SELF_CHECK.txt, recomputed independently with plain json/gzip/Decimal",
+   "requirement": "Native evidence is traced to its source: every paired baseline is a P15-16A job document pinned by path and sha256 in the job record, and the self-check recomputes that digest from the bytes and finds the entry id in the source episodes.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_18.py::test_negative_control_a_refined_parameter_must_change_the_scan"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/search_run.py",
+     "symbol": "paired_row"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0001/pytest.log",
+     "selector": "/",
+     "sha256": "fc79efcd4301969159c4578853e53853ebe90a33b05028352f4931efb010aa30"
+    }
+   ],
+   "expected": "a complete zero-opportunity day enters the mean with 0; an incomplete or unpaired day is excluded with its reason",
+   "id": "S11",
+   "observed": "the mean over a zero day and a 2-point day is 1.0, not 2.0",
+   "oracle": "the contract's denominator rule in EVALUATION.md, exercised by an independent fixture",
+   "requirement": "A complete day with no opportunity keeps its zero in the denominator and a missing window is never imputed: paired_row admits only common complete days and every exclusion keeps its reason.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_18.py::test_a_fold_selects_only_from_its_own_inner_days"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/search_run.py",
+     "symbol": "pending_dates"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0001/pytest.log",
+     "selector": "/",
+     "sha256": "fc79efcd4301969159c4578853e53853ebe90a33b05028352f4931efb010aa30"
+    }
+   ],
+   "expected": "the validated shard is reused and only the truncated date is recomputed",
+   "id": "S12",
+   "observed": "one date recomputed; both shards byte-identical to the first run",
+   "oracle": "a fixture run twice with an interruption between",
+   "requirement": "A resumed run neither drops nor duplicates a job: checkpoints are validated against the daily shard digest, a truncated shard is redone and the resumed outputs are identical to the uninterrupted ones.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_18.py::test_neighbors_respect_the_per_bank_and_per_family_caps"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/search_run.py",
+     "symbol": "init_run"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0001/pytest.log",
+     "selector": "/",
+     "sha256": "fc79efcd4301969159c4578853e53853ebe90a33b05028352f4931efb010aa30"
+    }
+   ],
+   "expected": "a different bank or B0.2 root on an existing run root raises ContractError",
+   "id": "S13",
+   "observed": "ContractError naming the conflicting key",
+   "oracle": "an independent fixture that changes one configuration field",
+   "requirement": "A frozen run root retried with a different configuration is refused, and the per-date shards carry their own digests so no stale object is reused.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_18.py::test_a_selected_bank_without_a_branch_is_refused"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/refinement.py",
+     "symbol": "select_refined_for_fold"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0001/pytest.log",
+     "selector": "/",
+     "sha256": "fc79efcd4301969159c4578853e53853ebe90a33b05028352f4931efb010aa30"
+    }
+   ],
+   "expected": "moving another fold's days cannot change this fold's choice",
+   "id": "S17",
+   "observed": "the 2022 choice is unchanged while the 2023 choice moves",
+   "oracle": "a synthetic two-fold series with a controlled perturbation",
+   "requirement": "No all-history preprocessing or in-sample stacking: each fold selects on its own fit and tune days only.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_18.py::test_a_fold_selects_only_from_its_own_inner_days"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/search.py",
+     "symbol": "build_enumeration_hook"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0001/pytest.log",
+     "selector": "/",
+     "sha256": "fc79efcd4301969159c4578853e53853ebe90a33b05028352f4931efb010aa30"
+    }
+   ],
+   "expected": "the candidate's contact ids differ from B0.2's on the proof date",
+   "id": "S22",
+   "observed": "contact populations differ for the enumeration axes",
+   "oracle": "the stage-A proof on a native session",
+   "requirement": "A changed rule enumerates its own contacts rather than filtering the baseline's: enumeration-axis candidates change the contact population on a native session.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_18.py::test_neighborhood_values_are_exactly_the_contract_table"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/search_run.py",
+     "symbol": "trial_records"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0001/TRIALS.jsonl",
+     "selector": "/",
+     "sha256": "8bf8c0ac38406c37754eadbe6a8ef740011f891d5c366aa54477caabc016f23a"
+    },
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0001/SELF_CHECK.txt",
+     "selector": "/",
+     "sha256": "2fbcef9ba98ecdd11060c0099509190ef83ece181a3a07df8b375772c0f8f201"
+    }
+   ],
+   "expected": "ledger rows equal candidates x folds, each with a disposition",
+   "id": "S24",
+   "observed": "counts reconcile exactly; every non-attempted row carries an attribution",
+   "oracle": "set reconciliation of the frozen bank against the ledger",
+   "requirement": "Every registered trial is in the ledger with a disposition and, where not promoted, a failure attribution; selection uses only inner evidence.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_18.py::test_a_combination_needs_both_ingredients_to_beat_the_baseline"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/search_run.py",
+     "symbol": "stream_run"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0001/SELF_CHECK.txt",
+     "selector": "/",
+     "sha256": "2fbcef9ba98ecdd11060c0099509190ef83ece181a3a07df8b375772c0f8f201"
+    }
+   ],
+   "expected": "a declared date with no shard is named in the coverage report",
+   "id": "S32",
+   "observed": "coverage names 2020-06-30 as the only date without a shard",
+   "oracle": "the run's own MANIFEST date list against the shards on disk",
+   "requirement": "The declared full population is reported honestly: the coverage block states the declared dates, the dates with documents, the retained failure and the hold-out exclusion, and a partial run cannot read as a full one.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_18.py::test_a_holdout_date_cannot_change_a_refinement_choice"
+   ]
+  }
+ ],
+ "schema_version": "research-evidence-matrix-v2",
+ "task_id": "P15-18"
+}
