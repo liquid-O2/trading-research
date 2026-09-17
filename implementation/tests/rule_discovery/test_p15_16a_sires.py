@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from datetime import date
+import tempfile
 from pathlib import Path
 import hashlib
 import json
@@ -45,7 +46,7 @@ IMPL = Path(__file__).resolve().parents[2]
 REPORTS = IMPL / "reports/research-work/P15-16A"
 TRACK = REPORTS / "_track_sires"
 REPAIR = REPORTS / "_repair_sires"
-WORK = REPORTS / "_work_r3"
+WORK = Path(tempfile.gettempdir()) / "p15_16a_gate_out"  # test output, kept out of the evidence tree
 EXAMPLES = IMPL.parent / "planning/phase-1-5/AUTHOR_EXAMPLES_2026-09-15.json"
 BYTE_BEFORE = TRACK / "BYTE_IDENTITY_BEFORE.json"
 SI_IDS = (

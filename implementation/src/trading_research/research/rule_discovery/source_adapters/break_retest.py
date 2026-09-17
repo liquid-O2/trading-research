@@ -32,12 +32,17 @@ def break_retest_cycles(rows: Sequence[Mapping[str, Any]], level: Decimal, side:
     """Cycles of ``{"index", "break", "retests": [{"index", "bar", "extreme", "retest"}]}``
     on ``rows`` (bars with O/H/L/C), ``side`` the direction of the break."""
     level = Decimal(str(level))
+    # bars without a full O/H/L/C (an unobserved minute) carry no break, no
+    # departure and no retest
+    rows = [r for r in rows if r.get("H") is not None and r.get("L") is not None and r.get("C") is not None]
     out: list[dict[str, Any]] = []
     n = 0
-    i = 0
+    i = 1
     while i < len(rows) and n < max_breaks:
         bar = rows[i]
-        inside_before = i == 0 or ((rows[i - 1]["C"] <= level) if side == "long" else (rows[i - 1]["C"] >= level))
+        # a break needs a close on the inside first: a level price already
+        # sits beyond at the session's first bar is not broken by that bar
+        inside_before = (rows[i - 1]["C"] <= level) if side == "long" else (rows[i - 1]["C"] >= level)
         through = (bar["H"] > level) if side == "long" else (bar["L"] < level)
         if not (inside_before and through):
             i += 1
@@ -54,7 +59,7 @@ def break_retest_cycles(rows: Sequence[Mapping[str, Any]], level: Decimal, side:
                 departed = True
             near = departed and ((b["L"] <= level + RETEST_POINTS) if side == "long" else (b["H"] >= level - RETEST_POINTS))
             if near:
-                cycle["retests"].append({"index": j, "bar": b, "extreme": b["L"] if side == "long" else b["H"], "retest": len(cycle["retests"])})
+                cycle["retests"].append({"index": j, "bar": b, "extreme": b["L"] if side == "long" else b["H"], "retest": len(cycle["retests"]), "next_bar": rows[j + 1] if j + 1 < len(rows) else None})
                 departed = False
                 if len(cycle["retests"]) >= MAX_RETESTS:
                     break

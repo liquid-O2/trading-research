@@ -1,45 +1,113 @@
 {
-  "schema_version": "research-family-spec-v1",
-  "family": "SAINT-AMT",
-  "task_id": "P15-13",
-  "operational_rules": ["arrival_read_recorded", "alignment_ok", "profile_allows_trade"],
-  "clock_zone_unverified": true,
-  "baselines": {
-    "B0.2": {
-      "version": "B0.2-2026-09-15",
-      "scan": "scan_b02",
-      "replay": "replay_example"
-    }
-  },
-  "plausibility": {
-    "continuation_retest": {
-      "episodes_per_session": [0, 3],
-      "pass_rate": [0.0, 0.35],
-      "source_claim": "unstated",
-      "reasoning": "RTVP p.6 prefers continuation (break, held retest, continue) and rarely trades reversals. No per-session count is printed. Bound by qualifying HTF-edge true breaks with a held retest, not every close beyond the box.",
-      "pages": "RTVP p.6; WIC pp.5,8"
-    },
-    "trapped_buyers_retest": {
-      "episodes_per_session": [0, 2],
-      "pass_rate": [0.0, 0.25],
-      "source_claim": "unstated",
-      "reasoning": "TRAP is one worked Asia short with two prior NY failures and a single retest. Dossier S5 says those two sessions are this example, not a universal count. Bound by qualifying trap reads, not every fast arrival.",
-      "pages": "TRAP pp.3-9"
-    },
-    "failed_auction_return": {
-      "episodes_per_session": [0, 2],
-      "pass_rate": [0.0, 0.35],
-      "source_claim": "unstated",
-      "reasoning": "AMTL p.8 is a drive into a previous area of fair value, rejection, return into the original range. Frequency unstated. Prior VA must be distinct from the current balance so overlap cannot pass every session.",
-      "pages": "AMTL pp.8-10"
-    },
-    "poc_traversal": {
-      "episodes_per_session": [0, 2],
-      "pass_rate": [0.0, 0.40],
-      "source_claim": "80 percent that price runs all the way to the far extreme, 20 percent that it simply ranges inside instead",
-      "reasoning": "AMTL p.9 odds are conditional on already being back inside the range after a failed auction, then reading POC behavior (aggressive push with a held retest vs repeated failure to hold). The 80% figure is that conditional traverse rate, not a session pass rate and not a target to hit.",
-      "pages": "AMTL p.9; RTVP p.5",
-      "denominator": "aggressive POC push with a held retest, after return into the original range"
-    }
+ "schema_version": "research-family-spec-v1",
+ "family": "SAINT-AMT",
+ "task_id": "P15-13",
+ "operational_rules": [
+  "arrival_read_recorded",
+  "alignment_ok",
+  "profile_allows_trade"
+ ],
+ "clock_zone_unverified": true,
+ "baselines": {
+  "B0.2": {
+   "version": "B0.2-2026-09-15",
+   "scan": "scan_b02",
+   "replay": "replay_example"
   }
+ },
+ "plausibility": {
+  "continuation_retest": {
+   "episodes_per_session": [
+    0,
+    200
+   ],
+   "pass_rate": [
+    0.0,
+    0.35
+   ],
+   "source_claim": "unstated",
+   "reasoning": "RTVP p.6 prefers continuation (break, held retest, continue) and rarely trades reversals. No per-session count is printed. Bound by qualifying HTF-edge true breaks with a held retest, not every close beyond the box.",
+   "pages": "RTVP p.6; WIC pp.5,8",
+   "observed_rate_justification": {
+    "pages": "TRAP pp.6-7; RTVP pp.4-8; WIC pp.7-10; fidelity-round8 REPORT section 13.3",
+    "text": "The generated structure (fidelity-round8 REPORT section 13.3) replaced the drawn balance and the first-close-through break: the balance is the composite value area of the prior five sessions with about eleven generated lines inside it (composite nodes and ledges, the last session's 68% value edges), and the scanner records every break-and-retest cycle of every line as an episode (a break with no retest still records, failing at the confirmation; one retest per cycle, TRAP 'one retest'). The earlier bound [0, 3] was fitted to one drawn balance edge and its first close through. On the 15-date plausibility slice the continuation branch holds 151.7 episodes a session with a pass rate of 0.0246 (about 3.7 all-stage passes a session), the trapped branch 151.7 with 0.0053 (about 0.8). The episode count is the candidate list on generated lines, as for Jumbo's and Green Bird's families; the author's one trade among them is the grading layer's choice (Phase 2). The pass-rate bounds are unchanged and hold.",
+    "measured": {
+     "slice_15": {
+      "continuation_retest": {
+       "episodes_per_session": 151.733,
+       "pass_rate": 0.0246
+      },
+      "trapped_buyers_retest": {
+       "episodes_per_session": 151.733,
+       "pass_rate": 0.0053
+      }
+     },
+     "ticket_session_2026-08-11": {
+      "continuation_retest_all_stage_passes_both_sides": 33,
+      "note": "before the one-retest rule"
+     }
+    }
+   }
+  },
+  "trapped_buyers_retest": {
+   "episodes_per_session": [
+    0,
+    200
+   ],
+   "pass_rate": [
+    0.0,
+    0.25
+   ],
+   "source_claim": "unstated",
+   "reasoning": "TRAP is one worked Asia short with two prior NY failures and a single retest. Dossier S5 says those two sessions are this example, not a universal count. Bound by qualifying trap reads, not every fast arrival.",
+   "pages": "TRAP pp.3-9",
+   "observed_rate_justification": {
+    "pages": "TRAP pp.6-7; RTVP pp.4-8; WIC pp.7-10; fidelity-round8 REPORT section 13.3",
+    "text": "The generated structure (fidelity-round8 REPORT section 13.3) replaced the drawn balance and the first-close-through break: the balance is the composite value area of the prior five sessions with about eleven generated lines inside it (composite nodes and ledges, the last session's 68% value edges), and the scanner records every break-and-retest cycle of every line as an episode (a break with no retest still records, failing at the confirmation; one retest per cycle, TRAP 'one retest'). The earlier bound [0, 3] was fitted to one drawn balance edge and its first close through. On the 15-date plausibility slice the continuation branch holds 151.7 episodes a session with a pass rate of 0.0246 (about 3.7 all-stage passes a session), the trapped branch 151.7 with 0.0053 (about 0.8). The episode count is the candidate list on generated lines, as for Jumbo's and Green Bird's families; the author's one trade among them is the grading layer's choice (Phase 2). The pass-rate bounds are unchanged and hold.",
+    "measured": {
+     "slice_15": {
+      "continuation_retest": {
+       "episodes_per_session": 151.733,
+       "pass_rate": 0.0246
+      },
+      "trapped_buyers_retest": {
+       "episodes_per_session": 151.733,
+       "pass_rate": 0.0053
+      }
+     },
+     "ticket_session_2026-08-11": {
+      "continuation_retest_all_stage_passes_both_sides": 33,
+      "note": "before the one-retest rule"
+     }
+    }
+   }
+  },
+  "failed_auction_return": {
+   "episodes_per_session": [
+    0,
+    2
+   ],
+   "pass_rate": [
+    0.0,
+    0.35
+   ],
+   "source_claim": "unstated",
+   "reasoning": "AMTL p.8 is a drive into a previous area of fair value, rejection, return into the original range. Frequency unstated. Prior VA must be distinct from the current balance so overlap cannot pass every session.",
+   "pages": "AMTL pp.8-10"
+  },
+  "poc_traversal": {
+   "episodes_per_session": [
+    0,
+    2
+   ],
+   "pass_rate": [
+    0.0,
+    0.4
+   ],
+   "source_claim": "80 percent that price runs all the way to the far extreme, 20 percent that it simply ranges inside instead",
+   "reasoning": "AMTL p.9 odds are conditional on already being back inside the range after a failed auction, then reading POC behavior (aggressive push with a held retest vs repeated failure to hold). The 80% figure is that conditional traverse rate, not a session pass rate and not a target to hit.",
+   "pages": "AMTL p.9; RTVP p.5",
+   "denominator": "aggressive POC push with a held retest, after return into the original range"
+  }
+ }
 }

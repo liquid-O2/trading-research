@@ -1,0 +1,7 @@
+# Rescan candidates v2 (the Phase 1.5 constants of the object-layer merge), judged against B0.3 on the year folds
+
+Queue: `run_rescan_queue.sh planning/phase-1-5/candidates/rescan_candidates_v2.json` on the phase15 worktree, four workers; scored like v1 (`evaluate_variants.py --rescan`, mean daily difference of the executed list, frozen block bootstrap, Holm within the family per fold). The JJ-PM-windows run was completed on its 619 cache-failed sessions with `--dates` and merged (`merge_population_rows.py`, 1,742 sessions) before it was read; three candidates ruined in the same minutes (projection lines, big print, band limit) are re-run in full by the restarted queue.
+
+| candidate | axis | mean daily diff (points) | folds promoted | reading |
+| --- | --- | ---: | --- | --- |
+| JJ-PM-windows (single-break windows to 16:00 instead of 10:30 / 12:00) | timing | +0.8 | none; -1.1 to +2.1 across the folds, 2023 and 2024 worse | the afternoon retests of the same range add a little on three folds and take it back on two; the window end is not where the result is, as for the Judas window (v1 T1/T2/T4). Recall: the two dated sessions that motivated it (JJ-2026-05-15's 12:46 and 12:55 projection retests, JJ-2026-05-19) stay undetected with the windows open to 16:00, because their range clock is not the 6-9 box (ledger); the candidate neither gains nor loses a pinned ticket |

@@ -777,11 +777,11 @@ def _scan_continuation_or_trapped(market, branch, balance, bars):
         events = []
         for level in candidates:
             for cycle in break_retest_cycles(bars, level, side):
-                if cycle["retests"]:
-                    for r in cycle["retests"]:
-                        events.append((level, cycle["break"], r["bar"], r["extreme"]))
-                else:
-                    events.append((level, cycle["break"], None, None))
+                # RR-22, TRAP pp.6-7 ("one retest"): the trade is the first
+                # retest after the departure; later pullbacks to the same
+                # broken level are not a second entry
+                first = cycle["retests"][0] if cycle["retests"] else None
+                events.append((level, cycle["break"], first["bar"] if first else None, first["extreme"] if first else None))
         if not events:
             continue
         events.sort(key=lambda item: (int(item[1].get("start") or 0), int((item[2] or item[1]).get("start") or 0)))

@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from collections import defaultdict
 from datetime import date
+import tempfile
 from pathlib import Path
 import hashlib
 import json
@@ -23,7 +24,7 @@ from trading_research.research.rule_discovery.source_adapters.sires_b02 import (
 
 IMPL = Path(__file__).resolve().parents[2]
 REPAIR = IMPL / "reports/research-work/P15-16A/_repair_sires"
-WORK = IMPL / "reports/research-work/P15-16A/_work_r3"
+WORK = Path(tempfile.gettempdir()) / "p15_16a_gate_out"  # test output, kept out of the evidence tree
 TRACK = IMPL / "reports/research-work/P15-16A/_track_sires"
 FAMILIES = IMPL / "src/trading_research/research/rule_discovery/families"
 EXAMPLES = IMPL.parent / "planning/phase-1-5/AUTHOR_EXAMPLES_2026-09-15.json"

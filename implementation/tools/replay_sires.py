@@ -275,11 +275,12 @@ def break_stop_fills(rows: list[dict], level: Decimal, side: str, *, max_breaks:
         trig = level + STOP_BEYOND if side == "long" else level - STOP_BEYOND
         out.append({"mode": "break_stop", "entry": trig, "at": cycle["break"]["end"], "cycle": n})
         for r in cycle["retests"]:
-            b, j = r["bar"], r["index"]
+            b = r["bar"]
             out.append({"mode": "break_retest_extreme", "entry": r["extreme"], "at": b["end"], "cycle": n, "retest": r["retest"]})
             out.append({"mode": "break_retest_close", "entry": b["C"], "at": b["end"], "cycle": n, "retest": r["retest"]})
-            if j + 1 < len(rows):
-                out.append({"mode": "break_retest_next_open", "entry": rows[j + 1]["O"], "at": rows[j + 1]["start"] + MINUTE, "cycle": n, "retest": r["retest"]})
+            nxt = r.get("next_bar")
+            if nxt is not None:
+                out.append({"mode": "break_retest_next_open", "entry": nxt["O"], "at": nxt["start"] + MINUTE, "cycle": n, "retest": r["retest"]})
     return out
 
 

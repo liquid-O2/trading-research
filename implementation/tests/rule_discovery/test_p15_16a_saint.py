@@ -5,6 +5,7 @@ import inspect
 import json
 from datetime import date, timedelta
 from decimal import Decimal as D
+import tempfile
 from pathlib import Path
 
 from trading_research.research.method_pack.empirical_market import clock
@@ -45,7 +46,8 @@ from trading_research.research.rule_discovery.source_adapters.saint import repla
 from trading_research.research.rule_discovery.source_adapters.saint import scan_b02 as saint_scan
 from trading_research.research.rule_discovery.source_adapters.common import dual_scan, load_source_market
 
-WORK_DIR = Path("/workspace/implementation/reports/research-work/P15-16A/_work_r3")
+WORK_DIR = Path(tempfile.gettempdir()) / "p15_16a_gate_out"  # test output, kept out of the evidence tree
+WORK_DIR.mkdir(parents=True, exist_ok=True)
 DAY = date(2026, 1, 15)
 START = clock(DAY - timedelta(days=1), "18:00")
 END = clock(DAY, "16:00")
@@ -110,10 +112,15 @@ def _continuation_bars(*, fast: bool, future_fast: bool = False, second_retest: 
     else:
         approach = _fill(t0, 5, 199, 200, 198.75, 199.25, delta=1, volume=10)
     brk = synth_bar(t0 + 5 * MINUTE, 199.5, 202, 199, 201.5, delta=5)
-    retest = synth_bar(t0 + 6 * MINUTE, 201, 201.25, 199.75, 200, delta=-1)
-    rows = bars + approach + [brk, retest]
+    # the shared cycle rule (break_retest.py): after the break price departs
+    # (twenty-five points) and the retest is the first bar back within fifteen
+    # points of the level from the broken side
+    depart = synth_bar(t0 + 6 * MINUTE, 201.5, 226, 201, 225, delta=5)
+    retest = synth_bar(t0 + 7 * MINUTE, 225, 225.5, 205, 206, delta=-1)
+    rows = bars + approach + [brk, depart, retest]
     if second_retest:
-        rows.append(synth_bar(t0 + 8 * MINUTE, 201, 201, 199.8, 200.1, delta=-1))
+        rows.append(synth_bar(t0 + 8 * MINUTE, 206, 230, 205.5, 229, delta=3))
+        rows.append(synth_bar(t0 + 9 * MINUTE, 229, 229.5, 204, 205, delta=-1))
     if future_fast:
         rows.append(synth_bar(t0 + 20 * MINUTE, 150, 200, 149, 198, delta=40, volume=50))
     return rows
