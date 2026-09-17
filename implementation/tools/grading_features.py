@@ -225,3 +225,117 @@ def memory_location_features(market, level: Decimal, side: str, at_ns: int, sess
         "session_range_so_far": None if span is None else float(span),
         "room_to_next_major": room,
     }
+
+
+# --------------------------------------------------------------------------- the authors' own profile and delta objects
+#
+# Jumbo: "Just RTH session VP and delta profile" (JR 2077828415923581206);
+# P-zones are kept where they sit on an HVN or on the shelf next to an LVN
+# (FIND p.8); the levels drawn every day include the prior RTH value and the
+# overnight profile's shelves, ledges and nodes (FIDELITY_AUDIT S1 ledger).
+# Sires: the delta print is the highest point of the delta profile, the side
+# that produced it was rewarded (DELTA p.7); a large delta print at an LVN or
+# minor node of the dealing range's VP gives repeatable wick reactions (p.9).
+# Saint: VAH / POC / VAL at 68%, the double distribution's two shelves (VP
+# pp.4-8).
+
+
+def delta_profile(market, start_ns: int, end_ns: int) -> dict[Decimal, float]:
+    """Delta per price over [start, end): the footprint's ask minus bid volume
+    at each price, summed over the window's minutes known by ``end``."""
+    out: dict[Decimal, float] = {}
+    for at, r in market.window.footprints.items():
+        if at < start_ns or r["end"] > end_ns or r["known_at"] > end_ns:
+            continue
+        for px, b, a, _u in r["rows"]:
+            key = Decimal(str(px))
+            out[key] = out.get(key, 0.0) + float(a) - float(b)
+    return out
+
+
+def delta_print(profile: dict[Decimal, float]) -> tuple[Decimal | None, float | None]:
+    """The highest point of the delta profile: the price with the largest
+    absolute delta and that delta (positive = buyers produced it)."""
+    if not profile:
+        return None, None
+    px = max(profile, key=lambda p: abs(profile[p]))
+    return px, profile[px]
+
+
+def delta_at(profile: dict[Decimal, float], level: Decimal, band: Decimal = Decimal("2")) -> float | None:
+    if not profile or level is None:
+        return None
+    inside = [v for p, v in profile.items() if abs(p - level) <= band]
+    return float(sum(inside)) if inside else 0.0
+
+
+def ledges(payload: dict, *, smooth: int = 2, prominence: float = 0.20, drop: float = 0.5) -> list[Decimal]:
+    """Shelf edges: from each low-volume node walk toward the neighbouring
+    high-volume shelf on each side; the ledge is the first price where the
+    smoothed volume reaches ``drop`` of that shelf's peak."""
+    rows = payload.get("rows") or []
+    if len(rows) < 5:
+        return []
+    prices = [Decimal(str(r.get("price"))) for r in rows]
+    vol = np.array([float(r.get("total_volume") or 0) for r in rows], dtype=float)
+    if smooth > 0:
+        kernel = np.ones(2 * smooth + 1) / (2 * smooth + 1)
+        vol = np.convolve(vol, kernel, mode="same")
+    hvn, lvn = profile_nodes(payload, smooth=smooth, prominence=prominence)
+    index = {p: i for i, p in enumerate(prices)}
+    out: list[Decimal] = []
+    for low in lvn:
+        i = index.get(low)
+        if i is None:
+            continue
+        for direction in (-1, 1):
+            j = i
+            peak = None
+            # the nearest HVN on this side
+            for h in sorted(hvn, key=lambda p: abs(p - low)):
+                if (h < low and direction < 0) or (h > low and direction > 0):
+                    peak = index.get(h)
+                    break
+            if peak is None:
+                continue
+            step = 1 if peak > j else -1
+            k = j
+            while k != peak:
+                k += step
+                if vol[k] >= drop * vol[peak]:
+                    out.append(prices[k])
+                    break
+    return sorted(set(out))
+
+
+def author_profile_features(market, level: Decimal, side: str, at_ns: int, prior: dict | None) -> dict:
+    """Jumbo's and Sires' objects at the decision: the RTH session profile
+    (from 09:30) and its delta profile, the overnight profile (18:00-09:30),
+    the prior RTH profile's ledges, and the delta print of each window."""
+    out: dict = {}
+    rth_open = int(market.at("09:30"))
+    session_open = int(market.start)
+    windows = {"rth": (rth_open, at_ns) if at_ns - rth_open >= 5 * MINUTE else None, "overnight": (session_open, min(at_ns, rth_open)) if min(at_ns, rth_open) - session_open >= 30 * MINUTE else None}
+    for name, span in windows.items():
+        if span is None:
+            out.update({f"{name}_poc_distance": None, f"{name}_hvn_distance": None, f"{name}_lvn_distance": None, f"{name}_ledge_distance": None, f"{name}_delta_print_distance": None, f"{name}_delta_print_with_side": None, f"{name}_delta_at_level": None})
+            continue
+        try:
+            payload = market.profile(int(span[0]), int(span[1]))
+        except Exception:
+            payload = None
+        if payload and payload.get("poc") is not None:
+            hvn, lvn = profile_nodes(payload)
+            out[f"{name}_poc_distance"] = float(level - _d(payload["poc"]))
+            out[f"{name}_hvn_distance"] = nearest_distance(level, hvn)
+            out[f"{name}_lvn_distance"] = nearest_distance(level, lvn)
+            out[f"{name}_ledge_distance"] = nearest_distance(level, ledges(payload))
+        else:
+            out.update({f"{name}_poc_distance": None, f"{name}_hvn_distance": None, f"{name}_lvn_distance": None, f"{name}_ledge_distance": None})
+        dp = delta_profile(market, int(span[0]), int(span[1]))
+        px, value = delta_print(dp)
+        out[f"{name}_delta_print_distance"] = None if px is None else float(abs(px - level))
+        out[f"{name}_delta_print_with_side"] = None if value is None else bool((value > 0) == (side == "long"))
+        out[f"{name}_delta_at_level"] = delta_at(dp, level)
+    out["prior_day_ledge_distance"] = nearest_distance(level, ledges(prior)) if prior else None
+    return out
