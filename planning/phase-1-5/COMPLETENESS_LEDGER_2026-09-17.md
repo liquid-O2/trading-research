@@ -11,7 +11,7 @@ Kept as work lands (2026-09-17 night). Columns: the object or play as the source
 | P-zones snapped to VP nodes or the shelf next to an LVN (FIND p.8) | level set from the fitted percentile recipe; node snap not applied | apply the node/ledge snap as a rescan candidate (drops bands in air) |
 | SessionStat envelope (SS) | computed when asked | none |
 | RTH session VP and delta profile (JR 2077828415923581206) | feature (rth_* profile, nodes, ledges, delta print, delta at level) | as a level set: not yet (his P-zone snap and "absorption at the midpoint" use it); candidate |
-| overnight profile shelves, ledges, nodes; prior-day and weekly delta-print bands (S1 ledger) | feature (overnight_*, prior_day_*); weekly delta-print band: no | build the weekly delta print band (delta profile over the prior week, its print price ±) |
+| overnight profile shelves, ledges, nodes; prior-day and weekly delta-print bands (S1 ledger) | feature (overnight_*, prior_day_*, weekly_delta_*: the prior five sessions' merged delta profile, its print, sign and same-signed band) | none for features |
 | composite profile, naked POCs (VP2 p.6, used by Sires; Jumbo's "3-day liquidity map") | feature (composite_*, naked_poc_*) | none for features |
 | BigTrades ≥100 NY / ≥75 London as confirmation; absorption candle = small body + volume spike at a mapped level (FIND pp.9, 12) | confirmation modes: signature/rejection/orderblock/absorption on 2/3/5-minute bars; the print threshold is not part of any fill | add the print-at-level confirmation (an aggressor order ≥100 within 2 points of the level in the confirmation bar) as a rescan candidate; JJ-2026-05-19's -1.33 long (282-lot) is the dated case that misses |
 | Plays: Judas fade, single break (EQ/quadrant/OR-mid/projection retest), rotation, London, P-zone, extension reaction | branches judas_reversal, judas_outbound, single_extended, single_purged, internal_rotation, other_session, timed_pzone_reversal, extension_reaction | the single-break windows end 10:30 (EQ) and 12:00 (purged); his afternoon expansion entries on the same range ("same ranges, different layers", JJ-2026-05-15 at 12:46 and 12:55 on the +0.33 projection) are outside them: extend the projection-retest play through the PM as a rescan candidate; the PM/other-clock ranges (13:00 formation, AM consolidation then PM expansion, TBR remaining clocks) are not scanned |
@@ -55,7 +55,7 @@ Kept as work lands (2026-09-17 night). Columns: the object or play as the source
 
 | the sources name | built | gap and action |
 | --- | --- | --- |
-| A period above prior value, rejection at POC/VAH, break on stacked imbalances, retest (AVG pp.21-24) | adapter; trigger repaired (footprint rows), stop below the retest low; 4 pass of 40 | no dated ticket exists; plausibility only; the higher-timeframe objective is missing on 4 of 40 sessions (objective stage unknown): define it from the source |
+| A period above prior value, rejection at POC/VAH, break on stacked imbalances, retest, a higher-timeframe objective (AVG pp.21-24) | adapter; trigger repaired (footprint rows), stop below the retest low; no objective above the entry now fails the objective stage (AVG p.21: "a clean break-and-retest into nothing is a clean entry into a losing trade"); 4 pass of 40 | no dated ticket exists; plausibility only; the objective set is the prior-day high, the prior VAH and the weekly high: naked POCs and composite nodes above are a candidate addition |
 
 ## Refill
 

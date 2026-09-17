@@ -488,11 +488,15 @@ def scan_keani_branch_b02(market, branch: str) -> tuple[list[dict[str, Any]], di
         stop = dec(a["low"]) - B02_Q if a.get("low") is not None else None
     name, target = _nearest_htf(entry, prior_high, prior_vah, weekly)
     used_a_width = False
+    # AVG p.21: the trade "still needs a decent higher-timeframe objective,
+    # somewhere for the auction to actually go. A clean break-and-retest into
+    # nothing is a clean entry into a losing trade." No level above the entry
+    # is therefore a failed objective stage, not an unknown one.
     if target is None:
-        obj_verdict = "unknown"
+        obj_verdict = "fail" if entry is not None and breakout else "unknown"
     else:
         obj_verdict = "pass"
-    obj = stage("objective", obj_verdict, a_end, {"selector": name, "target": str(target) if target is not None else None, "a_high_plus_a_width": used_a_width})
+    obj = stage("objective", obj_verdict, a_end, {"selector": name, "target": str(target) if target is not None else None, "a_high_plus_a_width": used_a_width, "reason": None if target is not None else "no_higher_timeframe_objective_above_the_entry"})
     risk = stage("risk", "pass" if entry is not None and stop is not None and entry > stop else "unknown", a_end, {"stop": str(stop) if stop is not None else None, "entry": str(entry)})
     stages = cascade_stages([ctx, ref, loc, trig, conf, risk, obj])
     verdict, failed, unknown = combine_verdict(stages)
