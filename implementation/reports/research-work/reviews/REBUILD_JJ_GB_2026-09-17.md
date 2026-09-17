@@ -265,3 +265,97 @@ the reference's own edge on that side -- the close the author waits for at the
 far edge, "the 5 min close back below the PDL after sweeping above it", is
 *outside* the prior day's range, and testing for containment there suppressed
 the whole prior-day short family.
+
+## 4. Replay (entries only)
+
+`implementation/reports/research-work/reviews/REPLAY_JJ_GB.md` and `.json`;
+charts in `replay-charts/` with `INDEX.md` mapping each PNG to the author's
+source page.
+
+| stage | strict (+/-5 pts) | ticket-risk | within three bars | of |
+| --- | --- | --- | --- | --- |
+| first rebuild | 4 | 14 | 17 | 40 |
+| after J-A..J-G | 7 | 17 | 21 | 40 |
+| after G-A..G-G and the two defects they surfaced | **7** | **18** | **22** | **40** |
+
+Nine further proper entries (2026-09-08, 09-11, 09-14, 09-15) are outside the
+tape, which ends 2026-09-03, and are carried as printed reference cases.
+
+The play our scanner chose is the author's play on **37 of the 40** inside-tape
+entries; the three without an episode at all are `JJ-2026-07-16`,
+`JJ-2026-07-27` and the second `GB-2026-04-28` fill.
+
+Detected at strict tolerance: `JJ-2025-01-28` (0.25), `JJ-2025-05-23-LONDON`
+(1.25), `JJ-2025-11-10` (2.85), `JJ-2025-11-18` (3.76), `JJ-2025-12-30` (1.25),
+`JJ-2026-01-09` (4.25), `JJ-2026-02-24` (0.00).
+
+### Misses, with the stated reason
+
+| example | our entry vs the printed fill | why |
+| --- | --- | --- |
+| `JJ-2025-09-09`, `JJ-2025-10-06`, `JJ-2026-06-05`, `JJ-2026-01-02`, `GB-2026-09-03` | 0.0-38.5 points, 2.2-3.6 bars late | the printed time is a chart read, not a ticket stamp; the price is inside the ticket's risk on four of the five |
+| `JJ-2026-07-06` | 53.75 points | the author's 30,065 is the upper extension band and the branch that owns that band is `extension_reaction`, which is not the play of this example; the `judas_reversal` projection closest to it is 53.75 away |
+| `JJ-2026-09-01` | 48.0 points | the narrated entry is at the **EVRange lower line**, a proprietary input we do not own (audit 1.2) |
+| `JJ-2026-07-10` | 10.25 points, 21 bars early | the author's 11:05 long is at the R-Lo / pRTHVAL test; ours fires on the first test of the same level at 09:20 |
+| `JJ-2026-07-16`, `JJ-2026-07-27` | no episode | the narrated entries are at the EQ on the opening drive; the signature our confirmation requires is not printed at those levels inside the window |
+| `GB-2026-07-13` | 21.0 points, 273 bars early | our PDL failure fires at 19:25, his fill is at 20:40 on a later test of the same level |
+| `GB-2026-08-11-12` | our 20:15 fill at the previous session's 09:00-10:00 box low is 4 points from his 29,635.75, but the printed 20:40 is 5 bars later; the row shown is a different reference |
+| `GB-2026-08-13` | 34.75 points | the reference is a double top made **inside** the current hour; it is neither a completed clock box nor the trailing-hour cut at his entry time |
+| `GB-2026-08-27` 13:00 | 18.75 points, 4.4 bars early | he sold 29,642.25, twenty-two points **above** his own 29,620 reference and thirty-three below the 29,675 extreme, before any close back through the level -- a discretionary fill inside the sweep zone |
+| `GB-2026-08-31` | 45.25 points | his reference is the opening spike's own extreme on a still-painting box (the audit's G13 finding); at 09:33 it is not a frozen reference |
+| `GB-2026-04-28` | no fill price printed; the two narrated fills sit at 09:30 and 09:45 inside the still-forming 09:00-10:00 box, which the author's own "I wait until after 10AM" excludes |
+| `GB-2026-07-29-30` | no episode | the 23:20 pocket short is measured from an impulse that ends after our overnight leg window; the 04:00 London long is at the running London low, taken before our running reference goes live |
+| `GB-2025-11-19` | 1.0 point, 5.8 bars early | our post-open re-entry fires at 09:31, his at 10:00 |
+
+## 5. Population and plausibility
+
+Measured before scaling, on the twenty-session representative slice
+(2025-01, 2025-10, 2026-04, 2026-08, five sessions each; the slice includes
+2025-01-01, a day with no session, as the negative control):
+
+* 20 sessions in 37.3 s wall on 6 workers, 8.4 s per session per worker
+  (11 s of that is the market load), worker peak RSS 1.90 GB. Against the
+  container's 17.85 cores and 77.3 GB (cgroup v1, `cpu.cfs_quota_us`
+  1,785,000 / `cpu.cfs_period_us` 100,000 and `memory.limit_in_bytes`
+  82,999,996,416), twelve workers is 23 GB and inside the CPU budget.
+* causality violations across the slice: **0**.
+* negative control 2025-01-01: the Jumbo read is `unknown` with only the London
+  play enabled and no pass; Green Bird records `reference_window_unavailable`
+  for every box, zero episodes, zero passes. Positive control 2026-08-28: 8
+  Jumbo passes, 151 Green Bird passes, 3 selected trades.
+* selected trade list on the slice: **JJ-TBR 1.60 entries a session,
+  GB-FAIL 2.05, GB-SCALP 0.80, GB-VWAP 0.25** against the authors' one to
+  three a day. Stop distances GB-FAIL median 20.75 points (the tickets are
+  17.25-48.25, median about 27) and R:R at target median 9.1 (the tickets print
+  3.99-11.09).
+
+The full-history run over the same 1,742-session list was still in flight when
+this report was written (`run_jj_gb_population.py --workers 10`, 900 of 1,742
+complete at 679 s, about 22 minutes end to end). The slice above is the
+measured basis for it; the completed run's `POPULATION.json` / `.md` and the
+gzipped per-episode rows are the outstanding artifact.
+
+### The plausibility gate fails, and that is the finding
+
+`tests/rule_discovery/test_p15_16a_plausibility_jumbo.py` now scans the session
+market (B0.3 reads the session window itself, so the replay view it used before
+produced nothing) and reports, over its fifteen-date slice:
+
+| branch | episodes/session | pass rate | bound in `families/jumbo.json` |
+| --- | --- | --- | --- |
+| judas_reversal | 73.9 | 0.485 | eps [0, 4] |
+| other_session | 51.0 | 0.448 | eps [0, 12] |
+| internal_rotation | 27.6 | 0.396 | eps [0, 8] |
+| single_extended | 10.9 | 0.129 | eps [0, 6] |
+| single_purged | 7.1 | 0.349 | eps [0, 6] |
+| judas_outbound | 4.9 | 0.000 | eps [0, 2] |
+
+The bounds are **not** widened. They were cut for the old B0.2 enumeration, and
+the rebuilt scanner enumerates a much larger branch population: every drawn
+level, on both sides, on up to three tests each, with two fills per signature.
+The author's frequency is recovered by the selection layer (1.6 and 2.05 entries
+a session above), not by the branch population. The coordinator has to choose
+which object Phase 1.5 scores -- the branch population, in which case the
+enumeration has to be narrowed and these bounds are the target, or the selected
+trade list, in which case the bounds must be re-cut against it. Either way the
+gate is a live blocker on the old reading and is reported as one.

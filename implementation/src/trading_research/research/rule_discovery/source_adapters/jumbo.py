@@ -373,10 +373,20 @@ def _as_day(market) -> date | None:
 
 
 def _at(market, hhmm: str, offset: int = 0) -> int:
-    try:
-        return int(market.at(hhmm, offset))
-    except TypeError:
-        return int(market.at(hhmm))
+    getter = getattr(market, "at", None)
+    if callable(getter):
+        try:
+            return int(getter(hhmm, offset))
+        except TypeError:
+            if offset == 0:
+                return int(getter(hhmm))
+    day = _as_day(market)
+    if day is None:
+        raise ValueError("market has no day for clock conversion")
+    from trading_research.research.method_pack.clocks import et_ns
+
+    hour, minute = (int(part) for part in hhmm.split(":"))
+    return int(et_ns(day + timedelta(days=offset), hour, minute))
 
 
 def session_bars(market, seconds: int = 60) -> list[dict[str, Any]]:
@@ -622,8 +632,8 @@ def session_context(market) -> dict[str, Any]:
         "purge": purge,
         "case": "double_break_favoured" if size["single_break_favoured"] is False else "single_break_favoured",
         "levels": drawn_levels(market, box),
-        "evrange": EVRANGE_FIXTURES.get(str(market.day)),
-        "pzones": PZONE_FIXTURES.get(str(market.day)) or [],
+        "evrange": EVRANGE_FIXTURES.get(str(_as_day(market))),
+        "pzones": PZONE_FIXTURES.get(str(_as_day(market))) or [],
         "sessionstat": sessionstat_envelope(market),
     }
     context["read"] = session_read(market, context)
@@ -699,7 +709,7 @@ def session_read(market, context: Mapping[str, Any]) -> dict[str, Any]:
     size = context.get("range_class") or {}
     pct = size.get("pct")
     purge = context.get("purge") or {}
-    pzone = bool(PZONE_FIXTURES.get(str(market.day)))
+    pzone = bool(PZONE_FIXTURES.get(str(_as_day(market))))
     pre_location = context.get("open_location")
     post_location = context.get("rth_open_location") or pre_location
     pre_class, pre_plays = _plays_for(pre_location, pct, purge, pzone=pzone)
@@ -807,7 +817,7 @@ def sessionstat_envelope(market, window: tuple[str, str] = ("09:00", "12:00")) -
     injected = getattr(market, "sessionstat_box", None)
     if injected:
         return dict(injected)
-    if not getattr(market, "jj_sessionstat", False):
+    if not getattr(market, "jj_sessionstat", False) or _as_day(market) is None:
         return None
     cache_key = f"_jj_sessionstat_{window[0]}_{window[1]}"
     cached = getattr(market, cache_key, "missing")
@@ -1248,7 +1258,7 @@ def _episode(
         "method": FAMILY,
         "branch": branch,
         "side": side,
-        "session_date": str(market.day),
+        "session_date": str(_as_day(market)),
         "instrument_id": market.instrument_id,
         "reference_id": None if reference is None else reference.get("id"),
         "occurrence_at": None if trigger is None else trigger.get("start"),
@@ -1289,7 +1299,7 @@ def _episode(
             "branch": branch,
             "predicate": "sequence",
             "side": side,
-            "session_date": str(market.day),
+            "session_date": str(_as_day(market)),
             "instrument_id": market.instrument_id,
             "reference_id": identity["reference_id"],
             "trigger_id": None if trigger is None else trigger.get("bar_id"),
@@ -1844,7 +1854,7 @@ def _scan_other_session(market) -> tuple[list[dict[str, Any]], list[dict[str, An
                   entry=entry,
                   stop=stop,
                   target=target,
-                  reference=london or {"id": f"jj-london-levels:{market.instrument_id}:{market.day}"},
+                  reference=london or {"id": f"jj-london-levels:{getattr(market, 'instrument_id', 'view')}:{_as_day(market)}"},
                   trigger=touch,
                   values={"reference_px": level, "reference_kind": row["kind"], "cycle": contact_index, "confirmation_mode": None if confirmed is None else confirmed["kind"], "box_edge_swept": edge_swept, "box_frozen": box_frozen},
                   geometry={"first_objective": target},
@@ -2017,7 +2027,7 @@ def _scan_pzone(market) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     """
     context = session_context(market)
     box = context.get("box")
-    zones = PZONE_FIXTURES.get(str(market.day))
+    zones = PZONE_FIXTURES.get(str(_as_day(market)))
     if not zones:
         return [], [{"reason": "pzone_generator_unknown", "branch": "timed_pzone_reversal", "operand": "pzone_generator"}]
     episodes: list[dict[str, Any]] = []
@@ -2057,7 +2067,7 @@ def _scan_pzone(market) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
                     entry=entry,
                     stop=stop,
                     target=target,
-                    reference={"id": f"pzone:{market.day}:{zone['low']}-{zone['high']}", "low": zone["low"], "high": zone["high"]},
+                    reference={"id": f"pzone:{_as_day(market)}:{zone['low']}-{zone['high']}", "low": zone["low"], "high": zone["high"]},
                     trigger=touch,
                     values={"reference_px": level, "reference_kind": "pzone", "cycle": 0, "confirmation_mode": mode, "pzone_anchor": anchor, "pzone": [zone["low"], zone["high"]]},
                     geometry={"first_objective": target},
@@ -2095,8 +2105,10 @@ def _rec_branch(rec: Any) -> str | None:
 
 def selection_for(market, episodes, *, primary_play: str | None = None) -> dict[str, Any]:
     """The author's trade list: the chosen play first, at most three entries."""
-    bars = _bars(market, int(market.start), int(market.end), 60)
     clock_window = (_at(market, SELECTION_CLOCK[0]), _at(market, SELECTION_CLOCK[1]))
+    start = getattr(market, "start", None)
+    end = getattr(market, "end", None)
+    bars = _bars(market, int(start), int(end), 60) if start is not None and end is not None else _bars(market, clock_window[0], clock_window[1], 60)
     chosen = [ep for ep in episodes if (ep.get("values") or {}).get("play") == primary_play] if primary_play else list(episodes)
     result = select_session_trades(chosen, bars=bars, clock=clock_window, max_entries=MAX_ENTRIES_PER_SESSION)
     fallback = False
@@ -2406,13 +2418,14 @@ def _entry_ns(market, date_text, time_et) -> int | None:
         hour, minute = int(parts[0]), int(parts[1])
     except ValueError:
         return None
-    day = market.day
+    session_day = _as_day(market)
+    day = session_day
     if date_text:
         try:
             day = date.fromisoformat(str(date_text)[:10])
         except ValueError:
-            day = market.day
-    offset = (day - market.day).days
+            day = session_day
+    offset = (day - session_day).days
     if hour >= 18:
         offset -= 1
     try:

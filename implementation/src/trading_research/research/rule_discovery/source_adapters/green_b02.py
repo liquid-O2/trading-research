@@ -2515,10 +2515,27 @@ def match_entry(
     }
 
 
+def _date_outside_tape(example: Mapping[str, Any]) -> bool:
+    """Is this example's session outside the owned calendar?
+
+    An example that is outside it is answered without touching the window cache,
+    so an after-tape replay never builds an event window.
+    """
+    from trading_research.research.rule_discovery.source_adapters.common import is_native_session
+
+    if example.get("inside_tape") is False:
+        return True
+    try:
+        day = date.fromisoformat(str(example.get("date") or "")[:10])
+    except Exception:
+        return True
+    return not is_native_session(day)
+
+
 def replay_example(market, example: Mapping[str, Any]) -> dict[str, Any]:
     """Replay one dated example, matching ENTRIES only (user instruction)."""
     example = dict(example)
-    if example.get("inside_tape") is False:
+    if _date_outside_tape(example):
         return {
             "example_id": example.get("id"),
             "detected": None,

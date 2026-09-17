@@ -12,6 +12,7 @@ import json
 import pytest
 
 from trading_research.research.rule_discovery.native import build_market_view, install_write_guard
+from trading_research.research.rule_discovery.source_adapters.common import load_source_market
 from trading_research.research.rule_discovery.source_adapters.common import is_native_session
 from trading_research.research.rule_discovery.source_adapters.jumbo import (
     BRANCHES,
@@ -229,7 +230,11 @@ def slice_population():
     load_errors: list[str] = []
     for day in SLICE_DATES:
         try:
-            market = build_market_view(day)
+            # B0.3 reads the session window itself -- the 06:00-09:00 box, the
+            # prior sessions and the day's clock -- so the slice is scanned on
+            # the session market, not on the replay view.
+            market = load_source_market(day)
+            market.jj_sessionstat = False
         except Exception as exc:
             load_errors.append(f"{day}: {type(exc).__name__}: {exc}")
             continue

@@ -372,7 +372,7 @@ def test_repair_replay_inside_tape_location_stage():
     from trading_research.research.rule_discovery.source_adapters.green_failure import replay_example as fail_replay
     from trading_research.research.rule_discovery.source_adapters.green_vwap_scalp import replay_example as vwap_replay
 
-    examples = json.loads(Path("/workspace/planning/phase-1-5/AUTHOR_EXAMPLES_2026-09-15.json").read_text())["examples"]
+    examples = json.loads((Path(__file__).resolve().parents[3] / "planning/phase-1-5/AUTHOR_EXAMPLES_2026-09-17.json").read_text())["examples"]
     gb = [row for row in examples if str(row.get("id", "")).startswith("GB-")]
     by_family = {"GB-FAIL": [], "GB-VWAP": [], "GB-SCALP": []}
     for example in gb:
@@ -454,7 +454,7 @@ def test_after_tape_replay_does_not_call_build_event_window(monkeypatch):
         raise AssertionError("build_event_window must not run for after-tape replay")
 
     monkeypatch.setattr(event_cache, "build_event_window", boom)
-    examples = json.loads(Path("/workspace/planning/phase-1-5/AUTHOR_EXAMPLES_2026-09-15.json").read_text())["examples"]
+    examples = json.loads((Path(__file__).resolve().parents[3] / "planning/phase-1-5/AUTHOR_EXAMPLES_2026-09-17.json").read_text())["examples"]
     gb = [row for row in examples if str(row.get("id", "")).startswith("GB-")]
     after = [row for row in gb if _date_outside_tape(row)]
     assert after

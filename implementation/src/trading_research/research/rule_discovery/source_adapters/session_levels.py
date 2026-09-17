@@ -73,7 +73,13 @@ def prior_sessions(market, count: int = MAX_LOOKBACK_SESSIONS) -> list[dict[str,
     if cached is not None and len(cached) >= count:
         return cached[:count]
     out: list[dict[str, Any]] = []
-    day = market.day
+    day = getattr(market, "day", None)
+    policy = getattr(market, "policy", None)
+    if day is None or policy is None or getattr(market, "instrument_id", None) is None:
+        # a view that is not the session window (the native replay view) has no
+        # prior-period objects of its own; the caller records the gap
+        setattr(market, "_prior_sessions_cache", [])
+        return []
     for _ in range(count * 3):
         if len(out) >= count:
             break
@@ -91,7 +97,7 @@ def prior_sessions(market, count: int = MAX_LOOKBACK_SESSIONS) -> list[dict[str,
     return out
 
 
-def prior_value_area(market, fraction: str = ".70") -> dict[str, Any] | None:
+def prior_value_area(market, fraction: str = ".70") -> dict[str, Any] | None:  # noqa: D401
     """Prior RTH value area (pRTHVAH / pRTHVAL / POC) from the prior session.
 
     The author reads value off his MGLevels panel; the owned equivalent is the
