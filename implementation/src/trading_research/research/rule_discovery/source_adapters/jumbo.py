@@ -2181,13 +2181,19 @@ def _eq_lines(market, branch: str) -> tuple[dict[str, Any] | None, list[dict[str
     if branch in {"single_extended", "single_purged"}:
         sides = ("long", "short") if branch == "single_extended" or direction is None else (direction,)
         begin = _at(market, "09:00" if branch == "single_extended" else "09:30")
-        end = min(_at(market, "10:30" if branch == "single_extended" else "12:00"), int(market.end))
+        end = min(_at(market, SINGLE_EXTENDED_END if branch == "single_extended" else SINGLE_PURGED_END), int(market.end))
         lines = [("eq", box["eq"])] if branch == "single_extended" else [("eq", box["eq"]), ("q25", box["q25"]), ("q75", box["q75"]), ("range_open", box["range_open"])]
         if branch == "single_purged":
             span = _span(_bars(market, _at(market, "09:30"), _at(market, "09:45"), 60), known_at=_at(market, "09:45"))
             if span is not None:
                 width = span["high"] - span["low"]
                 lines += [("or15_mid", (span["low"] + span["high"]) / 2), ("or15_q25", span["low"] + width / 4), ("or15_q75", span["low"] + width * 3 / 4)]
+            # Phase 1.5 candidate: the projections as retest lines on the
+            # expansion day (2026-05-15: longs at the +0.33 projection at 12:46
+            # and 12:55 after the break above the range); B0.3 draws none
+            for name in PURGED_PROJECTION_LINES:
+                if box["ladder"].get(name) is not None:
+                    lines.append((name, box["ladder"][name]))
         objective = {side: _trend_objective(box, side) for side in ("long", "short")}
     else:
         sides = ("long", "short")
@@ -2378,6 +2384,12 @@ SELECTION_CLOCK = ("02:00", "16:00")
 # The list is bounded by the opportunities (two per line and side, one
 # position at a time), not by a count: 2026-07-10 "had a couple diabolical Ls
 # and roundtrips" before the 11:05 rotation long (JR p.42).
+# the single-break plays' action windows (Phase 1.5 timing axis: "same ranges,
+# different layers" -- 2026-05-15's +0.33 projection retests at 12:46 and 12:55
+# sit past the 12:00 end of the purged case)
+PURGED_PROJECTION_LINES: tuple = ()
+SINGLE_EXTENDED_END = "10:30"
+SINGLE_PURGED_END = "12:00"
 NY_ROUND_TRIPS = 8
 LONDON_ROUND_TRIPS = 4
 MAX_PER_LINE = 2
