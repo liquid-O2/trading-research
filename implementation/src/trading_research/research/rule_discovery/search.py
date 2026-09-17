@@ -1114,7 +1114,11 @@ def _apply_sires_locations(resolved, market, payload, ctx) -> Any:
 
 
 def _apply_gbvwap_reference(resolved, market, payload, ctx) -> Any:
-    if not isinstance(payload, Mapping):
+    # The GB-VWAP Reference axis rewrites the {asia, london, boundary} payload
+    # the VWAP branch builds. Every other reference payload offered at this
+    # point -- a single drawn box, a list of them -- is not this hook's to
+    # rewrite and passes through untouched.
+    if not isinstance(payload, Mapping) or "asia" not in payload or "london" not in payload:
         return payload
     asia = dict(payload["asia"])
     london = dict(payload["london"])

@@ -672,3 +672,81 @@ def _touches_after_departure_kernel(t_ns, known_at_ns, price_ticks, is_trade, lo
             k += 1
             armed = False
     return ts_out[:k].copy(), kn_out[:k].copy(), px_out[:k].copy()
+
+
+# --------------------------------------------------------------------------- appended (fidelity round 8)
+# The trade file is fill-level (fidelity-round8 REPORT section 10.1): an
+# aggressor order of sixty contracts arrives as many fills sharing one event
+# timestamp and side. The paper's "sixty, eighty, a hundred contracts hitting
+# in seconds" (REF p.5) are orders, so the zones are formed from fills grouped
+# by (event timestamp, side) before the print floor and the cluster rule apply.
+def aggregate_orders(arrays):
+    """Fills grouped by (event timestamp, side): one row per aggressor order
+    with its total size, its tick span and the latest known-at."""
+    trade = arrays.is_trade & (arrays.side != 0)
+    idx = np.flatnonzero(trade)
+    if idx.size == 0:
+        return idx, np.zeros(0, dtype=np.int64), np.zeros(0, dtype=np.int64), np.zeros(0, dtype=np.int64), np.zeros(0, dtype=np.int64), np.zeros(0, dtype=np.int64), np.zeros(0, dtype=np.int64)
+    t = arrays.t_ns[idx].astype(np.int64)
+    side = arrays.side[idx].astype(np.int64)
+    ticks = arrays.price_ticks[idx].astype(np.int64)
+    size = arrays.size[idx].astype(np.int64)
+    known = arrays.known_at_ns[idx].astype(np.int64)
+    boundary = np.ones(idx.size, dtype=np.bool_)
+    boundary[1:] = (t[1:] != t[:-1]) | (side[1:] != side[:-1])
+    group = np.cumsum(boundary) - 1
+    n = int(group[-1]) + 1
+    o_size = np.bincount(group, weights=size, minlength=n).astype(np.int64)
+    o_lo = np.full(n, np.iinfo(np.int64).max, dtype=np.int64)
+    o_hi = np.full(n, np.iinfo(np.int64).min, dtype=np.int64)
+    np.minimum.at(o_lo, group, ticks)
+    np.maximum.at(o_hi, group, ticks)
+    o_known = np.zeros(n, dtype=np.int64)
+    np.maximum.at(o_known, group, known)
+    starts = np.flatnonzero(boundary)
+    return idx, t[starts], side[starts], o_lo, o_hi, o_size, o_known
+
+
+def form_b02_zones_orders(view: NativeMarketView) -> dict[str, Any]:
+    """The zone rule of ``form_b02_zones`` applied to aggressor ORDERS: an
+    order of at least PRINT_THRESHOLD contracts is a print; prints of one side
+    within CLUSTER_SECONDS and CLUSTER_SPAN_TICKS form a zone once they sum to
+    SOURCE_CLUSTER_MIN_SIZE."""
+    arrays = view.arrays
+    if arrays.t_ns.size == 0:
+        return {"zones": [], "n_prints": 0, "n_zones": 0, "n_orders": 0}
+    _idx, t_ns, side, lo_t, hi_t, size, known = aggregate_orders(arrays)
+    n_orders = int(t_ns.size)
+    keep = size >= PRINT_THRESHOLD
+    t_ns, side, lo_t, hi_t, size, known = t_ns[keep], side[keep], lo_t[keep], hi_t[keep], size[keep], known[keep]
+    n_prints = int(t_ns.size)
+    zones: list[dict[str, Any]] = []
+    if n_prints == 0:
+        return {"zones": [], "n_prints": 0, "n_zones": 0, "n_orders": n_orders}
+    mid = (lo_t + hi_t) // 2
+    cluster_ns = CLUSTER_SECONDS * NS
+    used = np.zeros(n_prints, dtype=np.bool_)
+    for i in range(n_prints):
+        if used[i]:
+            continue
+        same = (side == side[i]) & (np.abs(mid - mid[i]) <= CLUSTER_SPAN_TICKS) & (t_ns >= t_ns[i]) & (t_ns <= t_ns[i] + cluster_ns) & (~used)
+        members = np.flatnonzero(same)
+        total = int(size[members].sum())
+        if total < SOURCE_CLUSTER_MIN_SIZE:
+            continue
+        used[members] = True
+        zones.append(
+            {
+                "side": "long" if int(side[i]) > 0 else "short",
+                "low_ticks": int(lo_t[members].min()),
+                "high_ticks": int(hi_t[members].max()),
+                "formed_at_ns": int(t_ns[members].max()),
+                "known_at_ns": int(known[members].max()),
+                "print_count": int(members.size),
+                "size": total,
+                "meets_60": total >= 60,
+                "meets_80": total >= 80,
+                "meets_100": total >= 100,
+            }
+        )
+    return {"zones": zones, "n_prints": n_prints, "n_zones": len(zones), "n_orders": n_orders}

@@ -2,7 +2,9 @@
   "schema_version": "research-family-spec-v1",
   "family": "KEANI-OPEN-ABOVE-VALUE",
   "task_id": "P15-15",
-  "findings": ["C4"],
+  "findings": [
+    "C4"
+  ],
   "clock_zone_unverified": true,
   "baselines": {
     "B0.2": {
@@ -13,11 +15,33 @@
   },
   "plausibility": {
     "source_long": {
-      "episodes_per_session": [0, 1],
-      "pass_rate": [0.0, 0.08],
+      "episodes_per_session": [
+        0,
+        1
+      ],
+      "pass_rate": [
+        0.0,
+        0.25
+      ],
       "source_claim": "unstated; B0.1 reference density 39 of 1695 A-period observations",
       "reasoning": "AVG p.21 requires the A period fully above prior-day value (strict A low > prior VAH, SD11), rejection at POC or prior VAH, aggressive developing-VAH break, then a defended retest. The branch is rare by construction. 39/1695 (~0.023) is the B0.1 reference density.",
-      "pages": "AVG pp.21-24; empirical_registry complete_a_above_prior_value value_fraction=0.70 prior RTH 09:30-16:00"
+      "pages": "AVG pp.21-24; empirical_registry complete_a_above_prior_value value_fraction=0.70 prior RTH 09:30-16:00",
+      "observed_rate_justification": {
+        "pages": "AVG pp.21-24; fidelity-round8 REPORT section 10.4",
+        "text": "The B0.2 trigger asked the O109 stacked-imbalance object for buy runs by candle id alone; the recipe needs the candle's footprint rows, the call raised and was swallowed into 'no runs', so the pass rate was 0 by defect, and the earlier bound [0, 0.08] was fitted to that defect. With the rows fed from the session window's footprints and the stop below the retest low, 40 random sessions give 4 pass, 4 unknown (no higher-timeframe objective), 2 confirmation fails, 2 trigger fails, 28 context fails (pass rate 0.10); the 15-date plausibility slice gives 2 passes (0.133). The bound is widened to [0, 0.25] on those measurements; the branch stays rare by construction (28 of 40 fail the strict A-period context).",
+        "measured": {
+          "random_40_sessions": {
+            "pass": 4,
+            "unknown": 4,
+            "fail_confirmation": 2,
+            "fail_trigger": 2,
+            "fail_context": 28
+          },
+          "slice_15": {
+            "pass_rate": 0.133
+          }
+        }
+      }
     }
   }
 }

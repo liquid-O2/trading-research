@@ -1,0 +1,206 @@
+{
+ "example": "MB-2026-07-K10",
+ "session": "2026-08-03",
+ "instrument": "ES-202609",
+ "n_entries": 2,
+ "n_strict_10": 2,
+ "levels": [
+  {
+   "name": "resistance_pair",
+   "low": 7558.75,
+   "high": 7564.0
+  },
+  {
+   "name": "green_pair",
+   "low": 7544.75,
+   "high": 7547.75
+  },
+  {
+   "name": "balance_30m",
+   "low": 7545.25,
+   "high": 7564.5
+  },
+  {
+   "name": "value_box",
+   "low": 7586.25,
+   "high": 7597.75
+  },
+  {
+   "name": "objective_band",
+   "low": 7625.75,
+   "high": 7639.25
+  }
+ ],
+ "rows": [
+  {
+   "example_id": "MB-2026-07-K10",
+   "session": "2026-08-03",
+   "time_et": "09:25-09:28",
+   "side": "short",
+   "price": 7558.75,
+   "strict_10": true,
+   "n_candidates_side": 201,
+   "best": {
+    "mode": "retest_limit_box_edge",
+    "play": "failure",
+    "level": "resistance_pair",
+    "level_px": 7564.0,
+    "entry": 7558.75,
+    "at": "09:27",
+    "delta": 0.0,
+    "bars": 0.0
+   },
+   "in_window": [
+    {
+     "mode": "retest_limit_box_edge",
+     "play": "failure",
+     "level": "resistance_pair",
+     "entry": 7558.75,
+     "at": "09:27",
+     "delta": 0.0
+    },
+    {
+     "mode": "break_stop",
+     "play": "break",
+     "level": "resistance_pair",
+     "entry": 7558.5,
+     "at": "09:26",
+     "delta": 0.25
+    },
+    {
+     "mode": "next_bar_open",
+     "play": "failure",
+     "level": "resistance_pair",
+     "entry": 7558.25,
+     "at": "09:27",
+     "delta": 0.5
+    },
+    {
+     "mode": "next_bar_open",
+     "play": "failure",
+     "level": "balance_30m",
+     "entry": 7558.25,
+     "at": "09:27",
+     "delta": 0.5
+    },
+    {
+     "mode": "failure_close_1m",
+     "play": "failure",
+     "level": "resistance_pair",
+     "entry": 7558.0,
+     "at": "09:26",
+     "delta": 0.75
+    },
+    {
+     "mode": "failure_close_1m",
+     "play": "failure",
+     "level": "balance_30m",
+     "entry": 7558.0,
+     "at": "09:26",
+     "delta": 0.75
+    },
+    {
+     "mode": "stop_beyond_retest_bar",
+     "play": "failure",
+     "level": "resistance_pair",
+     "entry": 7556.0,
+     "at": "09:28",
+     "delta": 2.75
+    },
+    {
+     "mode": "stop_beyond_retest_bar",
+     "play": "failure",
+     "level": "balance_30m",
+     "entry": 7556.0,
+     "at": "09:28",
+     "delta": 2.75
+    }
+   ]
+  },
+  {
+   "example_id": "MB-2026-07-K10",
+   "session": "2026-08-03",
+   "time_et": "09:30-09:32",
+   "side": "long",
+   "price": 7548.0,
+   "strict_10": true,
+   "n_candidates_side": 184,
+   "best": {
+    "mode": "stop_beyond_edge",
+    "play": "reclaim",
+    "level": "green_pair",
+    "level_px": 7547.75,
+    "entry": 7548.0,
+    "at": "09:31",
+    "delta": 0.0,
+    "bars": 0.0
+   },
+   "in_window": [
+    {
+     "mode": "stop_beyond_edge",
+     "play": "reclaim",
+     "level": "green_pair",
+     "entry": 7548.0,
+     "at": "09:31",
+     "delta": 0.0
+    },
+    {
+     "mode": "stop_beyond_edge",
+     "play": "reclaim",
+     "level": "green_pair",
+     "entry": 7548.0,
+     "at": "09:32",
+     "delta": 0.0
+    },
+    {
+     "mode": "break_stop",
+     "play": "break",
+     "level": "green_pair",
+     "entry": 7548.0,
+     "at": "09:31",
+     "delta": 0.0
+    },
+    {
+     "mode": "retest_limit_box_edge",
+     "play": "failure",
+     "level": "green_pair",
+     "entry": 7547.75,
+     "at": "09:32",
+     "delta": 0.25
+    },
+    {
+     "mode": "band_edge_limit",
+     "play": "defence",
+     "level": "green_pair",
+     "entry": 7547.75,
+     "at": "09:30",
+     "delta": 0.25
+    },
+    {
+     "mode": "failure_close_1m",
+     "play": "failure",
+     "level": "green_pair",
+     "entry": 7549.0,
+     "at": "09:31",
+     "delta": 1.0
+    },
+    {
+     "mode": "next_bar_open",
+     "play": "failure",
+     "level": "green_pair",
+     "entry": 7549.0,
+     "at": "09:32",
+     "delta": 1.0
+    },
+    {
+     "mode": "band_defence_close",
+     "play": "defence",
+     "level": "green_pair",
+     "entry": 7549.0,
+     "at": "09:31",
+     "delta": 1.0
+    }
+   ]
+  }
+ ]
+}

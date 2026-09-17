@@ -1,5 +1,5 @@
 {
-  "baseline": "B0.2-2026-09-15",
+  "baseline": "B0.3-2026-09-17",
   "branches": {
     "source_long": {
       "asia_passes": 0,
@@ -19,19 +19,19 @@
       "diagnosis": null,
       "episodes": 15,
       "episodes_per_session": 1.0,
-      "fail": 14,
+      "fail": 7,
       "family": "GB-VWAP",
-      "in_bound": true,
+      "in_bound": false,
       "london_passes": 0,
-      "monday_passes": 0,
-      "pass": 1,
-      "pass_rate": 0.0667,
+      "monday_passes": 4,
+      "pass": 8,
+      "pass_rate": 0.5333,
       "sessions": 15,
-      "sessions_with_pass": 1,
+      "sessions_with_pass": 8,
       "stage_counts": {
         "confirmation": {
-          "fail": 10,
-          "pass": 1
+          "fail": 6,
+          "pass": 9
         },
         "context": {
           "pass": 15
@@ -41,16 +41,19 @@
           "pass": 11
         },
         "management": {
-          "pass": 1
+          "fail": 7,
+          "pass": 8
         },
         "objective": {
-          "pass": 1
+          "fail": 7,
+          "pass": 8
         },
         "reference": {
           "pass": 15
         },
         "risk": {
-          "pass": 1
+          "fail": 6,
+          "pass": 9
         },
         "trigger": {
           "fail": 4,
@@ -61,104 +64,75 @@
         {
           "stage": "context",
           "varying_operands": [
-            "session"
+            "session",
+            "bias_direction",
+            "reference_live_from"
           ]
         },
         {
           "stage": "reference",
           "varying_operands": [
-            "asia_high",
-            "london_high"
+            "box_low",
+            "box_high",
+            "level",
+            "live_from"
           ]
         }
       ],
       "stage_value_nunique": {
         "confirmation": {
-          "asia_high": 1,
-          "boundary": 9,
-          "breakout_close": 1,
-          "candidate_60m": 1,
-          "confirm_at_ns": 1,
-          "confirm_close": 1,
-          "continuation_hold": 2,
-          "fail_to_continue": 1,
-          "fail_window_end_ns": 1,
-          "horizon": 1,
-          "inside_box": 1,
-          "london_high": 1,
-          "retest_close": 9,
-          "retest_high": 1,
-          "retest_low": 1,
-          "sweep_depth": 1,
-          "through_level": 1,
-          "touched_vwap": 1,
-          "vwap": 9
+          "entry": 10
         },
         "context": {
-          "bias_box_side": 1,
-          "bias_compatible": 1,
-          "bias_direction": 1,
-          "bias_prior_side": 1,
-          "decision_ns": 1,
-          "session": 2,
-          "source_session_allowed": 1
+          "bias_direction": 3,
+          "bias_rule": 1,
+          "no_entry_window_filter": 1,
+          "reference_live_from": 15,
+          "session": 2
         },
         "location": {
-          "asia_high": 4,
-          "boundary": 8,
-          "box_high": 1,
-          "box_low": 1,
-          "breakout": 1,
-          "breakout_close": 8,
-          "distance_beyond_edge": 1,
-          "level": 1,
-          "london_high": 4,
-          "sweep_extreme": 1
+          "cycle": 1,
+          "edge": 1,
+          "level": 15,
+          "sweep_depth": 1,
+          "sweep_extreme": 15
         },
         "management": {
-          "derived_quantity": 1,
-          "ladder_rungs": 1,
-          "ladder_spacing": 1,
-          "risk_dollars": 1,
-          "stop_points": 1
+          "derived_quantity": 2,
+          "ladder_rungs": 5,
+          "ladder_spacing": 1
         },
         "objective": {
-          "entry": 1,
-          "first_rung": 1,
-          "opposite_edge": 1,
-          "target": 1
+          "far_objective": 10,
+          "first_objective": 1,
+          "next_drawn_level": 10
         },
         "reference": {
-          "asia_high": 14,
-          "box_high": 1,
-          "box_low": 1,
-          "known_at": 1,
-          "level": 1,
-          "london_high": 14
+          "box_high": 15,
+          "box_low": 15,
+          "kind": 1,
+          "level": 15,
+          "live_from": 15,
+          "scope": 1
         },
         "risk": {
-          "entry": 1,
+          "buffer_points": 1,
+          "entry": 10,
           "risk_dollars": 1,
-          "stop": 1,
-          "stop_points": 1
+          "stop": 15,
+          "stop_points": 3
         },
         "trigger": {
-          "asia_high": 5,
-          "boundary": 10,
-          "breakout": 1,
-          "breakout_close": 10,
-          "close": 2,
-          "close_above_both": 2,
-          "level": 1,
-          "london_high": 5,
-          "side": 1,
-          "sweep_at_ns": 1,
-          "sweep_depth": 1,
-          "sweep_extreme": 1
+          "bars_sweep_to_fail": 8,
+          "fail_close": 10,
+          "fail_window_bars": 1,
+          "status": 2
         }
       },
       "time_of_entry_histogram_et_30m": {
-        "13:00": 1
+        "09:30": 4,
+        "10:00": 3,
+        "10:30": 1
       },
       "unknown": 0
     }
