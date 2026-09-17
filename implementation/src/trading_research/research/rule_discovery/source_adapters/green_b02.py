@@ -3100,6 +3100,8 @@ def proper_entries(example: Mapping[str, Any]) -> list[dict[str, Any]]:
                 "branch": row.get("branch"),
                 "reference": row.get("reference"),
                 "marked_by": row.get("marked_by"),
+                "scored_by_decision": row.get("scored_by_decision"),
+                "author_documented_mistake": row.get("author_documented_mistake"),
                 "note": row.get("note"),
                 "chart_clock": example.get("chart_clock"),
                 "accepted_by_owner": row.get("accepted_by_owner"),

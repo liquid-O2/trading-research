@@ -74,6 +74,10 @@ def scan_one(day: str, sessionstat: bool) -> dict:
         reads[family] = document.get("day_read")
         selection[family] = {
             "n_entries": (document.get("selection") or {}).get("n_entries", 0),
+            # the candidate list (every admitted opportunity once) is n_entries;
+            # the executed list (one position at a time, adds, flips) beside it
+            "n_executed": ((document.get("selection") or {}).get("executed") or {}).get("n_entries", 0),
+            "n_round_trips": ((document.get("selection") or {}).get("executed") or {}).get("n_round_trips", 0),
             "n_candidates": (document.get("selection") or {}).get("n_candidates", 0),
             "primary_play": (document.get("selection") or {}).get("primary_play"),
             "fallback_play_used": (document.get("selection") or {}).get("fallback_play_used"),
@@ -194,6 +198,8 @@ def main(argv=None) -> int:
     started = time.monotonic()
     totals = defaultdict(lambda: {"episodes": 0, "pass": 0, "fail": 0, "unknown": 0})
     entries_per_session = defaultdict(list)
+    executed_per_session = defaultdict(list)
+    round_trips_per_session = defaultdict(list)
     stop_points = defaultdict(list)
     rr = defaultdict(list)
     outcomes = defaultdict(Counter)
@@ -252,6 +258,8 @@ def main(argv=None) -> int:
                         totals[key][field] += count
                 for family, payload in result["selection"].items():
                     entries_per_session[family].append(payload["n_entries"])
+                    executed_per_session[family].append(payload.get("n_executed", 0))
+                    round_trips_per_session[family].append(payload.get("n_round_trips", 0))
                     primary_play[family][payload["primary_play"]] += 1
                     for item in payload["entries"]:
                         if item["stop_points"]:
@@ -301,6 +309,15 @@ def main(argv=None) -> int:
             }
             for family, values in entries_per_session.items()
         },
+        "executed_per_session": {
+            family: {"mean": (sum(values) / len(values)) if values else None, "n_sessions": len(values)}
+            for family, values in executed_per_session.items()
+        },
+        "round_trips_per_session": {
+            family: {"mean": (sum(values) / len(values)) if values else None, "distribution": dict(Counter(values)), "n_sessions": len(values)}
+            for family, values in round_trips_per_session.items()
+        },
+        "author_trades_per_day": {"JJ-TBR": "1-3 (JR dated posts)", "GB-FAIL": "1-2 (GB dated posts)"},
         "stop_points": {family: _quantiles(values) for family, values in stop_points.items()},
         "r_multiple_at_target": {family: _quantiles(values) for family, values in rr.items()},
         "selected_trade_outcomes": {family: dict(counter) for family, counter in outcomes.items()},
