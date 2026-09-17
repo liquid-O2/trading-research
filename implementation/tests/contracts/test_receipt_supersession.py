@@ -180,3 +180,96 @@ def test_the_verifier_files_are_recorded_not_pinned():
     failures = []
     _check_declared_source_files({native: stale, next(iter(r.VERIFIER_FILES)): stale}, failures, "CODE_SNAPSHOT.json", kind="code")
     assert [(f.code, native in f.detail) for f in failures] == [("IDENTITY", True)]
+
+
+# --------------------------------------------------------------------------
+# Rule 4: a stale code pin is superseded by any later receipt that verifies on
+# its own, pins the live digest and lists this receipt as a predecessor; the
+# search must not depend on the order in which candidates are tried, nor on a
+# failure recorded while another candidate was being verified.
+# --------------------------------------------------------------------------
+
+import json
+
+from trading_research.research.contracts import receipts as rec
+from trading_research.research.contracts.identity import digest
+from tests.rule_discovery.test_p15_01 import (
+    ASSURANCE_VERSION,
+    _rebind_draft,
+    _refresh_named,
+    _stale_code,
+    bound_graph_tasks,
+    write_bound_task,
+    write_graph,
+)
+
+
+def _pin_code(receipt: Path, rel: str, payload: bytes | None) -> str:
+    """Add a second code pin to a receipt's CODE_SNAPSHOT: the live bytes, or
+    a historical payload that no longer matches the workspace."""
+    code_path = receipt.parent / "CODE_SNAPSHOT.json"
+    code = json.loads(code_path.read_text())
+    copy = receipt.parent / "snapshots/code" / rel
+    copy.parent.mkdir(parents=True, exist_ok=True)
+    copy.write_bytes((DEFAULT_ROOT / rel).read_bytes() if payload is None else payload)
+    pinned = file_digest(copy)
+    code["files"][rel] = pinned
+    code["snapshot_paths"][rel] = f"snapshots/code/{rel}"
+    code_path.write_text(json.dumps(code, indent=2) + "\n")
+    _refresh_named(receipt, "CODE_SNAPSHOT.json")
+    _rebind_draft(receipt, code_sha256=digest(code))
+    return pinned
+
+
+def _three_task_graph(tmp_path: Path) -> Path:
+    tasks = bound_graph_tasks()
+    third = {k: v for k, v in tasks[1].items() if k != "id"}
+    third["dependencies"] = ["P15-00", "P15-01"]
+    tasks.append({"id": "P15-02", **third})
+    return write_graph(
+        tmp_path / "graph.json",
+        tasks,
+        required_task_artifacts=[
+            "DRAFT_MANIFEST.json", "PLAN_SNAPSHOT.json", "CODE_SNAPSHOT.json",
+            "EVIDENCE_MATRIX.json", "WORK_LOG.md", "DECISIONS.tsv", "REPORT.md",
+        ],
+        assurance_version=ASSURANCE_VERSION,
+    )
+
+
+def test_supersession_is_granted_through_the_newest_verified_successor(tmp_path):
+    """A (oldest) pins file 1 stale. B pins file 1 live but pins file 2 stale.
+    C pins both live and lists A and B. Only C verifies on its own; B verifies
+    only because C supersedes its file-2 pin. A must verify: C is a verified
+    later receipt that pins A's stale file live and lists A. The old search
+    tried B first, recorded B's failure in a context-free cache while C was
+    still on the visiting stack, and then rejected C because of that record."""
+    graph = _three_task_graph(tmp_path)
+    second_rel = "implementation/src/trading_research/research/contracts/identity.py"
+    a = write_bound_task(tmp_path, "P15-00")
+    rel, old, live = _stale_code(a)
+    assert old != live
+    b = write_bound_task(tmp_path, "P15-01", predecessors={"P15-00": file_digest(a)})
+    stale_second = _pin_code(b, second_rel, b"historical-identity-bytes\n")
+    assert stale_second != file_digest(DEFAULT_ROOT / second_rel)
+    c = write_bound_task(
+        tmp_path, "P15-02",
+        predecessors={"P15-00": file_digest(a), "P15-01": file_digest(b)},
+    )
+    _pin_code(c, second_rel, None)
+    assert str(b) < str(c), "the failing candidate must sort before the verifying one"
+
+    # positive: A verifies through C, whichever candidate the search meets first
+    result = rec.verify_task_receipt(a, graph_path=graph, receipts_root=tmp_path)
+    assert result.ok, result.failures
+    # and B, whose own stale pin is superseded by C, verifies as well
+    assert rec.verify_task_receipt(b, graph_path=graph, receipts_root=tmp_path).ok
+
+    # negative control: once C no longer verifies, neither B nor A is excused
+    (c.parent / "REPORT.md").write_text("tampered\n")
+    broken_b = rec.verify_task_receipt(b, graph_path=graph, receipts_root=tmp_path)
+    assert not broken_b.ok
+    assert any(f.code == rec.FailureCode.IDENTITY and second_rel in f.detail for f in broken_b.failures)
+    broken_a = rec.verify_task_receipt(a, graph_path=graph, receipts_root=tmp_path)
+    assert not broken_a.ok
+    assert any(f.code == rec.FailureCode.IDENTITY and rel in f.detail for f in broken_a.failures)
