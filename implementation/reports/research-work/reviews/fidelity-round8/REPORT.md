@@ -35,7 +35,7 @@ R:R-tool tickets carry the time the tool was drawn, not the fill. Where the prin
 
 ## 5. Per-day, per-play opportunity table (uncapped candidate lists)
 
-Every opportunity the framework admits on the 40 dated sessions, once, without segment caps (only the per-line limit: two trades on one line for Jumbo, three for Green Bird). `in list` = the author's entry is one of them within 10 points on the right bar (any supported fill of that opportunity). Full per-day rows: `opps_jj2.json`, `opps_gb4.json` in the session scratchpad; the replay tables in this directory carry the capped lists.
+Every opportunity the framework admits on the 40 dated sessions, once, without segment caps (only the per-line limit: two trades on one line for Jumbo, three for Green Bird). `in list` = the author's entry is one of them within 10 points on the right bar (any supported fill of that opportunity). Full per-day rows: `OPPORTUNITIES_JJ.json`, `OPPORTUNITIES_GB.json` in this directory; the replay tables in this directory carry the capped lists.
 
 | family, rule state | opportunities a day (min–max) | author's entries in the list | a day, by play |
 | --- | --- | --- | --- |
@@ -44,8 +44,9 @@ Every opportunity the framework admits on the 40 dated sessions, once, without s
 | Green Bird, pass 8 | 50.5 (8–72) | 13 of 16 | nyam_box 14.5, previous_hour 14.0, prior_day 4.8, london_box 4.2, asia_tdo_case 3.1, golden_pocket 3.1, cash_open 2.7, prior_week 2.5, asia_box 1.8 |
 | Green Bird + a running edge is one line | 46.8 (8–61) | 14 of 16 | previous_hour 14.2, nyam_box 12.3, prior_day 4.8, asia_tdo_case 3.1, golden_pocket 3.1, cash_open 2.7, prior_week 2.5, london_box 2.4, asia_box 1.8 |
 | Green Bird + his rules: last completed hour (GB p.1), closed 9–10 box (p.5), overnight bias (pp.9–11), one post-open re-entry | 37.9 (8–57) | 13 of 16 | previous_hour 9.8, nyam_box 9.2, prior_day 4.2, asia_tdo_case 3.1, cash_open 2.8, golden_pocket 2.6, london_box 2.4, prior_week 2.1, asia_box 1.8 |
+| Green Bird + the post-open re-entry on the last overnight cycle that failed (final) | 38.0 (8–57) | 14 of 16 | previous_hour 9.8, nyam_box 9.2, prior_day 4.2, asia_tdo_case 3.1, cash_open 2.8, golden_pocket 2.6, london_box 2.4, prior_week 2.2, asia_box 1.8 |
 
-The two Green Bird entries outside the list in the last row are the ones his own rules exclude or the tape cannot print: 2025-11-20 (MNQ level, §3) and 2026-04-28 09:45 (his documented mistake, GB p.5); 2025-11-19 dropped out of that row through a coding slip in the post-open re-entry (it must ride the last overnight cycle that failed, not the last cycle), fixed and being re-counted. The author takes one to three trades a day; the framework admits 17 (Jumbo) and roughly 35 (Green Bird) after his stated rules. The remaining multiplier is mechanical breadth he prunes by grading ("you're always scoring and rating a setup", GB p.4; "context - location - confirmation", JR p.33): which of the drawn levels' failures he takes when several occur, and which edge of the 6–9 he takes first.
+The two Green Bird entries outside the final list are the ones his own rules exclude or the tape cannot print: 2025-11-20 (MNQ level, §3; the user has since confirmed NQ only) and 2026-04-28 09:45 (his documented mistake, GB p.5). Full per-day rows: `OPPORTUNITIES_GB.json`. The author takes one to three trades a day; the framework admits 17 (Jumbo) and roughly 35 (Green Bird) after his stated rules. The remaining multiplier is mechanical breadth he prunes by grading ("you're always scoring and rating a setup", GB p.4; "context - location - confirmation", JR p.33): which of the drawn levels' failures he takes when several occur, and which edge of the 6–9 he takes first.
 
 ## 6. Rules verified against the source this round
 
