@@ -354,12 +354,47 @@ def bars_from_window(at_ns: int, window: tuple[int, int]) -> float:
     return round(gap / FIVE, 1)
 
 
-def candidates_for(example: dict, market, rows: list[dict], action: dict) -> list[dict]:
-    """Every fill the mechanics admit at every drawn level, on the ticket's side."""
+def generated_levels(example: dict, action: dict, window: tuple[int, int], params: dict) -> list[dict]:
+    """The aggression boxes generated from order-level prints before the ticket
+    (tools/sires_levels_fit.py), as the level set: each box known before the
+    ticket window opens is a level."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("sires_levels_fit", str(Path(__file__).resolve().parent / "sires_levels_fit.py"))
+    fit = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(fit)
+    day = session_day(example, action)
+    hh = int(str(action["time_et"])[:2])
+    if hh >= 18 or hh < 8:
+        start = fit.ns_at(day, "18:00", -1)
+    else:
+        start = fit.ns_at(day, "08:00")
+    orders = fit.orders_between(day, start, window[1] + 60 * fit.NS)
+    if orders is None or orders.empty:
+        return []
+    adaptive = {"quantile": params["quantile"], "lookback_s": params["lookback"], "floor": params["floor"]} if params.get("adaptive") else None
+    boxes = fit.cluster_orders(orders, min_size=params["min_size"], band=params["band"], window_s=params["window"], min_orders=params["min_orders"], adaptive=adaptive)
+    if params.get("absorbed"):
+        boxes = fit.absorbed(orders, boxes, follow_s=params["follow"], give=params["give"], give_in_ranges=bool(params.get("adaptive")))
+    out = []
+    for i, b in enumerate(boxes):
+        if int(b["known_at"]) >= window[0]:
+            continue  # not drawn yet when he traded
+        out.append({"name": f"gen[{i}] {b['first']}-{b['last']} {b['sides']}{b['largest']}", "low": _d(b["lo"]), "high": _d(b["hi"])})
+    return out
+
+
+LEVEL_SOURCE = {"mode": "drawn", "params": {}}
+
+
+def candidates_for(example: dict, market, rows: list[dict], action: dict, window: tuple[int, int] | None = None) -> list[dict]:
+    """Every fill the mechanics admit at every level, on the ticket's side. The
+    level set is the author's drawn boxes (``drawn``) or the boxes generated
+    from order-level prints before the ticket (``generated``)."""
     side = action["side"]
     branch = action.get("branch")
     out = []
-    for lvl in fixture_levels(example):
+    levels = fixture_levels(example) if LEVEL_SOURCE["mode"] == "drawn" else (generated_levels(example, action, window, LEVEL_SOURCE["params"]) if window else [])
+    for lvl in levels:
         lo, hi = lvl["low"], lvl["high"]
         is_box = hi > lo
         # OFM / band failure / balance fade / resistance fade: the raid through
@@ -394,7 +429,7 @@ def replay(example: dict, markets: dict) -> list[dict]:
         start = int(market.start)
         end = min(int(market.end), window[1] + 60 * MINUTE)
         rows = bars_between(market, start, end)
-        cands = candidates_for(example, market, rows, action)
+        cands = candidates_for(example, market, rows, action, window)
         price = _d(action.get("price"))
         scored = []
         for c in cands:
@@ -426,7 +461,21 @@ def main(argv=None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--only", default=None)
+    parser.add_argument("--levels", choices=("drawn", "generated"), default="drawn")
+    parser.add_argument("--min-size", type=int, default=30)
+    parser.add_argument("--band", type=float, default=6.0)
+    parser.add_argument("--window", type=int, default=180)
+    parser.add_argument("--min-orders", type=int, default=2)
+    parser.add_argument("--absorbed", action="store_true")
+    parser.add_argument("--follow", type=int, default=120)
+    parser.add_argument("--give", type=float, default=1.5)
+    parser.add_argument("--adaptive", action="store_true")
+    parser.add_argument("--quantile", type=float, default=0.995)
+    parser.add_argument("--lookback", type=int, default=3600)
+    parser.add_argument("--floor", type=int, default=20)
     args = parser.parse_args(argv)
+    LEVEL_SOURCE["mode"] = args.levels
+    LEVEL_SOURCE["params"] = {k: getattr(args, k) for k in ("min_size", "band", "window", "min_orders", "absorbed", "follow", "give", "adaptive", "quantile", "lookback", "floor")}
     examples = json.loads(EXAMPLES.read_text())["examples"]
     wanted = set(args.only.split(",")) if args.only else None
     markets: dict = {}
@@ -443,9 +492,9 @@ def main(argv=None) -> int:
             b = row["best"] or {}
             print(json.dumps({"id": row["example_id"], "time": row["time_et"], "side": row["side"], "price": row["price"], "strict_10": row["strict_10"], "best": f'{b.get("play")}/{b.get("mode")}@{b.get("entry")} on {b.get("level")} d={b.get("delta")} b={b.get("bars")} at {b.get("at")}', "n_side": row["n_candidates_side"], "n_window": row["n_in_window"]}), flush=True)
     args.out.mkdir(parents=True, exist_ok=True)
-    summary = {"n_entries": len(table), "n_strict_10": sum(1 for r in table if r["strict_10"]), "rows": table}
+    summary = {"n_entries": len(table), "n_strict_10": sum(1 for r in table if r["strict_10"]), "levels": LEVEL_SOURCE, "rows": table}
     (args.out / "REPLAY_SIRES.json").write_text(json.dumps(summary, indent=1, default=str) + "\n")
-    lines = ["# Sires and Saint ticket replay on the drawn levels", "", f"{summary['n_strict_10']} of {summary['n_entries']} ticketed fills reproduced within 10 points on the right bar (one five-minute bar) by a source-supported fill at one of the author's drawn levels, on his side.", "", "| ticket | side | printed | our fill | mode / play | level | d | bars | ok |", "| --- | --- | --- | --- | --- | --- | --- | --- | --- |"]
+    lines = [f"# Sires and Saint ticket replay on the {LEVEL_SOURCE['mode']} levels", "", f"{summary['n_strict_10']} of {summary['n_entries']} ticketed fills reproduced within 10 points on the right bar (one five-minute bar) by a source-supported fill at one of the author's drawn levels, on his side.", "", "| ticket | side | printed | our fill | mode / play | level | d | bars | ok |", "| --- | --- | --- | --- | --- | --- | --- | --- | --- |"]
     for r in table:
         b = r["best"] or {}
         lines.append(f"| `{r['example_id']}` {r['time_et']} | {r['side']} | {r['price']} | {b.get('entry')} at {b.get('at')} | {b.get('mode')} / {b.get('play')} | {b.get('level')} {b.get('level_px')} | {b.get('delta')} | {b.get('bars')} | {'yes' if r['strict_10'] else 'no'} |")

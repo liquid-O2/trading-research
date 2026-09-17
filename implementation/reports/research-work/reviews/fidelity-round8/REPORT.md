@@ -143,3 +143,16 @@ Probe on the two clearest Sires charts (`cme__nq-continuous-futures__trades`, we
 | 2026-07-14 09:30–09:40 | 16,285 | 1 | 12 | 2 | 0 |
 
 Read as orders, the prints land where he drew: on 07-08 a 106-contract sell at 10:43:20 spans 29,222–29,228 (his "absorbed aggression" box 29,224–29,231), and 40-contract buys at 10:39:47 and 10:41:17 sit at 29,251–29,256 (his failure box 29,246–29,251.5, the circled buyers "getting exhausted into the catalyst"); on 07-14 a 39-contract buy at 09:37:33 spans 29,741–29,746 (his 29,745 support, "sellers absorbed at the bottom") and a 38-contract buy at 09:33:03 sits in the refill box 29,750–29,757. Deepchart draws an aggressor order as one bubble; our feed records each fill against the book. The earlier Sires adapter (`AGGRESSION_MIN = 30` on fills) and the Refill study's cluster rule therefore almost never saw the prints the authors describe ("sixty, eighty, a hundred contracts hitting in seconds"), which is a large part of the plausibility failures the audit recorded (S3, R1–R2). Level generation for Sires and the Refill re-measurement must start from order-level aggregation.
+
+### 10.2 Generating his boxes from order-level prints (`tools/sires_levels_fit.py`)
+
+Boxes are clusters of aggressor orders (fills grouped by event timestamp and side) within 6 points and 3 minutes of each other, at least two orders. His 32 drawn boxes on the nine sessions split by what they are: 15 aggression / absorption / refill boxes (order-flow prints), 6 squeeze structures (failure box, wick, entry box), 11 profile objects (nodes, resistance and support bands, composite zones). The cluster rule is scored on the first group; the other two are the Phase 3 objects.
+
+| size cut | absorption filter | drawn boxes reproduced (of 32) | aggression boxes (of 15) | structure (of 6) | profile (of 11) | generated boxes a session |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| fixed 30 contracts (BIG p.3) | none | 25 | 13 | 6 | 6 | 21.8 |
+| fixed 60 contracts, single orders | none | 16 | — | — | — | 13.4 |
+| fixed 30 | no follow-through beyond 4 points in 3 minutes | 10 | — | — | — | 6.1 |
+| adaptive: top 0.5% of the trailing hour's orders (floor 20) | none | 29 | 13 | 6 | 10 | 34.0 |
+
+A fixed contract number is the wrong object, as the user noted and as the author says ("bubble scale adjusted with the session's volume", BIG p.3): the adaptive cut finds the boxes he drew on every session including the quiet overnight one, at the cost of more boxes; the absorption test ("aggression that gets nothing") is what should prune them, and a fixed 4-point tolerance pruned the wrong ones. The tolerance now follows the trailing minute range; those results are appended below when the run completes. He draws 2 to 6 boxes a session; the count after absorption is the number to judge.
