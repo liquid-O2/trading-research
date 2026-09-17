@@ -1246,7 +1246,11 @@ def sweep_cycles(market, *, level: Decimal, side: str, begin: int, end: int, max
     return cycles
 
 
-MAX_CONTACTS_PER_LEVEL = 3
+# two tests of a line per session (2026-06-05 buys R-Lo at 05:03 after two
+# earlier round trips); the scan's only cap: both call sites read it at call
+# time so a rescan override reaches them (the literal 2 they carried made the
+# 2026-09-17 contacts candidates inert)
+MAX_CONTACTS_PER_LEVEL = 2
 
 
 def first_touch(market, *, level: Decimal, begin: int, end: int) -> dict[str, Any] | None:
@@ -2187,7 +2191,7 @@ def _scan_judas_reversal(market) -> tuple[list[dict[str, Any]], list[dict[str, A
         first_break = _first_break(market, begin=begin, end=end, edge=edge, side=side)
         if first_break is None:
             continue
-        contacts = level_contacts(market, level=line, begin=int(first_break["start"]), end=end, departure=box["width"] / 10, max_contacts=2)
+        contacts = level_contacts(market, level=line, begin=int(first_break["start"]), end=end, departure=box["width"] / 10)
         for index, contact in enumerate(contacts):
             fills = _contact_fills(market, level=line, side=side, contact=contact, end=end, placed_at=int(first_break["start"]))
             episodes.extend(
@@ -2384,7 +2388,7 @@ def _scan_other_session(market) -> tuple[list[dict[str, Any]], list[dict[str, An
             first_break = _first_break(market, begin=begin, end=end, edge=edge, side=side)
             if first_break is None:
                 continue
-            for index, contact in enumerate(level_contacts(market, level=line, begin=int(first_break["start"]), end=end, departure=london["width"] / 10, max_contacts=2)):
+            for index, contact in enumerate(level_contacts(market, level=line, begin=int(first_break["start"]), end=end, departure=london["width"] / 10)):
                 fills = _contact_fills(market, level=line, side=side, contact=contact, end=end, placed_at=int(first_break["start"]))
                 episodes.extend(_line_episodes(market, context, branch="other_session", side=side, level=line, kind=name, location_kind="exhaustion_projection", reference=london, trigger=contact, fills=fills, objective=objective_ladder(london, side), begin=begin, cycle=index))
     # the drawn liquidity levels, live from 02:00

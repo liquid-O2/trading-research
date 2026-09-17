@@ -40,7 +40,12 @@ def main(argv=None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--population", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
+    parser.add_argument("--negative-fraction", type=float, default=1.0, help="keep this fraction of the unlabelled candidates a session (seeded), every labelled one; the object-layer features cost seconds a row and a session holds thousands of candidates")
+    parser.add_argument("--seed", type=int, default=0)
     args = parser.parse_args(argv)
+    import random
+
+    rng = random.Random(args.seed)
     from trading_research.research.rule_discovery.source_adapters.common import load_source_market
 
     gf = _module("grading_features")
@@ -71,7 +76,21 @@ def main(argv=None) -> int:
             prior = gf.prior_day_profile(market)
             cache = {}
             rows = []
+            kept = []
             for cand in session["candidates"]:
+                at = int(cand["decision_at"])
+                side = cand["side"]
+                geometry = cand.get("geometry") or {}
+                entry = _d(geometry.get("entry"))
+                label = 0
+                for ticket, window in windows:
+                    price = _d(ticket.get("price"))
+                    if ticket["side"] == side and price is not None and entry is not None and abs(entry - price) <= v1.TOLERANCE and rs.bars_from_window(at, window) <= rs.BARS_ALLOWED:
+                        label = 1
+                if label or args.negative_fraction >= 1.0 or rng.random() < args.negative_fraction:
+                    kept.append(cand)
+            n_all = len(session["candidates"])
+            for cand in kept:
                 at = int(cand["decision_at"])
                 side = cand["side"]
                 geometry = cand.get("geometry") or {}
@@ -86,6 +105,8 @@ def main(argv=None) -> int:
                 risk = None if entry is None or stop is None else float(abs(entry - stop))
                 reward = None if entry is None or target is None else float(abs(target - entry))
                 row = {
+                    "sample_weight": 1.0 if label else (1.0 / args.negative_fraction),
+                    "candidates_in_session": n_all,
                     "family": "SI",
                     "example_id": example["id"],
                     "session": day,
@@ -120,7 +141,7 @@ def main(argv=None) -> int:
                 sink.write(json.dumps(row, default=str) + "\n")
             n_rows += len(rows)
             n_pos += sum(r["label"] for r in rows)
-            print(json.dumps({"id": example["id"], "session": day, "candidates": len(rows), "positives": sum(r["label"] for r in rows), "tickets": len(tickets)}), flush=True)
+            print(json.dumps({"id": example["id"], "session": day, "candidates": n_all, "rows": len(rows), "positives": sum(r["label"] for r in rows), "tickets": len(tickets)}), flush=True)
     print(json.dumps({"event": "dataset_complete", "rows": n_rows, "positives": n_pos}))
     return 0
 
