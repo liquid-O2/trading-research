@@ -3583,6 +3583,91 @@
     "reference": "R-Lo swept to the -0.5 at 09:45",
     "entry_window_et": "09:45-10:00"
    }
+  },
+  {
+   "id": "GB-2026-05-01",
+   "family": "GB-FAIL",
+   "source": "GB p.46 (HHP3lUrWoAA4oPA.png; Tradovate MNQ Jun 2026, 'Fri 01 May 26 11:16 AM' on the axis; Total Day PnL +$9,607.48)",
+   "date": "2026-05-01",
+   "session": "NY",
+   "instrument": "MNQM26",
+   "chart_clock": "tradovate UTC-4",
+   "inside_tape": true,
+   "dated_by": "the axis prints 'Fri 01 May 26'; the NQ tape: 09:00-10:00 box 27,575.75-27,875.75, RTH 27,617.75-27,917, the 10:00-11:20 high 27,909.25 (his box-high sweep), consistent with the chart",
+   "levels": {
+    "ny_box_09_10": [
+     27575.75,
+     27875.75
+    ],
+    "buy_limits": [
+     27805.5,
+     27786.25,
+     27767.0,
+     27685.0,
+     27581.0
+    ]
+   },
+   "actions": [
+    {
+     "time_et": "10:40-11:16",
+     "action": "sell",
+     "qty": 5,
+     "price": 27901.5,
+     "note": "short 5 at about 27,901.50 (position tag) after the sweep of the 09:00-10:00 box high 27,875.75 to 27,909 and the failure back inside; buy limits 27,805.50 down to 27,581; chart-marked",
+     "proper_entry": true,
+     "side": "short",
+     "branch": "nyam_box",
+     "marked_by": "chart",
+     "added": "added 2026-09-17 night: GB p.46 charts dated on the tape; chart-marked fills carry the chart's resolution (about 5 points)"
+    }
+   ],
+   "n_proper_entries": 1,
+   "expected_detection": {
+    "branch": "nyam_box",
+    "side": "short",
+    "reference": "the 9-10 box high swept after 10:00 and failed",
+    "entry_window_et": "10:40-11:16"
+   }
+  },
+  {
+   "id": "GB-2026-05-04",
+   "family": "GB-FAIL",
+   "source": "GB p.46 (HHhCuL3WAAAFcPK.jpg; Tradovate MNQ Jun 2026, '11:19:29 AM (UTC-4)'; Total Day PnL +$11,647.82; London Low, True Day Open and PDH drawn)",
+   "date": "2026-05-04",
+   "session": "NY",
+   "instrument": "MNQM26",
+   "chart_clock": "tradovate UTC-4",
+   "inside_tape": true,
+   "dated_by": "the wiki carried the page as '2026-06 (two sessions)'; the NQ tape dates the chart 2026-05-04: London low 27,864.25 (his 'London Low' line about 27,858), the 09:00-10:00 box 27,787.50-27,898.75 (his shaded box top about 27,900), the 10:50-11:20 drop from 27,940.75 to 27,761 (his short riding to 27,820 by 11:19)",
+   "levels": {
+    "ny_box_09_10": [
+     27787.5,
+     27898.75
+    ],
+    "london_low": 27858,
+    "true_day_open": 27930
+   },
+   "actions": [
+    {
+     "time_et": "10:55-11:12",
+     "action": "sell",
+     "qty": 1,
+     "price": 27900.75,
+     "note": "short at about 27,900.75 (position tag) after the box high 27,898.75 was swept to 27,940 at 10:50-11:00 and price failed back under it; the True Day Open and PDH sit just above; chart-marked",
+     "proper_entry": true,
+     "side": "short",
+     "branch": "nyam_box",
+     "marked_by": "chart",
+     "added": "added 2026-09-17 night: GB p.46 charts dated on the tape; chart-marked fills carry the chart's resolution (about 5 points)"
+    }
+   ],
+   "n_proper_entries": 1,
+   "expected_detection": {
+    "branch": "nyam_box",
+    "side": "short",
+    "reference": "the 9-10 box high swept to the TDO/PDH area and failed",
+    "entry_window_et": "10:55-11:12"
+   }
   }
  ],
  "supersedes": "AUTHOR_EXAMPLES_2026-09-15.json"
