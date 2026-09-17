@@ -182,7 +182,7 @@ def evaluate(rows: list[dict], per_day: float, l2: float) -> dict:
         idx = [i for i, r in enumerate(rows) if r["example_id"] == day]
         srt = sorted(idx, key=lambda i: -out_scores[i])
         for pos_i in [i for i in idx if rows[i]["label"] == 1]:
-            ranks[f'{day} {rows[pos_i]["branch"]}/{rows[pos_i]["mode"]}'] = srt.index(pos_i) + 1
+            ranks[f'{day} {rows[pos_i].get("branch") or rows[pos_i].get("play")}/{rows[pos_i].get("mode")}'] = srt.index(pos_i) + 1
     # a full fit on all rows for the weights
     Xa, cols, vocab = design(rows)
     Xa, mu, sd = standardise(Xa)
