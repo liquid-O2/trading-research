@@ -126,8 +126,12 @@ def evaluate(rows: list[dict], per_day: float, l2: float) -> dict:
     Xa, mu, sd = standardise(Xa)
     wa, ba = fit_logistic(Xa, np.array([r["label"] for r in rows], dtype=float), l2=l2)
     weights = sorted(zip(cols, wa), key=lambda kv: -abs(kv[1]))
+    # chance: admitting per_day of the candidates a session at random recovers
+    # per_day / (candidates a session) of the tickets
+    chance = min(1.0, per_day * n_days / max(1, len(rows)))
     return {
         "rows": len(rows), "positives": int(y.sum()), "days": n_days, "per_day_target": per_day,
+        "candidates_per_day": round(len(rows) / n_days, 1), "chance_recall_at_density": round(chance, 3),
         "threshold": float(threshold), "density_at_threshold": round(density, 2), "recall_at_density": round(recall, 3),
         "recall_top1": round(float(sum(1 for v in ranks.values() if v <= 1) / max(1, len(ranks))), 3),
         "recall_top3": round(float(sum(1 for v in ranks.values() if v <= 3) / max(1, len(ranks))), 3),
