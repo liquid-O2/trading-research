@@ -364,10 +364,13 @@ def generated_levels(example: dict, action: dict, window: tuple[int, int], param
     spec.loader.exec_module(fit)
     day = session_day(example, action)
     hh = int(str(action["time_et"])[:2])
+    # the boxes he carries into a session include the prior day's aggression
+    # bands ("prior_day_aggression_band", BIG p.11): generate from the prior
+    # session's cash open
     if hh >= 18 or hh < 8:
-        start = fit.ns_at(day, "18:00", -1)
+        start = fit.ns_at(day, "09:30", -1)
     else:
-        start = fit.ns_at(day, "08:00")
+        start = fit.ns_at(day, "09:30", -1)
     orders = fit.orders_between(day, start, window[1] + 60 * fit.NS)
     if orders is None or orders.empty:
         return []

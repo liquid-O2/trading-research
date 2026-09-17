@@ -156,3 +156,11 @@ Boxes are clusters of aggressor orders (fills grouped by event timestamp and sid
 | adaptive: top 0.5% of the trailing hour's orders (floor 20) | none | 29 | 13 | 6 | 10 | 34.0 |
 
 A fixed contract number is the wrong object, as the user noted and as the author says ("bubble scale adjusted with the session's volume", BIG p.3): the adaptive cut finds the boxes he drew on every session including the quiet overnight one, at the cost of more boxes; the absorption test ("aggression that gets nothing") is what should prune them, and a fixed 4-point tolerance pruned the wrong ones. The tolerance now follows the trailing minute range; those results are appended below when the run completes. He draws 2 to 6 boxes a session; the count after absorption is the number to judge.
+
+### 10.3 The tickets scored on GENERATED boxes
+
+`replay_sires.py --levels generated --adaptive` (boxes from order-level prints with the session-adaptive size cut, no absorption filter, only boxes known before the ticket): **17 of 20 tickets** reproduced within 10 points on the right bar on his side (`REPLAY_SIRES_GENERATED.md`). The three outside: 2026-07-31 09:33 (his "wick box", a squeeze structure, not an aggression box), 2026-08-06 09:33 (the prior day's aggression band, outside the generation window that started at 08:00; being re-run from the prior session's open) and 2026-08-06 09:52 (a box that forms in the same minute as the ticket). So the entry mechanics hold on levels the data draws, not only on the levels he drew; what remains is the count (the grading layer) and the two object families the cluster rule does not cover (squeeze structure, profile).
+
+### 10.4 Keani (no dated ticket): where the zero comes from
+
+Forty random sessions through `scan_keani_branch_b02`: 40 fail, 28 at context (the 09:30–10:00 period is not fully above the prior day's 70% value area high) and 12 at the trigger (the break of the current value area high on aggressive imbalances, retest holding). The context condition is the trader's own ("the whole A period above prior value"); the trigger as coded is what never fires on the days that reach it. Without a dated example the trigger cannot be calibrated against a tape; it stays a documented plausibility failure until a dated post exists.
