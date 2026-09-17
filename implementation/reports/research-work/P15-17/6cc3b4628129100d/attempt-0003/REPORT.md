@@ -4,23 +4,26 @@ Decision trail: `WORK_LOG.md`. Self-check: `SELF_CHECK.txt`.
 
 ## Result card
 
-**Question.** Does any of the 160 registered one-axis candidates beat the source-faithful baseline B0.2 well enough to replace it as a family's entry rule?
+**Question.** Does any registered one-axis candidate, including the 2026-09-16 profile supplement, beat the source-faithful baseline B0.2 well enough to replace it as a family's entry rule?
 
-| headline | value | unit / support | artifact |
-| --- | --- | --- | --- |
-| candidates promoted | 0 | candidates of 148 supported / 5 outer folds, Holm across the stage | `attempt-0003/BREADTH_RESULTS.json#decisions` |
-| best mean paired improvement | 25.7799 | net points per common complete day / 1094 days, 10325 resolved entries / [24.7714, 26.7971] / SIRES:absorption_reward_retest:S1 | `attempt-0003/BREADTH_RESULTS.json#decisions` |
-| dispositions | {'retained_baseline': 44, 'rejected_by_evidence': 19, 'inconclusive_support': 101} | candidates | `attempt-0003/TRIALS.jsonl` |
-| declared jobs reconciled | True | 278560 written + 160 absent = 278720 declared | `attempt-0003/RUN_COMPLETE.json` |
-| hold-out days excluded | 112 | account days, 2026-04-01..2026-09-03 | `attempt-0003/BREADTH_RESULTS.json#holdout_excluded` |
+| headline | value | unit | interval / support | artifact |
+| --- | --- | --- | --- | --- |
+| candidates promoted | 0 | candidates of 164 in the Holm family | 164 | `BREADTH_RESULTS.json` |
+| best mean paired improvement | 25.7799 | net points per common complete day (SIRES:absorption_reward_retest:S1) | [24.771400822669104, 26.79708638025594] | `BREADTH_RESULTS.json` |
+| candidates left inconclusive on support | 101 | candidates | 880 | `TRIALS.jsonl` |
+| declared jobs reconciled | 278560 | job documents written, plus 160 absent on the retained failure date | 278720 | `RUN_COMPLETE.json` |
+| hold-out days excluded | 112 | account days, 2026-04-01 to 2026-09-03 | 112 | `BREADTH_RESULTS.json` |
 
-**Target.** EVALUATION.md promotion gates: paired mean improvement with a 95% lower bound above zero, Holm-adjusted p <= .05, support (100 resolved opportunities, 30 days, 3 blocks), positive in 60% of supported blocks, no cost-stress reversal, no unexplained coverage loss  
+**Target.** EVALUATION.md promotion gates: paired mean improvement with a 95% lower bound above zero, Holm-adjusted p <= .05, support of 100 resolved opportunities on 30 days in 3 blocks, positive in 60% of supported blocks, no cost-stress reversal, no unexplained coverage loss  
 **Met:** no
 
-**Verdict.** `not_reaching_target` — No candidate clears the gates: 91 of 148 fail support outright and the rest fall at Holm, coverage or the cost stress, so the source-faithful baseline is retained in every family.
+**Verdict.** `not_reaching_target` — No candidate clears the gates: most fail support outright and the rest fall at Holm, coverage or the cost stress, so the source-faithful baseline is retained in every family. The finite screen is complete and its result is a verified negative.
 
-**Smallest lever.** raise the entry count of the location-limited candidates before re-screening: the most common first attribution is location_miss (54 candidates), which Phase 3's improved locations address directly under the bounded-revisit rule
+**Smallest lever.** re-screen the retained candidates whose first attribution is location_miss on Phase 3's improved locations, under the bounded-revisit rule, rather than widening the bank
 
-**Evidence it worked.** the same breadth screen, re-run on the retained candidates with Phase 3 locations, moves candidates out of inconclusive_support into a decided disposition and at least one clears the support gate
+**Evidence it worked.** candidates move out of inconclusive_support into a decided disposition and at least one clears the support gate with its 95% lower bound above zero
 
-**Limits.** Mean daily net points in the one-mini benchmark on an isolated family under a fixed scheduler; not a portfolio, not a claim about the user's daily target, and no statement about the blind hold-out, which no number here touches.
+**Limits.**
+- Mean daily net points in the deterministic one-mini benchmark on an isolated family under a fixed scheduler; not a portfolio and not a claim about the user's daily target.
+- No number here touches the blind hold-out (2026-04-01 to 2026-09-03).
+- The P15-16A receipt digest is still pending; the pairing bytes are pinned by path and sha256 in the run's own job documents.

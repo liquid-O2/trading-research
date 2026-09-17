@@ -1,0 +1,582 @@
+{
+ "assurance_version": "research-assurance-2026-09-14-v3",
+ "checks": [
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/search_run.py",
+     "symbol": "trial_records"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/TRIALS.jsonl",
+     "selector": "/",
+     "sha256": "598d039293add35c99a93980b0ecd3fccc4fe8c8c9149569c815e0e2b2d4913b"
+    },
+    {
+     "path": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/JOB_RECONCILIATION.json",
+     "selector": "/",
+     "sha256": "3cb9f0829d9b1cb8dc2cc790754d00987ee6f2b2c743acb44aba4dfe2ca7c967"
+    },
+    {
+     "path": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/RUN_COMPLETE.json",
+     "selector": "/",
+     "sha256": "adc1a080b54b20460bf667efcc0c056a4e215161d7579047ea64df0817087e7f"
+    }
+   ],
+   "expected": "880 ledger rows and declared jobs = written + absent",
+   "id": "A01",
+   "observed": "880 rows; 278,720 = 278,560 + 160; zero missing documents",
+   "oracle": "JOB_RECONCILIATION.json, computed by streaming every document once",
+   "requirement": "Every registered candidate has an attempted, duplicate, unsupported or not-applicable record: 880 ledger rows = (160 + 16) candidates x 5 folds, and the job reconciliation accounts for all 278,720 declared jobs.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_17.py::test_native_slice_covers_every_declared_job",
+    "implementation/tests/rule_discovery/test_p15_17.py::test_s24_the_ledger_holds_every_registered_candidate_in_every_fold"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/search_run.py",
+     "symbol": "select_for_fold"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/BREADTH_RESULTS.json",
+     "selector": "/",
+     "sha256": "a81948e90ba77040a1db58d32eacb3b31f3a99eba7d68096b63e9d00179c1c3d"
+    }
+   ],
+   "expected": "perturbing outer test days leaves the selection identical; perturbing inner days changes it",
+   "id": "A02",
+   "observed": "identical selection under the outer perturbation, changed under the inner one",
+   "oracle": "a synthetic two-fold table with a controlled perturbation",
+   "requirement": "Changing outer outcomes does not change that fold's bank choice.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_17.py::test_a02_outer_outcomes_do_not_change_the_fold_choice",
+    "implementation/tests/rule_discovery/test_p15_17.py::test_a_holdout_date_cannot_change_a_breadth_fold_choice"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/search_run.py",
+     "symbol": "declare_profile_supplement"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/MANIFEST.json",
+     "selector": "/",
+     "sha256": "bf434f60ba295b9cd137777a3b50792fbd0f239419c5311c0e01bff5a61a72e4"
+    }
+   ],
+   "expected": "bank sha256 in MANIFEST equals the frozen bank; supplement declared_at precedes its first checkpoint",
+   "id": "A03",
+   "observed": "bank sha256 matches; declared_at 2026-09-16T21:10:28Z precedes every attempt-0004 checkpoint",
+   "oracle": "the frozen CANDIDATE_BANK.json digest and the filesystem timestamps",
+   "requirement": "No result-driven candidate entered the run: the bank is pinned by sha256 and the supplement was declared and hashed before its first session.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_17.py::test_the_supplement_is_declared_before_any_result_and_duplicates_are_not_run"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/search_run.py",
+     "symbol": "daily_benchmark"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/JOB_RECONCILIATION.json",
+     "selector": "/",
+     "sha256": "3cb9f0829d9b1cb8dc2cc790754d00987ee6f2b2c743acb44aba4dfe2ca7c967"
+    },
+    {
+     "path": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/SELF_CHECK.txt",
+     "selector": "/",
+     "sha256": "c126b3e2962cfd62778b60717edb11c16779019a0337cd192df5681df34253da"
+    }
+   ],
+   "expected": "opportunities == fills + exclusions and daily net points == the sum of filled entries, on every document",
+   "id": "A04",
+   "observed": "zero A04 violations over 278,560 documents",
+   "oracle": "an independent pass over the job documents with plain Decimal arithmetic",
+   "requirement": "Primary daily metrics reconcile to opportunities, fills, exclusions and zero days.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_17.py::test_a04_daily_metrics_reconcile_to_opportunities_fills_exclusions_zero_days",
+    "implementation/tests/rule_discovery/test_p15_17.py::test_a04_reconciliation_failure_is_raised_not_swallowed"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/search_run.py",
+     "symbol": "complete_run"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/RUN_COMPLETE.json",
+     "selector": "/",
+     "sha256": "adc1a080b54b20460bf667efcc0c056a4e215161d7579047ea64df0817087e7f"
+    },
+    {
+     "path": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/SHARD_INVENTORY.json",
+     "selector": "/",
+     "sha256": "fb935184954c99e757b20f11e861f1fed19740f7f5e1db973591fe7d23a8017e"
+    }
+   ],
+   "expected": "validated shards are reused, a partial shard is redone, and a retained failure is named in RUN_COMPLETE",
+   "id": "A05",
+   "observed": "2020-06-30 retained and named; declared jobs reconcile with its 160 absent documents",
+   "oracle": "a fixture run with an interruption, and the run's own completion record",
+   "requirement": "A resource timeout resumes the same run and no slow date disappears.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_17.py::test_a_run_whose_only_pending_dates_are_retained_failures_completes",
+    "implementation/tests/rule_discovery/test_p15_17.py::test_resume_reuses_validated_shards_and_never_accepts_a_partial_one"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/search_run.py",
+     "symbol": "evaluate_run"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/SELF_CHECK.txt",
+     "selector": "/",
+     "sha256": "c126b3e2962cfd62778b60717edb11c16779019a0337cd192df5681df34253da"
+    },
+    {
+     "path": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/RUN_META.json",
+     "selector": "/",
+     "sha256": "91c846cec267db612b45591fcc0354f6aa3ff64eadfd2305dbc6d1ddea1d5e9d"
+    },
+    {
+     "path": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/pytest.log",
+     "selector": "/",
+     "sha256": "ffebc4c68987314f5db2b25ceec3d1dd99805b7526fb0a981ffd0a710f581798"
+    },
+    {
+     "path": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/REPORT.md",
+     "selector": "/",
+     "sha256": "b978a95523efc035d004c2441e06279dbd4651bca2c7fb1241648d5388914b03"
+    }
+   ],
+   "expected": "a pytest log with exit 0, hashed artifacts, coverage counts and a recomputed central number",
+   "id": "A06",
+   "observed": "105 passed, exit 0; coverage and unknown counts in the receipt; two recomputations in SELF_CHECK",
+   "oracle": "the executed command log and the attempt's own artifacts",
+   "requirement": "Evidence includes the command exit code, artifact hashes, coverage and unknown counts, runtime and inspected output.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_17.py::test_native_slice_reconciles_a04_on_every_row"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/search_run.py",
+     "symbol": "reconcile_jobs"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/JOB_RECONCILIATION.json",
+     "selector": "/",
+     "sha256": "3cb9f0829d9b1cb8dc2cc790754d00987ee6f2b2c743acb44aba4dfe2ca7c967"
+    }
+   ],
+   "expected": "a document that claims another candidate's identity is reported",
+   "id": "A07",
+   "observed": "identity mismatches are detected; zero on this run",
+   "oracle": "a deliberately substituted document in the fixture",
+   "requirement": "Every acceptance key resolves to code, an executed command and hashed evidence; a substituted artifact fails.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_17.py::test_reconcile_jobs_streams_every_document_and_checks_a04"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/search_run.py",
+     "symbol": "classify_failure"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/pytest.log",
+     "selector": "/",
+     "sha256": "ffebc4c68987314f5db2b25ceec3d1dd99805b7526fb0a981ffd0a710f581798"
+    },
+    {
+     "path": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/SELF_CHECK.txt",
+     "selector": "/",
+     "sha256": "c126b3e2962cfd62778b60717edb11c16779019a0337cd192df5681df34253da"
+    }
+   ],
+   "expected": "each probe's negative control fails when the behaviour is removed",
+   "id": "A08",
+   "observed": "105 tests pass including every probe and its control",
+   "oracle": "the probes in SILENT_FAILURES.md, implemented as independent fixtures",
+   "requirement": "The assigned silent-failure probes pass with sensitive positive and negative controls and honest counts.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_17.py::test_native_slice_unsupported_rows_carry_their_reason",
+    "implementation/tests/rule_discovery/test_p15_17.py::test_s15_a_row_without_its_pair_is_excluded_not_zeroed"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/search_run.py",
+     "symbol": "apply_holdout"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/BREADTH_RESULTS.json",
+     "selector": "/",
+     "sha256": "a81948e90ba77040a1db58d32eacb3b31f3a99eba7d68096b63e9d00179c1c3d"
+    },
+    {
+     "path": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/TRIALS.jsonl",
+     "selector": "/",
+     "sha256": "598d039293add35c99a93980b0ecd3fccc4fe8c8c9149569c815e0e2b2d4913b"
+    }
+   ],
+   "expected": "112 hold-out dates removed from the test window and recorded",
+   "id": "A09",
+   "observed": "holdout_excluded.days_excluded == 112 in the results and in every ledger row",
+   "oracle": "the split manifest's 2026 test list against the trimmed fold",
+   "requirement": "The 2026 outer block ends 2026-03-31 and the hold-out dates enter no tuning, selection, Holm family or gate; the count excluded is recorded.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_17.py::test_the_holdout_is_trimmed_from_every_fold_window",
+    "implementation/tests/rule_discovery/test_p15_17.py::test_a_holdout_date_cannot_change_a_breadth_fold_choice"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/search_run.py",
+     "symbol": "run_supplement"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/BREADTH_RESULTS.json",
+     "selector": "/",
+     "sha256": "a81948e90ba77040a1db58d32eacb3b31f3a99eba7d68096b63e9d00179c1c3d"
+    },
+    {
+     "path": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/TRIALS.jsonl",
+     "selector": "/",
+     "sha256": "598d039293add35c99a93980b0ecd3fccc4fe8c8c9149569c815e0e2b2d4913b"
+    }
+   ],
+   "expected": "20 declared, 16 executed, 4 duplicates; the fraction reaches profile_value_area",
+   "id": "A10",
+   "observed": "counts as expected; the SAINT P3 cells are the duplicates; profile_fraction recorded in the operands",
+   "oracle": "the declaration file and the adapters' own value-area fractions",
+   "requirement": "The profile supplement was declared and hashed before any result, ran on the same roots, folds and hold-out exclusion, entered the same ledger and Holm family of 164, and its cells equal to a branch's source fraction are duplicates, not run.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_17.py::test_the_supplement_is_declared_before_any_result_and_duplicates_are_not_run",
+    "implementation/tests/rule_discovery/test_p15_17.py::test_a_supplement_candidate_carries_its_fraction_into_the_profile_stage"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/search_run.py",
+     "symbol": "_unavailable_session"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/pytest.log",
+     "selector": "/",
+     "sha256": "ffebc4c68987314f5db2b25ceec3d1dd99805b7526fb0a981ffd0a710f581798"
+    }
+   ],
+   "expected": "2020-01-01 yields 160 session_unavailable rows and no paired day",
+   "id": "S06",
+   "observed": "160 rows, complete false, excluded from every denominator",
+   "oracle": "the run-1.0.1 declared date list against the tape calendar",
+   "requirement": "Coverage is not calendar-only: a declared session outside the native tape keeps a reconciled row per candidate with its reason and is not a complete zero-net-points day.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_17.py::test_declared_session_outside_the_tape_is_reconciled_not_dropped"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/search_run.py",
+     "symbol": "_load_b02_document"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/SELF_CHECK.txt",
+     "selector": "/",
+     "sha256": "c126b3e2962cfd62778b60717edb11c16779019a0337cd192df5681df34253da"
+    }
+   ],
+   "expected": "the recorded pairing sha256 recomputes from the P15-16A bytes and the entry id is present in that job's episodes",
+   "id": "S07",
+   "observed": "recomputed sha256 matches; entry id present; net points recompute exactly",
+   "oracle": "SELF_CHECK.txt, recomputed independently with plain json/gzip/Decimal",
+   "requirement": "Native evidence is traced to its source: every paired baseline is a P15-16A job document pinned by path and sha256 in the job record, and the self-check recomputes that digest from the bytes and finds the entry id in the source episodes.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_17.py::test_native_slice_rows_are_paired_to_the_actual_b02_job_bytes"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/search_run.py",
+     "symbol": "paired_row"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/pytest.log",
+     "selector": "/",
+     "sha256": "ffebc4c68987314f5db2b25ceec3d1dd99805b7526fb0a981ffd0a710f581798"
+    }
+   ],
+   "expected": "a complete zero-opportunity day enters the mean with 0; an incomplete or unpaired day is excluded with its reason",
+   "id": "S11",
+   "observed": "the mean over a zero day and a 2-point day is 1.0, not 2.0",
+   "oracle": "the contract's denominator rule in EVALUATION.md, exercised by an independent fixture",
+   "requirement": "A complete day with no opportunity keeps its zero in the denominator and a missing window is never imputed: paired_row admits only common complete days and every exclusion keeps its reason.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_17.py::test_s11_complete_zero_opportunity_day_stays_in_the_denominator"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/search_run.py",
+     "symbol": "pending_dates"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/pytest.log",
+     "selector": "/",
+     "sha256": "ffebc4c68987314f5db2b25ceec3d1dd99805b7526fb0a981ffd0a710f581798"
+    }
+   ],
+   "expected": "the validated shard is reused and only the truncated date is recomputed",
+   "id": "S12",
+   "observed": "one date recomputed; both shards byte-identical to the first run",
+   "oracle": "a fixture run twice with an interruption between",
+   "requirement": "A resumed run neither drops nor duplicates a job: checkpoints are validated against the daily shard digest, a truncated shard is redone and the resumed outputs are identical to the uninterrupted ones.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_17.py::test_resume_reuses_validated_shards_and_never_accepts_a_partial_one"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/search_run.py",
+     "symbol": "init_run"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/pytest.log",
+     "selector": "/",
+     "sha256": "ffebc4c68987314f5db2b25ceec3d1dd99805b7526fb0a981ffd0a710f581798"
+    }
+   ],
+   "expected": "a different bank or B0.2 root on an existing run root raises ContractError",
+   "id": "S13",
+   "observed": "ContractError naming the conflicting key",
+   "oracle": "an independent fixture that changes one configuration field",
+   "requirement": "A frozen run root retried with a different configuration is refused, and the per-date shards carry their own digests so no stale object is reused.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_17.py::test_conflicting_frozen_root_is_rejected"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/search_run.py",
+     "symbol": "paired_days"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/pytest.log",
+     "selector": "/",
+     "sha256": "ffebc4c68987314f5db2b25ceec3d1dd99805b7526fb0a981ffd0a710f581798"
+    }
+   ],
+   "expected": "a row without its pair is dropped from the paired series with its reason",
+   "id": "S15",
+   "observed": "only the matched day enters the series",
+   "oracle": "an independent fixture with a deliberately unmatched row",
+   "requirement": "The candidate-to-baseline join is one row per candidate-date; an unmatched or incomplete row is masked out explicitly rather than zeroed.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_17.py::test_s15_a_row_without_its_pair_is_excluded_not_zeroed"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/search.py",
+     "symbol": "build_enumeration_hook"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/pytest.log",
+     "selector": "/",
+     "sha256": "ffebc4c68987314f5db2b25ceec3d1dd99805b7526fb0a981ffd0a710f581798"
+    }
+   ],
+   "expected": "the candidate's contact ids differ from B0.2's on the proof date",
+   "id": "S22",
+   "observed": "contact populations differ for the enumeration axes",
+   "oracle": "the stage-A proof on a native session",
+   "requirement": "A changed rule enumerates its own contacts rather than filtering the baseline's: enumeration-axis candidates change the contact population on a native session.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_17.py::test_enumeration_axes_change_the_contact_population"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/search_run.py",
+     "symbol": "trial_records"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/TRIALS.jsonl",
+     "selector": "/",
+     "sha256": "598d039293add35c99a93980b0ecd3fccc4fe8c8c9149569c815e0e2b2d4913b"
+    },
+    {
+     "path": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/SELF_CHECK.txt",
+     "selector": "/",
+     "sha256": "c126b3e2962cfd62778b60717edb11c16779019a0337cd192df5681df34253da"
+    }
+   ],
+   "expected": "ledger rows equal candidates x folds, each with a disposition",
+   "id": "S24",
+   "observed": "counts reconcile exactly; every non-attempted row carries an attribution",
+   "oracle": "set reconciliation of the frozen bank against the ledger",
+   "requirement": "Every registered trial is in the ledger with a disposition and, where not promoted, a failure attribution; selection uses only inner evidence.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_17.py::test_s24_the_ledger_holds_every_registered_candidate_in_every_fold"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/search_run.py",
+     "symbol": "stream_run"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/SELF_CHECK.txt",
+     "selector": "/",
+     "sha256": "c126b3e2962cfd62778b60717edb11c16779019a0337cd192df5681df34253da"
+    }
+   ],
+   "expected": "a declared date with no shard is named in the coverage report",
+   "id": "S32",
+   "observed": "coverage names 2020-06-30 as the only date without a shard",
+   "oracle": "the run's own MANIFEST date list against the shards on disk",
+   "requirement": "The declared full population is reported honestly: the coverage block states the declared dates, the dates with documents, the retained failure and the hold-out exclusion, and a partial run cannot read as a full one.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_17.py::test_native_slice_summarize_reports_pending_work_honestly"
+   ]
+  }
+ ],
+ "schema_version": "research-evidence-matrix-v2",
+ "task_id": "P15-17"
+}

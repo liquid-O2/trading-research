@@ -1,0 +1,69 @@
+{
+ "attempt": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-19/definitive-0001",
+ "headline": [
+  {
+   "artifact": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-19/definitive-0001/EXIT_TRIALS.jsonl",
+   "name": "policies promoted over E0",
+   "sha256": "e27c8687bc968a713e25ca9d9b8d297d3c407be9e01394ced3cff6292461ef74",
+   "support": 72,
+   "unit": "of 72 policy-by-rule comparisons",
+   "value": 0
+  },
+  {
+   "artifact": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-19/definitive-0001/FIXED_ENTRIES.json",
+   "name": "frozen entries compared",
+   "sha256": "9409ff57faed379fdc1d5d0922f069aadf6cbd6a8e9ebbdfe1700e0b9f21365d",
+   "support": 9575,
+   "unit": "entries over 1680 account days and 18 selected rules",
+   "value": 9575
+  },
+  {
+   "artifact": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-19/definitive-0001/EXIT_COMPARISON.json",
+   "interval": [
+    3.8214285714285716,
+    33.82142857142857
+   ],
+   "name": "best comparison",
+   "sha256": "349ced7feef55f4cb71b83cb13eb7dc4f839e4caf3ae3a192874dd8cf7363535",
+   "unit": "net points per common complete day against E0 (KEANI-OPEN-ABOVE-VALUE:source_long:S4:favorable_ticks=1|E3)",
+   "value": 18.8214
+  },
+  {
+   "artifact": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-19/definitive-0001/EXIT_COMPARISON.json",
+   "name": "E0 reproduction mismatches",
+   "sha256": "349ced7feef55f4cb71b83cb13eb7dc4f839e4caf3ae3a192874dd8cf7363535",
+   "support": 9575,
+   "unit": "entries where the recomputed E0 differs from the entry run's own E0",
+   "value": 0
+  },
+  {
+   "artifact": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-19/definitive-0001/EXIT_COMPARISON.json",
+   "name": "hold-out days excluded",
+   "sha256": "349ced7feef55f4cb71b83cb13eb7dc4f839e4caf3ae3a192874dd8cf7363535",
+   "support": 112,
+   "unit": "account days, 2026-04-01 to 2026-09-03",
+   "value": 112
+  }
+ ],
+ "label": "definitive",
+ "lever": {
+  "change": "raise the share of entries that travel far enough for the policies to differ (better locations or a later entry) before asking a management policy to add value",
+  "evidence": "the share of entries whose exit reason differs between E0 and E4 rises well above its current level and E4's interval separates from zero"
+ },
+ "limits": [
+  "A bounded baseline study on the entries the selected rules produced, not a learned management system.",
+  "It is a separately counted decision family: it cannot promote or rescue an entry.",
+  "No hold-out date enters any comparison."
+ ],
+ "question": "With the entries frozen by the entry stage, does any of E1 to E4 beat the E0 baseline management on the selected rules?",
+ "schema_version": "research-result-card-v1",
+ "target": {
+  "met": "partial",
+  "text": "OUTCOMES.md unchanged-entry exit experiment: compare exactly E0 to E4 on frozen entries with the shared promotion gates, choosing only inside tuning, retaining every policy, and never rescuing an entry candidate"
+ },
+ "task_id": "P15-19",
+ "verdict": {
+  "reason": "All five policies ran on every frozen entry and the comparison is clean, but no alternative policy clears the gates, so the E0 baseline management stands.",
+  "value": "needs_upgrade"
+ }
+}

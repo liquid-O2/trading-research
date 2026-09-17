@@ -1,0 +1,606 @@
+{
+ "account_day": "2021-06-21",
+ "e0_mismatches": 0,
+ "entries": 7,
+ "rules": {
+  "GB-FAIL:previous_hour:F3:efficiency=0.5": [
+   {
+    "e0_matches_entry_run": true,
+    "entry_id": "b02:7c2162a160774fe017e057150babd117",
+    "fill_at_ns": 1624302180000000000,
+    "fill_price": "14131.5",
+    "initial_stop": "14132.50",
+    "objective": "14115.0",
+    "policies": {
+     "E0": {
+      "complete": true,
+      "entry_id": "b02:7c2162a160774fe017e057150babd117",
+      "exit_at_ns": 1624302363503464103,
+      "exit_price": "14132.50",
+      "net_dollars": "-25.00",
+      "net_points": "-1.25",
+      "occupancy_flagged": false,
+      "policy_id": "E0",
+      "reason": "stop",
+      "stop_updates": []
+     },
+     "E1": {
+      "complete": true,
+      "entry_id": "b02:7c2162a160774fe017e057150babd117",
+      "exit_at_ns": 1624302363503464103,
+      "exit_price": "14132.50",
+      "net_dollars": "-25.00",
+      "net_points": "-1.25",
+      "occupancy_flagged": false,
+      "policy_id": "E1",
+      "reason": "stop",
+      "stop_updates": []
+     },
+     "E2": {
+      "complete": true,
+      "entry_id": "b02:7c2162a160774fe017e057150babd117",
+      "exit_at_ns": 1624302363503464103,
+      "exit_price": "14132.50",
+      "net_dollars": "-25.00",
+      "net_points": "-1.25",
+      "occupancy_flagged": false,
+      "policy_id": "E2",
+      "reason": "stop",
+      "stop_updates": []
+     },
+     "E3": {
+      "complete": true,
+      "entry_id": "b02:7c2162a160774fe017e057150babd117",
+      "exit_at_ns": 1624302281138330385,
+      "exit_price": "14131.75",
+      "net_dollars": "-10.00",
+      "net_points": "-0.50",
+      "occupancy_flagged": false,
+      "policy_id": "E3",
+      "reason": "break-even stop",
+      "stop_updates": [
+       {
+        "effective_after_batch_id": "1624302180015125521",
+        "effective_available_at_ns": 1624302180015125521,
+        "kind": "break_even",
+        "stop": "14131.25",
+        "trigger_available_at_ns": 1624302180006601535,
+        "trigger_batch_id": "1624302180006601535"
+       }
+      ]
+     },
+     "E4": {
+      "complete": true,
+      "entry_id": "b02:7c2162a160774fe017e057150babd117",
+      "exit_at_ns": 1624302181762254119,
+      "exit_price": "14128.25",
+      "net_dollars": "60.00",
+      "net_points": "3.00",
+      "occupancy_flagged": false,
+      "policy_id": "E4",
+      "reason": "trailing stop",
+      "stop_updates": [
+       {
+        "effective_after_batch_id": "1624302180015125521",
+        "effective_available_at_ns": 1624302180015125521,
+        "kind": "trailing",
+        "stop": "14128.00",
+        "trigger_available_at_ns": 1624302180006601535,
+        "trigger_batch_id": "1624302180006601535"
+       },
+       {
+        "effective_after_batch_id": "1624302180184116385",
+        "effective_available_at_ns": 1624302180184116385,
+        "kind": "trailing",
+        "stop": "14127.75",
+        "trigger_available_at_ns": 1624302180015125521,
+        "trigger_batch_id": "1624302180015125521"
+       },
+       {
+        "effective_after_batch_id": "1624302180195336841",
+        "effective_available_at_ns": 1624302180195336841,
+        "kind": "trailing",
+        "stop": "14127.50",
+        "trigger_available_at_ns": 1624302180184116385,
+        "trigger_batch_id": "1624302180184116385"
+       },
+       {
+        "effective_after_batch_id": "1624302180228985101",
+        "effective_available_at_ns": 1624302180228985101,
+        "kind": "trailing",
+        "stop": "14127.25",
+        "trigger_available_at_ns": 1624302180195336841,
+        "trigger_batch_id": "1624302180195336841"
+       },
+       {
+        "effective_after_batch_id": "1624302181028276473",
+        "effective_available_at_ns": 1624302181028276473,
+        "kind": "trailing",
+        "stop": "14127.00",
+        "trigger_available_at_ns": 1624302181020328239,
+        "trigger_batch_id": "1624302181020328239"
+       }
+      ]
+     }
+    },
+    "recorded_e0": {
+     "exit_at_ns": 1624302363503464103,
+     "exit_reason": "stop",
+     "net_points": "-1.25"
+    },
+    "round_trip_cost": "5.00",
+    "side": -1
+   }
+  ],
+  "SAINT-AMT:continuation_retest:S1:deadline_minutes=15": [
+   {
+    "e0_matches_entry_run": true,
+    "entry_id": "b02:SAINT-AMT:continuation_retest:0",
+    "fill_at_ns": 1624261680000000000,
+    "fill_price": "14105.75",
+    "initial_stop": "14093.50",
+    "objective": "14108.75",
+    "policies": {
+     "E0": {
+      "complete": true,
+      "entry_id": "b02:SAINT-AMT:continuation_retest:0",
+      "exit_at_ns": 1624261683268036551,
+      "exit_price": "14109.00",
+      "net_dollars": "60.00",
+      "net_points": "3.00",
+      "occupancy_flagged": false,
+      "policy_id": "E0",
+      "reason": "objective",
+      "stop_updates": []
+     },
+     "E1": {
+      "complete": true,
+      "entry_id": "b02:SAINT-AMT:continuation_retest:0",
+      "exit_at_ns": 1624261683268036551,
+      "exit_price": "14109.00",
+      "net_dollars": "60.00",
+      "net_points": "3.00",
+      "occupancy_flagged": false,
+      "policy_id": "E1",
+      "reason": "objective",
+      "stop_updates": []
+     },
+     "E2": {
+      "complete": true,
+      "entry_id": "b02:SAINT-AMT:continuation_retest:0",
+      "exit_at_ns": 1624261683268036551,
+      "exit_price": "14109.00",
+      "net_dollars": "60.00",
+      "net_points": "3.00",
+      "occupancy_flagged": false,
+      "policy_id": "E2",
+      "reason": "objective",
+      "stop_updates": []
+     },
+     "E3": {
+      "complete": true,
+      "entry_id": "b02:SAINT-AMT:continuation_retest:0",
+      "exit_at_ns": 1624261683268036551,
+      "exit_price": "14109.00",
+      "net_dollars": "60.00",
+      "net_points": "3.00",
+      "occupancy_flagged": false,
+      "policy_id": "E3",
+      "reason": "objective",
+      "stop_updates": []
+     },
+     "E4": {
+      "complete": true,
+      "entry_id": "b02:SAINT-AMT:continuation_retest:0",
+      "exit_at_ns": 1624261683268036551,
+      "exit_price": "14109.00",
+      "net_dollars": "60.00",
+      "net_points": "3.00",
+      "occupancy_flagged": false,
+      "policy_id": "E4",
+      "reason": "objective",
+      "stop_updates": []
+     }
+    },
+    "recorded_e0": {
+     "exit_at_ns": 1624261683268036551,
+     "exit_reason": "objective",
+     "net_points": "3.00"
+    },
+    "round_trip_cost": "5.00",
+    "side": 1
+   },
+   {
+    "e0_matches_entry_run": true,
+    "entry_id": "b02:SAINT-AMT:continuation_retest:1",
+    "fill_at_ns": 1624262400000000000,
+    "fill_price": "14094.0",
+    "initial_stop": "14109.00",
+    "objective": "14093.75",
+    "policies": {
+     "E0": {
+      "complete": true,
+      "entry_id": "b02:SAINT-AMT:continuation_retest:1",
+      "exit_at_ns": 1624262401059167549,
+      "exit_price": "14094.50",
+      "net_dollars": "-15.00",
+      "net_points": "-0.75",
+      "occupancy_flagged": false,
+      "policy_id": "E0",
+      "reason": "objective",
+      "stop_updates": []
+     },
+     "E1": {
+      "complete": true,
+      "entry_id": "b02:SAINT-AMT:continuation_retest:1",
+      "exit_at_ns": 1624262401059167549,
+      "exit_price": "14094.50",
+      "net_dollars": "-15.00",
+      "net_points": "-0.75",
+      "occupancy_flagged": false,
+      "policy_id": "E1",
+      "reason": "objective",
+      "stop_updates": []
+     },
+     "E2": {
+      "complete": true,
+      "entry_id": "b02:SAINT-AMT:continuation_retest:1",
+      "exit_at_ns": 1624262401059167549,
+      "exit_price": "14094.50",
+      "net_dollars": "-15.00",
+      "net_points": "-0.75",
+      "occupancy_flagged": false,
+      "policy_id": "E2",
+      "reason": "objective",
+      "stop_updates": []
+     },
+     "E3": {
+      "complete": true,
+      "entry_id": "b02:SAINT-AMT:continuation_retest:1",
+      "exit_at_ns": 1624262401059167549,
+      "exit_price": "14094.50",
+      "net_dollars": "-15.00",
+      "net_points": "-0.75",
+      "occupancy_flagged": false,
+      "policy_id": "E3",
+      "reason": "objective",
+      "stop_updates": []
+     },
+     "E4": {
+      "complete": true,
+      "entry_id": "b02:SAINT-AMT:continuation_retest:1",
+      "exit_at_ns": 1624262401059167549,
+      "exit_price": "14094.50",
+      "net_dollars": "-15.00",
+      "net_points": "-0.75",
+      "occupancy_flagged": false,
+      "policy_id": "E4",
+      "reason": "objective",
+      "stop_updates": []
+     }
+    },
+    "recorded_e0": {
+     "exit_at_ns": 1624262401059167549,
+     "exit_reason": "objective",
+     "net_points": "-0.75"
+    },
+    "round_trip_cost": "5.00",
+    "side": -1
+   }
+  ],
+  "SAINT-AMT:continuation_retest:S1:deadline_minutes=5": [
+   {
+    "e0_matches_entry_run": true,
+    "entry_id": "b02:SAINT-AMT:continuation_retest:1",
+    "fill_at_ns": 1624262400000000000,
+    "fill_price": "14094.0",
+    "initial_stop": "14109.00",
+    "objective": "14093.75",
+    "policies": {
+     "E0": {
+      "complete": true,
+      "entry_id": "b02:SAINT-AMT:continuation_retest:1",
+      "exit_at_ns": 1624262401059167549,
+      "exit_price": "14094.50",
+      "net_dollars": "-15.00",
+      "net_points": "-0.75",
+      "occupancy_flagged": false,
+      "policy_id": "E0",
+      "reason": "objective",
+      "stop_updates": []
+     },
+     "E1": {
+      "complete": true,
+      "entry_id": "b02:SAINT-AMT:continuation_retest:1",
+      "exit_at_ns": 1624262401059167549,
+      "exit_price": "14094.50",
+      "net_dollars": "-15.00",
+      "net_points": "-0.75",
+      "occupancy_flagged": false,
+      "policy_id": "E1",
+      "reason": "objective",
+      "stop_updates": []
+     },
+     "E2": {
+      "complete": true,
+      "entry_id": "b02:SAINT-AMT:continuation_retest:1",
+      "exit_at_ns": 1624262401059167549,
+      "exit_price": "14094.50",
+      "net_dollars": "-15.00",
+      "net_points": "-0.75",
+      "occupancy_flagged": false,
+      "policy_id": "E2",
+      "reason": "objective",
+      "stop_updates": []
+     },
+     "E3": {
+      "complete": true,
+      "entry_id": "b02:SAINT-AMT:continuation_retest:1",
+      "exit_at_ns": 1624262401059167549,
+      "exit_price": "14094.50",
+      "net_dollars": "-15.00",
+      "net_points": "-0.75",
+      "occupancy_flagged": false,
+      "policy_id": "E3",
+      "reason": "objective",
+      "stop_updates": []
+     },
+     "E4": {
+      "complete": true,
+      "entry_id": "b02:SAINT-AMT:continuation_retest:1",
+      "exit_at_ns": 1624262401059167549,
+      "exit_price": "14094.50",
+      "net_dollars": "-15.00",
+      "net_points": "-0.75",
+      "occupancy_flagged": false,
+      "policy_id": "E4",
+      "reason": "objective",
+      "stop_updates": []
+     }
+    },
+    "recorded_e0": {
+     "exit_at_ns": 1624262401059167549,
+     "exit_reason": "objective",
+     "net_points": "-0.75"
+    },
+    "round_trip_cost": "5.00",
+    "side": -1
+   }
+  ],
+  "SIRES:absorption_reward_retest:M1:max_prior_contacts=0": [
+   {
+    "e0_matches_entry_run": true,
+    "entry_id": "b02:SIRES:absorption_reward_retest:short:1624226841844341829",
+    "fill_at_ns": 1624226841844341829,
+    "fill_price": "14030.00",
+    "initial_stop": "14032.00",
+    "objective": "14020.00",
+    "policies": {
+     "E0": {
+      "complete": true,
+      "entry_id": "b02:SIRES:absorption_reward_retest:short:1624226841844341829",
+      "exit_at_ns": 1624226864447664969,
+      "exit_price": "14032.75",
+      "net_dollars": "-60.00",
+      "net_points": "-3.00",
+      "occupancy_flagged": false,
+      "policy_id": "E0",
+      "reason": "stop",
+      "stop_updates": []
+     },
+     "E1": {
+      "complete": true,
+      "entry_id": "b02:SIRES:absorption_reward_retest:short:1624226841844341829",
+      "exit_at_ns": 1624226864447664969,
+      "exit_price": "14032.75",
+      "net_dollars": "-60.00",
+      "net_points": "-3.00",
+      "occupancy_flagged": false,
+      "policy_id": "E1",
+      "reason": "stop",
+      "stop_updates": []
+     },
+     "E2": {
+      "complete": true,
+      "entry_id": "b02:SIRES:absorption_reward_retest:short:1624226841844341829",
+      "exit_at_ns": 1624226864447664969,
+      "exit_price": "14032.75",
+      "net_dollars": "-60.00",
+      "net_points": "-3.00",
+      "occupancy_flagged": false,
+      "policy_id": "E2",
+      "reason": "stop",
+      "stop_updates": []
+     },
+     "E3": {
+      "complete": true,
+      "entry_id": "b02:SIRES:absorption_reward_retest:short:1624226841844341829",
+      "exit_at_ns": 1624226864447664969,
+      "exit_price": "14032.75",
+      "net_dollars": "-60.00",
+      "net_points": "-3.00",
+      "occupancy_flagged": false,
+      "policy_id": "E3",
+      "reason": "stop",
+      "stop_updates": []
+     },
+     "E4": {
+      "complete": true,
+      "entry_id": "b02:SIRES:absorption_reward_retest:short:1624226841844341829",
+      "exit_at_ns": 1624226864447664969,
+      "exit_price": "14032.75",
+      "net_dollars": "-60.00",
+      "net_points": "-3.00",
+      "occupancy_flagged": false,
+      "policy_id": "E4",
+      "reason": "stop",
+      "stop_updates": []
+     }
+    },
+    "recorded_e0": {
+     "exit_at_ns": 1624226864447664969,
+     "exit_reason": "stop",
+     "net_points": "-3.00"
+    },
+    "round_trip_cost": "5.00",
+    "side": -1
+   },
+   {
+    "e0_matches_entry_run": true,
+    "entry_id": "b02:SIRES:absorption_reward_retest:long:1624227309410163037",
+    "fill_at_ns": 1624227309410163037,
+    "fill_price": "14022.00",
+    "initial_stop": "14020.00",
+    "objective": "14032.00",
+    "policies": {
+     "E0": {
+      "complete": true,
+      "entry_id": "b02:SIRES:absorption_reward_retest:long:1624227309410163037",
+      "exit_at_ns": 1624227332575944901,
+      "exit_price": "14019.25",
+      "net_dollars": "-60.00",
+      "net_points": "-3.00",
+      "occupancy_flagged": false,
+      "policy_id": "E0",
+      "reason": "stop",
+      "stop_updates": []
+     },
+     "E1": {
+      "complete": true,
+      "entry_id": "b02:SIRES:absorption_reward_retest:long:1624227309410163037",
+      "exit_at_ns": 1624227332575944901,
+      "exit_price": "14019.25",
+      "net_dollars": "-60.00",
+      "net_points": "-3.00",
+      "occupancy_flagged": false,
+      "policy_id": "E1",
+      "reason": "stop",
+      "stop_updates": []
+     },
+     "E2": {
+      "complete": true,
+      "entry_id": "b02:SIRES:absorption_reward_retest:long:1624227309410163037",
+      "exit_at_ns": 1624227332575944901,
+      "exit_price": "14019.25",
+      "net_dollars": "-60.00",
+      "net_points": "-3.00",
+      "occupancy_flagged": false,
+      "policy_id": "E2",
+      "reason": "stop",
+      "stop_updates": []
+     },
+     "E3": {
+      "complete": true,
+      "entry_id": "b02:SIRES:absorption_reward_retest:long:1624227309410163037",
+      "exit_at_ns": 1624227332575944901,
+      "exit_price": "14019.25",
+      "net_dollars": "-60.00",
+      "net_points": "-3.00",
+      "occupancy_flagged": false,
+      "policy_id": "E3",
+      "reason": "stop",
+      "stop_updates": []
+     },
+     "E4": {
+      "complete": true,
+      "entry_id": "b02:SIRES:absorption_reward_retest:long:1624227309410163037",
+      "exit_at_ns": 1624227332575944901,
+      "exit_price": "14019.25",
+      "net_dollars": "-60.00",
+      "net_points": "-3.00",
+      "occupancy_flagged": false,
+      "policy_id": "E4",
+      "reason": "stop",
+      "stop_updates": []
+     }
+    },
+    "recorded_e0": {
+     "exit_at_ns": 1624227332575944901,
+     "exit_reason": "stop",
+     "net_points": "-3.00"
+    },
+    "round_trip_cost": "5.00",
+    "side": 1
+   },
+   {
+    "e0_matches_entry_run": true,
+    "entry_id": "b02:SIRES:absorption_reward_retest:short:1624228457332966671",
+    "fill_at_ns": 1624228457332966671,
+    "fill_price": "14037.75",
+    "initial_stop": "14039.75",
+    "objective": "14027.75",
+    "policies": {
+     "E0": {
+      "complete": true,
+      "entry_id": "b02:SIRES:absorption_reward_retest:short:1624228457332966671",
+      "exit_at_ns": 1624228469692689255,
+      "exit_price": "14039.25",
+      "net_dollars": "-35.00",
+      "net_points": "-1.75",
+      "occupancy_flagged": false,
+      "policy_id": "E0",
+      "reason": "stop",
+      "stop_updates": []
+     },
+     "E1": {
+      "complete": true,
+      "entry_id": "b02:SIRES:absorption_reward_retest:short:1624228457332966671",
+      "exit_at_ns": 1624228469692689255,
+      "exit_price": "14039.25",
+      "net_dollars": "-35.00",
+      "net_points": "-1.75",
+      "occupancy_flagged": false,
+      "policy_id": "E1",
+      "reason": "stop",
+      "stop_updates": []
+     },
+     "E2": {
+      "complete": true,
+      "entry_id": "b02:SIRES:absorption_reward_retest:short:1624228457332966671",
+      "exit_at_ns": 1624228469692689255,
+      "exit_price": "14039.25",
+      "net_dollars": "-35.00",
+      "net_points": "-1.75",
+      "occupancy_flagged": false,
+      "policy_id": "E2",
+      "reason": "stop",
+      "stop_updates": []
+     },
+     "E3": {
+      "complete": true,
+      "entry_id": "b02:SIRES:absorption_reward_retest:short:1624228457332966671",
+      "exit_at_ns": 1624228469692689255,
+      "exit_price": "14039.25",
+      "net_dollars": "-35.00",
+      "net_points": "-1.75",
+      "occupancy_flagged": false,
+      "policy_id": "E3",
+      "reason": "stop",
+      "stop_updates": []
+     },
+     "E4": {
+      "complete": true,
+      "entry_id": "b02:SIRES:absorption_reward_retest:short:1624228457332966671",
+      "exit_at_ns": 1624228469692689255,
+      "exit_price": "14039.25",
+      "net_dollars": "-35.00",
+      "net_points": "-1.75",
+      "occupancy_flagged": false,
+      "policy_id": "E4",
+      "reason": "stop",
+      "stop_updates": []
+     }
+    },
+    "recorded_e0": {
+     "exit_at_ns": 1624228469692689255,
+     "exit_reason": "stop",
+     "net_points": "-1.75"
+    },
+    "round_trip_cost": "5.00",
+    "side": -1
+   }
+  ]
+ },
+ "schema_version": "research-p15-19-exit-shard-v1",
+ "task_id": "P15-19"
+}
