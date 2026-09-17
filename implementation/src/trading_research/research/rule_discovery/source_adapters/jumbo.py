@@ -2206,7 +2206,7 @@ def _eq_lines(market, branch: str) -> tuple[dict[str, Any] | None, list[dict[str
                      "short": [{"name": "eq", "price": box["eq"]}, {"name": "box_low", "price": box["low"]}, {"name": "minus_0.5", "price": box["ladder"]["minus_0.5"]}]}
         if not (read.get("open_inside_value") or read.get("big_range")):
             return None, [{"reason": "rotation_needs_inside_value_or_big_range", "branch": branch, "play": "big_range_eq"}]
-    return {"context": context, "sides": sides, "begin": begin, "end": end, "lines": lines, "objective": objective, "direction": direction}, []
+    return {"context": context, "box": box, "sides": sides, "begin": begin, "end": end, "lines": lines, "objective": objective, "direction": direction}, []
 
 
 def _scan_eq_branch(market, branch: str) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
@@ -2226,7 +2226,7 @@ def _scan_eq_branch(market, branch: str) -> tuple[list[dict[str, Any]], list[dic
     plan, omissions = _eq_lines(market, branch)
     if plan is None:
         return [], omissions
-    context, sides, begin, end, lines, objective, direction = (plan[key] for key in ("context", "sides", "begin", "end", "lines", "objective", "direction"))
+    context, box, sides, begin, end, lines, objective, direction = (plan[key] for key in ("context", "box", "sides", "begin", "end", "lines", "objective", "direction"))
     episodes: list[dict[str, Any]] = []
     for kind, level in lines:
         if level is None:

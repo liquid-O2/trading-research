@@ -265,6 +265,7 @@ def test_j6_the_day_read_is_recorded_with_its_inputs_and_gates_the_plays():
     assert set(read["inputs"]) >= {"range_pct", "range_bin", "open_location", "overnight_purged_high", "overnight_purged_low", "edges_still_drawn"}
     assert read["unavailable_inputs"] == ["sister_index_relative_strength", "news_calendar"]
     document = jj.scan_b02(market, {"branch": "all"})
+    assert not [row for row in document["omissions"] if row.get("reason") == "scan_error"], "a branch raised"
     plays = {ep["values"]["play"] for ep in document["episodes"]}
     assert plays <= set(read["plays"])
     # J-C: every play stays available; a branch is left out only by the read
@@ -444,6 +445,8 @@ def test_frequency_selection_takes_the_chosen_play_first_and_keeps_one_position(
     section 11) and is gated in the plausibility test."""
     market = _session()
     document = jj.scan_b02(market, {"branch": "all"})
+    assert not [row for row in document["omissions"] if row.get("reason") == "scan_error"], "a branch raised"
+    assert {ep["branch"] for ep in document["episodes"]} >= {"single_purged", "internal_rotation"}, "the EQ plays scan on the fixture"
     selection = document["selection"]
     assert selection["primary_play"] == document["day_read"]["primary_play"]
     assert selection["n_entries"] <= jj.NY_ROUND_TRIPS + jj.LONDON_ROUND_TRIPS

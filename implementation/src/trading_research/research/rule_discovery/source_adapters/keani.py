@@ -393,12 +393,34 @@ def scan_keani_branch_b02(market, branch: str) -> tuple[list[dict[str, Any]], di
         if observation and (row.get("observed_complete") or row.get("complete")) and row.get("C") is not None:
             vah = None if current is None else current.get("vah")
             if vah is not None and dec(row["C"]) > dec(vah):
+                # The stacked-imbalance object needs the candle's footprint
+                # rows; asking for it by candle id alone never returned a run
+                # (fidelity round 8, section 10.4), which is why the trigger
+                # never fired on the days that reached it.
                 runs = []
+                footprint = None
                 try:
-                    im = market.domain("O109", {"candle_id": row.get("bar_id")})
-                    runs = im.get("buy_runs") or []
+                    footprint = market.window.footprints.get(row.get("start"))
                 except Exception:
-                    runs = []
+                    footprint = None
+                if footprint and not any(u > 0 for _px, _b, _s, u in footprint["rows"]):
+                    cfg = setting("imbalance")
+                    try:
+                        im = market.domain(
+                            "O109",
+                            {
+                                "candle_id": row.get("bar_id"),
+                                "footprint_rows": [{"price": px, "B": b, "A": s} for px, b, s, u in footprint["rows"]],
+                                "q": Q,
+                                "ratio_min": _D(str(cfg["ratio"])),
+                                "row_count": cfg["consecutive_rows"],
+                                "zero_rule": cfg["zero"],
+                                "known_at": row.get("known_at"),
+                            },
+                        )
+                        runs = im.get("buy_runs") or []
+                    except Exception:
+                        runs = []
                 if fx.get("imbalance_band") is not None:
                     runs = [{"band": fx["imbalance_band"]}]
                 if runs or fx.get("imbalance_band") is not None:
