@@ -33,9 +33,19 @@ The mean list sizes a day are printed beside the author's one to three so the ga
 
 R:R-tool tickets carry the time the tool was drawn, not the fill. Where the printed fill price does not trade at the drawn time, the record's time is now the window in which that price trades on our tape: GB 08-11 20:01–20:13 (drawn 20:40, price 29,653–29,658 then), 09-03 00:32–00:35 (drawn 00:45), 04-23 12:35–12:36 (drawn 13:00; 27,116.25 prints only there), 08-27 12:50–12:56 (drawn 13:00) and 11:21–11:24 (drawn 11:30; price 29,566–29,580 then), 08-13 11:20–11:27 (drawn 11:30), 07-29 22:04–22:25 (drawn 22:20; the price first trades at the 22:04–22:05 failure close). Branch alternatives "a / b" are recorded where one author level is two adapter references: 08-27 13:00 (the 12:45 high above the 9–10/10–11 highs he names), 04-28 09:30 (the opening bar's sweep of the 09:00–09:30 low inside the developing 9–10 box), 08-13 (the trailing hour's high is the 10–11 box high at 11:24).
 
-## 5. Per-day, per-play opportunity table
+## 5. Per-day, per-play opportunity table (uncapped candidate lists)
 
-Filled from `opps_jj.json` / `opps_gb.json` (uncapped candidate lists) when the runs complete; see the addendum at the end of this file.
+Every opportunity the framework admits on the 40 dated sessions, once, without segment caps (only the per-line limit: two trades on one line for Jumbo, three for Green Bird). `in list` = the author's entry is one of them within 10 points on the right bar (any supported fill of that opportunity). Full per-day rows: `opps_jj2.json`, `opps_gb4.json` in the session scratchpad; the replay tables in this directory carry the capped lists.
+
+| family, rule state | opportunities a day (min–max) | author's entries in the list | a day, by play |
+| --- | --- | --- | --- |
+| Jumbo, pass 8 | 17.7 (8–34) | 23 of 24 | other_session 7.0, judas_reversal 6.1, internal_rotation 3.4, single_extended 0.5, extension_reaction 0.3, single_purged 0.2, judas_outbound 0.1 |
+| Jumbo + Judas raids confined to 09:00–10:15 (TBR p.8) | 17.3 (8–34) | 23 of 24 | other_session 7.0, judas_reversal 5.7, internal_rotation 3.4, single_extended 0.5, extension_reaction 0.3, single_purged 0.2, judas_outbound 0.1 |
+| Green Bird, pass 8 | 50.5 (8–72) | 13 of 16 | nyam_box 14.5, previous_hour 14.0, prior_day 4.8, london_box 4.2, asia_tdo_case 3.1, golden_pocket 3.1, cash_open 2.7, prior_week 2.5, asia_box 1.8 |
+| Green Bird + a running edge is one line | 46.8 (8–61) | 14 of 16 | previous_hour 14.2, nyam_box 12.3, prior_day 4.8, asia_tdo_case 3.1, golden_pocket 3.1, cash_open 2.7, prior_week 2.5, london_box 2.4, asia_box 1.8 |
+| Green Bird + his rules: last completed hour (GB p.1), closed 9–10 box (p.5), overnight bias (pp.9–11), one post-open re-entry | 37.9 (8–57) | 13 of 16 | previous_hour 9.8, nyam_box 9.2, prior_day 4.2, asia_tdo_case 3.1, cash_open 2.8, golden_pocket 2.6, london_box 2.4, prior_week 2.1, asia_box 1.8 |
+
+The two Green Bird entries outside the list in the last row are the ones his own rules exclude or the tape cannot print: 2025-11-20 (MNQ level, §3) and 2026-04-28 09:45 (his documented mistake, GB p.5); 2025-11-19 dropped out of that row through a coding slip in the post-open re-entry (it must ride the last overnight cycle that failed, not the last cycle), fixed and being re-counted. The author takes one to three trades a day; the framework admits 17 (Jumbo) and roughly 35 (Green Bird) after his stated rules. The remaining multiplier is mechanical breadth he prunes by grading ("you're always scoring and rating a setup", GB p.4; "context - location - confirmation", JR p.33): which of the drawn levels' failures he takes when several occur, and which edge of the 6–9 he takes first.
 
 ## 6. Rules verified against the source this round
 

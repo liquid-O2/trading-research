@@ -608,6 +608,9 @@ def session_references(market) -> tuple[list[dict[str, Any]], list[dict[str, Any
     # p.7): each completed clock hour, and -- as with the NY boxes -- the hour
     # in progress half an hour in (2026-08-27's 13:00 short is the failed push
     # above the 12:00-13:00 hour's high of 12:43, swept at 12:45).
+    # "Previous-hour range: the last completed 60 minutes" (GB p.1): one
+    # completed hour is the reference at a time, replaced when the next hour
+    # closes; the hour in progress rides beside it from half past.
     for hour in range(11, 16):
         add_box(
             f"hour_box_{hour:02d}",
@@ -617,6 +620,9 @@ def session_references(market) -> tuple[list[dict[str, Any]], list[dict[str, Any
             f"hour-box-{hour:02d}",
             running_after=int(_at(market, f"{hour:02d}:30")),
         )
+        completed = next((ref for ref in refs if ref["kind"] == f"hour_box_{hour:02d}"), None)
+        if completed is not None:
+            completed["superseded_at"] = int(_at(market, f"{min(hour + 2, 16):02d}:00"))
 
     # The author's NY boxes stay drawn overnight: 2026-08-11's 20:40 long was
     # taken at the previous session's 09:00-10:00 box low with the PDH as the
@@ -1635,6 +1641,7 @@ def _fail_branch_episodes(market, refs: Sequence[Mapping[str, Any]], objectives:
             if line_reference and begin < open_ns < fail_by:
                 windows = [(begin, open_ns), (open_ns, fail_by)]
             cycles = []
+            last_overnight_cycle = None
             for w_begin, w_end in windows:
                 for cycle in sweep_cycles(
                     market,
@@ -1653,6 +1660,12 @@ def _fail_branch_episodes(market, refs: Sequence[Mapping[str, Any]], objectives:
                     # post_open_retest mode (G-G)
                     cycle["fill_end"] = int(w_end)
                     cycles.append(cycle)
+                    if int(w_end) <= open_ns and cycle.get("fail") is not None:
+                        # the re-entry belongs to the last overnight cycle that
+                        # actually failed (2025-11-19: the PWL's 04:18 sweep
+                        # and reclaim carries the 09:35 long; a later held
+                        # sweep does not)
+                        last_overnight_cycle = cycle["cycle"]
             for cycle in cycles:
                 if int(cycle["sweep_at"]) >= end:
                     continue  # a later cut owns that sweep
@@ -1772,8 +1785,10 @@ def _fail_branch_episodes(market, refs: Sequence[Mapping[str, Any]], objectives:
                 # same level (2025-11-19 swept and reclaimed the previous week's
                 # low at 04:18 and the author bought it at 10:00). It is a second
                 # fill of the same opportunity, not a second setup.
-                open_ns = int(_at(market, "09:30"))
-                if minute is not None and int(minute["decision_at"]) < open_ns < int(end):
+                # (one re-entry per level and side: the last overnight cycle
+                # carries it; three overnight cycles of the PDL on 2026-09-01
+                # otherwise put three identical 11:42 retests in the list)
+                if minute is not None and int(minute["decision_at"]) < open_ns < int(end) and cycle.get("cycle") == last_overnight_cycle:
                     post = None
                     for row in _safe_bars(market, open_ns, min(int(end), open_ns + RETEST_WINDOW_NS)):
                         row_lo, row_hi = _d(row.get("L")), _d(row.get("H"))
@@ -2930,6 +2945,21 @@ def selection_for(market, episodes: Sequence[Mapping[str, Any]], *, primary_play
             # (2026-08-31) and is traded only there; elsewhere it fired on the
             # first bars of the session (18:03) and on every false failure
             pool = [ep for ep in pool if (ep.get("values") or {}).get("confirmation_mode") != "next_bar_open"]
+        # "Do not enter the NYAM idea before the box exists. He documented a
+        # $12K day where the mistake was entering at 9:45 AM" (GB p.5, the
+        # 2026-04-28 chart): the developing 9-10 box is not in his model's
+        # list; its fills stay in the scan as the documented exception.
+        pool = [ep for ep in pool if str((ep.get("values") or {}).get("reference_kind", "")) != "ny_box_09_10_running"]
+        # "If overnight already did the clean reclaim (e.g. PDL swept and
+        # held): bias is set. During NYAM he buys pullbacks into discount /
+        # golden pocket rather than only fading a fresh range" (GB pp.9-10;
+        # Jul 14 "Bias from overnight PDL sweep and reclaim. Long overnight.
+        # NYAM: buy pullbacks / golden pockets / sweeps in the direction of
+        # that reclaim"). The 09:30 manipulation is a separate trigger (GB
+        # p.2) and is not filtered.
+        bias = read.get("bias")
+        if name == "ny" and bias in ("long", "short"):
+            pool = [ep for ep in pool if ep.get("side") == bias]
         # adds in the direction of the position are his by hand ("position
         # shown as 8 at 29,680.75"); they are the same opportunity, not a
         # second trade in the list

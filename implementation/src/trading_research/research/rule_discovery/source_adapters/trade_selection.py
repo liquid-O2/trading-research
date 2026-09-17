@@ -148,15 +148,19 @@ def _episode_key(episode: Mapping[str, Any]) -> tuple:
         return (branch, episode.get("side"), values.get("reference_id") or (episode.get("reference") or {}).get("id"), "pocket", None, None)
     kind = str(values.get("reference_kind") or "")
     running = kind.endswith("_running") or kind == "trailing_hour"
-    # a running reference is one line however many five-minute cuts it went
-    # through: the cut id is not part of the opportunity
+    if running:
+        # a developing box has ONE high and ONE low however many five-minute
+        # cuts it goes through and whatever price each cut printed: the edge
+        # is the opportunity (2026-08-27: seven "lines" of the 12-13 hour's
+        # high were one line moving up)
+        return (episode.get("branch"), episode.get("side"), None, kind.replace("_running", ""), str(values.get("level_edge") or ""), None)
     return (
         episode.get("branch"),
         episode.get("side"),
-        None if running else (values.get("reference_id") or (episode.get("reference") or {}).get("id")),
-        kind.replace("_running", ""),
+        values.get("reference_id") or (episode.get("reference") or {}).get("id"),
+        kind,
         str(values.get("reference_px")),
-        values.get("cycle") if not running else None,
+        values.get("cycle"),
     )
 
 
@@ -243,7 +247,7 @@ def select_session_trades(
     busy_line: Decimal | None = None
     round_trips = 0
     finished = False
-    per_line: list[tuple[str, Decimal]] = []
+    per_line: list[tuple[str, Decimal, tuple | None]] = []
     skipped = {"duplicate": 0, "position_open": 0, "after_objective": 0, "max_entries": 0, "max_per_line": 0}
     NEAR_PRICE = Decimal("2")
     NEAR_NS = 10 * 60 * 1_000_000_000
@@ -273,6 +277,7 @@ def select_session_trades(
             skipped["after_objective"] += 1
             continue
         line_px = _d((episode.get("values") or {}).get("reference_px")) or entry
+        running_line = _episode_key(episode)[2] is None
         in_position = one_position and busy_until is not None and decision < busy_until and str(episode.get("side")) == busy_side
         # an add: the same side while the position is live -- any line when
         # ``allow_adds`` is True, the SAME line on a later cycle when it is
@@ -281,7 +286,8 @@ def select_session_trades(
         if not is_add and round_trips >= max_entries:
             skipped["max_entries"] += 1
             continue
-        if max_per_line is not None and sum(1 for side_, px in per_line if side_ == str(episode.get("side")) and abs(px - line_px) <= NEAR_PRICE * 3) >= max_per_line:
+        line_tag = _episode_key(episode)[:2] + _episode_key(episode)[3:5] if running_line else None
+        if max_per_line is not None and sum(1 for side_, px, tag in per_line if side_ == str(episode.get("side")) and ((tag is not None and tag == line_tag) or (tag is None and line_tag is None and abs(px - line_px) <= NEAR_PRICE * 3))) >= max_per_line:
             skipped["max_per_line"] += 1
             continue
         # One position at a time blocks the OPPOSITE side while a trade is live;
@@ -333,7 +339,7 @@ def select_session_trades(
         )
         if not is_add:
             round_trips += 1
-        per_line.append((str(episode.get("side")), line_px))
+        per_line.append((str(episode.get("side")), line_px, line_tag))
         if busy_until is None or result["at_ns"] is None or (busy_until is not None and result["at_ns"] > busy_until):
             busy_until = result["at_ns"]
         busy_side = str(episode.get("side"))

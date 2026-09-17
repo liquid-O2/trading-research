@@ -293,6 +293,13 @@ EXTENSION_BAND = (Decimal("1.33"), Decimal("1.66"))
 # window is an operand, never a gate (JR p.20 sell at 09:03; 2026-01-09 09:32;
 # 2026-02-24 09:33; 2026-08-28 09:30-09:32).
 NY_ACTION = ("09:00", "12:00")
+# The Judas raids of the 6-9 edges belong to the open: "the judas trades from
+# 9:30 to the reversal window and the actual reversal trade between the 9:40
+# and 9:50 ... always terminating my trading session before 10am" (TBR p.8);
+# his dated Judas entries run 09:05 (a pre-open raid, 2025-10-13) to 10:10
+# (2025-10-03). A raid of the edge after that is the extension or rotation
+# cycle's business ("cycle 2 from there to 12:00"), not a Judas.
+JUDAS_RAID_WINDOW = ("09:00", "10:15")
 NY_EXTENSION_ACTION = ("10:00", "16:00")
 MODAL_WINDOW = ("09:40", "09:50")
 LONDON_BOX_WINDOW = ("02:00", "03:00")
@@ -2049,8 +2056,9 @@ def _scan_judas_reversal(market) -> tuple[list[dict[str, Any]], list[dict[str, A
     # JR p.20). The first two raids of an edge are the opportunities; how far
     # the raid reached (its depth class, the exhaustion levels it met) is
     # recorded on the episode for the context study, not used as a gate.
+    raid_end = min(_at(market, JUDAS_RAID_WINDOW[1]), end)
     for name, side, level in (("box_high", "short", box["high"]), ("box_low", "long", box["low"])):
-        for cycle in sweep_cycles(market, level=level, side=side, begin=begin, end=end, max_cycles=2):
+        for cycle in sweep_cycles(market, level=level, side=side, begin=_at(market, JUDAS_RAID_WINDOW[0]), end=raid_end, max_cycles=2):
             extreme = cycle["extreme"]
             depth = (level - extreme) if side == "long" else (extreme - level)
             klass = depth_class(depth, box["width"])
