@@ -2320,6 +2320,36 @@
         }
       ],
       "previous_entry_sha256": "f0da3331c0437232e25adfa173d165516c01707eeed778e636235e94dfa09336"
+    },
+    {
+      "prior_plan_version": "research-plan-2026-09-14-v3",
+      "new_plan_version": "research-plan-2026-09-14-v3",
+      "assurance_version": "research-assurance-2026-09-14-v3",
+      "unchanged": [
+        "Research formulas and source attribution",
+        "Finite candidate/trial budgets and statistical selection rules",
+        "Accepted Phase 1 code/data/report identities",
+        "Pinned foundation checker tools/check_foundation_adversarial.py",
+        "Pinned outcome fixture checker tools/check_outcome_fixtures.py",
+        "Acceptance amendment research-assurance-2026-09-14-v3"
+      ],
+      "execution_rule": "Preserve old reports and their original plan identities. New work after this amendment binds research-assurance-2026-09-14-v3. Plan-file live mismatches verify through this amendment chain starting at the declared hash; code-file live mismatches verify through a later verified successor receipt.",
+      "exposure_rule": "Carry all previously exposed dates and inspected coverage forward. Descriptive regime cuts in the B0 Strategy Book edition do not select candidates, thresholds or dates.",
+      "id": "amendment-2026-09-17-artifact-directory-names",
+      "date": "2026-09-17",
+      "scope": "TASK_GRAPH.json artifact entries that name a directory drop their trailing slash (P15-17: FAMILY_REPORTS/; P15-19: FAMILY_REPORTS/; P15-20: STRATEGY_BOOK_CSVS/; P2-02A: FAMILY_REPORTS/; P2-24: STRATEGY_BOOK_CSVS/, EXPERT_SCORECARDS/). The verifier matches required artifacts by manifest entry name, which never carries a slash, so the slashed spelling could never be satisfied. No artifact, acceptance key or dependency changes meaning.",
+      "reason": "Found 2026-09-17 while verifying the P15-17 definitive receipt: 'required artifacts missing: FAMILY_REPORTS/' although the directory and its manifest entry exist.",
+      "changes": [
+        "planning/research-program/TASK_GRAPH.json"
+      ],
+      "changed_files": [
+        {
+          "path": "planning/research-program/TASK_GRAPH.json",
+          "sha256_before": "96dc1e5bbd714477f8bdae911ceb46472c9d0aa858e70effc1da18f519132d88",
+          "sha256_after": "845074010925f337f1175a85607807bf73d0e940f7994e152a2d7776f3d827a6"
+        }
+      ],
+      "previous_entry_sha256": "c46e5d7025ad5172ef4b2ad12a3b959280d90940cf85010eba770d91fd70b11e"
     }
   ]
 }
