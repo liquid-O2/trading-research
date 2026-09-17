@@ -94,6 +94,8 @@ def evaluate(rows: list[dict], per_day: float, l2: float) -> dict:
     for day in days:
         train = [r for r in rows if r["example_id"] != day]
         test_idx = [i for i, r in enumerate(rows) if r["example_id"] == day]
+        if not train or not any(r["label"] for r in train):
+            continue  # leave-one-day-out needs another day with a ticket
         Xtr, cols, vocab = design(train)
         Xtr, mu, sd = standardise(Xtr)
         ytr = np.array([r["label"] for r in train], dtype=float)
