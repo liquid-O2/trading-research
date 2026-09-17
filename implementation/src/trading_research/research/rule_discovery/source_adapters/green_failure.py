@@ -220,7 +220,11 @@ def slice_family(day: str) -> dict[str, Any]:
     return payload
 
 
-RULES = {key: value for key, value in B02_RULES.items() if key.startswith(("RR-11", "RR-12", "RR-13", "RR-14", "RR-15", "F06", "F07", "F18"))}
+RULES = {
+    key: value
+    for key, value in B02_RULES.items()
+    if key.startswith(("GB-REF", "GB-FAIL", "GB-CASH", "GB-POCKET", "GB-CONTINUATION", "GB-RISK", "GB-OBJ", "GB-BIAS", "GB-SELECT", "GB-NWOG"))
+}
 
 
 def scan_b02(market, rec: Mapping[str, Any] | None = None, *, overrides=None) -> dict[str, Any]:

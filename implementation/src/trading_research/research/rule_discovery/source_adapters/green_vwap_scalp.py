@@ -180,7 +180,11 @@ def _merge(a: dict[str, int], b: dict[str, int]) -> dict[str, int]:
     return {key: int(a.get(key, 0)) + int(b.get(key, 0)) for key in keys}
 
 
-RULES = {key: value for key, value in B02_RULES.items() if key.startswith(("F01", "F13", "F06-A4", "RR-14", "RR-12", "F07"))}
+RULES = {
+    key: value
+    for key, value in B02_RULES.items()
+    if key.startswith(("GB-VWAP", "GB-SCALP", "GB-POCKET", "GB-RISK", "GB-OBJ", "GB-BIAS", "GB-SELECT"))
+}
 
 
 def scan_b02(market, rec: Mapping[str, Any] | None = None, *, overrides=None) -> dict[str, Any]:
