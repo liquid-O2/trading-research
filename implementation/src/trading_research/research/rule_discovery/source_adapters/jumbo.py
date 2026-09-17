@@ -2419,6 +2419,12 @@ def _scan_pzone(market) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     zones = context.get("pzones") or []
     if not zones:
         return [], [{"reason": "pzone_generator_unavailable", "branch": "timed_pzone_reversal", "operand": "pzone_generator"}]
+    omissions: list[dict[str, Any]] = []
+    if PZONE_NODE_SNAP:
+        zones, dropped = _pzones_on_nodes(market, zones)
+        omissions.extend({"reason": "pzone_not_on_node_or_ledge", "branch": "timed_pzone_reversal", "operand": "pzone", "pzone": [str(z["low"]), str(z["high"])]} for z in dropped)
+        if not zones:
+            return [], omissions
     episodes: list[dict[str, Any]] = []
     price_at_nine = context.get("price_at_0900")
     for index, zone in enumerate(zones):
@@ -2446,7 +2452,28 @@ def _scan_pzone(market) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
                 extra_values={"pzone": [low, high], "pzone_anchor": anchor, "pzone_source": zone.get("source") or context.get("pzone_source")},
             )
         )
-    return episodes, []
+    return episodes, omissions
+
+
+def _pzones_on_nodes(market, zones: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """FIND p.8: a P-zone is kept where it "sits on an HVN or on the shelf next
+    to an LVN" of the profile built so far (18:00 to the zone's anchor); either
+    edge of the band within PZONE_NODE_TOLERANCE of a node or ledge keeps it."""
+    from trading_research.research.method_pack.profile_nodes import on_node_or_ledge
+
+    kept, dropped = [], []
+    payloads: dict[str, dict] = {}
+    for zone in zones:
+        anchor = zone.get("anchor", "09:00")
+        if anchor not in payloads:
+            payloads[anchor] = market.profile(_at(market, "18:00", -1), _at(market, anchor))
+        payload = payloads[anchor]
+        low, high = _d(zone["low"]), _d(zone["high"])
+        if on_node_or_ledge(low, payload, PZONE_NODE_TOLERANCE) or on_node_or_ledge(high, payload, PZONE_NODE_TOLERANCE):
+            kept.append(zone)
+        else:
+            dropped.append(zone)
+    return kept, dropped
 
 
 _SCANNERS = {
@@ -2481,6 +2508,11 @@ BIG_PRINT_CONFIRMATION = False
 # -1.66 long of 2025-09-09 at 10:35; the 2026-05-19 chart's long at the band
 # on the 282-lot print), beside the signature confirmation B0.3 uses
 EXTENSION_BAND_LIMIT = False
+# Phase 1.5 candidate (FIND p.8): keep a P-zone band only where it "sits on an
+# HVN or on the shelf next to an LVN" of the overnight profile (18:00 to the
+# zone's anchor); a lone P-zone in air is not his trade
+PZONE_NODE_SNAP = False
+PZONE_NODE_TOLERANCE = Decimal("5")
 BIGTRADES_NY = 100
 BIGTRADES_LONDON = 75
 BIG_PRINT_POINTS = Decimal("2")

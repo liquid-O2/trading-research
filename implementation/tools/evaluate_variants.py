@@ -179,12 +179,15 @@ def merge_rescans(sessions: list[dict], rescans: dict[str, Path]) -> list[dict]:
 
 
 def main(argv=None) -> int:
+    global BASELINE
     parser = argparse.ArgumentParser()
     parser.add_argument("--rows", type=Path, required=True, help="the baseline run's rows.jsonl (B0.3 plus its selection variants)")
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--families", default="JJ-TBR,GB-FAIL")
     parser.add_argument("--rescan", action="append", default=[], help="name=path/to/rows.jsonl of a rescan candidate's run (repeatable)")
+    parser.add_argument("--baseline", default=BASELINE, help="the variant every other variant is judged against (B0.3 for selection and rescan runs, E0 for the exit runs)")
     args = parser.parse_args(argv)
+    BASELINE = args.baseline
     sessions = load_sessions(args.rows)
     if not sessions:
         raise SystemExit("no session lines in the rows file")

@@ -304,7 +304,6 @@ from trading_research.research.rule_discovery.source_adapters.b02_saint_track im
     episode_doc,
     export_rules,
     first_touch,
-    first_true_break,
     fixtures,
     market_at,
     market_bars,
@@ -494,12 +493,125 @@ def ltf_break_direction(trigger, balance, boundary=None):
     return None
 
 
+COMPOSITE_SESSIONS = 5
+BALANCE_SNAP = _D("40")
+# VP p.4: VAH, POC and VAL at 68% of the session's volume
+VALUE_FRACTION = _D(".68")
+# one line per level: the recipe's adjacent prices (a ledge on each side of a
+# one-tick LVN, a POC beside an HVN) collapse to the middle price of the group
+LEVEL_MERGE = _D("2")
+
+
+def _merge_levels(prices, within=LEVEL_MERGE) -> list:
+    groups: list[list] = []
+    for px in sorted(set(prices)):
+        if groups and px - groups[-1][-1] <= within:
+            groups[-1].append(px)
+        else:
+            groups.append([px])
+    return [g[len(g) // 2] for g in groups]
+# "composite": the balance drawn on the daily/weekly profile (WIC); "intraday":
+# the earlier fit on the session's own five-minute swings
+GENERATED_BALANCE = "composite"
+
+
+def _value_profile(window, start: int, end: int, fraction) -> dict:
+    """The window's profile with the value area at ``fraction`` (the same call
+    the historical market makes for its own window at 70%; the window's own
+    ``profile`` is fixed at 70% and is part of the cached-window identity, so
+    it is not changed)."""
+    prefix = window._prefix(start, end)
+    coverage = window.coverage(start, end)
+    return prefix.payload(
+        tick=B02_Q,
+        tie_policy="lowest",
+        value_area={"fraction": _D(str(fraction)), "algorithm": "contiguous_larger_adjacent_volume_tie_both", "tie_policy": "both"},
+        complete=coverage["observed_scope_complete"],
+    )
+
+
+def composite_balance(market):
+    """WIC: the higher-timeframe balance is drawn on the daily or weekly
+    profile and redrawn until it fits. Generated as the value area (70%) of the
+    composite of the prior COMPOSITE_SESSIONS full sessions, each edge snapped
+    to the nearest composite ledge or HVN within BALANCE_SNAP (AMT1 p.9: the
+    ledges of the prior balance are what hold). SA-2026-08-10: drawn
+    29,600-29,960 against the five-session composite's 29,576.5-29,950, and
+    five of his six intraday levels sit within three points of the composite's
+    nodes and ledges, which are carried as ``intraday_levels``."""
+    from trading_research.research.method_pack.profile_nodes import composite, ledges, nodes
+    from trading_research.research.rule_discovery.source_adapters.session_levels import prior_sessions
+
+    spans = prior_sessions(market, COMPOSITE_SESSIONS)
+    payloads = []
+    for span in spans:
+        window = span.get("window")
+        if window is None:
+            continue
+        payloads.append(window.profile(window.start, window.end))
+    comp = composite(payloads)
+    if comp is None:
+        return None
+    hvn, lvn = nodes(comp)
+    edges = ledges(comp)
+
+    def snap(px):
+        # the edge of a balance is a shelf's edge (a ledge), never a shelf's centre
+        near = [a for a in edges if abs(a - px) <= BALANCE_SNAP]
+        return min(near, key=lambda a: abs(a - px)) if near else px
+
+    low, high = snap(dec(comp["val"])), snap(dec(comp["vah"]))
+    if high <= low:
+        return None
+    known_at = int(getattr(market, "start", 0))
+    starts = [int(s["start"]) for s in spans if s.get("start") is not None]
+    # the levels inside the balance he plans on: the composite's nodes and
+    # ledges (RTVP p.8) and the last session's value edges and POC at 68%, of
+    # the RTH session and of the whole session (VP pp.4-5; SA-2026-08-10's
+    # 29,740 is the prior RTH VAL 29,738.5, its 29,840 the prior session VAH
+    # 29,840.5); prior_sessions lists the most recent session first
+    inside = set(list(hvn) + list(lvn) + list(edges))
+    last = spans[0] if spans else None
+    if last is not None and last.get("window") is not None and last.get("date"):
+        from datetime import date as _date
+
+        from trading_research.research.method_pack.empirical_market import clock
+
+        win = last["window"]
+        day = _date.fromisoformat(str(last["date"]))
+        for a, b in ((int(win.start), int(win.end)), (int(clock(day, "09:30")), int(clock(day, "16:00")))):
+            value = _value_profile(win, a, b, VALUE_FRACTION)
+            inside.update(dec(value[k]) for k in ("vah", "val", "poc") if value.get(k) is not None)
+    # the balance's own profile is the composite's volume inside it: the shape
+    # read (F04) is of the balance, not of the whole composite whose value area
+    # the balance is
+    own = composite([{"rows": [r for r in comp["rows"] if low <= r["price"] <= high]}])
+    return {
+        "id": f"balance:composite{len(payloads)}:{low}-{high}",
+        "low": low,
+        "high": high,
+        "width": high - low,
+        "start": min(starts) if starts else known_at,
+        "end": known_at,
+        "known_at": known_at,
+        "source": "composite_value_area",
+        "sessions": len(payloads),
+        "profile": own,
+        "composite": comp,
+        "intraday_levels": _merge_levels(p for p in inside if low < p < high),
+    }
+
+
 def fit_balance(market):
     """RR-22. Redraw until it fits. TRAP p.3."""
     fx = as_balance(fixtures(market).get("balance"), known_at=int(getattr(market, "start", 0)), start=int(getattr(market, "start", 0)))
     if fx:
         fx["width"] = dec(fx["high"]) - dec(fx["low"])
         return fx, "fixture"
+    if GENERATED_BALANCE == "composite":
+        comp = composite_balance(market)
+        if comp is not None:
+            return comp, "composite"
     try:
         from trading_research.research.method_pack.historical_auction_scanners import balances, primary_balance
 
@@ -596,7 +708,10 @@ def _finish(family, branch, side, market, stages, values, decision_at, reference
 def _break_levels(market, balance, side: str):
     edge = dec(balance["high"]) if side == "long" else dec(balance["low"])
     levels = [edge]
-    for raw in fixtures(market).get("intraday_levels") or []:
+    drawn = fixtures(market).get("intraday_levels")
+    # his drawn intraday levels where he printed them; elsewhere the composite's
+    # nodes and ledges inside the balance (RTVP p.8: the shelves he plans on)
+    for raw in (drawn if drawn is not None else (balance.get("intraday_levels") or [])):
         px = dec(raw)
         if px not in levels:
             levels.append(px)
@@ -617,9 +732,9 @@ def _break_levels(market, balance, side: str):
 def _scan_continuation_or_trapped(market, branch, balance, bars):
     episodes = []
     sides = ("long", "short") if branch != "trapped_buyers_retest" else ("short", "long")
-    profile = None
+    profile = balance.get("profile") if balance else None
     try:
-        if balance.get("start") is not None and balance.get("known_at") is not None:
+        if profile is None and balance.get("start") is not None and balance.get("known_at") is not None:
             profile = market.profile(balance["start"], balance["known_at"], ".68")
     except Exception:
         profile = fixtures(market).get("profile")
@@ -649,22 +764,44 @@ def _scan_continuation_or_trapped(market, branch, balance, bars):
         },
         require=("levels_marked",),
     )
+    from trading_research.research.rule_discovery.source_adapters.break_retest import break_retest_cycles
+
     for side in sides:
         sg = 1 if side == "long" else -1
         candidates = _break_levels(market, balance, side)
-        breaks = []
+        # every break-and-retest cycle of every level (the shared rule the
+        # ticket replay was accepted on: a break after a close inside, a
+        # departure, the retest from the broken side; a close back through
+        # ends the cycle and the next break needs a re-entry); a cycle without
+        # a retest is still an episode, failing at the confirmation
+        events = []
         for level in candidates:
-            trigger = first_true_break(bars, level, side)
-            if trigger is not None:
-                breaks.append((level, trigger))
-        if not breaks:
+            for cycle in break_retest_cycles(bars, level, side):
+                if cycle["retests"]:
+                    for r in cycle["retests"]:
+                        events.append((level, cycle["break"], r["bar"], r["extreme"]))
+                else:
+                    events.append((level, cycle["break"], None, None))
+        if not events:
             continue
-        breaks.sort(key=lambda item: int(item[1].get("start") or 0))
-        if not fixtures(market).get("intraday_levels") and not fixtures(market).get("break_level"):
-            breaks = breaks[:1]
-        for boundary, trigger in breaks:
+        events.sort(key=lambda item: (int(item[1].get("start") or 0), int((item[2] or item[1]).get("start") or 0)))
+        # two cycles of one level can overlap (a close back inside by under a
+        # point re-arms the next break while the first cycle's retest window
+        # is still open): one episode per level and retest bar, the earliest
+        seen = set()
+        unique = []
+        for item in events:
+            key = (item[0], int((item[2] or item[1]).get("start") or 0))
+            if key in seen:
+                continue
+            seen.add(key)
+            unique.append(item)
+        events = unique
+        if len(candidates) <= 1:
+            # the balance edge alone: its first break is the trigger
+            events = events[:1]
+        for boundary, trigger, retest, retest_extreme in events:
             after = [r for r in bars if int(r["start"]) >= int(trigger["end"])]
-            retest = first_touch(after, dec(boundary) - B02_Q, dec(boundary) + B02_Q)
             if branch == "trapped_buyers_retest":
                 extreme_side = "high" if side == "short" else "low"
                 extreme_px = balance["high"] if side == "short" else balance["low"]
@@ -730,8 +867,11 @@ def _scan_continuation_or_trapped(market, branch, balance, bars):
             else:
                 require = ("confirm_at", "held_retest", "arrival_ok", "alignment_ok")
             conf = stage_from("confirmation", confirm_at, conf_operands, require=require)
-            entry = dec(retest["C"]) if retest and retest.get("C") is not None else None
-            stop = dec(balance["low"]) - B02_Q if side == "long" else dec(balance["high"]) + B02_Q
+            # the fill at the retest's extreme (TRAP pp.6-10: sold 29,729.25 into
+            # the 19:47 pullback high 29,726.75), the stop a tick through the
+            # broken level (his stop box 29,729-29,736.75 under the 29,740 line)
+            entry = dec(retest_extreme) if retest_extreme is not None else None
+            stop = dec(boundary) - B02_Q if side == "long" else dec(boundary) + B02_Q
             shape = (context.get("operands") or {}).get("shape")
             if shape == "double":
                 selector, target = opposite_shelf_near_edge(profile, side, balance["low"], balance["high"])
@@ -815,7 +955,7 @@ def _scan_failed_auction(market, balance, bars):
     profile = fixtures(market).get("profile")
     if profile is None:
         try:
-            profile = market.profile(balance.get("start") or market.start, balance.get("known_at") or market.end, ".68")
+            profile = balance.get("profile") or market.profile(balance.get("start") or market.start, balance.get("known_at") or market.end, ".68")
         except Exception:
             profile = None
     context = _stage_profile(profile, balance)
@@ -955,7 +1095,7 @@ def _scan_poc(market, balance, bars):
     profile = fixtures(market).get("profile")
     if profile is None:
         try:
-            profile = market.profile(balance.get("start") or market.start, balance.get("known_at") or market.end, ".68")
+            profile = balance.get("profile") or market.profile(balance.get("start") or market.start, balance.get("known_at") or market.end, ".68")
         except Exception:
             profile = None
     poc = None if profile is None else profile.get("poc")

@@ -52,32 +52,9 @@ def _f(v):
 
 
 def profile_nodes(payload: dict, *, smooth: int = 2, prominence: float = 0.20) -> tuple[list[Decimal], list[Decimal]]:
-    """High- and low-volume nodes of a profile payload: local maxima and minima
-    of the smoothed volume at price whose prominence against the neighbouring
-    trough or peak is at least ``prominence`` of the profile's maximum (the
-    P-zone fit's node recipe)."""
-    rows = payload.get("rows") or []
-    if len(rows) < 5:
-        return [], []
-    prices = [Decimal(str(r.get("price"))) for r in rows]
-    vol = np.array([float(r.get("total_volume") or 0) for r in rows], dtype=float)
-    if smooth > 0:
-        kernel = np.ones(2 * smooth + 1) / (2 * smooth + 1)
-        vol = np.convolve(vol, kernel, mode="same")
-    peak = float(vol.max()) if vol.size else 0.0
-    if peak <= 0:
-        return [], []
-    hvn, lvn = [], []
-    for i in range(1, len(vol) - 1):
-        if vol[i] >= vol[i - 1] and vol[i] > vol[i + 1]:
-            trough = min(vol[max(0, i - 8):i].min(), vol[i + 1:i + 9].min()) if i + 1 < len(vol) else vol[i]
-            if (vol[i] - trough) / peak >= prominence:
-                hvn.append(prices[i])
-        if vol[i] <= vol[i - 1] and vol[i] < vol[i + 1]:
-            crest = max(vol[max(0, i - 8):i].max(), vol[i + 1:i + 9].max()) if i + 1 < len(vol) else vol[i]
-            if (crest - vol[i]) / peak >= prominence:
-                lvn.append(prices[i])
-    return hvn, lvn
+    from trading_research.research.method_pack.profile_nodes import nodes as _nodes
+
+    return _nodes(payload, smooth=smooth, prominence=prominence)
 
 
 def nearest_distance(level: Decimal, prices: list[Decimal]) -> float | None:
@@ -118,7 +95,11 @@ def developing_profile(market, start_ns: int, at_ns: int) -> dict | None:
 
 
 def profile_features(level: Decimal, prior: dict | None, developing: dict | None) -> dict:
+    from trading_research.research.method_pack.profile_nodes import shape as _shape
+
     out = {}
+    out["prior_day_shape"] = _shape(prior) if prior else None
+    out["developing_shape"] = _shape(developing) if developing else None
     for name, prof in (("prior_day", prior), ("developing", developing)):
         if not prof:
             out.update({f"{name}_poc_distance": None, f"{name}_vah_distance": None, f"{name}_val_distance": None, f"{name}_inside_value": None, f"{name}_hvn_distance": None, f"{name}_lvn_distance": None})
@@ -270,42 +251,9 @@ def delta_at(profile: dict[Decimal, float], level: Decimal, band: Decimal = Deci
 
 
 def ledges(payload: dict, *, smooth: int = 2, prominence: float = 0.20, drop: float = 0.5) -> list[Decimal]:
-    """Shelf edges: from each low-volume node walk toward the neighbouring
-    high-volume shelf on each side; the ledge is the first price where the
-    smoothed volume reaches ``drop`` of that shelf's peak."""
-    rows = payload.get("rows") or []
-    if len(rows) < 5:
-        return []
-    prices = [Decimal(str(r.get("price"))) for r in rows]
-    vol = np.array([float(r.get("total_volume") or 0) for r in rows], dtype=float)
-    if smooth > 0:
-        kernel = np.ones(2 * smooth + 1) / (2 * smooth + 1)
-        vol = np.convolve(vol, kernel, mode="same")
-    hvn, lvn = profile_nodes(payload, smooth=smooth, prominence=prominence)
-    index = {p: i for i, p in enumerate(prices)}
-    out: list[Decimal] = []
-    for low in lvn:
-        i = index.get(low)
-        if i is None:
-            continue
-        for direction in (-1, 1):
-            j = i
-            peak = None
-            # the nearest HVN on this side
-            for h in sorted(hvn, key=lambda p: abs(p - low)):
-                if (h < low and direction < 0) or (h > low and direction > 0):
-                    peak = index.get(h)
-                    break
-            if peak is None:
-                continue
-            step = 1 if peak > j else -1
-            k = j
-            while k != peak:
-                k += step
-                if vol[k] >= drop * vol[peak]:
-                    out.append(prices[k])
-                    break
-    return sorted(set(out))
+    from trading_research.research.method_pack.profile_nodes import ledges as _ledges
+
+    return _ledges(payload, smooth=smooth, prominence=prominence, drop=drop)
 
 
 def author_profile_features(market, level: Decimal, side: str, at_ns: int, prior: dict | None) -> dict:
@@ -407,20 +355,11 @@ def naked_pocs(profiles: list[dict], market, at_ns: int) -> list[Decimal]:
 
 
 def composite_payload(profiles: list[dict]) -> dict | None:
-    """Several sessions' profiles merged by price (Sires' composite)."""
-    if not profiles:
-        return None
-    merged: dict[Decimal, float] = {}
-    for prof in profiles:
-        for r in prof.get("rows") or []:
-            px = Decimal(str(r.get("price")))
-            merged[px] = merged.get(px, 0.0) + float(r.get("total_volume") or 0)
-    rows = [{"price": px, "total_volume": v} for px, v in sorted(merged.items())]
-    if not rows:
-        return None
-    return {"rows": rows, "poc": max(rows, key=lambda r: r["total_volume"])["price"]}
+    """Several sessions' profiles merged by price (Sires' composite): the
+    shared rule in ``profile_nodes.composite``."""
+    from trading_research.research.method_pack.profile_nodes import composite
 
-
+    return composite(profiles)
 def context_profile_features(market, level: Decimal, side: str, at_ns: int) -> dict:
     out: dict = {}
     profiles = prior_session_profiles(market, 5)

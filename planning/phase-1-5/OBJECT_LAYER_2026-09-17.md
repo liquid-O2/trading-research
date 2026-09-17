@@ -1,6 +1,6 @@
 # The shared object layer: each author's profile, delta and level objects, from their own words
 
-Addition to the pack (2026-09-17). These are the objects the grading study (Phase 2) and the confluence candidates (Phase 1.5) draw on; every one is cited to the author who uses it, and each family is read with its own set. Implementation: `implementation/tools/grading_features.py`.
+Addition to the pack (2026-09-17). These are the objects the grading study (Phase 2) and the confluence candidates (Phase 1.5) draw on; every one is cited to the author who uses it, and each family is read with its own set. Implementation: `implementation/tools/grading_features.py`; the profile structure (nodes, ledges, the P-zone keep rule, the shape read) is the shared `trading_research/research/method_pack/profile_nodes.py`, used by the feature layer and by the scanners' candidates alike. Node prominence is topographic (the crest or trough however far it sits), not a fixed window: the LVN between two overnight distributions can be tens of points wide (MAMT p.16).
 
 ## Jumbo (JJumboFX)
 
@@ -25,7 +25,7 @@ Addition to the pack (2026-09-17). These are the objects the grading study (Phas
 ## Saint (Ethos)
 
 - **Value**: VAH, POC, VAL at 68% of the session's volume (VP p.4); POC as the magnet, the behaviour at POC decides the VAL or VAH target (p.5).
-- **Shapes**: balanced, double distribution (two shelves and the leg between them), trending (nothing to trade), P and B (VP pp.7-11); the double distribution's shelves are the levels he plans on before price gets there (p.8).
+- **Shapes**: balanced, double distribution (two shelves and the leg between them), trending (nothing to trade), P and B (VP pp.7-11); the double distribution's shelves are the levels he plans on before price gets there (p.8). Two readings exist on purpose: the Saint scanner's own balance-scoped classifier (`saint.classify_profile_shape`, F04, its constants fitted with the family and pinned by its tests) decides his entries; the shared read (`profile_nodes.shape`, prominence nodes over the whole profile) is the grading feature `prior_day_shape` / `developing_shape`. Swapping the scanner's rule for the shared read is a Phase 1.5 candidate to be judged on folds, not a silent change.
 - **Higher-timeframe balance** drawn on the daily or weekly profile, redrawn until it fits (WIC).
 
 ## Member (K10)
