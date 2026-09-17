@@ -1,0 +1,75 @@
+{
+  "headline": [
+    {
+      "artifact": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-10/84b565a87314716d/attempt-0001/PRICING_FIXTURES.json",
+      "interval": null,
+      "name": "ATM European call, S=K=100, sigma=.2, T=1",
+      "selector": "/atm/call",
+      "sha256": "5196f391cbff3f928142a6af5778dcbe4ebf8a998f57049b93697afac3c09ba3",
+      "support": "contract reference 7.96556746",
+      "unit": "index points",
+      "value": 7.965567455405804
+    },
+    {
+      "artifact": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-10/84b565a87314716d/attempt-0001/PRICING_FIXTURES.json",
+      "interval": null,
+      "name": "worst analytic-vs-finite-difference relative error",
+      "selector": "/finite_difference",
+      "sha256": "5196f391cbff3f928142a6af5778dcbe4ebf8a998f57049b93697afac3c09ba3",
+      "support": "4 Greeks at h=.01, v=.0001",
+      "unit": "relative",
+      "value": 1.158454902178182e-07
+    },
+    {
+      "artifact": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-10/84b565a87314716d/attempt-0001/GREEK_SENSITIVITY.json",
+      "interval": null,
+      "name": "American 400 vs 800 step delta relative difference",
+      "selector": "/delta_rel",
+      "sha256": "5ffd8f2886a1ce96566b811e2c3aab9f61b50790078e21f3d2a55867f294c09f",
+      "support": "1 engineering contract; contract gate is 10%",
+      "unit": "relative",
+      "value": 2.3045399153515474e-05
+    },
+    {
+      "artifact": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-10/84b565a87314716d/attempt-0001/EXPOSURE_BOARDS.json",
+      "interval": null,
+      "name": "native boards built",
+      "selector": "/boards",
+      "sha256": "e942245ea2bbcc49d32bcc8bdeaaaf31f839c8c77505cada2f43af14fb9cf1bc",
+      "support": "80 root-days attempted, 12 refused with a reason",
+      "unit": "boards",
+      "value": 68
+    },
+    {
+      "artifact": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-10/84b565a87314716d/attempt-0001/EXPOSURE_BOARDS.json",
+      "interval": null,
+      "name": "median live contracts per board by root",
+      "selector": "/depth_by_root",
+      "sha256": "e942245ea2bbcc49d32bcc8bdeaaaf31f839c8c77505cada2f43af14fb9cf1bc",
+      "support": "80 root-days",
+      "unit": "contracts",
+      "value": {
+        "ES": 6.0,
+        "NQ": 1.0,
+        "QQQ": 883.0,
+        "SPY": 1125.0
+      }
+    }
+  ],
+  "lever": "Own an option BBO or MBP schema for NQ and ES; board depth, concentration nodes and churn become measurable on the futures roots, which EXPOSURE_BOARDS.depth_by_root would show directly.",
+  "limits": [
+    "Boards are built on 20 engineering dates at 10:00 ET, not on the full history.",
+    "The full-chain reference model is the labelled equivalent-European approximation; the American tree is a bounded sensitivity model, not an exact American price.",
+    "The American 400/800 sensitivity runs on one engineering ATM contract, not on OPTIONS.md's sample of 16 contracts per supported American root and engineering date, and no per-cohort 10% Greek-exclusion record is written: the CRR gamma at 400 versus 800 steps differs far more than 10% at these step counts, and no American Greek is consumed by any board or feature.",
+    "Exposure scenarios are assumptions about sign, never known dealer inventory.",
+    "The 1,742-session Level Atlas produced on 2026-09-15 stays under reports/research-work/phase2-early/P2-10 as a descriptive by-product; it is not an artifact of this receipt because it ranks levels over a window that includes the blind hold-out 2026-04-01..2026-09-03, and location work is Phase 3.",
+    "Nothing in this receipt is fitted, tuned, ranked or selected, so the hold-out is not consumed."
+  ],
+  "met": "partial",
+  "question": "Do the pricing, Greek and exposure-board primitives reproduce the contract's reference vectors, and do the native boards they build carry their model and scenario labels?",
+  "schema_version": "research-result-card-v1",
+  "target": "Card P2-10 A01-A08: fixture and parity to declared tolerance, finite-difference and American 400/800 sensitivity, .01 vega scaling with explicit units, unavailable rather than invented IV and term brackets, and scenario labels that are assumptions.",
+  "task_id": "P2-10",
+  "verdict": "needs_upgrade",
+  "verdict_reason": "The primitives match the independent reference vectors to 1e-12 and every board row carries its model, scenario and coverage labels, but the NQ and ES boards built from owned data are degenerate (median live contracts 1.0 and 6.0), and the American 400/800 sensitivity is one engineering contract rather than the contract's per-root-date sample, so the exposure board is only informative for QQQ and SPY today."
+}

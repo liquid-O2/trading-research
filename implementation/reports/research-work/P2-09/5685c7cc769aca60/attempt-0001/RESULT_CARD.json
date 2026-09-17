@@ -1,0 +1,69 @@
+{
+  "headline": [
+    {
+      "artifact": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/INSTRUMENT_LEDGER.json",
+      "interval": null,
+      "name": "required roots with dated definitions",
+      "selector": "/roots",
+      "sha256": "0e00259eeb4a8ed480e84484679597f6ea6ebbd8f756e513770df1278b7cb1ec",
+      "support": "8 of 8 required roots",
+      "unit": "roots",
+      "value": 8
+    },
+    {
+      "artifact": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/OPTIONS_AVAILABILITY.json",
+      "interval": null,
+      "name": "root-days with a complete observed-scope disposition",
+      "selector": "/coverage",
+      "sha256": "32ed9febb2ad359c4cc60bca75d874d752e0b6cdabb697555bd49d62d66d471f",
+      "support": "152 of 160 root-days",
+      "unit": "root-days",
+      "value": 152
+    },
+    {
+      "artifact": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/SURFACE_INPUT_SLICE.json",
+      "interval": null,
+      "name": "snapshot quote rows kept",
+      "selector": "/slices",
+      "sha256": "004363bed55987fc460a0b0a7d2640af7ac1a5f32ff8daaf05449de3014d36f5",
+      "support": "45031 rejected rows retained as records",
+      "unit": "quote rows",
+      "value": 170111
+    },
+    {
+      "artifact": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/SURFACE_INPUT_SLICE.json",
+      "interval": null,
+      "name": "slices that used OI before its availability",
+      "selector": "/slices",
+      "sha256": "004363bed55987fc460a0b0a7d2640af7ac1a5f32ff8daaf05449de3014d36f5",
+      "support": "0 expected over 160 slices",
+      "unit": "slices",
+      "value": 0
+    },
+    {
+      "artifact": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/OPTIONS_AVAILABILITY.json",
+      "interval": null,
+      "name": "root-days without native intraday spot",
+      "selector": "/coverage",
+      "sha256": "32ed9febb2ad359c4cc60bca75d874d752e0b6cdabb697555bd49d62d66d471f",
+      "support": "NDX/NDXP/SPX/SPXW cash index, explicitly unsupported",
+      "unit": "root-days",
+      "value": 80
+    }
+  ],
+  "lever": "Own an option BBO or MBP schema for NQ and ES, and an intraday NDX/SPX print; the same slice would then show n_live per board in the tens rather than 2-7, which OPTIONS_AVAILABILITY.board_depth would show directly.",
+  "limits": [
+    "Slice of 20 engineering dates, not full history; the frozen engineering dates are a subset.",
+    "Exchange-feed completeness is unknown; scoped feeds are labelled scoped, never treated as full chains.",
+    "NQ/ES option quotes are ohlcv-1m last trade as bid=ask mid (no owned option BBO), labelled in the artifact.",
+    "Cash-index intraday spot is not owned, so native NDX/SPX intraday exposure stays unsupported.",
+    "2026-09-03 lies inside the blind hold-out 2026-04-01..2026-09-03; nothing here is fitted, tuned, ranked or selected, so the hold-out is not consumed."
+  ],
+  "met": "yes",
+  "question": "Does every required option root get a dated instrument definition, a causally clocked quote/spot/OI snapshot and an explicit disposition for what is not owned?",
+  "schema_version": "research-result-card-v1",
+  "target": "Card P2-09 A01-A08: distinct expiry clocks, no pre-publication OI, no look-ahead strikes, rejections rather than zero prices, reconciled coverage denominators, and bound evidence.",
+  "task_id": "P2-09",
+  "verdict": "needs_upgrade",
+  "verdict_reason": "The adapters carry every owned input with dated definitions and explicit dispositions, but two of the six required underlyings have no owned two-sided option quote (NQ/ES use a one-minute last-trade mid) and the cash indices have no owned intraday spot, so the surface inputs are thin where the contract wants a chain."
+}

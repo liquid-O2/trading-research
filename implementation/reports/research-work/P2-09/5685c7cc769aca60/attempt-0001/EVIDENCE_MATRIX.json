@@ -1,0 +1,587 @@
+{
+  "assurance_version": "research-assurance-2026-09-14-v3",
+  "checks": [
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/experts/options/instruments.py",
+          "symbol": "expiry_clocks_distinct"
+        }
+      ],
+      "command_indices": [
+        0,
+        1
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/INSTRUMENT_LEDGER.json",
+          "selector": "/expiry_clocks/ndx_ndxp_distinct",
+          "sha256": "0e00259eeb4a8ed480e84484679597f6ea6ebbd8f756e513770df1278b7cb1ec"
+        },
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/INSTRUMENT_LEDGER.json",
+          "selector": "/expiry_clocks/spx_spxw_distinct",
+          "sha256": "0e00259eeb4a8ed480e84484679597f6ea6ebbd8f756e513770df1278b7cb1ec"
+        }
+      ],
+      "expected": "NDX/NDXP and SPX/SPXW expiry clocks stay distinct",
+      "id": "A01",
+      "observed": "INSTRUMENT_LEDGER.json/expiry_clocks/ndx_ndxp_distinct=True; INSTRUMENT_LEDGER.json/expiry_clocks/spx_spxw_distinct=True",
+      "oracle": "the contract's literal worked example and the native slice artifact",
+      "requirement": "NDX/NDXP and SPX/SPXW expiry clocks stay distinct",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py::test_a01_ndx_ndxp_and_spx_spxw_expiry_clocks_distinct"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/experts/options/native.py",
+          "symbol": "load_oi_available_at"
+        }
+      ],
+      "command_indices": [
+        0,
+        1
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/SURFACE_INPUT_SLICE.json",
+          "selector": "/slices/0/oi_used_before_asof",
+          "sha256": "004363bed55987fc460a0b0a7d2640af7ac1a5f32ff8daaf05449de3014d36f5"
+        },
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/PUBLICATION_SENSITIVITY.json",
+          "selector": "/filename_date_is_not_publication",
+          "sha256": "7308a5efd0d1239e28e2dfadfdd5f57e3c40a978a288bed0bef42120872e5491"
+        }
+      ],
+      "expected": "A filename date cannot make daily OI available before publication",
+      "id": "A02",
+      "observed": "SURFACE_INPUT_SLICE.json/slices/0/oi_used_before_asof=False; PUBLICATION_SENSITIVITY.json/filename_date_is_not_publication=True",
+      "oracle": "the contract's literal worked example and the native slice artifact",
+      "requirement": "A filename date cannot make daily OI available before publication",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py::test_a02_filename_date_cannot_make_oi_available"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/experts/options/native.py",
+          "symbol": "chain_universe"
+        }
+      ],
+      "command_indices": [
+        0,
+        1
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/SURFACE_INPUT_SLICE.json",
+          "selector": "/slices/0/universe/lookahead_excluded_count",
+          "sha256": "004363bed55987fc460a0b0a7d2640af7ac1a5f32ff8daaf05449de3014d36f5"
+        }
+      ],
+      "expected": "Future-listed strikes cannot appear in an earlier universe",
+      "id": "A03",
+      "observed": "SURFACE_INPUT_SLICE.json/slices/0/universe/lookahead_excluded_count=32",
+      "oracle": "the contract's literal worked example and the native slice artifact",
+      "requirement": "Future-listed strikes cannot appear in an earlier universe",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py::test_a03_future_listed_strikes_excluded_from_earlier_universe"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/experts/options/native.py",
+          "symbol": "quote_reject_codes"
+        }
+      ],
+      "command_indices": [
+        0,
+        1
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/SURFACE_INPUT_SLICE.json",
+          "selector": "/slices/2/n_rejected",
+          "sha256": "004363bed55987fc460a0b0a7d2640af7ac1a5f32ff8daaf05449de3014d36f5"
+        },
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/SURFACE_INPUT_SLICE.json",
+          "selector": "/slices/2/n_ok",
+          "sha256": "004363bed55987fc460a0b0a7d2640af7ac1a5f32ff8daaf05449de3014d36f5"
+        }
+      ],
+      "expected": "Stale, crossed and missing quotes stay rejection records, not zero prices",
+      "id": "A04",
+      "observed": "SURFACE_INPUT_SLICE.json/slices/2/n_rejected=314; SURFACE_INPUT_SLICE.json/slices/2/n_ok=456",
+      "oracle": "the contract's literal worked example and the native slice artifact",
+      "requirement": "Stale, crossed and missing quotes stay rejection records, not zero prices",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py::test_a04_stale_crossed_missing_are_rejections_not_zero"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/experts/options/native.py",
+          "symbol": "coverage_row"
+        }
+      ],
+      "command_indices": [
+        0,
+        1
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/OPTIONS_AVAILABILITY.json",
+          "selector": "/coverage/0/full_chain_rows",
+          "sha256": "32ed9febb2ad359c4cc60bca75d874d752e0b6cdabb697555bd49d62d66d471f"
+        },
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/OPTIONS_AVAILABILITY.json",
+          "selector": "/coverage/0/underlying_id",
+          "sha256": "32ed9febb2ad359c4cc60bca75d874d752e0b6cdabb697555bd49d62d66d471f"
+        }
+      ],
+      "expected": "Root coverage reconciles full-chain and scoped-feed denominators with native underlying IDs",
+      "id": "A05",
+      "observed": "OPTIONS_AVAILABILITY.json/coverage/0/full_chain_rows=3432; OPTIONS_AVAILABILITY.json/coverage/0/underlying_id=NDX",
+      "oracle": "the contract's literal worked example and the native slice artifact",
+      "requirement": "Root coverage reconciles full-chain and scoped-feed denominators with native underlying IDs",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py::test_a05_coverage_reconciles_full_chain_and_scoped_feed"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/receipts.py",
+          "symbol": "verify_task_receipt"
+        }
+      ],
+      "command_indices": [
+        0,
+        1,
+        2
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/predecessor_verify.log",
+          "selector": "/ok",
+          "sha256": "4f42e0f61b772913df0b8d9ecccfa5a429edbd64e17ccc7d041582533a02dc9c"
+        },
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/THROUGHPUT.json",
+          "selector": "/median_seconds",
+          "sha256": "f7822de8aba42120577d55fb0c6ca6d4acd3caf94d44f9f455c8f90d7ef9a499"
+        },
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/slice.log",
+          "selector": "/ok",
+          "sha256": "4d85c419157ecd1d82d8a01a4724c6026c7540994e70d983ac4517d62426c46e"
+        },
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/REPORT.md",
+          "selector": "Inspected output",
+          "sha256": "df3b6c943ab4b329e82b2278dd0ea7ff774bd06303b11d7af9f86b99ea458cb5"
+        }
+      ],
+      "expected": "every predecessor receipt verifies; runtime and coverage counts are recorded",
+      "id": "A06",
+      "observed": "predecessor verification exit 0; 1 predecessor receipts",
+      "oracle": "verify_research_release.py task on each predecessor receipt",
+      "requirement": "Command exit codes, artifact hashes, coverage counts, runtime and inspected output are recorded, and every predecessor receipt verifies",
+      "status": "pass",
+      "test_nodeids": []
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/receipts.py",
+          "symbol": "verify_task_receipt"
+        }
+      ],
+      "command_indices": [
+        2
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/FORGERY_PROBES.json",
+          "selector": "/control/ok",
+          "sha256": "d5ddc3749f77b6d0bd31c0d3b8dc54f7f0b433d0256a7290e4e491a770f9d363"
+        },
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/FORGERY_PROBES.json",
+          "selector": "/mutations/remove_artifact/rejected",
+          "sha256": "d5ddc3749f77b6d0bd31c0d3b8dc54f7f0b433d0256a7290e4e491a770f9d363"
+        },
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/FORGERY_PROBES.json",
+          "selector": "/mutations/substitute_file/rejected",
+          "sha256": "d5ddc3749f77b6d0bd31c0d3b8dc54f7f0b433d0256a7290e4e491a770f9d363"
+        },
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/FORGERY_PROBES.json",
+          "selector": "/mutations/row_count/rejected",
+          "sha256": "d5ddc3749f77b6d0bd31c0d3b8dc54f7f0b433d0256a7290e4e491a770f9d363"
+        },
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/FORGERY_PROBES.json",
+          "selector": "/mutations/invalid_json/rejected",
+          "sha256": "d5ddc3749f77b6d0bd31c0d3b8dc54f7f0b433d0256a7290e4e491a770f9d363"
+        },
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/FORGERY_PROBES.json",
+          "selector": "/mutations/plan_digest/rejected",
+          "sha256": "d5ddc3749f77b6d0bd31c0d3b8dc54f7f0b433d0256a7290e4e491a770f9d363"
+        },
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/FORGERY_PROBES.json",
+          "selector": "/mutations/code_digest/rejected",
+          "sha256": "d5ddc3749f77b6d0bd31c0d3b8dc54f7f0b433d0256a7290e4e491a770f9d363"
+        },
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/FORGERY_PROBES.json",
+          "selector": "/mutations/run_id/rejected",
+          "sha256": "d5ddc3749f77b6d0bd31c0d3b8dc54f7f0b433d0256a7290e4e491a770f9d363"
+        },
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/FORGERY_PROBES.json",
+          "selector": "/mutations/omit_owned_file/rejected",
+          "sha256": "d5ddc3749f77b6d0bd31c0d3b8dc54f7f0b433d0256a7290e4e491a770f9d363"
+        },
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/FORGERY_PROBES.json",
+          "selector": "/mutations/command_log/rejected",
+          "sha256": "d5ddc3749f77b6d0bd31c0d3b8dc54f7f0b433d0256a7290e4e491a770f9d363"
+        },
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/FORGERY_PROBES.json",
+          "selector": "/mutations/predecessor_digest/rejected",
+          "sha256": "d5ddc3749f77b6d0bd31c0d3b8dc54f7f0b433d0256a7290e4e491a770f9d363"
+        },
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/FORGERY_PROBES.json",
+          "selector": "/mutations/matrix_evidence/rejected",
+          "sha256": "d5ddc3749f77b6d0bd31c0d3b8dc54f7f0b433d0256a7290e4e491a770f9d363"
+        },
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/FORGERY_PROBES.json",
+          "selector": "/mutations/matrix_status/rejected",
+          "sha256": "d5ddc3749f77b6d0bd31c0d3b8dc54f7f0b433d0256a7290e4e491a770f9d363"
+        }
+      ],
+      "expected": "control verifies and all 12 forgeries are rejected with their intended code",
+      "id": "A07",
+      "observed": "control ok=True; rejected 12 of 12",
+      "oracle": "verify_research_release.py on mutated copies of this receipt",
+      "requirement": "Every acceptance key and assigned case resolves to code, executed commands and hashed evidence; artifact, identity and command forgeries fail",
+      "status": "pass",
+      "test_nodeids": []
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/receipts.py",
+          "symbol": "verify_task_receipt"
+        }
+      ],
+      "command_indices": [
+        0,
+        2
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/pytest.log",
+          "selector": "18 passed in",
+          "sha256": "1a2dcfe2ed983ba71bc0793ebd6e8a9a69e378dc99fdc98110ae06bd3d8ad5f9"
+        },
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/FORGERY_PROBES.json",
+          "selector": "/ok",
+          "sha256": "d5ddc3749f77b6d0bd31c0d3b8dc54f7f0b433d0256a7290e4e491a770f9d363"
+        }
+      ],
+      "expected": "the assigned case tests pass and the forgery controls behave as declared",
+      "id": "A08",
+      "observed": "pytest 18 passed in; 9 assigned case tests",
+      "oracle": "pytest on the owned test file plus the receipt forgery probes",
+      "requirement": "The assigned silent-failure probes pass with sensitive positive and negative controls and honest native, unknown and job counts",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py::test_s06_incomplete_quote_day_does_not_fill_from_another_root",
+        "implementation/tests/context_experts/test_p2_09.py::test_s07_native_quote_row_replays",
+        "implementation/tests/context_experts/test_p2_09.py::test_s08_future_quotes_do_not_enter_earlier_snapshot",
+        "implementation/tests/context_experts/test_p2_09.py::test_s09_same_timestamp_conflict_survives_permutation",
+        "implementation/tests/context_experts/test_p2_09.py::test_s10_dst_and_am_pm_clocks",
+        "implementation/tests/context_experts/test_p2_09.py::test_s13_semantic_run_id_mutations_and_conflicting_root",
+        "implementation/tests/context_experts/test_p2_09.py::test_s15_join_does_not_invent_osi_order",
+        "implementation/tests/context_experts/test_p2_09.py::test_s25_stale_spot_and_unknown_futures_definitions",
+        "implementation/tests/context_experts/test_p2_09.py::test_s31_proxies_stay_labelled"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/experts/options/native.py",
+          "symbol": "coverage_row"
+        }
+      ],
+      "command_indices": [
+        0,
+        1
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/pytest.log",
+          "selector": "18 passed in",
+          "sha256": "1a2dcfe2ed983ba71bc0793ebd6e8a9a69e378dc99fdc98110ae06bd3d8ad5f9"
+        }
+      ],
+      "expected": "the case probe passes with its sensitive positive case and negative control",
+      "id": "S06",
+      "observed": "pytest 18 passed in",
+      "oracle": "the owned case test and the native slice artifacts",
+      "requirement": "Assigned silent-failure case S06",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py::test_s06_incomplete_quote_day_does_not_fill_from_another_root"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/experts/options/native.py",
+          "symbol": "replay_quote_row"
+        }
+      ],
+      "command_indices": [
+        0,
+        1
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/pytest.log",
+          "selector": "18 passed in",
+          "sha256": "1a2dcfe2ed983ba71bc0793ebd6e8a9a69e378dc99fdc98110ae06bd3d8ad5f9"
+        }
+      ],
+      "expected": "the case probe passes with its sensitive positive case and negative control",
+      "id": "S07",
+      "observed": "pytest 18 passed in",
+      "oracle": "the owned case test and the native slice artifacts",
+      "requirement": "Assigned silent-failure case S07",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py::test_s07_native_quote_row_replays"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/experts/options/native.py",
+          "symbol": "load_quote_arrays"
+        }
+      ],
+      "command_indices": [
+        0,
+        1
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/pytest.log",
+          "selector": "18 passed in",
+          "sha256": "1a2dcfe2ed983ba71bc0793ebd6e8a9a69e378dc99fdc98110ae06bd3d8ad5f9"
+        }
+      ],
+      "expected": "the case probe passes with its sensitive positive case and negative control",
+      "id": "S08",
+      "observed": "pytest 18 passed in",
+      "oracle": "the owned case test and the native slice artifacts",
+      "requirement": "Assigned silent-failure case S08",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py::test_s08_future_quotes_do_not_enter_earlier_snapshot"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/experts/options/native.py",
+          "symbol": "same_timestamp_conflict"
+        }
+      ],
+      "command_indices": [
+        0,
+        1
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/pytest.log",
+          "selector": "18 passed in",
+          "sha256": "1a2dcfe2ed983ba71bc0793ebd6e8a9a69e378dc99fdc98110ae06bd3d8ad5f9"
+        }
+      ],
+      "expected": "the case probe passes with its sensitive positive case and negative control",
+      "id": "S09",
+      "observed": "pytest 18 passed in",
+      "oracle": "the owned case test and the native slice artifacts",
+      "requirement": "Assigned silent-failure case S09",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py::test_s09_same_timestamp_conflict_survives_permutation"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/experts/options/instruments.py",
+          "symbol": "expiry_ns"
+        }
+      ],
+      "command_indices": [
+        0,
+        1
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/pytest.log",
+          "selector": "18 passed in",
+          "sha256": "1a2dcfe2ed983ba71bc0793ebd6e8a9a69e378dc99fdc98110ae06bd3d8ad5f9"
+        }
+      ],
+      "expected": "the case probe passes with its sensitive positive case and negative control",
+      "id": "S10",
+      "observed": "pytest 18 passed in",
+      "oracle": "the owned case test and the native slice artifacts",
+      "requirement": "Assigned silent-failure case S10",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py::test_s10_dst_and_am_pm_clocks"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/errors.py",
+          "symbol": "IntegrityError"
+        }
+      ],
+      "command_indices": [
+        0,
+        1
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/pytest.log",
+          "selector": "18 passed in",
+          "sha256": "1a2dcfe2ed983ba71bc0793ebd6e8a9a69e378dc99fdc98110ae06bd3d8ad5f9"
+        }
+      ],
+      "expected": "the case probe passes with its sensitive positive case and negative control",
+      "id": "S13",
+      "observed": "pytest 18 passed in",
+      "oracle": "the owned case test and the native slice artifacts",
+      "requirement": "Assigned silent-failure case S13",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py::test_s13_semantic_run_id_mutations_and_conflicting_root"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/experts/options/native.py",
+          "symbol": "load_quote_arrays"
+        }
+      ],
+      "command_indices": [
+        0,
+        1
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/pytest.log",
+          "selector": "18 passed in",
+          "sha256": "1a2dcfe2ed983ba71bc0793ebd6e8a9a69e378dc99fdc98110ae06bd3d8ad5f9"
+        }
+      ],
+      "expected": "the case probe passes with its sensitive positive case and negative control",
+      "id": "S15",
+      "observed": "pytest 18 passed in",
+      "oracle": "the owned case test and the native slice artifacts",
+      "requirement": "Assigned silent-failure case S15",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py::test_s15_join_does_not_invent_osi_order"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/experts/options/native.py",
+          "symbol": "spot_at"
+        }
+      ],
+      "command_indices": [
+        0,
+        1
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/pytest.log",
+          "selector": "18 passed in",
+          "sha256": "1a2dcfe2ed983ba71bc0793ebd6e8a9a69e378dc99fdc98110ae06bd3d8ad5f9"
+        }
+      ],
+      "expected": "the case probe passes with its sensitive positive case and negative control",
+      "id": "S25",
+      "observed": "pytest 18 passed in",
+      "oracle": "the owned case test and the native slice artifacts",
+      "requirement": "Assigned silent-failure case S25",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py::test_s25_stale_spot_and_unknown_futures_definitions"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/experts/options/instruments.py",
+          "symbol": "root_spec"
+        }
+      ],
+      "command_indices": [
+        0,
+        1
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/5685c7cc769aca60/attempt-0001/pytest.log",
+          "selector": "18 passed in",
+          "sha256": "1a2dcfe2ed983ba71bc0793ebd6e8a9a69e378dc99fdc98110ae06bd3d8ad5f9"
+        }
+      ],
+      "expected": "the case probe passes with its sensitive positive case and negative control",
+      "id": "S31",
+      "observed": "pytest 18 passed in",
+      "oracle": "the owned case test and the native slice artifacts",
+      "requirement": "Assigned silent-failure case S31",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py::test_s31_proxies_stay_labelled"
+      ]
+    }
+  ],
+  "schema_version": "research-evidence-matrix-v2",
+  "task_id": "P2-09"
+}

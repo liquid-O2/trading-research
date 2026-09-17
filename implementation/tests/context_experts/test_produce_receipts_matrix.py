@@ -1,10 +1,15 @@
-"""Evidence matrix rows must resolve under the receipt verifier."""
+"""Evidence-matrix rows must resolve under the receipt verifier's own resolvers.
+
+The producer builds the matrix from TASK_GRAPH.json; this guards the binding
+rules the verifier enforces (code_refs, test nodeids, evidence selectors) plus
+the two ways the producer is allowed to fail loudly: an unknown case id and a
+case with no uniquely named test.
+"""
 
 from __future__ import annotations
 
 from importlib.util import module_from_spec, spec_from_file_location
 from pathlib import Path
-import ast
 import json
 import shutil
 import sys
@@ -20,140 +25,120 @@ from trading_research.research.contracts.receipts import (
 
 WORKTREE = Path(__file__).resolve().parents[3]
 PRODUCER_PATH = WORKTREE / "implementation/reports/research-work/phase2-early/produce_receipts.py"
-SLICE = WORKTREE / "implementation/reports/research-work/phase2-early"
+RUN_ROOT = WORKTREE / "implementation/reports/research-work/phase2-early/run-2026-09-16"
 _spec = spec_from_file_location("phase2_early_produce_receipts", PRODUCER_PATH)
 assert _spec is not None and _spec.loader is not None
 producer = module_from_spec(_spec)
 sys.modules[_spec.name] = producer
 _spec.loader.exec_module(producer)
 
-
-def _def_class_names(path: Path) -> set[str]:
-    tree = ast.parse(path.read_text(encoding="utf-8"))
-    names: set[str] = set()
-    for node in tree.body:
-        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
-            names.add(node.name)
-            if isinstance(node, ast.ClassDef):
-                for child in node.body:
-                    if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                        names.add(f"{node.name}.{child.name}")
-    return names
-
-
-MATRIX_ARTIFACTS = (
-    "INSTRUMENT_LEDGER.json",
-    "SURFACE_INPUT_SLICE.json",
-    "OPTIONS_AVAILABILITY.json",
-    "PUBLICATION_SENSITIVITY.json",
-    "PRICING_FIXTURES.json",
-    "EXPOSURE_BOARDS.json",
-    "VOLATILITY_FIXTURES.json",
-    "VOLATILITY_TARGETS.json",
-)
-
+INDICES = {"pytest": 0, "slice": 1, "predecessors": [2]}
 PROBE_STUB = {
-    "ok": True,
+    "schema_version": producer.PROBES_SCHEMA,
     "control": {"ok": True, "codes": []},
     "mutations": {
-        "remove_artifact": {"ok": False, "codes": ["ARTIFACT_MISSING"]},
-        "substitute_file": {"ok": False, "codes": ["SCHEMA"]},
-        "row_count": {"ok": False, "codes": ["INVENTORY"]},
-        "invalid_json": {"ok": False, "codes": ["JSON_PARSE"]},
-        "plan_digest": {"ok": False, "codes": ["IDENTITY"]},
-        "code_digest": {"ok": False, "codes": ["IDENTITY"]},
-        "draft_digest": {"ok": False, "codes": ["IDENTITY"]},
-        "omit_owned_file": {"ok": False, "codes": ["INVENTORY"]},
+        name: {"ok": False, "codes": [code], "expected_code": code, "expected_code_present": True, "rejected": True}
+        for name, _fn, code, _desc in producer.MUTATIONS
     },
+    "n_rejected": len(producer.MUTATIONS),
+    "n_mutations": len(producer.MUTATIONS),
+    "ok": True,
 }
 
 
-def _stage_attempt(tmp_path: Path, task_id: str) -> Path:
-    spec = producer.TASKS[task_id]
+def _stage(tmp_path: Path, task_id: str, spec: dict) -> Path:
     attempt = tmp_path / task_id
     attempt.mkdir()
     (attempt / "pytest.log").write_text("17 passed in 0.40s\n")
-    (attempt / "VERIFY_TASK.json").write_text(json.dumps({"ok": True, "kind": "task", "path": "TASK_RECEIPT.json"}) + "\n")
-    (attempt / "PROBES_S01_S03.json").write_text(json.dumps(PROBE_STUB) + "\n")
-    slice_dir = SLICE / spec["slice_dir"]
-    for name in MATRIX_ARTIFACTS:
-        src = slice_dir / name
-        if src.is_file():
-            shutil.copy2(src, attempt / name)
+    (attempt / "slice.log").write_text(json.dumps({"ok": True, "task": task_id}) + "\n")
+    (attempt / "predecessor_verify.log").write_text(json.dumps({"kind": "task", "ok": True, "path": "x"}) + "\n")
+    (attempt / "REPORT.md").write_text("# report\n\n## Inspected output\n\n- one native row\n")
+    (attempt / producer.PROBES_NAME).write_text(json.dumps(PROBE_STUB) + "\n")
+    source = RUN_ROOT / spec["slice_dir"]
+    for name in list(spec["artifacts"]) + ["THROUGHPUT.json"]:
+        if (source / name).is_file():
+            shutil.copy2(source / name, attempt / name)
     return attempt
-
-
-def _assert_code_ref(ref: dict) -> None:
-    raw = str(ref["path"])
-    assert "/tests/" not in raw.replace("\\", "/")
-    code_path = _resolve_workspace_file(raw, WORKTREE)
-    assert code_path is not None and code_path.is_file()
-    symbols = _module_symbols(code_path)
-    assert symbols is not None
-    assert ref["symbol"] in symbols
-    assert ref["symbol"] in _def_class_names(code_path)
 
 
 @pytest.mark.parametrize("task_id", ["P2-09", "P2-10", "P2-03"])
 def test_matrix_rows_resolve_for_verifier(task_id, tmp_path):
-    spec = producer.TASKS[task_id]
-    attempt = _stage_attempt(tmp_path, task_id)
-    matrix = producer._matrix(task_id, spec, attempt, 0, audit_index=1)
+    spec = producer.load_spec(task_id, WORKTREE)
+    attempt = _stage(tmp_path, task_id, spec)
+    matrix = producer.build_matrix(spec, attempt, WORKTREE, INDICES)
     checks = matrix["checks"]
-    assert {check["id"] for check in checks} == set(spec["cases"])
-    assert len(checks) == len(spec["cases"])
+    assert [check["id"] for check in checks] == spec["cases"]
     by_id = {check["id"]: check for check in checks}
-    for key in ("A06", "A07", "A08"):
-        row = by_id[key]
-        assert row["test_nodeids"] == []
-        assert row["command_indices"] == [1]
-        assert row["status"] == "pass"
-        selectors = [item["selector"] for item in row["evidence"]]
-        assert "/ok" in selectors
-        if key == "A08":
-            assert any("passed" in item for item in selectors)
-    for key in ("S01", "S03"):
-        row = by_id[key]
-        assert row["test_nodeids"] == []
-        assert row["command_indices"] == [1]
-        assert row["status"] == "pass"
-        selectors = [item["selector"] for item in row["evidence"]]
-        assert "/control/ok" in selectors
-        assert any(item.startswith("/mutations/") for item in selectors)
-    if "S07" in by_id and task_id == "P2-03":
-        node = by_id["S07"]["test_nodeids"][0]
-        assert node.endswith("::test_s07_native_minute_close_is_tagged_not_bbo")
-        assert by_id["S07"]["code_refs"][0]["symbol"] != "future_prices_do_not_enter"
+
+    assert by_id["A07"]["test_nodeids"] == []
+    selectors = [item["selector"] for item in by_id["A07"]["evidence"]]
+    assert "/control/ok" in selectors
+    assert sum(1 for item in selectors if item.startswith("/mutations/")) == len(producer.MUTATIONS)
+    assigned = [case for case in spec["cases"] if case.startswith("S")]
+    assert len(by_id["A08"]["test_nodeids"]) == len(assigned)
+    assert any(item["selector"] == "/ok" for item in by_id["A06"]["evidence"])
+
     for check in checks:
-        if check.get("status") not in {"pass", "accepted-limit"}:
-            continue
-        assert check.get("command_indices")
-        assert check.get("evidence")
-        refs = check.get("code_refs")
-        assert refs
-        for ref in refs:
-            _assert_code_ref(ref)
-        nodes = check.get("test_nodeids")
-        assert isinstance(nodes, list)
-        prefix = f"test_{str(check['id']).lower()}"
-        for nodeid in nodes:
-            assert "::" in nodeid
+        assert check["status"] in {"pass", "accepted-limit"}
+        assert check["command_indices"]
+        assert check["evidence"]
+        for ref in check["code_refs"]:
+            assert "/tests/" not in str(ref["path"]).replace("\\", "/")
+            code_path = _resolve_workspace_file(str(ref["path"]), WORKTREE)
+            assert code_path is not None, ref
+            symbols = _module_symbols(code_path)
+            assert symbols is not None and ref["symbol"] in symbols, ref
+        for nodeid in check["test_nodeids"]:
             file_part, _, test_part = nodeid.partition("::")
-            wanted = test_part.split("::")[-1]
-            assert wanted == prefix or wanted.startswith(prefix + "_")
             test_path = _resolve_workspace_file(file_part, WORKTREE)
             assert test_path is not None
             names = _test_node_names(test_path)
-            assert names is not None
-            assert wanted in names
+            assert names is not None and test_part in names, nodeid
         for item in check["evidence"]:
-            evidence_path = Path(item["path"])
-            assert _selector_resolves(evidence_path, item["selector"])
+            assert _selector_resolves(Path(item["path"]), item["selector"]), (check["id"], item)
 
 
-def test_unmatched_check_id_raises(tmp_path):
-    spec = dict(producer.TASKS["P2-09"])
+def test_unknown_case_id_raises(tmp_path):
+    spec = producer.load_spec("P2-09", WORKTREE)
     spec["cases"] = list(spec["cases"]) + ["S99"]
-    attempt = _stage_attempt(tmp_path, "P2-09")
+    attempt = _stage(tmp_path, "P2-09", spec)
     with pytest.raises(RuntimeError, match="S99"):
-        producer._matrix("P2-09", spec, attempt, 0, audit_index=1)
+        producer.build_matrix(spec, attempt, WORKTREE, INDICES)
+
+
+def test_ambiguous_case_binding_raises():
+    with pytest.raises(RuntimeError, match="test_s0"):
+        producer._bind_test_function(["test_s07_one", "test_s07_two"], "S07")
+
+
+@pytest.mark.parametrize("task_id", ["P2-09", "P2-10", "P2-03"])
+def test_result_card_passes_the_verifier_rule(task_id, tmp_path):
+    """The card the producer writes must satisfy receipts.result_card_failures as it stands."""
+    from trading_research.research.contracts.receipts import RESULT_CARD_SCHEMA, result_card_failures
+
+    spec = producer.load_spec(task_id, WORKTREE)
+    attempt = _stage(tmp_path, task_id, spec)
+    card = {"schema_version": RESULT_CARD_SCHEMA, "task_id": task_id, **producer.CARDS[task_id](attempt, ["2020-01-02", "2026-09-03"])}
+    path = attempt / "RESULT_CARD.json"
+    path.write_text(json.dumps(card, indent=2, sort_keys=True) + "\n")
+    assert result_card_failures(path) == []
+    for row in card["headline"]:
+        assert ("support" in row) != ("interval" in row)
+        if "support" in row:
+            assert row["support"] >= row["value"] or row["unit"] == "relative"
+        else:
+            assert row["interval"] == [row["value"], row["value"]]
+
+
+def test_result_card_without_support_or_interval_is_rejected(tmp_path):
+    """Negative control: the rule that broke the first issue must still bite."""
+    from trading_research.research.contracts.receipts import RESULT_CARD_SCHEMA, result_card_failures
+
+    spec = producer.load_spec("P2-09", WORKTREE)
+    attempt = _stage(tmp_path, "P2-09", spec)
+    card = {"schema_version": RESULT_CARD_SCHEMA, **producer.CARDS["P2-09"](attempt, ["2020-01-02"])}
+    card["headline"][0].pop("support")
+    path = attempt / "BROKEN_CARD.json"
+    path.write_text(json.dumps(card, indent=2, sort_keys=True) + "\n")
+    problems = result_card_failures(path)
+    assert any("headline[0] needs an interval" in item for item in problems), problems

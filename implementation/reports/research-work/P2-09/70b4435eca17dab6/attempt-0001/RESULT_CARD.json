@@ -1,0 +1,96 @@
+{
+  "headline": [
+    {
+      "artifact": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/70b4435eca17dab6/attempt-0001/INSTRUMENT_LEDGER.json",
+      "name": "required option roots with a dated instrument definition",
+      "note": "the 8 roots OPTIONS.md requires: NDX, NDXP, SPX, SPXW, QQQ, SPY, NQ, ES",
+      "selector": "/roots",
+      "sha256": "0e00259eeb4a8ed480e84484679597f6ea6ebbd8f756e513770df1278b7cb1ec",
+      "support": 8,
+      "unit": "roots",
+      "value": 8
+    },
+    {
+      "artifact": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/70b4435eca17dab6/attempt-0001/OPTIONS_AVAILABILITY.json",
+      "name": "root-days with a complete observed-scope disposition",
+      "note": "denominator is every root-day attempted in the slice",
+      "selector": "/coverage",
+      "sha256": "32ed9febb2ad359c4cc60bca75d874d752e0b6cdabb697555bd49d62d66d471f",
+      "support": 160,
+      "unit": "root-days",
+      "value": 152
+    },
+    {
+      "artifact": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/70b4435eca17dab6/attempt-0001/SURFACE_INPUT_SLICE.json",
+      "name": "snapshot quote rows kept by the freshness and crossed filters",
+      "note": "45031 rejected rows are retained as rejection records, never zero prices",
+      "selector": "/slices",
+      "sha256": "004363bed55987fc460a0b0a7d2640af7ac1a5f32ff8daaf05449de3014d36f5",
+      "support": 215142,
+      "unit": "quote rows",
+      "value": 170111
+    },
+    {
+      "artifact": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/70b4435eca17dab6/attempt-0001/SURFACE_INPUT_SLICE.json",
+      "name": "slices that used open interest before its publication clock",
+      "note": "the assumed clock is the next regular session at 12:00 ET",
+      "selector": "/slices",
+      "sha256": "004363bed55987fc460a0b0a7d2640af7ac1a5f32ff8daaf05449de3014d36f5",
+      "support": 160,
+      "unit": "slices",
+      "value": 0
+    },
+    {
+      "artifact": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/70b4435eca17dab6/attempt-0001/OPTIONS_AVAILABILITY.json",
+      "name": "root-days without native intraday spot",
+      "note": "NDX/NDXP/SPX/SPXW cash index, explicitly unsupported",
+      "selector": "/coverage",
+      "sha256": "32ed9febb2ad359c4cc60bca75d874d752e0b6cdabb697555bd49d62d66d471f",
+      "support": 160,
+      "unit": "root-days",
+      "value": 80
+    }
+  ],
+  "lever": {
+    "change": "Own an option BBO or MBP schema for NQ and ES, and an intraday NDX/SPX print.",
+    "evidence": "The same 20-date slice would show live contracts per board in the tens or hundreds for NQ and ES instead of 1 and 6, in OPTIONS_AVAILABILITY.board_depth_20date and EXPOSURE_BOARDS.depth_by_root."
+  },
+  "limits": [
+    "Slice of 20 engineering dates, not full history; the frozen engineering dates are a subset.",
+    "Exchange-feed completeness is unknown; scoped feeds are labelled scoped, never treated as full chains.",
+    "NQ/ES option quotes are ohlcv-1m last trade as bid=ask mid (no owned option BBO), labelled in the artifact.",
+    "Cash-index intraday spot is not owned, so native NDX/SPX intraday exposure stays unsupported.",
+    "Nothing here is fitted, tuned, ranked or selected, so the blind hold-out 2026-04-01..2026-09-03 is not consumed; 2026-09-03 appears only as a slice date."
+  ],
+  "plausibility": [
+    {
+      "check": "the native quote row in SURFACE_INPUT_SLICE replays to its own parquet row",
+      "expected": "bid 15.73, ask 16.38, ts_event 2024-01-02 14:31:00+00:00 read straight from the file with pyarrow",
+      "observed": "QQQ 2024-01-11 P422 bid 15.73 ask 16.38 at event_ns 1704205860000000000",
+      "verdict": "plausible"
+    },
+    {
+      "check": "the OI vintage used at the 10:00 ET asof was published before it",
+      "expected": "the 2023-12-28 session published 2023-12-29 12:00 ET, before the 2024-01-02 10:00 ET asof",
+      "observed": "effective session 2023-12-28, available_at_ns 1703869200000000000",
+      "verdict": "plausible"
+    },
+    {
+      "check": "the share of snapshot quote rows rejected by the freshness and crossed filters",
+      "expected": "0.05 to 0.35 for a scoped one-minute option feed snapshotted at 10:00 ET, where far strikes are stale",
+      "observed": 0.2093,
+      "verdict": "plausible"
+    }
+  ],
+  "question": "Does every required option root get a dated instrument definition, a causally clocked quote/spot/OI snapshot and an explicit disposition for what is not owned?",
+  "schema_version": "research-result-card-v1",
+  "target": {
+    "met": "yes",
+    "text": "Card P2-09 A01-A08: distinct expiry clocks, no pre-publication OI, no look-ahead strikes, rejections rather than zero prices, reconciled coverage denominators, and bound evidence."
+  },
+  "task_id": "P2-09",
+  "verdict": {
+    "reason": "The adapters carry every owned input with dated definitions and explicit dispositions, but two of the six required underlyings have no owned two-sided option quote (NQ/ES use a one-minute last-trade mid) and the cash indices have no owned intraday spot, so the surface inputs are thin where the contract wants a chain.",
+    "value": "needs_upgrade"
+  }
+}
