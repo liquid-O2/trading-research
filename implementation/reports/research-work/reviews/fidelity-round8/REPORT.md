@@ -57,3 +57,40 @@ Still FITTED and labelled as such: the approach-and-reject under a level (a one-
 ## 7. Answer to "why hundreds a day"
 
 The episode count a session (6 to 127 in the replay days) is the number of fill variants: every line × cycle × the fill modes the source supports (stop at the line, failure close, orderblock, rejection, next-bar open...). The opportunity count is the number of (line, side, cycle) objects, 10 to 20 a day uncapped. The author's count is one to three. The first two numbers are the strategy as written; the third is his discretion.
+
+## 8. The authors' own "when to use what", and what the pool does with it
+
+The user's point (2026-09-17 17:10): the daily choice is in the authors' posts. It is. The rules below are the ones that select, quoted from the sources, with what the adapter now does.
+
+### Jumbo (Time-Based ranges Framework, TBR; raw archive, JR)
+
+| his rule | source | in the pool |
+| --- | --- | --- |
+| "the judas trades from 9:30 to the reversal window and the actual reversal trade between the 9:40 and 9:50 ... always terminating my trading session before 10am" | TBR p.8 | Judas raids of the 6–9 edges are scanned 09:00–10:15 only (his dated Judas entries span 09:05–10:10); later edge raids are not Judas |
+| "levels of interest will be the mean reversal levels or −0.5 projection" | TBR p.8 | the Judas' scale-ins at ±0.33/0.5/0.66 stay (2026-09-01 buys the −0.33 at 09:40) |
+| extended overnight range → EQ/quadrants, targets the 6–9 high/low, "after 10am all interest in being in a position is no longer present" | TBR p.12, p.24 | `single_extended` on the extended read; the pre-open EQ tag on aligned or big-range days |
+| purged overnight (stop hunts, liquidity taken) → expansion from EQ/quadrants, 09:40–09:50 as continuation/add | TBR p.12 | `single_purged` on the purged read (2026-07-28) |
+| "RTH open location in relation to previous day value/range and the current day 6-9 ... discard mean reversion and range double breaks when these things align" | JR p.34, p.36 (2026-07-28) | the `aligned` read: open outside prior value on the purged side |
+| range-size table: double break leads below 1.2%, single break above | JR (2026-06-08 table) | the size rule in the day read |
+| "RTH open inside previous day value/range, scalping territory" | JR p.42 (2026-07-10) | `internal_rotation` admitted from 10:00 on inside-value reads |
+| "when having a big 6-9 range > long/short the EQ" | JR p.3 (2026-09-02) | `internal_rotation` and the EQ tag on big-range reads |
+| "1.33 1.66 provided the move again today ... equal highs above us gave confidence on the reversal off the 1.33 1.66 levels" | JR p.25 (2025-09-09), p.57 (2025-11-18), p.44 (2026-07-06) | `extension_reaction` after 10:00 |
+| London: "same principles, same logic different times of action" | JR p.63 (2025-10-13) | the London segment on the 20:00–03:00 box |
+
+What his words do not give: which edge of the 6–9 he takes first on a double-break day, and how many rotation scalps he takes on a scalping day ("a couple diabolical Ls and roundtrips", JR p.42). Those remain the discretionary residue.
+
+### Green Bird (distilled framework, GB pp.1–12, tagged HIS WORDS / HIS CHART)
+
+| his rule | source | in the pool |
+| --- | --- | --- |
+| "I wait until after 10AM. The 9 to 10AM range is established. No guessing beforehand." / "He documented a $12K day where the mistake was entering at 9:45 AM." | GB p.1, p.5 | the developing 9–10 box is out of the model's list; 2026-04-28 09:45 is recorded as his documented mistake (still a framework fill in the any-fill count) |
+| "9:30am manipulation below, reclaim, enter for longs targeting retracement into discount, stops at lows" — "a separate trigger" | GB p.1, p.3 | the cash-open segment, its own play, not bias-filtered |
+| "Previous-hour range: the last completed 60 minutes" | GB p.1 | one completed hour live at a time (replaced when the next closes), plus the hour in progress |
+| Asia: "Asia highs and lows are the edges of the table ... After midnight the box is finished; the trade is sweep-and-fail of that finished box, often with a close back through TDO" | GB p.1, p.9 | the Asia box is traded once closed; no running Asia cuts |
+| "IF Asia high is swept AND price closes back below (ideally also below midnight open / TDO on the 5m) THEN short toward Asia low" | GB p.9 | `asia_box` / `asia_tdo_case` sweep-and-fail with the TDO close as a mode |
+| "A reclaim of PDL overnight ... can create the next day's bias (get long overnight, buy pullbacks in NYAM)" / "Bias from overnight PDL sweep and reclaim. Long overnight. NYAM: buy pullbacks / golden pockets / sweeps in the direction of that reclaim." | GB p.7, p.9–11 (Jul 14) | on days with an overnight PDL/PDH sweep-and-reclaim the NY segment's candidates are on the bias side only (the cash-open reaction exempt) |
+| "First target = other side of the box, or NWOG / PDL" | GB p.3, p.8 | objectives are the drawn levels only |
+| "A+ must include a sweep of the range. No sweep = not A+." / B+ "not easy to trade", 20–30 point scalps | GB p.3, p.6 | the approach-and-reject under a level (no sweep) is his B+ and stays a labelled fitted mode (04-23, 08-13) |
+| "Partials every 25 points ... stop to breakeven ... runners" | GB p.8 | management, not selection |
+
+What his words do not give: which of the drawn levels' failures he takes when several occur in a session (the A+ grade is "confluence ... you're always scoring and rating a setup"), and the exact Asia clock ("not stated; he only says Asia high / Asia low").
