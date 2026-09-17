@@ -143,6 +143,12 @@ def replay(markets: Markets, example) -> dict:
         row["selected_delta_points"] = selected_match.get("delta_points")
         row["selected_bars_from_printed"] = selected_match.get("bars_from_printed")
         row["selected_strict_10"] = selected_match.get("detected_strict_10")
+        if entry.get("scored_by_decision"):
+            bars = selected_match.get("bars_from_printed")
+            allowed = 1.0 if entry.get("marked_by") == "rr_tool" else 3.0
+            row["decision_match"] = bool(selected_match.get("our_entry") is not None and bars is not None and float(bars) <= allowed)
+            row["selected_strict_10"] = bool(row["selected_strict_10"]) or row["decision_match"]
+            row["detected_strict_10"] = bool(row.get("detected_strict_10")) or row["decision_match"]
         row["selected_strict"] = selected_match.get("detected_strict")
         row["selected_detected"] = selected_match.get("detected")
         row["selected_within_3_bars"] = selected_match.get("detected_within_3_bars")
