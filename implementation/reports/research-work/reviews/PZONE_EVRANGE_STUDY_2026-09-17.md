@@ -38,3 +38,26 @@ Two readouts: 2026-08-28 band 29,590–29,724 (width 134); 2026-09-01 band 29,05
 ## 4. What would pin the recipes
 
 A bounded fitting task, after the JJ/GB replay passes: collect every printed P-zone and EVRange frame (with its anchor label), fit one percentile-of-excursion recipe per anchor over lookback ∈ {250, 400, 500}, score by the fraction of printed zones reproduced within their own width, and report the fit honestly. Until then both objects remain unsupported inputs, admissible as misses only where a printed frame is absent.
+
+## 5. Fit result (2026-09-17, later the same day)
+
+Recipe tested on every printed frame (fit script: percentile of the raw-point excursion from the 09:00 anchor price over 09:00→16:00, ranked over the prior 250 sessions; a 12:00 window, longer lookbacks and ATR-normalised excursions all fit worse).
+
+**EVRange reproduced.** Band = anchor − p25(down excursion) to anchor + p25(up excursion):
+
+| readout | printed | predicted | edge error |
+| --- | --- | --- | --- |
+| 2026-08-28 | 29,590–29,724 | 29,587–29,724 | −3 / 0 |
+| 2026-09-01 | 29,058–29,195 | 29,058–29,190 | 0 / −5 |
+
+The "+50%" line on 09-01 (printed 29,290) is anchor + p55(up) = 29,293; p50 gives 29,275 and "band top + half the width" gives 29,264. Two readouts cannot separate p55 from a neighbouring definition; the band itself is settled to within 5 points.
+
+**P-zones reproduced to within the zone width.** Zone = [p_k, p_k+δ] of the same excursion distribution, per tier:
+
+| tier | k | δ | mean edge error | zones |
+| --- | --- | --- | --- | --- |
+| T1 | 0.115 | 0.060 | 3.4 points | 4 (12-30 ×2, 01-02 ×2) |
+| T2 | 0.320 | 0.035 | 3.6 points | 4 |
+| T3 | 0.550 | 0.025 | 6.7 points | 3 (01-09, 02-24 ×2) |
+
+Every predicted zone overlaps its printed zone. Not settled: the two 10:00-anchored zones (01-02 and 01-09) do not agree with each other under a 10:00 anchor (ranks 0.13 and 0.49), so the 10:00 recipe needs more frames; the "T3/T4" bands on the 2025-11-10 chart sit exactly on the ±1.33/1.66 projections and are the projection band, not P-zones; the volume/volatility filter the author names is not visible in these frames (the unfiltered distribution already fits). A generator built on this recipe is admissible as an approximation labelled as such; the author's exact tool remains proprietary.
