@@ -62,25 +62,40 @@ The rehearsal and parity oracle is `attempt-0002`; stage A `47dedaaa4f5b9ce1` re
 ## Receipt and verification
 
 - `TASK_RECEIPT.json` (disposition `retained_baseline`) with PLAN_SNAPSHOT (17 live planning files plus
-  SPEC.md, copied into `snapshots/plan/`), CODE_SNAPSHOT (the runtime modules and the three owned test
-  files, copied into `snapshots/code/`), DRAFT_MANIFEST, EVIDENCE_MATRIX (A01-A10 plus the assigned
+  SPEC.md, copied into `snapshots/plan/`), CODE_SNAPSHOT (the runtime modules, the three owned test
+  files and the drift set tabulated below, copied into `snapshots/code/`), DRAFT_MANIFEST, EVIDENCE_MATRIX (A01-A10 plus the assigned
   cases S06, S07, S11, S12, S13, S15, S22, S24, S32, each bound to a test node id, a command index and
   hashed evidence), DECISIONS.tsv, REPORT.md and RESULT_CARD.json.
-- Predecessors pinned: P15-09 through P15-16 and **P15-16A** (`fb725d77e6834c3f/attempt-0001`, sha256
-  9230f8ab1dadf583..., disposition implemented_verified) -- the receipt that was pending through the
-  rehearsal now exists and is bound here.
-- `tools/verify_research_release.py task` exits 2. Every residual failure is one of three classes, none
-  of them a defect in this attempt's evidence: (a) the declared code files of this branch are not on
-  main yet, so their bytes, symbols and test node ids cannot resolve under /workspace; (b) the
-  recursive check of P15-09..P15-16A reports identity drift inside those receipts, which this task does
-  not own; (c) the required artifact name `FAMILY_REPORTS/` cannot match, because the verifier keys the
-  manifest by `Path(path).name`, which never carries a trailing slash. (c) is a one-line fix in either
-  TASK_GRAPH (drop the slash) or receipts.py (`rstrip("/")` when comparing); both files are outside this
-  task's ownership.
-
+- Predecessors pinned, rebound on 2026-09-17 to the receipts the subphase gates actually closed on
+  (wiki/current-status.md): P15-09 `250e5aea146f3516`, P15-10 `b89cbd7b0f4473cc`, P15-11
+  `9e7fda7b291cce99`, P15-12 `f33f750e365a04c1`, P15-13 `8de8e78a21b0838a`, P15-14 `f01de253cf514105`,
+  P15-15 `ced9a15cf6c6dae2`, P15-16 `cf6bf4778e53a0b0` and **P15-16A** `a931349e71b6ee2f` (sha256
+  86174e0540b4abd9...). The earlier binding used preserved first-round attempts of P15-09, P15-10,
+  P15-11, P15-13, P15-14 and P15-15; their PLAN_SNAPSHOTs pin wiki method pages at digests the
+  amendment chain does not start from, so the chain could not excuse the later edits to those pages.
+  The 04 gate receipts pin exactly the `sha256_before` the 2026-09-15 amendments carry forward.
+- 2026-09-17: the branch is merged, so every declared file is hashed from /workspace. The four
+  native-slice tests failed on main because `native-slice/jobs/` is gitignored (.gitignore:124) and
+  the merge could not carry it; the 800 job documents were copied from the merged worktree into this
+  attempt's run root, which restores the fixture the tests read. `SHARD_INVENTORY.json` still pins
+  their per-date sha256, so the copy is checkable. The three recorded pytest commands were then re-run
+  against the live tree: 111, 117 and 72 passed, exit 0 each, and the logs in the attempt directories
+  are those runs.
+- `tools/verify_research_release.py task` exits 0 for this receipt on 2026-09-17, after the
+  coordinator's integration patch to `contracts/receipts.py` (amendment chain exempt from the plan
+  hash comparison, a required artifact matched by a path component, and an added file under an owned
+  path cleared by a verified successor that pins it at the live digest).
 ## Code drift superseded by this attempt
 
-The stage A and fast-engine rounds changed files that closed tasks had pinned. The verifier clears a stale pin only when a later verified receipt pins the same path at the live digest and lists that task as a predecessor, so attempt-0003's CODE_SNAPSHOT now pins every drifted path this run executed. The set was computed mechanically (drift.py over every receipt under reports/research-work, then an import and open trace of the runner entry), never from memory.
+The stage A and fast-engine rounds changed files that closed tasks had pinned, and P15-16A's
+owned `source_adapters/` directory gained `enumeration.py` after its receipt closed. The verifier
+clears a stale pin, or an unpinned owned file, only when a later verified receipt that lists that
+task as a predecessor pins the same path at the live digest, so attempt-0003's CODE_SNAPSHOT
+carries the whole set. Both halves were computed mechanically (drift.py and pinset.py over every
+receipt under reports/research-work, plus an import and open trace of the runner entry), never
+from memory.
+
+Executed by this attempt (imported or opened by the run or by its own verification pass):
 
 | file | live digest | closed task whose pin it supersedes |
 | --- | --- | --- |
@@ -88,6 +103,7 @@ The stage A and fast-engine rounds changed files that closed tasks had pinned. T
 | `src/trading_research/research/contracts/execution.py` | `a3ecbfae92dd40a0` | P15-03 |
 | `src/trading_research/research/contracts/identity.py` | `da3cb30399536f8f` | P15-00, P15-01, P15-02, P15-03 |
 | `src/trading_research/research/contracts/outcomes.py` | `6c4a2aac7c624170` | P15-03 |
+| `src/trading_research/research/contracts/receipts.py` | `859efe869728a0dc` | P15-01, P15-16A |
 | `src/trading_research/research/method_pack/historical_features.py` | `0fea65612affd342` | P15-06 |
 | `src/trading_research/research/rule_discovery/baseline.py` | `828a4b49d800b0e5` | P15-02 |
 | `src/trading_research/research/rule_discovery/engine_slice.py` | `fa066745cdc13f3d` | P15-05, P15-06, P15-07, P15-08 |
@@ -111,7 +127,40 @@ The stage A and fast-engine rounds changed files that closed tasks had pinned. T
 | `src/trading_research/research/rule_discovery/source_adapters/saint.py` | `44eabc51c02a0bc3` | P15-13, P15-16A |
 | `src/trading_research/research/rule_discovery/source_adapters/sires.py` | `9c13a4ce68cd4c08` | P15-12 |
 | `src/trading_research/research/rule_discovery/source_adapters/sires_b02.py` | `222c7a87e3ef5fbf` | P15-16A |
-| `src/trading_research/research/contracts/receipts.py` | `c17758c964678ec0` | P15-01, P15-16A (executed by this attempt's own verification pass, not by the search run) |
-| `tools/verify_research_release.py` | `e4e8c4efe83cf985` | P15-01 (executed by this attempt's own verification pass, not by the search run) |
+| `tools/verify_research_release.py` | `e4e8c4efe83cf985` | P15-01 |
 
-Not pinned here, and therefore still stale for their owners: every drifted path this run did not execute -- the Phase 2 expert modules and tools (P2-03, P2-09, P2-10), the other tasks' own test files, and `tools/produce_p15_16a.py` and `tools/replay_author_examples.py` (P15-16A). Declaring bytes this attempt never ran would be a false identity.
+Pinned for identity only, on the coordinator's 2026-09-17 integration patch, so that P15-01,
+P15-02, P15-03, P15-05, P15-09 to P15-16 and P15-16A resolve at the live digests. This attempt
+did not execute these files; the pin declares the bytes, not that the run used them. Two further
+files of P15-16A's owned `source_adapters/` package, `__init__.py` and `confirmation.py`, are pinned
+as well so the whole directory is declared; neither has drifted, so neither appears below:
+
+| file | live digest | closed task whose pin it supersedes |
+| --- | --- | --- |
+| `src/trading_research/research/rule_discovery/baseline_manifest.py` | `aeab5b67affd961e` | P15-00, P15-02 |
+| `src/trading_research/research/rule_discovery/families/green_failure.json` | `de3a409576450429` | P15-10, P15-16A |
+| `src/trading_research/research/rule_discovery/families/green_vwap_scalp.json` | `19285ddbe75aa7f3` | P15-11, P15-16A |
+| `src/trading_research/research/rule_discovery/families/jumbo.json` | `6dbcfcf1482990c1` | P15-09, P15-16A |
+| `src/trading_research/research/rule_discovery/families/keani.json` | `a2a55677a7c5c44c` | P15-15, P15-16A |
+| `src/trading_research/research/rule_discovery/families/member.json` | `5c31a6eb7941ed1b` | P15-14, P15-16A |
+| `src/trading_research/research/rule_discovery/families/processes.json` | `739053dada3382dd` | P15-16, P15-16A |
+| `src/trading_research/research/rule_discovery/families/saint.json` | `b5c37ecf25a21665` | P15-13, P15-16A |
+| `src/trading_research/research/rule_discovery/families/sires.json` | `23d55fae9fec481b` | P15-12, P15-16A |
+| `src/trading_research/research/rule_discovery/sequences.py` | `7b40ce15fb4573ca` | P15-07 |
+| `tests/contracts/test_receipt_memos.py` | `730e52aee5cf0cd3` | P15-16A |
+| `tests/rule_discovery/test_p15_01.py` | `c0308999a81f1b21` | P15-01 |
+| `tests/rule_discovery/test_p15_02.py` | `696a924f2b7f6ab4` | P15-02 |
+| `tests/rule_discovery/test_p15_03.py` | `ecd1706ed13d6213` | P15-03 |
+| `tests/rule_discovery/test_p15_09.py` | `1f9ce359a8b94e53` | P15-09 |
+| `tests/rule_discovery/test_p15_10.py` | `c3607106df86f5c5` | P15-10 |
+| `tests/rule_discovery/test_p15_12.py` | `025ce5501d8b6042` | P15-12 |
+| `tests/rule_discovery/test_p15_13.py` | `d0d4c3dd4ea588ce` | P15-13 |
+| `tests/rule_discovery/test_p15_14.py` | `daa353afb7534041` | P15-14 |
+| `tests/rule_discovery/test_p15_15.py` | `1227338095bec482` | P15-15 |
+| `tests/rule_discovery/test_p15_16.py` | `4d053e9908a7b8a4` | P15-16 |
+| `tests/rule_discovery/test_p15_16a.py` | `92542de11a7c35de` | P15-16A |
+| `tools/produce_p15_16a.py` | `fe82bd8cab7bebf6` | P15-16A |
+| `tools/replay_author_examples.py` | `314bce0bef8418e9` | P15-16A |
+| `src/trading_research/research/rule_discovery/source_adapters/enumeration.py` | `598dd33475bb69da` | P15-16A (added under P15-16A's owned directory after its receipt closed) |
+
+Still stale for their owners, and deliberately not pinned here: `src/trading_research/research/experts/labels/volatility.py` (P2-03), `src/trading_research/research/experts/options/atlas.py` (P2-10), `src/trading_research/research/experts/options/boards.py` (P2-10), `src/trading_research/research/experts/options/instruments.py` (P2-09, P2-10), `src/trading_research/research/experts/options/native.py` (P2-09, P2-10), `src/trading_research/research/experts/options/pricing.py` (P2-10), `src/trading_research/research/experts/options/slice_runner.py` (P2-03, P2-09, P2-10), `src/trading_research/research/rule_discovery/candidate_bank_v1.json` (P15-08), `src/trading_research/research/rule_discovery/cohorts.py` (P15-06), `src/trading_research/research/rule_discovery/delta.py` (P15-06), `tests/context_experts/test_p2_03.py` (P2-03), `tests/context_experts/test_p2_09.py` (P2-09), `tests/context_experts/test_p2_10.py` (P2-10), `tests/rule_discovery/test_p15_06.py` (P15-06), `tests/rule_discovery/test_p15_07.py` (P15-07), `tests/rule_discovery/test_p15_08.py` (P15-08), `tools/run_context_experts.py` (P2-03, P2-09, P2-10). Those tasks are outside the chain this patch covers.

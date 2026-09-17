@@ -1,0 +1,107 @@
+{
+  "schema_version": "research-family-spec-v1",
+  "family": "GB-FAIL",
+  "task_id": "P15-10",
+  "branches": ["nyam_box", "previous_hour", "asia_tdo_case", "cash_open_reclaim_case", "prior_day_level", "prior_week_level", "prior_month_level", "mss_fvg_refinement"],
+  "source_additions": ["london_box", "asia_box", "overnight_scan"],
+  "clock_zone_unverified": true,
+  "baselines": {
+    "B0.2": {
+      "version": "B0.2-2026-09-15",
+      "scan": "trading_research.research.rule_discovery.source_adapters.green_failure:scan_b02",
+      "replay": "trading_research.research.rule_discovery.source_adapters.green_failure:replay_example",
+      "branches": [
+        "london_box",
+        "asia_box",
+        "asia_tdo_case",
+        "prior_day_level",
+        "nyam_box",
+        "previous_hour",
+        "nwog",
+        "cash_open_reclaim_case",
+        "golden_pocket",
+        "ny_session_extreme"
+      ],
+      "clock_zone_unverified": false
+    }
+  },
+  "plausibility": {
+    "family_pass_cap_per_session": {
+      "passes_per_session": [0, 2],
+      "scope": "sum of GB-FAIL box-branch passes in both directions",
+      "source_claim": "One setup. One strike. Maximum conviction. Nov 19 prints one long and one short, both directions, not more.",
+      "page": "GB p.30 One setup. One strike; GB p.31 Trade 1 long / Trade 2 short",
+      "note": "F07 forbids a scanner cap. This bound is a plausibility check on measured A+ passes, not a filter."
+    },
+    "london_box": {
+      "episodes_per_session": [0, 2],
+      "pass_rate": [0.0, 0.55],
+      "source_claim": "London-low A1 is a named sequence, not a daily default.",
+      "page": "GB NG 2099513366326730859; RR-11; F06 A1"
+    },
+    "asia_box": {
+      "episodes_per_session": [0, 2],
+      "pass_rate": [0.0, 0.70],
+      "source_claim": "Asia-high failure short, no TDO required. Histogram must show Asia entries.",
+      "page": "GB pp.16, 19, 27; F06 A2"
+    },
+    "asia_tdo_case": {
+      "episodes_per_session": [0, 2],
+      "pass_rate": [0.0, 0.65],
+      "source_claim": "Literal 5-minute close below TDO after Asia-high sweep.",
+      "page": "GB pp.19, 27"
+    },
+    "prior_week_level": {
+      "episodes_per_session": [0, 2],
+      "pass_rate": [0.0, 0.6],
+      "source_claim": "Previous weekly candle's extremes (PWH/PWL) as sweep-and-reclaim references, both sides, one reference lifecycle per level per week. The page names the level set and dates three uses; it states no frequency, so the bound is the structural one: at most one episode per side per session.",
+      "page": "GB p.31 (SD03 addendum); 2025-11-19, 2026-04-23, 2026-09-15; frequency unstated",
+      "observed_rate_justification": {
+        "page": "GB p.31 (SD03 addendum)",
+        "text": "The source gives no weekly-level frequency. The episodes-per-session bound [0, 2] is structural (one reference per side per session) and the pass-rate bound reuses the prior_day_level sweep-and-reclaim template on the same confirmation mode. An observed rate outside it is reported, not tuned."
+      }
+    },
+    "prior_day_level": {
+      "episodes_per_session": [0, 4],
+      "pass_rate": [0.0, 0.60],
+      "source_claim": "PDL/PDH sweep and 5-minute close. Both sides. Overnight eligible.",
+      "page": "GB pp.25, 48, 52-54; F06 A3"
+    },
+    "nyam_box": {
+      "episodes_per_session": [0, 12],
+      "pass_rate": [0.0, 0.40],
+      "source_claim": "At-level failure of the 9-10 box and sub-boxes. A+ is one or two per session across boxes, not several nyam passes.",
+      "page": "GB pp.22, 38, 43, 58; RR-13"
+    },
+    "previous_hour": {
+      "episodes_per_session": [0, 16],
+      "pass_rate": [0.0, 0.35],
+      "source_claim": "Completed-hour fail-back. Repeats allowed. Not several A+ per hour.",
+      "page": "GB pp.37-38"
+    },
+    "nwog": {
+      "episodes_per_session": [0, 4],
+      "pass_rate": [0.0, 0.25],
+      "source_claim": "NWOG Mondays. Destination after a midnight or NY-open failure, not a daily box.",
+      "page": "GB pp.13, 14, 36, 37"
+    },
+    "cash_open_reclaim_case": {
+      "episodes_per_session": [0, 2],
+      "pass_rate": [0.0, 0.50],
+      "source_claim": "09:30 manipulation below, reclaim, retracement objective, stops at lows. Confirmation duration unpublished (OD 5-minute reclaim).",
+      "page": "GB p.3 / p.40"
+    },
+    "golden_pocket": {
+      "episodes_per_session": [0, 2],
+      "pass_rate": [0.0, 0.30],
+      "source_claim": "Down-leg pocket plus a real failure. Band touch alone is not the setup.",
+      "page": "GB pp.23, 25, 51; RR-14"
+    },
+    "ny_session_extreme": {
+      "episodes_per_session": [0, 2],
+      "pass_rate": [0.0, 0.20],
+      "source_claim": "One dated afternoon sweep-and-fail of the running NY session low after 11:00, plus the text that session highs and lows are the table edges.",
+      "page": "SOURCE_ADDITIONS_2026-09-15 trade 3; GB p.3 session highs and lows"
+    }
+  }
+}

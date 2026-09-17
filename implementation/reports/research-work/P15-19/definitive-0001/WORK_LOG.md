@@ -32,8 +32,6 @@ breadth run `P15-17/6cc3b4628129100d/attempt-0003` (both B0.2 roots, supplementa
 - `TASK_RECEIPT.json` with PLAN_SNAPSHOT, CODE_SNAPSHOT, DRAFT_MANIFEST, EVIDENCE_MATRIX (every
   acceptance key and assigned assurance case bound to a test node id, a command index and hashed
   evidence), DECISIONS.tsv, REPORT.md and RESULT_CARD.json; the predecessor receipt is pinned by digest.
-- `tools/verify_research_release.py task` exits 2. The residual failures are the branch's code not being
-  on main yet (declared bytes, code_ref symbols and test node ids resolve only in this worktree) and,
-  for a task whose artifacts include `FAMILY_REPORTS/`, the verifier's manifest key being
-  `Path(path).name`, which never carries a trailing slash. Neither is a defect in this attempt's
-  evidence; both clear outside this task's ownership.
+- 2026-09-17: the branch is merged, so every declared file is hashed from /workspace. The receipt was
+  re-issued against the live tree and rebound to the re-issued predecessor digest, and the recorded
+  pytest command was re-run there. `tools/verify_research_release.py task` now exits 0.

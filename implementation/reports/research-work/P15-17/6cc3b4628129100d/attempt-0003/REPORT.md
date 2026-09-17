@@ -2,6 +2,8 @@
 
 Decision trail: `WORK_LOG.md`. Self-check: `SELF_CHECK.txt`.
 
+Code identity: this attempt's `CODE_SNAPSHOT.json` pins 65 files: the runtime and test modules it owns, the 29 drifted files it executed, and 27 identity-only pins carried on the coordinator's 2026-09-17 integration patch so that the closed receipts of P15-00 to P15-16 and P15-16A resolve at the live digests; the split is tabulated in `WORK_LOG.md`.
+
 ## Result card
 
 **Question.** Does any registered one-axis candidate, including the 2026-09-16 profile supplement, beat the source-faithful baseline B0.2 well enough to replace it as a family's entry rule?
@@ -26,4 +28,4 @@ Decision trail: `WORK_LOG.md`. Self-check: `SELF_CHECK.txt`.
 **Limits.**
 - Mean daily net points in the deterministic one-mini benchmark on an isolated family under a fixed scheduler; not a portfolio and not a claim about the user's daily target.
 - No number here touches the blind hold-out (2026-04-01 to 2026-09-03).
-- The P15-16A receipt digest is still pending; the pairing bytes are pinned by path and sha256 in the run's own job documents.
+- The pairing is bound to P15-16A's verified receipt a931349e71b6ee2f and, inside the run, to each job document's own path and sha256.
