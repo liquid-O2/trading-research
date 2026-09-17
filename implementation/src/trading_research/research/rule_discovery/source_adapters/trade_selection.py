@@ -36,32 +36,36 @@ MAX_ENTRIES_PER_SESSION = 3
 #: listed here, fall back to the earliest decision and are recorded as such --
 #: no order is invented where the tickets are silent.
 MODE_PREFERENCE: dict[str, tuple[str, ...]] = {
-    # --- read off the replay of the author's tickets (strict matches, 2026-09-17)
-    "judas_reversal": ("at_level", "signature_close"),            # 4 + 3 tickets
-    "other_session": ("rejection_block", "absorption"),           # 2 + 1
-    "extension_reaction": ("absorption", "orderblock", "rejection_block"),  # 2 + 1 + 1
-    "timed_pzone_reversal": ("rejection_close", "at_level"),      # 1 + 1
-    "internal_rotation": ("two_minute_close",),                   # 1 (2026-07-10)
-    "single_purged": ("two_minute_close",),                       # 1 (2026-07-28)
-    # The ticket-evidenced mode first, then the mode the SOURCE TEXT names for
-    # the same failure trade -- "wait for the 5 min close back below the PDL
-    # after sweeping above it", then "low risk entry on any retracement with
-    # stops above PDL" (GB p.3). That rule is written for the failure family as
-    # a whole, so the retracement limit is supported on every failure branch,
-    # not only on the ones a ticket happens to show it on.
-    "prior_week_level": ("post_open_retest", "five_minute_close", "at_level"),   # ticket 2025-11-19
-    "previous_hour": ("five_minute_close", "at_level"),                         # ticket 2026-04-23
-    "nyam_box": ("five_minute_close", "at_level"),                              # ticket 2026-08-28
-    # --- no ticket reproduced these branches strictly; the order is the one the
-    # --- SOURCE TEXT names for the Green Bird failure trade -- "wait for the
-    # --- 5-minute close through the level", then "low risk entry on any
-    # --- retracement with stops above PDL" (GB p.3) -- and nothing more.
-    "prior_day_level": ("five_minute_close", "at_level"),
-    "asia_box": ("five_minute_close", "at_level"),
-    "london_box": ("five_minute_close", "at_level"),
-    "asia_tdo_case": ("five_minute_close", "at_level"),
+    # --- Jumbo, read off the author's tickets (coordinator rebuild 2026-09-17):
+    # the resting limit at the line and the signature at the line lead the
+    # Judas tickets (12-30, 02-24, 08-28, 09-01 at the line; 01-28, 10-03, 10-13
+    # on the signature); the EQ tickets are the failure close (07-27 09:00 tag,
+    # 07-16) and the two-minute reclaim (07-10); the London tickets are the
+    # signature (10-06, 10-07, 05-23) and the limit at the box low (10-08); the
+    # P-zone tickets are the limit inside the zone (01-09, 01-02).
+    "judas_reversal": ("stop_at_line", "stop_at_next_line", "failure_close", "signature_close", "rejection_close", "two_minute_close", "next_bar_open"),
+    "other_session": ("stop_at_line", "failure_close", "signature_close", "rejection_close", "two_minute_close", "next_bar_open"),
+    "single_extended": ("stop_at_line", "failure_close", "two_minute_close", "next_bar_open", "signature_close", "rejection_close"),
+    "single_purged": ("stop_at_line", "two_minute_close", "failure_close", "next_bar_open", "signature_close", "rejection_close"),
+    "internal_rotation": ("two_minute_close", "stop_at_line", "failure_close", "next_bar_open", "signature_close", "rejection_close"),
+    "timed_pzone_reversal": ("zone_limit", "rejection_close", "signature_close", "next_bar_open"),
+    "judas_outbound": ("stop_at_line",),
+    # --- Green Bird, read off the tickets (coordinator rebuild 2026-09-17):
+    # the limit at the level on the retest (07-13, 09-03, 09-14, 11-20), the
+    # five-minute close (04-23), the stop through the level (08-28 at the TDO),
+    # the turn of the cash-open spike (08-31), the post-open retest (11-19),
+    # the failed retest under the previous high (08-13, 04-23; FITTED).
+    "nyam_box": ("at_level", "edge_test", "stop_at_level", "stop_at_next_level", "five_minute_close", "failure_close_1m", "approach_reject", "next_bar_open", "post_open_retest"),
+    "previous_hour": ("approach_reject", "five_minute_close", "at_level", "stop_at_level", "failure_close_1m", "next_bar_open"),
+    "prior_day_level": ("at_level", "post_open_retest", "five_minute_close", "stop_at_level", "failure_close_1m", "next_bar_open"),
+    "prior_week_level": ("post_open_retest", "at_level", "five_minute_close", "stop_at_level", "failure_close_1m", "next_bar_open"),
+    "asia_box": ("at_level", "five_minute_close", "stop_at_level", "failure_close_1m", "next_bar_open", "post_open_retest"),
+    "asia_tdo_case": ("at_level", "tdo_close", "five_minute_close", "stop_at_level", "failure_close_1m", "next_bar_open"),
+    "london_box": ("at_level", "post_open_reclaim", "five_minute_close", "stop_at_level", "failure_close_1m", "next_bar_open"),
+    "cash_open_reclaim_case": ("next_bar_open", "at_level", "failure_close_1m"),
+    "golden_pocket": ("pocket_retest_after_failure", "pocket_failure_close", "pocket_near_limit", "pocket_close", "pocket_far_limit"),
+    "golden_pocket_continuation": ("pocket_retest_after_failure", "pocket_failure_close", "pocket_near_limit", "pocket_close", "pocket_far_limit"),
 }
-
 #: Branches whose preference order the tickets do not determine. Recorded in the
 #: selection payload so the report can say which ones are still "earliest".
 UNEVIDENCED_FALLBACK = "earliest_decision"
@@ -118,13 +122,41 @@ def resolve_trade(
     return {"outcome": "open", "at_ns": None, "ambiguous": False}
 
 
+def branch_alternatives(text: Any) -> tuple[str, ...]:
+    """A record may name two adapter branches for one author level, separated
+    by "/": the trailing hour's high at 11:24 on 2026-08-13 IS the 10-11 box
+    high, and the "09:30 low" of 2026-04-28 is the cash-open sweep of the
+    09:00-09:30 low inside the developing 9-10 box. Either branch reproduces
+    the author's reference; the first named is the primary."""
+    if not text:
+        return ()
+    return tuple(part.strip() for part in str(text).split("/") if part.strip())
+
+
 def _episode_key(episode: Mapping[str, Any]) -> tuple:
+    """One opportunity: the branch, the side, the LINE (its kind and price) and
+    the cycle. The reference id alone is the box, which every line of the play
+    shares; keying on it collapsed every Judas long of a session into one
+    opportunity and let the earliest fill of any line win (coordinator
+    rebuild 2026-09-17)."""
     values = episode.get("values") or {}
+    branch = str(episode.get("branch") or "")
+    if branch.startswith("golden_pocket"):
+        # one pocket is one opportunity whichever rung fills it (the near
+        # limit, the far limit, the failure close or the retest): the author
+        # sells the pocket once (2026-07-29 22:20) and adds later by hand
+        return (branch, episode.get("side"), values.get("reference_id") or (episode.get("reference") or {}).get("id"), "pocket", None, None)
+    kind = str(values.get("reference_kind") or "")
+    running = kind.endswith("_running") or kind == "trailing_hour"
+    # a running reference is one line however many five-minute cuts it went
+    # through: the cut id is not part of the opportunity
     return (
         episode.get("branch"),
         episode.get("side"),
-        values.get("reference_id") or (episode.get("reference") or {}).get("id"),
-        values.get("cycle"),
+        None if running else (values.get("reference_id") or (episode.get("reference") or {}).get("id")),
+        kind.replace("_running", ""),
+        str(values.get("reference_px")),
+        values.get("cycle") if not running else None,
     )
 
 
@@ -134,6 +166,13 @@ def select_session_trades(
     bars: Sequence[Mapping[str, Any]],
     clock: tuple[int, int] | None = None,
     max_entries: int = MAX_ENTRIES_PER_SESSION,
+    stop_after_target: bool = True,
+    reenter_same_line: bool = False,
+    edge_first: bool = False,
+    allow_adds: bool | str = False,
+    max_per_line: int | None = None,
+    allow_flips: bool = False,
+    one_position: bool = True,
 ) -> dict[str, Any]:
     """The author's trade list for one session.
 
@@ -145,7 +184,16 @@ def select_session_trades(
       still live;
     * no re-entry after a full objective -- once a taken trade reaches its
       target the session is finished;
-    * at most ``max_entries`` entries a session.
+    * at most ``max_entries`` entries a session;
+    * at most ``max_per_line`` trades on one line and side (the first cycle and
+      one re-entry): no ticket shows a third attempt at the same line;
+    * with ``one_position`` False the list is the CANDIDATE list: every
+      opportunity the framework admits, once, without the position bookkeeping
+      (no blocking, no adds, no flips) -- the object the author chooses from;
+    * with ``allow_flips`` a setup on the opposite side closes the open trade
+      and is taken ("after a failed idea the author flips", audit 1.1;
+      2025-10-13 shorts the R-Hi at 09:05 and buys the R-Lo at 09:40): the
+      mechanical exit is not what keeps him in.
 
     Two modes of the same failure at the same reference are one opportunity: the
     earlier decision wins and the other is recorded as ``duplicate_of``.
@@ -181,13 +229,22 @@ def select_session_trades(
         if current is None or (rank, row[0]) < (current[0], current[1][0]):
             best_by_key[key] = (rank, row)
     rows = [item[1] for item in best_by_key.values()]
-    rows.sort(key=lambda item: (item[0], str(item[1].get("branch")), str(item[1].get("side"))))
+    # Two fills in the same minute, one at the box edge and one at a projection
+    # line beyond it, are the same reversal seen from two lines; the author
+    # names the edge ("R-Lo swept") and is filled on its reclaim (2025-10-03
+    # 25,091.45 on the low's reclaim, not the -0.5 limit under it).
+    EDGE_KINDS = {"box_low", "box_high", "london_low", "london_high"}
+    rows.sort(key=lambda item: (item[0] // (2 * 60 * 1_000_000_000) if edge_first else item[0], 0 if (edge_first and (item[1].get("values") or {}).get("reference_kind") in EDGE_KINDS) else 1, item[0], str(item[1].get("branch")), str(item[1].get("side"))))
 
     taken: list[dict[str, Any]] = []
     seen_keys: set[tuple] = set()
     busy_until: int | None = None
+    busy_side: str | None = None
+    busy_line: Decimal | None = None
+    round_trips = 0
     finished = False
-    skipped = {"duplicate": 0, "position_open": 0, "after_objective": 0, "max_entries": 0}
+    per_line: list[tuple[str, Decimal]] = []
+    skipped = {"duplicate": 0, "position_open": 0, "after_objective": 0, "max_entries": 0, "max_per_line": 0}
     NEAR_PRICE = Decimal("2")
     NEAR_NS = 10 * 60 * 1_000_000_000
     for decision, episode, entry, stop, target in rows:
@@ -195,14 +252,19 @@ def select_session_trades(
         if key in seen_keys:
             skipped["duplicate"] += 1
             continue
-        # Two fills at the same price, on the same branch and side, minutes
-        # apart are one trade however the reference ids differ: 2026-07-10
-        # otherwise takes 29,804.25 twice, at 09:04 and 09:05.
+        # Two fills at the same price and side, minutes apart, are one trade
+        # however the reference ids or branches differ: 2026-07-10 otherwise
+        # takes 29,804.25 twice, at 09:04 and 09:05, and 2026-04-28 takes the
+        # 09:00-09:30 low as a cash-open reclaim AND as a developing-box edge.
+        # A later CYCLE of the same line is a new opportunity even at the same
+        # price minutes later (2026-07-13: the PDL's second retest at 20:22
+        # and the third cycle's fill at 20:29-20:41 are two entries).
+        cycle = (episode.get("values") or {}).get("cycle")
         if any(
-            row["branch"] == episode.get("branch")
-            and row["side"] == episode.get("side")
+            row["side"] == episode.get("side")
             and abs(row["entry"] - entry) <= NEAR_PRICE
             and abs(int(row["decision_at"]) - decision) <= NEAR_NS
+            and not (row["branch"] == episode.get("branch") and row.get("cycle") is not None and cycle is not None and row.get("cycle") != cycle)
             for row in taken
         ):
             skipped["duplicate"] += 1
@@ -210,11 +272,39 @@ def select_session_trades(
         if finished:
             skipped["after_objective"] += 1
             continue
-        if len(taken) >= max_entries:
+        line_px = _d((episode.get("values") or {}).get("reference_px")) or entry
+        in_position = one_position and busy_until is not None and decision < busy_until and str(episode.get("side")) == busy_side
+        # an add: the same side while the position is live -- any line when
+        # ``allow_adds`` is True, the SAME line on a later cycle when it is
+        # "same_line" (Green Bird's re-entry of a level he is already long)
+        is_add = bool(in_position and (allow_adds is True or (allow_adds == "same_line" and busy_line is not None and abs(line_px - busy_line) <= NEAR_PRICE * 3)))
+        if not is_add and round_trips >= max_entries:
             skipped["max_entries"] += 1
             continue
-        if busy_until is not None and decision < busy_until:
-            skipped["position_open"] += 1
+        if max_per_line is not None and sum(1 for side_, px in per_line if side_ == str(episode.get("side")) and abs(px - line_px) <= NEAR_PRICE * 3) >= max_per_line:
+            skipped["max_per_line"] += 1
+            continue
+        # One position at a time blocks the OPPOSITE side while a trade is live;
+        # a second entry on the same side is an add ("scaling in at the lines
+        # and out at the next line", audit §1.1) and counts against the cap.
+        if one_position and busy_until is not None and decision < busy_until and not is_add:
+            if allow_flips and str(episode.get("side")) != busy_side and taken:
+                taken[-1]["flipped_at"] = decision
+                taken[-1]["flipped_by"] = episode.get("candidate_id")
+                busy_until = decision
+            else:
+                skipped["position_open"] += 1
+                continue
+        # A stopped idea is not re-entered at the same line: "after a failed
+        # idea the author flips" (audit §1.1); no ticket shows a second entry at
+        # a line that has just stopped him out.
+        if not reenter_same_line and any(
+            row["outcome"] == "stop"
+            and row["side"] == episode.get("side")
+            and abs(_d(row.get("reference_px") or row["entry"]) - _d((episode.get("values") or {}).get("reference_px") or entry)) <= NEAR_PRICE * 3
+            for row in taken
+        ):
+            skipped["same_line_after_stop"] = skipped.get("same_line_after_stop", 0) + 1
             continue
         seen_keys.add(key)
         result = resolve_trade(bars, side=str(episode.get("side")), entry=entry, stop=stop, target=target, after_ns=decision)
@@ -233,21 +323,30 @@ def select_session_trades(
                 if target is None or entry == stop
                 else abs(target - entry) / abs(entry - stop),
                 "confirmation_mode": (episode.get("values") or {}).get("confirmation_mode"),
+                "cycle": (episode.get("values") or {}).get("cycle"),
+                "reference_px": (episode.get("values") or {}).get("reference_px"),
                 "reference_id": (episode.get("reference") or {}).get("id"),
                 "outcome": result["outcome"],
                 "outcome_at": result["at_ns"],
                 "outcome_ambiguous": result["ambiguous"],
             }
         )
-        busy_until = result["at_ns"]
-        if result["outcome"] == "target":
+        if not is_add:
+            round_trips += 1
+        per_line.append((str(episode.get("side")), line_px))
+        if busy_until is None or result["at_ns"] is None or (busy_until is not None and result["at_ns"] > busy_until):
+            busy_until = result["at_ns"]
+        busy_side = str(episode.get("side"))
+        busy_line = line_px
+        if result["outcome"] == "target" and stop_after_target:
             finished = True
     return {
         "entries": taken,
         "n_entries": len(taken),
+        "n_round_trips": round_trips,
         "mode_preference_fallback": sorted(fallbacks),
         "n_candidates": len(rows),
         "skipped": skipped,
         "max_entries": max_entries,
-        "rule": "first qualifying setup in the author's clock; one position at a time; no re-entry after a full objective; at most three a session",
+        "rule": "first qualifying setup in the author's clock; one position at a time; at most three a segment" + ("; no re-entry after a full objective (Green Bird)" if stop_after_target else "; a stopped idea may be followed by the next qualifying setup (Jumbo)"),
     }

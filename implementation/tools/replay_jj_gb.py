@@ -103,7 +103,7 @@ def replay(markets: Markets, example) -> dict:
                     "detected": None,
                     "detected_strict": None,
                     "divergence": "date outside the tape",
-                    "expected_play": module.PLAY_OF_BRANCH.get(entry.get("branch")),
+                    "expected_play": module._expected_play(entry),
                 }
             )
             rows.append(row)
@@ -146,13 +146,24 @@ def replay(markets: Markets, example) -> dict:
         row["selected_strict"] = selected_match.get("detected_strict")
         row["selected_detected"] = selected_match.get("detected")
         row["selected_within_3_bars"] = selected_match.get("detected_within_3_bars")
+        # the EXECUTED list: one position at a time, with the family's adds and
+        # flips -- reported beside the candidate list, never in its place
+        executed_match = module.match_entry(market, selected.get("executed_episodes") or [], entry)
+        row["executed_trades"] = selected.get("executed_trades") or []
+        row["n_executed"] = len(selected.get("executed_trades") or [])
+        row["n_round_trips"] = selected.get("n_round_trips")
+        row["executed_our_entry"] = executed_match.get("our_entry")
+        row["executed_our_mode"] = executed_match.get("our_mode")
+        row["executed_delta_points"] = executed_match.get("delta_points")
+        row["executed_bars_from_printed"] = executed_match.get("bars_from_printed")
+        row["executed_strict_10"] = executed_match.get("detected_strict_10")
 
         # The same selected-list test with the day read's classifier taken out
         # of the question: the primary play is set to the play the AUTHOR
         # traded. The gap between this column and the one above is the
         # classifier's error; the gap between this column and a perfect score
         # is the selection rule's.
-        author_play = module.PLAY_OF_BRANCH.get(entry.get("branch"))
+        author_play = module._expected_play(entry)
         row["author_play"] = author_play
         row["primary_play_matches_author"] = (selected.get("primary_play") == author_play)
         if author_play and author_play != selected.get("primary_play"):
@@ -200,21 +211,42 @@ def _selection_for_session(module, market, episodes, read) -> dict:
     except Exception as exc:  # a selection failure is reported, never swallowed
         return {"trades": [{"error": f"{type(exc).__name__}: {exc}"}], "episodes": []}
     taken = selection.get("entries") or []
+    executed = (selection.get("executed") or {}).get("entries") or []
+    trades, chosen = _trades_and_episodes(episodes, taken)
+    executed_trades, executed_episodes = _trades_and_episodes(episodes, executed)
+    return {
+        "trades": trades,
+        "episodes": chosen,
+        "primary_play": primary,
+        "executed_trades": executed_trades,
+        "executed_episodes": executed_episodes,
+        "n_round_trips": (selection.get("executed") or {}).get("n_round_trips"),
+    }
+
+
+def _trades_and_episodes(episodes, taken) -> tuple[list[dict], list[dict]]:
+    """The taken trades, and every supported fill of the opportunities behind them.
+
+    The selected TRADE is the opportunity (branch, side, line, cycle); the fill
+    the selection layer prices it with is one of the source-supported
+    executions of that opportunity (the stop through the line, the failure
+    close, the orderblock confirmation...). The author's own execution varies
+    between them from day to day, so the selected-fill test scores every
+    supported fill of the selected opportunity, and the population is priced
+    with the preferred one.
+    """
+    from trading_research.research.rule_discovery.source_adapters.trade_selection import _episode_key
     keys = {
         (str(row.get("branch")), str(row.get("side")), int(row.get("decision_at") or 0), str(row.get("entry")))
         for row in taken
     }
-    chosen = [
+    chosen_fills = [
         ep
         for ep in episodes
-        if (
-            str(ep.get("branch")),
-            str(ep.get("side")),
-            int(ep.get("decision_at") or 0),
-            str((ep.get("geometry") or {}).get("entry")),
-        )
-        in keys
+        if (str(ep.get("branch")), str(ep.get("side")), int(ep.get("decision_at") or 0), str((ep.get("geometry") or {}).get("entry"))) in keys
     ]
+    opportunity_keys = {_episode_key(ep) for ep in chosen_fills}
+    chosen = [ep for ep in episodes if _episode_key(ep) in opportunity_keys]
     trades = [
         {
             "branch": row.get("branch"),
@@ -224,10 +256,11 @@ def _selection_for_session(module, market, episodes, read) -> dict:
             "entry": None if row.get("entry") is None else float(row["entry"]),
             "stop": None if row.get("stop") is None else float(row["stop"]),
             "outcome": row.get("outcome"),
+            "flipped_at": ns_to_et(int(row["flipped_at"])).strftime("%H:%M") if row.get("flipped_at") else None,
         }
         for row in taken
     ]
-    return {"trades": trades, "episodes": chosen, "primary_play": primary}
+    return trades, chosen
 
 
 def _why(match) -> str:
@@ -487,14 +520,29 @@ def by_family(payload) -> list[dict]:
             bucket["risk"] += 1 if row.get("detected") else 0
             bucket["b3"] += 1 if row.get("detected_within_3_bars") else 0
             bucket["sel_strict10"] += 1 if row.get("selected_strict_10") else 0
+            bucket["exec_strict10"] = bucket.get("exec_strict10", 0) + (1 if row.get("executed_strict_10") else 0)
+            bucket.setdefault("_cand", []).append(int(row.get("n_selected") or 0))
+            bucket.setdefault("_exec", []).append(int(row.get("n_executed") or 0))
+            bucket.setdefault("_rt", []).append(int(row.get("n_round_trips") or 0))
             bucket["sel_strict"] += 1 if row.get("selected_strict") else 0
             bucket["sel_risk"] += 1 if row.get("selected_detected") else 0
             bucket["sel_b3"] += 1 if row.get("selected_within_3_bars") else 0
+    all_cand: list[int] = []
+    all_exec: list[int] = []
+    all_rt: list[int] = []
+    for value in rows.values():
+        for key, src, sink in (("cand_per_day", "_cand", all_cand), ("exec_per_day", "_exec", all_exec), ("rt_per_day", "_rt", all_rt)):
+            items = value.pop(src, [])
+            sink.extend(items)
+            value[key] = None if not items else round(sum(items) / len(items), 1)
     out = [{"family": fam, **value} for fam, value in sorted(rows.items())]
-    total = {"family": "both", **{key: 0 for key in fields}}
+    total = {"family": "both", **{key: 0 for key in fields}, "exec_strict10": 0}
     for value in out:
         for key in fields:
             total[key] += value[key]
+        total["exec_strict10"] += int(value.get("exec_strict10") or 0)
+    for key, items in (("cand_per_day", all_cand), ("exec_per_day", all_exec), ("rt_per_day", all_rt)):
+        total[key] = None if not items else round(sum(items) / len(items), 1)
     out.append(total)
     return out
 
@@ -516,7 +564,8 @@ def render_md(payload) -> str:
         f"- **reproduced (strict_10: +/-10 points, right bar, the author's play, branch, side and a supported fill mode): {payload.get('n_detected_strict_10')}**",
         f"- reproduced under the old +/-5 rule: {payload['n_detected_strict']}",
         f"- detected within three five-minute bars of the printed time: {payload['n_detected_3bars']}",
-        f"- **reproduced by the SELECTED trade list (strict_10): {payload.get('n_selected_strict_10')}**",
+        f"- **reproduced by the CANDIDATE list (strict_10): {payload.get('n_selected_strict_10')}** (every opportunity the framework admits, once; mean {payload.get('mean_candidates_per_day')} a day)",
+        f"- reproduced by the EXECUTED list (one position at a time, adds and flips): {payload.get('n_executed_strict_10')} (mean {payload.get('mean_executed_per_day')} fills / {payload.get('mean_round_trips_per_day')} round trips a day)",
         f"- reproduced by the selected trade list (+/-5): {payload.get('n_selected_strict')}",
         f"- reproduced by the selected trade list (ticket-risk): {payload.get('n_selected_risk')}",
         f"- reproduced by the selected trade list (three bars): {payload.get('n_selected_3bars')}",
@@ -526,25 +575,28 @@ def render_md(payload) -> str:
         "",
         "## By family",
         "",
-        "`any fill` scores every fill of every passing episode; `selected` scores only the",
-        "trade list the family would actually have taken that session (the day's primary play,",
-        "the first qualifying setup, one position at a time, at most three entries). The",
-        "acceptance bar is the SELECTED column.",
+        "`any fill` scores every fill of every passing episode. `candidates` scores the",
+        "CANDIDATE list: every opportunity the family's framework admits that session, once",
+        "(per segment and play; at most two or three trades on one line; no position",
+        "bookkeeping) -- the list the author chooses from. `executed` scores the one-position-",
+        "at-a-time list with the family's adds and flips. The acceptance bar is the",
+        "CANDIDATE column; the mean list sizes a day are printed beside it so the author's",
+        "one to three trades a day can be compared with what the framework admits.",
         "",
-        "| family | proper entries | selected strict_10 | selected +/-5 | selected 3 bars | any-fill strict_10 | any-fill +/-5 | any-fill ticket-risk |",
-        "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+        "| family | proper entries | candidates strict_10 | executed strict_10 | candidates +/-5 | candidates 3 bars | any-fill strict_10 | any-fill +/-5 | any-fill ticket-risk | mean candidates / day | mean executed fills / day | mean round trips / day |",
+        "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
     ]
     for row in by_family(payload):
         lines.append(
-            f"| {row['family']} | {row['n']} | **{row['sel_strict10']}** | {row['sel_strict']} | {row['sel_b3']} "
-            f"| {row['strict10']} | {row['strict']} | {row['risk']} |"
+            f"| {row['family']} | {row['n']} | **{row['sel_strict10']}** | {row.get('exec_strict10')} | {row['sel_strict']} | {row['sel_b3']} "
+            f"| {row['strict10']} | {row['strict']} | {row['risk']} | {row.get('cand_per_day')} | {row.get('exec_per_day')} | {row.get('rt_per_day')} |"
         )
     lines += [
         "",
         "## Every entry",
         "",
-        "| example | session | play (ours / author) | branch | side | printed | framework fill | d | bars | strict_10 | +/-5 | sel fill | sel d | sel strict_10 |",
-        "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
+        "| example | session | play (ours / author) | branch | side | printed | framework fill | d | bars | strict_10 | +/-5 | candidate fill | cand d | cand strict_10 | exec strict_10 | candidates / executed / round trips |",
+        "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
     ]
     for item in payload["examples"]:
         for row in item["entries"]:
@@ -552,7 +604,9 @@ def render_md(payload) -> str:
             if printed is None:
                 printed = row.get("printed_reference")
             lines.append(
-                "| `{id}` | {sess} | {op} / {ep} | {br} | {side} | {pt} @{tt} | {fv} | {fd} | {fb} | {s10} | {st} | {sv} | {sd} | {ss} |".format(
+                "| `{id}` | {sess} | {op} / {ep} | {br} | {side} | {pt} @{tt} | {fv} | {fd} | {fb} | {s10} | {st} | {sv} | {sd} | {ss} | {es} | {counts} |".format(
+                    es=row.get("executed_strict_10"),
+                    counts=f"{row.get('n_selected')} / {row.get('n_executed')} / {row.get('n_round_trips')}",
                     id=item["example_id"],
                     sess=row.get("session_date"),
                     op=row.get("our_play"),
@@ -672,6 +726,10 @@ def main(argv=None) -> int:
         "n_detected_3bars": sum(1 for row in inside if row.get("detected_within_3_bars")),
         # Item 11: the same question asked of the SELECTED trade list only.
         "n_selected_strict_10": sum(1 for row in inside if row.get("selected_strict_10")),
+        "n_executed_strict_10": sum(1 for row in inside if row.get("executed_strict_10")),
+        "mean_candidates_per_day": None if not inside else round(sum(int(row.get("n_selected") or 0) for row in inside) / len(inside), 1),
+        "mean_executed_per_day": None if not inside else round(sum(int(row.get("n_executed") or 0) for row in inside) / len(inside), 1),
+        "mean_round_trips_per_day": None if not inside else round(sum(int(row.get("n_round_trips") or 0) for row in inside) / len(inside), 1),
         "n_selected_strict": sum(1 for row in inside if row.get("selected_strict")),
         "n_selected_3bars": sum(1 for row in inside if row.get("selected_within_3_bars")),
         "n_selected_risk": sum(1 for row in inside if row.get("selected_detected")),

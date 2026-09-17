@@ -755,8 +755,8 @@
      "proper_entry": true,
      "marked_by": "narration",
      "side": "long",
-     "branch": "timed_pzone_reversal",
-     "reference": "09:00 P-zone box 25660-25666",
+     "branch": "judas_reversal",
+     "reference": "09:00 P-zone box 25660-25666 (coordinator 2026-09-17: the zone marks the exhaustion area beyond R-Lo; the trade is the Judas reversal at that line)",
      "reference_price": 25663,
      "target": 25741
     },
@@ -784,7 +784,7 @@
     }
    ],
    "expected_detection": {
-    "branch": "timed_pzone_reversal",
+    "branch": "judas_reversal",
     "side": "long then short",
     "reference": "09:00 P-zone box then the 10:00 P-zone box",
     "entry_window_et": "09:15-10:10"
@@ -840,8 +840,8 @@
      "proper_entry": true,
      "marked_by": "rr_tool",
      "side": "long",
-     "branch": "timed_pzone_reversal",
-     "reference": "09:00 P-zone box 25655-25665",
+     "branch": "judas_reversal",
+     "reference": "09:00 P-zone box 25655-25665 (coordinator 2026-09-17: the zone marks the exhaustion area beyond R-Lo; the trade is the Judas reversal at that line)",
      "stop": 25617.25,
      "target": 25846.5
     },
@@ -866,7 +866,7 @@
     }
    ],
    "expected_detection": {
-    "branch": "timed_pzone_reversal",
+    "branch": "judas_reversal",
     "side": "long",
     "reference": "09:00 P-zone box 25655-25665, absorption print",
     "entry_window_et": "09:25-09:40",
@@ -1635,15 +1635,17 @@
    },
    "actions": [
     {
-     "time_et": "13:00",
-     "note": "sweep of the 11:00 high 27146.50 (eye)",
+     "time_et": "12:35-12:36",
+     "note": "sweep of the 11:00 high 27146.50 (eye) | price 27,116.25 carried from the paired action of the same ticket (coordinator record fix 2026-09-17, G4-5) | coordinator record check 2026-09-17 (pass 8): the tool is drawn at 13:00 but 27,116.25 prints only in the 12:35-12:36 bars (12:36 high 27,119, the lower high 36.75 under our 11:33 AM high 27,155.75 / 27.5 under his MNQ 27,146.5); the fill is the rejection of that approach",
      "proper_entry": true,
      "marked_by": "rr_tool",
      "side": "short",
      "branch": "previous_hour",
      "reference": "11:00 hour high 27146.50",
      "stop": 27146.5,
-     "target": 26847.25
+     "target": 26847.25,
+     "price": 27116.25,
+     "time_et_original": "13:00"
     },
     {
      "time_et": "13:00-14:00",
@@ -1680,11 +1682,11 @@
     {
      "time_et": "09:30",
      "action": "buy",
-     "note": "at the 09:30 low 27075",
+     "note": "at the 09:30 low 27075 | coordinator record check 2026-09-17 (pass 8): the '09:30 low' is the opening bar's sweep of the 09:00-09:30 low 27,113.75 (09:31 low 27,068.25) reclaimed at 09:32 (close 27,137.5): the cash-open reclaim inside the developing 9-10 box, either branch names it",
      "proper_entry": true,
      "marked_by": "narration",
      "side": "long",
-     "branch": "nyam_box",
+     "branch": "cash_open_reclaim_case / nyam_box",
      "reference": "09:00-10:00 box low (developing)",
      "target": 27250
     },
@@ -1882,18 +1884,19 @@
    },
    "actions": [
     {
-     "time_et": "20:40",
+     "time_et": "20:01-20:13",
      "action": "buy",
      "qty": 12,
      "price": 29635.75,
-     "note": "at the Asia low; stop 29587.50 (48.25, 193 ticks, Amount 750), target 29896 (260.25, R:R 5.39)",
+     "note": "at the Asia low; stop 29587.50 (48.25, 193 ticks, Amount 750), target 29896 (260.25, R:R 5.39) | coordinator record check 2026-09-17 (pass 8): the R:R tool is drawn at 20:40 but 29,635.75 never prints there (20:39-20:41 lows 29,653.75); the price prints at 20:01 (low 29,626) and 20:04-20:13 (lows 29,624.5-29,628.25), so the fill is the resting limit at the previous session's 9-10 low filled in that window",
      "proper_entry": true,
      "marked_by": "rr_tool",
      "side": "long",
      "branch": "nyam_box",
      "reference": "previous session 09:00-10:00 box low 29635 (audit 2.1 'Entry clock'), traded inside the Asia session",
      "stop": 29587.5,
-     "target": 29896
+     "target": 29896,
+     "time_et_original": "20:40"
     },
     {
      "time_et": "20:40",
@@ -1943,15 +1946,15 @@
    },
    "actions": [
     {
-     "time_et": "11:30",
+     "time_et": "11:20-11:27",
      "action": "sell",
      "qty": 2,
      "price": 30227.5,
-     "note": "stop 30238.75, target 30011.75, limit buy 30069.50",
+     "note": "stop 30238.75, target 30011.75, limit buy 30069.50 | coordinator record check 2026-09-17 (pass 8): the trailing hour's high at 11:24 (30,267.5 at 10:35) is the 10-11 box high; the 11:24 poke to 30,238.75 sits 28.75 under it and the 11:24 bar closes 30,231 (O 30,234.25): his 30,227.5 prints in the 11:25 and 11:27 bars | pass 8: 30,227.5 prints in the 11:20-11:23 and 11:25-11:27 bars, either side of the 11:24 poke; the drawn 11:30 is the tool, when price is already 30,180-30,195",
      "proper_entry": true,
      "marked_by": "rr_tool",
      "side": "short",
-     "branch": "previous_hour",
+     "branch": "previous_hour / nyam_box",
      "reference": "trailing-hour equal highs 30,235 poked to 30,238 at 11:30 (2-minute chart; the stop 30,238.75 sits on the poke)",
      "stop": 30238.75,
      "target": 30011.75,
@@ -1996,36 +1999,38 @@
      "note": "sweep of the 10:00-11:00 box high 29620 into 29633"
     },
     {
-     "time_et": "11:30",
+     "time_et": "11:21-11:24",
      "action": "sell",
      "qty": 5,
      "price": 29613.75,
-     "note": "+1002.50 at 11:46; stop 29633 (19.25 pts, 77 ticks, Amount 750, qty 6.494), target 29427.75 (186 pts, R:R 9.66) = PDH 29432; buy limits 29505.50 / 29490.75 / 29473.50 / 29454 / 29425.50",
+     "note": "+1002.50 at 11:46; stop 29633 (19.25 pts, 77 ticks, Amount 750, qty 6.494), target 29427.75 (186 pts, R:R 9.66) = PDH 29432; buy limits 29505.50 / 29490.75 / 29473.50 / 29454 / 29425.50 | coordinator record check 2026-09-17 (pass 8): the tool is drawn at 11:30 but price is 29,566-29,580 then; 29,613.75 prints in the 11:21-11:24 bars (11:20 closes 29,618.50 back under the 10-11 high 29,623.5 after the 11:15 push to 29,635), the fill of the one-minute failure",
      "proper_entry": true,
      "marked_by": "rr_tool",
      "side": "short",
      "branch": "nyam_box",
      "reference": "10:00-11:00 box high 29620",
      "stop": 29633,
-     "target": 29427.75
+     "target": 29427.75,
+     "time_et_original": "11:30"
     },
     {
      "time_et": "12:45-13:00",
      "note": "sweep of the 9-10 highs into 29675"
     },
     {
-     "time_et": "13:00",
+     "time_et": "12:50-12:56",
      "action": "sell",
      "qty": 8,
      "price": 29642.25,
-     "note": "stop 29664 (21.75, 87 ticks, Amount 750), target 29425.25 (217, R:R 9.98)",
+     "note": "stop 29664 (21.75, 87 ticks, Amount 750), target 29425.25 (217, R:R 9.98) | coordinator record check 2026-09-17 (pass 8): the tool is drawn at 13:00 but 29,642.25 prints at 12:50-12:51 (lows 29,637-29,640.75) and 12:56 (low 29,642.25 exactly), after the 12:45 push to 29,659.5 rejected; the level he sells is the trailing hour's high (the 12:45 high) above the 9-10 / 10-11 highs he names, so either branch is the same trade",
      "proper_entry": true,
      "marked_by": "rr_tool",
      "side": "short",
-     "branch": "nyam_box",
+     "branch": "nyam_box / previous_hour",
      "reference": "09:00-10:00 box highs 29600/29620",
      "stop": 29664,
-     "target": 29425.25
+     "target": 29425.25,
+     "time_et_original": "13:00"
     },
     {
      "time_et": "13:00",
@@ -2173,11 +2178,11 @@
    },
    "actions": [
     {
-     "time_et": "11:45",
+     "time_et": "12:05",
      "action": "sell",
      "qty": 4,
      "price": 29253.75,
-     "note": "live 4 @ 29254 (drawn 29253.75); after the sweep above PDL and the 5-minute close below; stop 29303.50 (49.75), target 29044 (drawn; live target 29043.75), R:R 4.22",
+     "note": "live 4 @ 29254 (drawn 29253.75); after the sweep above PDL and the 5-minute close below; stop 29303.50 (49.75), target 29044 (drawn; live target 29043.75), R:R 4.22 | coordinator record check 2026-09-17: the ticket's tool is drawn at 11:45 but the printed stop 29,303.50 sits UNDER the 11:45 spike high (29,317.75 on our tape), so a fill at 11:38 (the only earlier print of 29,253.75) would have been stopped out; the entry is a sell stop under the reclaimed PDL, triggered on the 12:05 break -- time set to 12:05",
      "proper_entry": true,
      "marked_by": "rr_tool",
      "side": "short",
@@ -2226,17 +2231,18 @@
      "note": "sweep to 29255, close back below"
     },
     {
-     "time_et": "00:45",
+     "time_et": "00:32-00:35",
      "action": "sell",
      "price": 29238.25,
-     "note": "stop 29255 (16.75), target 29126.50; buy limits 29189.50 / 29153.75 / 29140.50 / 29126.50",
+     "note": "stop 29255 (16.75), target 29126.50; buy limits 29189.50 / 29153.75 / 29140.50 / 29126.50 | coordinator record check 2026-09-17 (pass 8): the tool is drawn at 00:45 but price is 15 points under the level then (00:45 high 29,223); the retest of the TDO/Asia high after the 00:26 sweep (high 29,246.75) and the 00:28 close back below is 00:32-00:35 (highs 29,235.25-29,236.25), the resting limit's fill on our tape",
      "proper_entry": true,
      "marked_by": "rr_tool",
      "side": "short",
      "branch": "asia_tdo_case",
      "reference": "Asia high = TDO 29238.25",
      "stop": 29255,
-     "target": 29126.5
+     "target": 29126.5,
+     "time_et_original": "00:45"
     }
    ],
    "expected_detection": {

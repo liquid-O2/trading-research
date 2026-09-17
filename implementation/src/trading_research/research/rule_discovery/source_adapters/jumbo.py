@@ -4,7 +4,7 @@ from __future__ import annotations
 from datetime import date, datetime, timedelta
 from decimal import Decimal
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any, Mapping, Sequence
 import inspect
 import json
 
@@ -256,6 +256,7 @@ from trading_research.research.rule_discovery.source_adapters.session_levels imp
     prior_value_area,
 )
 from trading_research.research.rule_discovery.source_adapters.trade_selection import (
+    branch_alternatives,
     MAX_ENTRIES_PER_SESSION,
     MODE_PREFERENCE,
     select_session_trades,
@@ -492,7 +493,7 @@ def box_geometry(market, kind: str) -> dict[str, Any] | None:
     if kind == "ny":
         start, end = _at(market, "06:00"), _at(market, "09:00")
     elif kind == "london":
-        start, end = _at(market, LONDON_BOX_WINDOW[0]), _at(market, LONDON_BOX_WINDOW[1])
+        start, end = _at(market, LONDON_BOX[0], -1), _at(market, LONDON_BOX[1])
     else:
         return None
     bars = _bars(market, start, end, 60)
@@ -557,56 +558,191 @@ def _open_location(open_px: Decimal | None, prior: Mapping[str, Any] | None, val
     return None
 
 
-def drawn_levels(market, box: Mapping[str, Any] | None) -> list[dict[str, Any]]:
-    """J4: every drawn liquidity level the author sweeps, not only R-Hi/R-Lo.
+# ---------------------------------------------------------------------------
+# the drawn levels, the P-zone / EVRange generators and the day read
+#
+# Rebuilt by the coordinator 2026-09-17 from the source (fidelity audit §1.1,
+# the author's own charts and tickets). Every level carries a ROLE: a level is
+# a Judas LOCATION only if the author sweeps it (a box edge into the exhaustion
+# area, an overnight / London / Asia / prior-day extreme, an EVRange line, a
+# P-zone); the internals (EQ, quadrants, range open) and the prior value area
+# are objectives and read inputs, never Judas locations.
 
-    "The author sweeps any drawn liquidity level (London high on 2026-07-16 at
-    29,530 inside the box, D-1/D-2 highs on 2026-01-02 and 2026-08-28, the
-    pre-market swing high on 2025-10-03, the prior RTH high)."
+LIQUIDITY_KINDS = ("onh", "onl", "london_high", "london_low", "asia_high", "asia_low", "d1_high", "d1_low", "prth_high", "prth_low")
+LONDON_LIQUIDITY = ("02:00", "07:05")   # audit §1.1: liquidity sessions 02:00-07:05 and 18:00-00:05
+ASIA_LIQUIDITY = ("18:00", "00:05")
+# The London BOX the author trades 03:00-06:00 is the overnight range that
+# closes at 03:00 (08:00 London): his printed R-Hi / R-Lo on 2025-10-06, 10-07
+# and 10-08 reproduce the 20:00-03:00 range within 1.5 points on both edges and
+# reproduce no 02:00-03:00 window (coordinator tape check 2026-09-17).
+LONDON_BOX = ("20:00", "03:00")
+LONDON_TRADE = ("03:00", "07:00")
+
+# P-zones and EVRange: the author's tools are proprietary; the printed frames
+# are reproduced by percentile bands of the raw-point excursion from the 09:00
+# anchor price over 09:00-16:00, ranked over the prior 250 sessions
+# (PZONE_EVRANGE_STUDY_2026-09-17.md §5: EVRange within 5 points on all four
+# printed edges, P-zone tiers within 3-7 points of the eleven printed zones).
+# They are APPROXIMATIONS of his tools and are labelled as such on every
+# episode (pzone_source / evrange_source = "fitted_percentile_recipe").
+EXCURSION_LOOKBACK = 250
+EXCURSION_WINDOW = (540, 960)   # minutes: 09:00 -> 16:00
+PZONE_TIERS = {"T1": (Decimal("0.115"), Decimal("0.175")), "T2": (Decimal("0.32"), Decimal("0.355")), "T3": (Decimal("0.55"), Decimal("0.575"))}
+EVRANGE_EDGE_PCT = Decimal("0.25")
+EVRANGE_PLUS_50_PCT = Decimal("0.55")
+
+_EXCURSIONS: dict[str, dict[str, tuple[Decimal, Decimal, Decimal]]] = {}
+
+
+def excursion_table(data_root: str) -> dict[str, tuple[Decimal, Decimal, Decimal]]:
+    """Per session: (anchor price at 09:00, up excursion, down excursion) over
+    09:00-16:00 on the front contract by volume. Read once per process from the
+    owned one-minute tape; nothing is written."""
+    root = str(data_root)
+    if root in _EXCURSIONS:
+        return _EXCURSIONS[root]
+    table: dict[str, tuple[Decimal, Decimal, Decimal]] = {}
+    try:
+        import pyarrow.parquet as pq
+        from datetime import timezone as _tz
+        from zoneinfo import ZoneInfo as _Zone
+
+        folder = Path(root) / "quantpad/cme__nq-continuous-futures__ohlcv-1m"
+        ny = _Zone("America/New_York")
+        by_day: dict[str, list] = {}
+        for path in sorted(folder.glob("*.parquet")):
+            for row in pq.read_table(path, columns=["t", "instrument_id", "o", "h", "l", "c", "v"]).to_pylist():
+                at = datetime.fromtimestamp(row["t"] / 1000, _tz.utc).astimezone(ny)
+                by_day.setdefault(at.strftime("%Y-%m-%d"), []).append((at.hour * 60 + at.minute, row))
+        a0, a1 = EXCURSION_WINDOW
+        for day, rows in by_day.items():
+            volume: dict[str, float] = {}
+            for _m, row in rows:
+                volume[row["instrument_id"]] = volume.get(row["instrument_id"], 0.0) + float(row["v"] or 0)
+            if not volume:
+                continue
+            front = max(volume, key=volume.get)
+            pre = [row for m, row in rows if row["instrument_id"] == front and m < a0]
+            post = [row for m, row in rows if row["instrument_id"] == front and a0 <= m < a1]
+            if not pre or len(post) < (a1 - a0) * 0.8:
+                continue
+            anchor = Decimal(str(max(pre, key=lambda r: r["t"])["c"]))
+            up = Decimal(str(max(r["h"] for r in post))) - anchor
+            down = anchor - Decimal(str(min(r["l"] for r in post)))
+            table[day] = (anchor, up, down)
+    except Exception:
+        table = {}
+    _EXCURSIONS[root] = table
+    return table
+
+
+def _excursion_distributions(market) -> tuple[list[Decimal], list[Decimal]] | None:
+    day = _as_day(market)
+    table = excursion_table(getattr(market, "data_root", "/workspace/data"))
+    if day is None or not table:
+        return None
+    prior = [key for key in sorted(table) if key < day.isoformat()][-EXCURSION_LOOKBACK:]
+    if len(prior) < EXCURSION_LOOKBACK // 2:
+        return None
+    ups = sorted(table[key][1] for key in prior)
+    downs = sorted(table[key][2] for key in prior)
+    return ups, downs
+
+
+def _quantile(values: list[Decimal], p: Decimal) -> Decimal:
+    if not values:
+        return Decimal(0)
+    position = (len(values) - 1) * p
+    low = int(position)
+    high = min(low + 1, len(values) - 1)
+    frac = position - low
+    return values[low] + (values[high] - values[low]) * frac
+
+
+def generated_pzones(market, anchor_px: Decimal | None) -> list[dict[str, Any]]:
+    dist = _excursion_distributions(market)
+    if dist is None or anchor_px is None:
+        return []
+    ups, downs = dist
+    zones = []
+    for tier, (k0, k1) in PZONE_TIERS.items():
+        zones.append({"tier": tier, "low": anchor_px + _quantile(ups, k0), "high": anchor_px + _quantile(ups, k1), "anchor": "09:00", "side": "short", "source": "fitted_percentile_recipe"})
+        zones.append({"tier": tier, "low": anchor_px - _quantile(downs, k1), "high": anchor_px - _quantile(downs, k0), "anchor": "09:00", "side": "long", "source": "fitted_percentile_recipe"})
+    return zones
+
+
+def generated_evrange(market, anchor_px: Decimal | None) -> dict[str, Any] | None:
+    dist = _excursion_distributions(market)
+    if dist is None or anchor_px is None:
+        return None
+    ups, downs = dist
+    return {
+        "lower": anchor_px - _quantile(downs, EVRANGE_EDGE_PCT),
+        "upper": anchor_px + _quantile(ups, EVRANGE_EDGE_PCT),
+        "plus_50": anchor_px + _quantile(ups, EVRANGE_PLUS_50_PCT),
+        "source": "fitted_percentile_recipe",
+    }
+
+
+def drawn_levels(market, box: Mapping[str, Any] | None, *, evrange: Mapping[str, Any] | None = None, pzones: Sequence[Mapping[str, Any]] | None = None) -> list[dict[str, Any]]:
+    """Every level on the author's chart, with its role.
+
+    role "sweep": a level the author fades when it is swept (box edges into the
+    exhaustion area, ONH/ONL, London and Asia extremes, D-1..D-3 extremes, the
+    prior RTH high/low, EVRange lines, P-zones). role "objective": internals and
+    the prior value area, which are targets and read inputs.
     """
     out: list[dict[str, Any]] = []
 
-    def add(kind: str, side: str, price: Decimal | None, known_at: int) -> None:
+    def add(kind: str, side: str, price: Decimal | None, known_at: int, role: str) -> None:
         if price is None:
             return
-        out.append({"kind": kind, "side": side, "price": price, "known_at": int(known_at)})
+        out.append({"kind": kind, "side": side, "price": price, "known_at": int(known_at), "role": role})
 
     if box is not None:
-        add("box_low", "long", box["low"], box["known_at"])
-        add("box_high", "short", box["high"], box["known_at"])
-    london = box_geometry(market, "london")
+        add("box_low", "long", box["low"], box["known_at"], "sweep")
+        add("box_high", "short", box["high"], box["known_at"], "sweep")
+        add("eq", "both", box["eq"], box["known_at"], "objective")
+        add("q25", "both", box["q25"], box["known_at"], "objective")
+        add("q75", "both", box["q75"], box["known_at"], "objective")
+        add("range_open", "both", box["range_open"], box["known_at"], "objective")
+    london = _span(_bars(market, _at(market, LONDON_LIQUIDITY[0]), _at(market, LONDON_LIQUIDITY[1]), 60), known_at=_at(market, LONDON_LIQUIDITY[1]))
     if london is not None:
-        add("london_low", "long", london["low"], london["known_at"])
-        add("london_high", "short", london["high"], london["known_at"])
-    asia = _span(_bars(market, _at(market, "20:00", -1), _at(market, "00:00"), 60), known_at=_at(market, "00:00"))
+        add("london_low", "long", london["low"], london["known_at"], "sweep")
+        add("london_high", "short", london["high"], london["known_at"], "sweep")
+    asia = _span(_bars(market, _at(market, ASIA_LIQUIDITY[0], -1), _at(market, ASIA_LIQUIDITY[1]), 60), known_at=_at(market, ASIA_LIQUIDITY[1]))
     if asia is not None:
-        add("asia_low", "long", asia["low"], asia["known_at"])
-        add("asia_high", "short", asia["high"], asia["known_at"])
+        add("asia_low", "long", asia["low"], asia["known_at"], "sweep")
+        add("asia_high", "short", asia["high"], asia["known_at"], "sweep")
     overnight = _span(_bars(market, _at(market, "18:00", -1), _at(market, "09:00"), 60), known_at=_at(market, "09:00"))
     if overnight is not None:
-        add("onl", "long", overnight["low"], overnight["known_at"])
-        add("onh", "short", overnight["high"], overnight["known_at"])
+        add("onl", "long", overnight["low"], overnight["known_at"], "sweep")
+        add("onh", "short", overnight["high"], overnight["known_at"], "sweep")
     for index, span in enumerate(prior_sessions(market, 3), start=1):
-        add(f"d{index}_low", "long", span["low"], span["known_at"])
-        add(f"d{index}_high", "short", span["high"], span["known_at"])
-    value = prior_value_area(market)
-    if value:
-        add("prth_val", "long", value.get("val"), value.get("known_at") or market.start)
-        add("prth_vah", "short", value.get("vah"), value.get("known_at") or market.start)
-    # J-F: the London session's own references are the Asia high/low, the
-    # midnight 00:00-00:30 range and the overnight extremes, all drawn before
-    # 02:00 (2025-05-23 buys the prior RTH low at 02:20).
+        add(f"d{index}_low", "long", span["low"], span["known_at"], "sweep")
+        add(f"d{index}_high", "short", span["high"], span["known_at"], "sweep")
     try:
         prior_rth = (market.prior("day") or {}).get("range")
     except Exception:
         prior_rth = None
     if prior_rth and prior_rth.get("low") is not None:
-        add("prth_low", "long", _d(prior_rth["low"]), int(prior_rth.get("known_at") or market.start))
-        add("prth_high", "short", _d(prior_rth["high"]), int(prior_rth.get("known_at") or market.start))
-    midnight = _span(_bars(market, _at(market, "00:00"), _at(market, "00:30"), 60), known_at=_at(market, "00:30"))
-    if midnight is not None:
-        add("midnight_low", "long", midnight["low"], midnight["known_at"])
-        add("midnight_high", "short", midnight["high"], midnight["known_at"])
+        add("prth_low", "long", _d(prior_rth["low"]), int(prior_rth.get("known_at") or market.start), "sweep")
+        add("prth_high", "short", _d(prior_rth["high"]), int(prior_rth.get("known_at") or market.start), "sweep")
+    value = prior_value_area(market)
+    if value:
+        known = int(value.get("known_at") or market.start)
+        add("prth_val", "long", value.get("val"), known, "objective")
+        add("prth_vah", "short", value.get("vah"), known, "objective")
+        add("prth_poc", "both", value.get("poc"), known, "objective")
+    if evrange:
+        known = _at(market, "09:00")
+        add("evrange_lower", "long", _d(evrange.get("lower")), known, "marker")
+        add("evrange_upper", "short", _d(evrange.get("upper")), known, "marker")
+        add("evrange_plus_50", "short", _d(evrange.get("plus_50")), known, "objective")
+    for zone in pzones or []:
+        side = zone.get("side") or ("long" if box is None or _d(zone["high"]) < box["eq"] else "short")
+        near = _d(zone["high"]) if side == "long" else _d(zone["low"])
+        add(f"pzone_{zone.get('tier', zone.get('anchor', '09:00'))}_{'lo' if side == 'long' else 'hi'}", side, near, _at(market, zone.get("anchor", "09:00")), "marker")
     return out
 
 
@@ -625,6 +761,17 @@ def session_context(market) -> dict[str, Any]:
     prior_day = prior[0] if prior else None
     size = range_class(None if box is None else box["width"], price_at_nine)
     purge = _purge_state(market, prior_day)
+    day_text = str(_as_day(market))
+    evrange = EVRANGE_FIXTURES.get(day_text)
+    evrange_source = "author_printed_fixture" if evrange else None
+    if evrange is None:
+        evrange = generated_evrange(market, price_at_nine)
+        evrange_source = None if evrange is None else "fitted_percentile_recipe"
+    pzones = [dict(zone, source="author_printed_fixture") for zone in (PZONE_FIXTURES.get(day_text) or [])]
+    pzone_source = "author_printed_fixture" if pzones else None
+    if not pzones:
+        pzones = generated_pzones(market, price_at_nine)
+        pzone_source = "fitted_percentile_recipe" if pzones else None
     context = {
         "box": box,
         "prior_sessions": [{k: v for k, v in span.items() if k != "window"} for span in prior],
@@ -635,22 +782,26 @@ def session_context(market) -> dict[str, Any]:
         "open_location": _open_location(price_at_nine, prior_day, value),
         "rth_open_location": _open_location(rth_open, prior_day, value),
         "purge": purge,
-        "case": "double_break_favoured" if size["single_break_favoured"] is False else "single_break_favoured",
-        "levels": drawn_levels(market, box),
-        "evrange": EVRANGE_FIXTURES.get(str(_as_day(market))),
-        "pzones": PZONE_FIXTURES.get(str(_as_day(market))) or [],
+        "evrange": evrange,
+        "evrange_source": evrange_source,
+        "pzones": pzones,
+        "pzone_source": pzone_source,
         "sessionstat": sessionstat_envelope(market),
     }
+    context["levels"] = drawn_levels(market, box, evrange=evrange, pzones=pzones)
+    context["case"] = None
     context["read"] = session_read(market, context)
+    context["case"] = context["read"]["classification"]
     setattr(market, "_jj_context", context)
     return context
 
 
-# The play changes with the day (user instruction 2026-09-17). Each branch is
-# one play; the day's classification decides which plays run at all.
+# The play changes with the day (owner instruction 2026-09-17). Each branch is
+# one play; every play is available every day and the day read names the
+# PRIMARY one, which the selection takes first.
 PLAY_OF_BRANCH = {
     "judas_reversal": "double_break",
-    "judas_outbound": "double_break",
+    "judas_outbound": "single_break",
     "extension_reaction": "double_break",
     "single_extended": "single_break",
     "single_purged": "single_break",
@@ -658,96 +809,88 @@ PLAY_OF_BRANCH = {
     "other_session": "london",
     "timed_pzone_reversal": "pzone",
 }
-# The author's own break-classification table (2026-06-08, 3,249 days, 9-12
-# window) read by its modal category: double break leads every bin up to 1.2%
-# (55.5 / 48.1 / 34.8 / 34.0) and only above 1.2% does a single break lead
-# (single-low 38.5 against double 17.8).
 DOUBLE_BREAK_MAX_PCT = Decimal("1.2")
-# "same framework when having a big 6-9 range > long/short the EQ" (2026-09-02).
 BIG_RANGE_MIN_PCT = Decimal("0.8")
 OUTSIDE_VALUE = {"below_pdl", "below_val", "above_vah", "above_pdh"}
 
 
-def _plays_for(location, pct, purge, *, pzone: bool) -> tuple[str, list[str]]:
-    """The plays one open-location read admits, and the case it classifies."""
-    aligned = (location in {"above_vah", "above_pdh"} and purge.get("purged_high") is True) or (
+def _aligned(location, purge) -> bool:
+    """The open sits outside prior value on the side the overnight already
+    purged (JR p.34, 2026-07-28: "RTH open location in relation to previous day
+    value/range and the current day 6-9")."""
+    return (location in {"above_vah", "above_pdh"} and purge.get("purged_high") is True) or (
         location in {"below_val", "below_pdl"} and purge.get("purged_low") is True
     )
-    decisive_trend = bool(aligned and pct is not None and pct >= DOUBLE_BREAK_MAX_PCT)
+
+
+def _plays_for(location, pct, purge, *, pzone: bool) -> tuple[str, list[str]]:
+    """The day's classification.
+
+    The author's rule, in his words (2026-07-28, JR p.34): "RTH open location in
+    relation to previous day value/range and the current day 6-9 ... Discard
+    mean reversion and range double breaks when these things align" -- an open
+    outside prior value on the side the overnight already purged is the single
+    break (trend) day. His 2026-06-08 table by range size (3,249 days) adds the
+    size rule: above 1.2% of price the single break leads; below it the double
+    break leads.
+    """
+    aligned = _aligned(location, purge)
+    plays = ["london", "double_break", "single_break", "big_range_eq", "pzone"]
     if pct is None or location is None:
-        # The read is unknown, not the day: an unreadable classifier input
-        # (2026 holidays and the 53 sessions whose prior value area is not
-        # measurable) removes the PRIMARY play, never the plays. Every play the
-        # author runs stays available and the missing input is recorded on the
-        # context stage as read_inputs_missing.
-        unknown_plays = ["london", "double_break", "single_break", "big_range_eq"]
-        if pzone:
-            unknown_plays.append("pzone")
-        return "unknown", unknown_plays
-    classification = "single_break" if aligned else "double_break"
-    # J-C: the plays are observed, not switched by a threshold. Every play the
-    # author runs is available every day; the classification chooses which is
-    # primary and is what the frequency report is read against. The single-break
-    # branches then gate themselves on the break state they actually observe and
-    # the EQ play runs on every day as a lower-priority play.
-    plays = ["london", "double_break", "single_break", "big_range_eq"]
-    if pzone:
-        plays.append("pzone")
-    return classification, plays
+        return "unknown", plays
+    # The 2026-06-08 table by range size decides first: up to 0.5% of price the
+    # double break leads by a wide margin (55.5 and 48.1 against 20-26 for
+    # either single break) and the alignment does not overturn it (2025-10-03,
+    # 2026-01-02, 2026-09-01 open outside value on the purged side and are
+    # Judas days); at 1.2% and above the single break leads. Between, the two
+    # are level in his table and the alignment rule decides.
+    if pct >= DOUBLE_BREAK_MAX_PCT:
+        return "single_break", plays
+    if pct < Decimal("0.5"):
+        return "double_break", plays
+    return ("single_break" if aligned else "double_break"), plays
 
 
 def session_read(market, context: Mapping[str, Any]) -> dict[str, Any]:
-    """The day's read, and the plays it allows, on the author's two clocks.
-
-    Audit 1.1 "The classifier (decided before the open)": range size in percent
-    of price, balanced versus already-purged overnight, the RTH open location
-    against the prior RTH value area and range, which Asia/London/midnight
-    edges still exist, sister-index relative strength and the news calendar.
-    The last two are not on the owned tape and are recorded as unavailable
-    rather than approximated.
-
-    The author reads the location twice: once when the 06:00-09:00 box freezes
-    at 09:00 and again at the RTH open, and his own posts quote the second
-    ("open inside prior RTH value: range scalps", 2026-07-10; "RTH open below
-    the prior RTH value low", 2026-07-28). Both reads are kept: the 09:00 read
-    governs an entry taken before 09:30 and the 09:30 read governs the rest, so
-    nothing is admitted on an input the scan could not yet see.
-
-    The plays: a double-break / Judas day trades the 0.33/0.66 band, 0.5 and,
-    after 10:00, the 1.33/1.66 band; a single-break / trend day trades the range
-    OPEN, the EQ and the quadrants; a big 6-9 range is traded at the EQ.
-    "Discard mean reversion and range double breaks when these things align"
-    (2026-07-28) is the rule that switches the day off the Judas play.
-    """
+    """The day's read on the two clocks (09:00 and the RTH open), and the plays."""
     size = context.get("range_class") or {}
     pct = size.get("pct")
     purge = context.get("purge") or {}
-    pzone = bool(PZONE_FIXTURES.get(str(_as_day(market))))
     pre_location = context.get("open_location")
     post_location = context.get("rth_open_location") or pre_location
-    pre_class, pre_plays = _plays_for(pre_location, pct, purge, pzone=pzone)
-    post_class, post_plays = _plays_for(post_location, pct, purge, pzone=pzone)
-    plays = sorted(set(pre_plays) | set(post_plays))
-    unswept = [
-        row["kind"]
-        for row in context.get("levels") or []
-        if row["kind"] in {"asia_high", "asia_low", "london_high", "london_low", "onh", "onl"}
-    ]
-    if post_class == "single_break" and "single_break" in post_plays:
+    pre_class, plays = _plays_for(pre_location, pct, purge, pzone=True)
+    post_class, _ = _plays_for(post_location, pct, purge, pzone=True)
+    unswept = [row["kind"] for row in context.get("levels") or [] if row["kind"] in {"asia_high", "asia_low", "london_high", "london_low", "onh", "onl"}]
+    if post_class == "single_break":
         primary = "single_break"
-    elif "double_break" in post_plays:
+    elif post_class == "double_break":
         primary = "double_break"
-    elif "big_range_eq" in post_plays:
-        primary = "big_range_eq"
     else:
-        primary = "london"
+        primary = None
+    big_range = pct is not None and pct >= BIG_RANGE_MIN_PCT
+    inside_value = post_location == "inside_value"
+    aligned = _aligned(post_location, purge) or _aligned(pre_location, purge)
+    direction = None
+    if post_class == "single_break":
+        if purge.get("purged_low") is True and purge.get("purged_high") is not True:
+            direction = "short"
+        elif purge.get("purged_high") is True and purge.get("purged_low") is not True:
+            direction = "long"
+        elif post_location in {"below_val", "below_pdl"}:
+            direction = "short"
+        elif post_location in {"above_vah", "above_pdh"}:
+            direction = "long"
     return {
         "classification": post_class,
         "classification_pre_open": pre_class,
-        "plays": plays,
-        "plays_pre_open": sorted(set(pre_plays)),
-        "plays_post_open": sorted(set(post_plays)),
+        "plays": sorted(plays),
+        "plays_pre_open": sorted(plays),
+        "plays_post_open": sorted(plays),
         "primary_play": primary,
+        "trend_direction": direction,
+        "big_range": big_range,
+        "aligned": aligned,
+        "open_inside_value": inside_value,
         "inputs": {
             "range_pct": pct,
             "range_bin": size.get("bin"),
@@ -762,11 +905,10 @@ def session_read(market, context: Mapping[str, Any]) -> dict[str, Any]:
                 "val": context["prior_value"].get("val"),
                 "poc": context["prior_value"].get("poc"),
             },
+            "evrange_source": context.get("evrange_source"),
+            "pzone_source": context.get("pzone_source"),
         },
         "unavailable_inputs": ["sister_index_relative_strength", "news_calendar"],
-        # An input the classifier needs but could not read is NAMED, so an
-        # "unknown" classification can be told apart from an unremarkable day.
-        # The plays stay available either way (see _plays_for).
         "read_inputs_missing": [
             name
             for name, present in (
@@ -779,12 +921,12 @@ def session_read(market, context: Mapping[str, Any]) -> dict[str, Any]:
             if not present
         ],
         "prior_value_unavailable_reason": (context.get("prior_value") or {}).get("unavailable"),
-        "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest",
+        "rule": "single break when the open sits outside prior value on the side the overnight already purged (JR p.34, 2026-07-28) or the 6-9 range exceeds 1.2% of price (the 2026-06-08 table); otherwise the double-break / Judas day; the EQ play in addition on a big range (>=0.8%) or an open inside prior value; London and the P-zones run on their own clocks",
     }
 
 
 def _purge_state(market, prior_day: Mapping[str, Any] | None) -> dict[str, Any]:
-    """Which overnight liquidity was already taken before 09:00."""
+    """Which prior-day liquidity was already taken before 09:00."""
     overnight = _span(_bars(market, _at(market, "18:00", -1), _at(market, "09:00"), 60), known_at=_at(market, "09:00"))
     if overnight is None or not prior_day:
         return {"available": False, "purged_high": None, "purged_low": None}
@@ -797,6 +939,7 @@ def _purge_state(market, prior_day: Mapping[str, Any] | None) -> dict[str, Any]:
         "overnight_low": overnight["low"],
         "overnight_width": overnight["high"] - overnight["low"],
     }
+
 
 
 SESSIONSTAT_SAMPLE = 60
@@ -1044,6 +1187,12 @@ def sweep_cycles(market, *, level: Decimal, side: str, begin: int, end: int, max
     rows = _bars(market, begin, end, 60)
     cycles: list[dict[str, Any]] = []
     index = 0
+    # A sweep is a raid THROUGH the line from the entry side: the bar before it
+    # closes on the entry side of the line (above it for a long, below it for
+    # a short) or the sweep bar opens there. A bar that merely sits beyond the
+    # line because price was already there is not a sweep (coordinator rebuild
+    # 2026-09-17: without this a breakdown from above counted as a "short
+    # failure" of the box low).
     while index < len(rows) and len(cycles) < max_cycles:
         row = rows[index]
         lo, hi = _d(row.get("L")), _d(row.get("H"))
@@ -1051,6 +1200,14 @@ def sweep_cycles(market, *, level: Decimal, side: str, begin: int, end: int, max
             index += 1
             continue
         if not (lo < level if side == "long" else hi > level):
+            index += 1
+            continue
+        prior_close = _d(rows[index - 1].get("C")) if index > 0 else None
+        opened = _d(row.get("O"))
+        entry_side = (prior_close is not None and ((prior_close >= level) if side == "long" else (prior_close <= level))) or (
+            opened is not None and ((opened >= level) if side == "long" else (opened <= level))
+        )
+        if not entry_side:
             index += 1
             continue
         start = int(row["start"])
@@ -1412,333 +1569,6 @@ def _context_stage(context: Mapping[str, Any], at_ns: int, **extra: Any) -> dict
 # branches
 
 
-FILL_MODES = ("at_level", "signature_close", "rejection_close")
-
-
-def _fill_modes(
-    confirmed: Mapping[str, Any] | None,
-    level: Decimal,
-    *,
-    limit_at: int | None = None,
-) -> list[tuple[str, Decimal | None, int | None]]:
-    """The two fills of one signature: the limit at the level, and the market
-    fill at the signature's own close.
-
-    The author prints both: 2025-10-01 sells the +0.5 at 24,845 (the projection
-    itself) and 2025-01-28 buys at 21,241.75, under the 21,258 low, on the
-    reclaim candle. They are alternative fills of one opportunity, not two
-    setups.
-    """
-    if confirmed is None:
-        return [(mode, None, None) for mode in FILL_MODES]
-    # A resting limit is filled when price TOUCHES it, which is earlier than the
-    # candle that confirms the signature -- but never earlier than the evidence
-    # that put the order there. ``limit_at`` is that touch, measured from the
-    # sweep by the caller; without it the limit falls back to the confirmation
-    # stamp rather than being dated before its own evidence.
-    out = [
-        ("at_level", level, int(limit_at) if limit_at is not None else confirmed["at"]),
-        ("signature_close", confirmed["entry"], confirmed["at"]),
-    ]
-    # J-B round 2: the author is filled on the rejection candle itself
-    # (2025-10-13: the 09:03-09:05 rejection at the HIGH closes about 24,850
-    # and his ticket is 24,848.50), not only on the candle that confirms it.
-    if confirmed.get("signal_close") is not None:
-        out.append(("rejection_close", confirmed["signal_close"], int(confirmed.get("signal_at") or confirmed["at"])))
-    return out
-
-
-def _judas_episode(
-    market,
-    context: Mapping[str, Any],
-    box: Mapping[str, Any],
-    *,
-    side: str,
-    level: Decimal,
-    kind: str,
-    location_kind: str,
-    contact,
-    pack: Mapping[str, Any],
-    begin: int,
-    extra_values: Mapping[str, Any] | None = None,
-    extra_location: Mapping[str, Any] | None = None,
-) -> list[dict[str, Any]]:
-    modal_lo, modal_hi = _at(market, MODAL_WINDOW[0]), _at(market, MODAL_WINDOW[1])
-    confirmed = pack.get("confirmed")
-    ladder = objective_ladder(box, side)
-    in_modal = contact is not None and modal_lo <= int(contact["start"]) < modal_hi
-    out: list[dict[str, Any]] = []
-    limit_from = None if contact is None else int(contact["end"])
-    limit_touch = None
-    if limit_from is not None and confirmed is not None:
-        touch = first_touch(market, level=level, begin=limit_from, end=int(confirmed["at"]))
-        limit_touch = None if touch is None else int(touch["known_at"])
-    for mode, entry, at_ns in _fill_modes(confirmed, level, limit_at=limit_touch):
-        stop = None if confirmed is None else confirmed["stop"]
-        anchor = entry if entry is not None else level
-        forward = [row for row in ladder if sign(side) * (row["price"] - anchor) > 0]
-        target = forward[0]["price"] if forward else None
-        stages = [
-            _context_stage(context, begin, branch="judas_reversal", location_kind=location_kind),
-            _stage("reference", "pass", int((extra_location or {}).get("known_at") or box["known_at"]), id=box["id"], level=level, kind=kind, box_low=box["low"], box_high=box["high"], width=box["width"]),
-            _stage(
-                "location",
-                "pass" if contact is not None and (extra_location or {}).get("verdict", "pass") == "pass" else "fail",
-                None if contact is None else int(contact["start"]),
-                level=level,
-                kind=kind,
-                location_kind=location_kind,
-                **{
-                    "reason": None if contact is not None else "level_not_contacted_in_the_window",
-                    **{k: v for k, v in (extra_location or {}).items() if k not in {"verdict", "known_at"}},
-                },
-            ),
-            _stage("trigger", "pass" if contact is not None else "fail", None if contact is None else int(contact["end"]), in_modal_window=in_modal, modal_window=list(MODAL_WINDOW)),
-            _stage(
-                "confirmation",
-                pack.get("verdict", "fail"),
-                at_ns,
-                mode=mode,
-                ob_2m=pack.get("ob_2m"),
-                ob_3m=pack.get("ob_3m"),
-                ob_5m=pack.get("ob_5m"),
-                rejection_block=pack.get("rejection_block"),
-                absorption=pack.get("absorption"),
-                kind=None if confirmed is None else confirmed["kind"],
-                timeframe_seconds=None if confirmed is None else confirmed.get("timeframe_seconds"),
-            ),
-            _stage("risk", "pass" if entry is not None and stop is not None and sign(side) * (entry - stop) > 0 else "fail", at_ns, entry=entry, stop=stop, stop_source="confirmation band"),
-            _stage("objective", "pass" if entry is not None and target is not None and sign(side) * (target - entry) > 0 else "fail", at_ns, ladder=[{"name": row["name"], "price": row["price"]} for row in ladder], first_objective=target),
-            _stage("management", "pass", at_ns, scale_out="along the ladder"),
-        ]
-        values = {
-            "reference_px": level,
-            "reference_kind": kind,
-            "location_kind": location_kind,
-            "cycle": (extra_values or {}).get("cycle", 0),
-            "in_modal_window": in_modal,
-            "confirmation_mode": mode,
-            "signature": None if confirmed is None else confirmed["kind"],
-            "confirmation_timeframe_seconds": None if confirmed is None else confirmed.get("timeframe_seconds"),
-        }
-        if extra_values:
-            values.update({k: v for k, v in extra_values.items() if k != "cycle"})
-        out.append(
-            _episode(
-                market,
-                branch="judas_reversal",
-                side=side,
-                stages=stages,
-                decision_at=at_ns,
-                entry=entry,
-                stop=stop,
-                target=target,
-                reference=box,
-                trigger=contact,
-                values=values,
-                geometry={"ladder": [{"name": row["name"], "price": row["price"]} for row in ladder], "first_objective": target},
-            )
-        )
-    return out
-
-
-def _empty_pack() -> dict[str, Any]:
-    return {"verdict": "fail", "confirmed": None, "ob_2m": None, "ob_3m": None, "ob_5m": None, "rejection_block": None, "absorption": None}
-
-
-def _scan_judas_reversal(market) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
-    """The double-break / Judas day.
-
-    Three location kinds, all traded on the rejection signature printed AT the
-    level (coordinator guidance J-A and J-D, 2026-09-17):
-
-    * the exhaustion projections +/-0.33, +/-0.5 and +/-0.66, which is where the
-      author actually sells and buys on these days;
-    * a drawn liquidity level that has been swept into the exhaustion area;
-    * the box edge itself on the first rejection printed there, without waiting
-      for a sweep and reclaim (2025-10-13 sells the HIGH at 09:03-09:05 and
-      then buys the LOW reclaim at 09:40).
-    """
-    context = session_context(market)
-    box = context.get("box")
-    if box is None:
-        return [], [{"reason": "ny_range_unavailable", "branch": "judas_reversal"}]
-    begin, end = _at(market, NY_ACTION[0]), _at(market, NY_ACTION[1])
-    episodes: list[dict[str, Any]] = []
-
-    def confirm_at(contact, side, level):
-        if contact is None:
-            return _empty_pack()
-        return confirm_pack(market, int(contact["end"]), side, level, min(end, int(contact["end"]) + CONFIRM_HORIZON_MIN * NS_MINUTE))
-
-    # 1. the exhaustion projections
-    for name, side in (
-        ("plus_0.33", "short"),
-        ("plus_0.5", "short"),
-        ("plus_0.66", "short"),
-        ("minus_0.33", "long"),
-        ("minus_0.5", "long"),
-        ("minus_0.66", "long"),
-    ):
-        price = box["ladder"][name]
-        touches = level_contacts(market, level=price, begin=begin, end=end, departure=box["width"] / 20)
-        for index, touch in enumerate(touches or [None]):
-            episodes.extend(
-                _judas_episode(
-                    market, context, box,
-                    side=side, level=price, kind=name, location_kind="exhaustion_projection",
-                    contact=touch, pack=confirm_at(touch, side, price), begin=begin,
-                    extra_values={"cycle": index},
-                    extra_location={"reason": None if touch is not None else "projection_not_reached"},
-                )
-            )
-
-    # 2. the box edge on the first rejection printed there
-    for name, side, price in (("box_high", "short", box["high"]), ("box_low", "long", box["low"])):
-        touches = level_contacts(market, level=price, begin=begin, end=end, departure=box["width"] / 20)
-        for index, touch in enumerate(touches or [None]):
-            episodes.extend(
-                _judas_episode(
-                    market, context, box,
-                    side=side, level=price, kind=name, location_kind="edge_rejection",
-                    contact=touch, pack=confirm_at(touch, side, price), begin=begin,
-                    extra_values={"cycle": index},
-                )
-            )
-
-    # 3. a drawn liquidity level swept into the exhaustion area
-    for level_row in context["levels"]:
-        side = level_row["side"]
-        level = level_row["price"]
-        if int(level_row["known_at"]) > begin:
-            continue
-        for cycle in sweep_cycles(market, level=level, side=side, begin=begin, end=end):
-            extreme = cycle["extreme"]
-            edge = box["low"] if side == "long" else box["high"]
-            depth = (edge - extreme) if side == "long" else (extreme - edge)
-            reach = exhaustion_hit(context, extreme, side, exclude_kind=level_row["kind"])
-            pack = confirm_pack(
-                market,
-                max(int(cycle["sweep"]["end"]), begin),
-                side,
-                level,
-                min(end, int(cycle["sweep"]["end"]) + CONFIRM_HORIZON_MIN * NS_MINUTE),
-            )
-            episodes.extend(
-                _judas_episode(
-                    market, context, box,
-                    side=side, level=level, kind=level_row["kind"], location_kind="swept_liquidity",
-                    contact=cycle["sweep"], pack=pack, begin=begin,
-                    extra_values={"cycle": cycle["cycle"], "sweep_extreme": extreme, "depth_class": depth_class(depth, box["width"])},
-                    extra_location={
-                        "verdict": "pass" if reach["reached"] else "fail",
-                        "sweep_extreme": extreme,
-                        "depth_points": depth,
-                        "depth_class": depth_class(depth, box["width"]),
-                        "in_mean_reversal_band": reach["in_band"],
-                        "at_or_beyond_band": reach["at_or_beyond_band"],
-                        "coincident_levels": reach["coincident"],
-                        "reason": None if reach["reached"] else "sweep_short_of_exhaustion_area",
-                    },
-                )
-            )
-    return episodes, []
-
-
-def _scan_judas_outbound(market) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
-    """Trade #1: at the open, take the break direction toward the projection.
-
-    J-E (coordinator guidance 2026-09-17): 2026-07-16 breaks a drawn level at
-    09:30-09:35 and the author sells 29,451.5 at 09:35 -- the first pullback to
-    a box internal on the way down, not the opening minute's close. The trade is
-    in the break direction, the objective is the opposite edge plus the half
-    projection, and it is closed as the modal window arrives.
-    """
-    context = session_context(market)
-    box = context.get("box")
-    if box is None:
-        return [], []
-    open_ns = _at(market, "09:30")
-    expiry = _at(market, MODAL_WINDOW[0])
-    window_end = min(expiry, int(market.end))
-    rows = _bars(market, open_ns, window_end, 60)
-    if not rows:
-        return [], []
-    episodes: list[dict[str, Any]] = []
-    # every level drawn before the open, plus the box edges, can be the level
-    # the opening drive takes
-    candidates = [{"kind": "box_high", "price": box["high"], "side": "short"}, {"kind": "box_low", "price": box["low"], "side": "long"}]
-    for row in context.get("levels") or []:
-        if int(row["known_at"]) <= open_ns:
-            candidates.append({"kind": row["kind"], "price": row["price"], "side": row["side"]})
-    internals = [
-        {"kind": "eq", "price": box["eq"]},
-        {"kind": "q25", "price": box["q25"]},
-        {"kind": "q75", "price": box["q75"]},
-        {"kind": "range_open", "price": box["range_open"]},
-    ]
-    seen: set[tuple] = set()
-    for item in candidates:
-        level = item["price"]
-        # the opening drive takes the level: a break downward is a short, a
-        # break upward is a long
-        for direction, broke in (("short", any(_d(r["L"]) is not None and _d(r["L"]) < level for r in rows)),
-                                 ("long", any(_d(r["H"]) is not None and _d(r["H"]) > level for r in rows))):
-            if not broke:
-                continue
-            break_bar = next(
-                r for r in rows
-                if (direction == "short" and _d(r["L"]) is not None and _d(r["L"]) < level)
-                or (direction == "long" and _d(r["H"]) is not None and _d(r["H"]) > level)
-            )
-            target = box["ladder"]["minus_0.5" if direction == "short" else "plus_0.5"]
-            for internal in internals:
-                price = internal["price"]
-                # The outbound trade runs WITH the break: after the drive takes
-                # the level the fill is the first box internal the move reaches
-                # beyond it, and the risk sits back above (below) the level it
-                # broke. The test was inverted -- it kept the internals on the
-                # wrong side of the level and then put the stop on the entry's
-                # own side, so the risk stage failed on all 8,313 episodes and
-                # the branch never produced a setup.
-                if sign(direction) * (price - level) <= 0:
-                    continue
-                fill = first_touch(market, level=price, begin=int(break_bar["end"]), end=window_end)
-                key = (direction, internal["kind"], str(price))
-                if key in seen:
-                    continue
-                seen.add(key)
-                at_ns = None if fill is None else int(fill["known_at"])
-                entry = None if fill is None else price
-                stop = level + LEVEL_COINCIDENCE if direction == "short" else level - LEVEL_COINCIDENCE
-                stages = [
-                    _context_stage(context, open_ns, branch="judas_outbound", broken_level=level, broken_kind=item["kind"]),
-                    _stage("reference", "pass", box["known_at"], id=box["id"], level=level, kind=item["kind"], internal=internal["kind"]),
-                    _stage("location", "pass", int(break_bar["start"]), level=level, broke=True, internal=internal["kind"], internal_price=price),
-                    _stage("trigger", "pass", int(break_bar["end"]), expiry_ns=expiry, direction=direction),
-                    _stage("confirmation", "pass" if fill is not None else "fail", at_ns, mode="pullback_to_internal", reason=None if fill is not None else "no_pullback_to_a_box_internal_before_the_modal_window"),
-                    _stage("risk", "pass" if entry is not None and sign(direction) * (entry - stop) > 0 else "fail", at_ns, entry=entry, stop=stop),
-                    _stage("objective", "pass" if entry is not None and sign(direction) * (target - entry) > 0 else "fail", at_ns, target=target, label="opposite edge + 0.5W projection"),
-                    _stage("management", "pass", at_ns, exit_window=list(MODAL_WINDOW)),
-                ]
-                episodes.append(
-                    _episode(
-                        market,
-                        branch="judas_outbound",
-                        side=direction,
-                        stages=stages,
-                        decision_at=at_ns,
-                        entry=entry,
-                        stop=stop,
-                        target=target,
-                        reference=box,
-                        trigger=break_bar,
-                        values={"reference_px": price, "reference_kind": internal["kind"], "broken_level": level, "broken_kind": item["kind"], "cycle": 0, "confirmation_mode": "pullback_to_internal", "expiry_ns": expiry},
-                        geometry={"first_objective": target},
-                    )
-                )
-    return episodes, []
-
 
 def _scan_extension_reaction(market) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     """After 10:00, a touch of the 1.33-1.66 band beyond an edge with a
@@ -1811,124 +1641,6 @@ def _scan_extension_reaction(market) -> tuple[list[dict[str, Any]], list[dict[st
     return episodes, []
 
 
-def _scan_other_session(market) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
-    """London: the 02:00-03:00 box traded 03:00-06:00 with the same internals.
-
-    J8: the author's London entries on 2025-10-07 and 2025-10-08 came at the 25%
-    line with no box-edge sweep; the edge raid is recorded as an operand, never
-    required. J7: any of the 2/3/5-minute orderblock or the rejection block
-    confirms, not the 3-minute one alone.
-    """
-    context = session_context(market)
-    london = box_geometry(market, "london")
-    begin, end = _at(market, "03:00"), _at(market, LONDON_ACTION[1])
-    episodes: list[dict[str, Any]] = []
-    locations: list[dict[str, Any]] = []
-    if london is not None:
-        for name, price, sides in (
-            ("london_low", london["low"], ("long",)),
-            ("q25", london["q25"], ("long", "short")),
-            ("eq", london["eq"], ("long", "short")),
-            ("q75", london["q75"], ("long", "short")),
-            ("london_high", london["high"], ("short",)),
-            ("minus_0.33", london["ladder"]["minus_0.33"], ("long",)),
-            ("minus_0.5", london["ladder"]["minus_0.5"], ("long",)),
-            ("minus_0.66", london["ladder"]["minus_0.66"], ("long",)),
-            ("plus_0.33", london["ladder"]["plus_0.33"], ("short",)),
-            ("plus_0.5", london["ladder"]["plus_0.5"], ("short",)),
-            ("plus_0.66", london["ladder"]["plus_0.66"], ("short",)),
-            ("minus_1.33", london["ladder"]["minus_1.33"], ("long",)),
-            ("minus_1.66", london["ladder"]["minus_1.66"], ("long",)),
-            ("plus_1.33", london["ladder"]["plus_1.33"], ("short",)),
-            ("plus_1.66", london["ladder"]["plus_1.66"], ("short",)),
-        ):
-            for side in sides:
-                locations.append({"kind": name, "price": price, "side": side, "known_at": london["known_at"], "from": begin})
-    # Drawn levels are live through the whole London session, before the box closes
-    # (2025-05-23: the prior RTH low is swept at 02:20, inside the box window).
-    for row in context.get("levels") or []:
-        if row["kind"] in {"box_low", "box_high"}:
-            continue
-        locations.append({**row, "from": max(_at(market, LONDON_ACTION[0]), int(row["known_at"]))})
-    if london is None and not locations:
-        return [], [{"reason": "london_range_unavailable", "branch": "other_session"}]
-    edge_swept = None
-    if london is not None:
-        edge_swept = any(
-            sweep_cycles(market, level=london[key], side=side, begin=begin, end=end, max_cycles=1)
-            for key, side in (("low", "long"), ("high", "short"))
-        )
-    drawn = sorted(
-        ({"price": row["price"], "kind": row["kind"], "known_at": int(row["known_at"])} for row in context.get("levels") or []),
-        key=lambda row: row["price"],
-    )
-    for row in locations:
-        side, level = row["side"], row["price"]
-        start = max(int(row.get("from") or begin), int(row["known_at"]))
-        box_frozen = london is not None and start >= int(london["known_at"])
-        width = (london["width"] if london is not None else Decimal("40"))
-        touches = level_contacts(market, level=level, begin=start, end=end, departure=width / 20)
-        for contact_index, touch in enumerate(touches or [None]):
-          pack = (
-            confirm_pack(market, int(touch["end"]), side, level, min(end, int(touch["end"]) + CONFIRM_HORIZON_MIN * NS_MINUTE))
-            if touch is not None
-            else {"verdict": "fail", "confirmed": None, "ob_2m": None, "ob_3m": None, "ob_5m": None, "rejection_block": None, "absorption": None}
-          )
-          confirmed = pack.get("confirmed")
-          entry = None if confirmed is None else confirmed["entry"]
-          at_ns = None if confirmed is None else confirmed["at"]
-          stop = None if confirmed is None else confirmed["stop"]
-          target = None
-          if entry is not None:
-            if box_frozen:
-                ladder = objective_ladder(london, side)
-                target = next((item["price"] for item in ladder if sign(side) * (item["price"] - entry) > 0), None)
-            if target is None:
-                # before the box freezes, the objective is the next drawn level
-                forward = [
-                    item["price"]
-                    for item in drawn
-                    if item["known_at"] <= at_ns and sign(side) * (item["price"] - entry) > 0
-                ]
-                target = (min(forward) if side == "long" else max(forward)) if forward else None
-          stages = [
-              _context_stage(context, start, branch="other_session", session="london", box_edge_swept=edge_swept, box_frozen=box_frozen),
-              _stage(
-                  "reference",
-                  "pass",
-                  int(row["known_at"]),
-                  id=None if london is None else london["id"],
-                  level=level,
-                  kind=row["kind"],
-                  box_low=None if not box_frozen else london["low"],
-                  box_high=None if not box_frozen else london["high"],
-                  box_frozen=box_frozen,
-              ),
-              _stage("location", "pass" if touch is not None else "fail", None if touch is None else int(touch["start"]), level=level, contact=None if touch is None else "touch", box_edge_swept=edge_swept, reason=None if touch is not None else "level_not_contacted_in_the_london_window"),
-              _stage("trigger", "pass" if touch is not None else "fail", None if touch is None else int(touch["start"])),
-              _stage("confirmation", pack["verdict"], at_ns, ob_2m=pack["ob_2m"], ob_3m=pack["ob_3m"], ob_5m=pack["ob_5m"], rejection_block=pack["rejection_block"], absorption=pack["absorption"], kind=None if confirmed is None else confirmed["kind"], any_of_2m_3m_5m=True),
-              _stage("risk", "pass" if entry is not None and stop is not None and sign(side) * (entry - stop) > 0 else "fail", at_ns, entry=entry, stop=stop),
-              _stage("objective", "pass" if entry is not None and target is not None and sign(side) * (target - entry) > 0 else "fail", at_ns, target=target, source="london ladder" if box_frozen else "next drawn level"),
-              _stage("management", "pass", at_ns),
-          ]
-          episodes.append(
-              _episode(
-                  market,
-                  branch="other_session",
-                  side=side,
-                  stages=stages,
-                  decision_at=at_ns,
-                  entry=entry,
-                  stop=stop,
-                  target=target,
-                  reference=london or {"id": f"jj-london-levels:{getattr(market, 'instrument_id', 'view')}:{_as_day(market)}"},
-                  trigger=touch,
-                  values={"reference_px": level, "reference_kind": row["kind"], "cycle": contact_index, "confirmation_mode": None if confirmed is None else confirmed["kind"], "box_edge_swept": edge_swept, "box_frozen": box_frozen},
-                  geometry={"first_objective": target},
-              )
-          )
-    return episodes, []
-
 
 def _spike_turn(market, *, level: Decimal, side: str, bar: Mapping[str, Any], end: int) -> dict[str, Any] | None:
     """The tagging bar turns; the fill is the open of the bar after it.
@@ -1994,352 +1706,632 @@ def _two_minute_reclaim(market, *, level: Decimal, side: str, begin: int, end: i
     return None
 
 
+
+# ---------------------------------------------------------------------------
+# fills at a line
+#
+# One mechanic runs through every play the author prints: a drawn line is
+# taken and price fails back through it, and he is in on the failure. His
+# execution, in his own words (Time-Based ranges Framework pp.25-29): "Market
+# Order ... this is what I mostly use during high volatility"; "Stop Order: I
+# use this preset frequently"; "Generally I don't use Limit Orders"; and the
+# entry models he "usually wait[s] for during reversals" are the 2/3/5-minute
+# three-candle orderblock ("candle 3 closes above candle 2 ... confirms the set
+# up") and the rejection block ("closure of the candle above the sweep candle
+# confirms"). So the fills of one failure are:
+#   stop_at_line      the stop order AT the line, triggered as price fails back
+#                     through it (2025-12-30 25,690 on the low's reclaim,
+#                     2026-08-28 29,592 at R-Lo, 2026-07-27 the EQ tag);
+#   stop_at_next_line the stop at the next drawn line in the trade's direction
+#                     after the failure (2025-10-13 the lower quadrant 24,768);
+#   failure_close     the market order at the close of the minute that fails
+#                     back through;
+#   two_minute_close  the close of the fixed-grid two-minute candle back
+#                     through (2026-07-10 29,809);
+#   signature_close / rejection_close  the orderblock / rejection-block
+#                     confirmation of the manual (2025-01-28 21,241.75,
+#                     2025-10-13 24,848.50);
+#   next_bar_open     FITTED: the turn of the tagging bar, filled at the next
+#                     open.
+# They are alternative fills of ONE opportunity; the selection layer chooses
+# among them by the author's own tickets (MODE_PREFERENCE).
+
+FILL_MODES = ("stop_at_line", "stop_at_next_line", "failure_close", "two_minute_close", "signature_close", "rejection_close", "next_bar_open")
+
+
+def _fill_modes(confirmed, level, *, limit_at=None):
+    """Kept for the rules table: the alternative fills of one signature."""
+    if confirmed is None:
+        return [(mode, None, None) for mode in ("at_level", "signature_close", "rejection_close")]
+    out = [("at_level", level, int(limit_at) if limit_at is not None else confirmed["at"]), ("signature_close", confirmed["entry"], confirmed["at"])]
+    if confirmed.get("signal_close") is not None:
+        out.append(("rejection_close", confirmed["signal_close"], int(confirmed.get("signal_at") or confirmed["at"])))
+    return out
+
+
+def _touch_after(market, *, level: Decimal, side: str, begin: int, end: int) -> dict[str, Any] | None:
+    """The first bar after ``begin`` whose range covers the level."""
+    for row in _bars(market, begin, end, 60):
+        lo, hi = _d(row.get("L")), _d(row.get("H"))
+        if lo is None or hi is None:
+            continue
+        if lo <= level <= hi:
+            return row
+    return None
+
+
+def _stop_through(market, *, level: Decimal, side: str, begin: int, end: int) -> dict[str, Any] | None:
+    """The stop order at the line: the first bar from ``begin`` (price beyond
+    the line) that trades back through it -- a buy stop is triggered by a bar
+    whose high reaches up to the line, a sell stop by a bar whose low reaches
+    down to it."""
+    for row in _bars(market, begin, end, 60):
+        lo, hi = _d(row.get("L")), _d(row.get("H"))
+        if lo is None or hi is None:
+            continue
+        if (hi >= level) if side == "long" else (lo <= level):
+            return row
+    return None
+
+
+def _line_failure_fills(market, *, level: Decimal, side: str, cycle: Mapping[str, Any], end: int, evidence_at: int, internal: Decimal | None = None) -> list[dict[str, Any]]:
+    """The fills of one failure of a line (the sweep bar, its extreme and the
+    bar that closes back through are in ``cycle``). ``internal`` is the next
+    drawn line beyond the failed one in the trade's direction: the author
+    rests a limit there too and scales in at the lines (2025-10-13 buys the
+    lower quadrant 24,768 after the low 24,731 was swept and reclaimed)."""
+    fills: list[dict[str, Any]] = []
+    extreme = _d(cycle.get("extreme"))
+    sweep = cycle.get("sweep") or {}
+    reclaim = cycle.get("reclaim")
+    stop = None if extreme is None else ((extreme - LEVEL_COINCIDENCE) if side == "long" else (extreme + LEVEL_COINCIDENCE))
+    if reclaim is not None:
+        at = int(reclaim.get("known_at") or reclaim.get("end"))
+        close = _d(reclaim.get("C"))
+        if close is not None:
+            fills.append({"mode": "failure_close", "entry": close, "at": at, "stop": stop, "evidence_at": at})
+        # the stop order at the line is triggered inside the bar that comes
+        # back through it: the first bar after the sweep bar that reaches the
+        # line, which is the reclaim bar itself at the latest
+        crossing = _stop_through(market, level=level, side=side, begin=int(sweep.get("end") or at) if sweep else at, end=at + NS_MINUTE) or reclaim
+        fills.append({"mode": "stop_at_line", "entry": level, "at": int(crossing.get("known_at") or crossing.get("end")), "stop": stop, "evidence_at": int(crossing.get("known_at") or crossing.get("end"))})
+        if internal is not None and sign(side) * (internal - level) > 0:
+            crossing = _stop_through(market, level=internal, side=side, begin=at, end=end)
+            if crossing is not None:
+                fills.append({"mode": "stop_at_next_line", "entry": internal, "at": int(crossing.get("known_at") or crossing.get("end")), "stop": stop, "evidence_at": at, "internal": internal})
+    two = _two_minute_reclaim(market, level=level, side=side, begin=int(sweep.get("start") or evidence_at), end=end) if sweep else None
+    if two is not None:
+        fills.append({"mode": "two_minute_close", "entry": two["entry"], "at": int(two["at"]), "stop": (two["extreme"] + LEVEL_COINCIDENCE) if side == "short" else (two["extreme"] - LEVEL_COINCIDENCE), "evidence_at": int(two["at"])})
+    if sweep:
+        pack = confirm_pack(market, int(sweep["end"]), side, level, min(end, int(sweep["end"]) + CONFIRM_HORIZON_MIN * NS_MINUTE))
+        confirmed = pack.get("confirmed")
+        if confirmed is not None:
+            fills.append({"mode": "signature_close", "entry": confirmed["entry"], "at": int(confirmed["at"]), "stop": confirmed["stop"], "evidence_at": int(confirmed["at"]), "signature": confirmed.get("kind"), "pack": pack})
+            if confirmed.get("signal_close") is not None:
+                fills.append({"mode": "rejection_close", "entry": confirmed["signal_close"], "at": int(confirmed.get("signal_at") or confirmed["at"]), "stop": confirmed["stop"], "evidence_at": int(confirmed.get("signal_at") or confirmed["at"]), "signature": confirmed.get("kind"), "pack": pack})
+        turn = _spike_turn(market, level=level, side=side, bar=sweep, end=end)
+        if turn is not None:
+            fills.append({"mode": "next_bar_open", "entry": turn["entry"], "at": int(turn["at"]), "stop": turn["stop"], "evidence_at": int(turn["at"]), "fitted": True})
+    return fills
+
+
+def _contact_fills(market, *, level: Decimal, side: str, contact: Mapping[str, Any], end: int, placed_at: int) -> list[dict[str, Any]]:
+    """The fills at a line REACHED after the evidence that put the order there
+    (a projection line reached after the edge broke, a P-zone entered): the
+    limit at the line on the touch, the signature at the line, the turn of the
+    tagging bar."""
+    fills: list[dict[str, Any]] = []
+    lo, hi = _d(contact.get("L")), _d(contact.get("H"))
+    touch_at = int(contact.get("known_at") or contact.get("end"))
+    if lo is not None and hi is not None:
+        # the line is reached; the stop order at the line is triggered as price
+        # comes back through it -- the touching bar itself when it closes back
+        # on the entry side, else the first later bar that reaches the line
+        close = _d(contact.get("C"))
+        back = close is not None and ((close > level) if side == "long" else (close < level))
+        crossing = contact if back else _stop_through(market, level=level, side=side, begin=touch_at, end=end)
+        if crossing is not None:
+            c_lo, c_hi = _d(crossing.get("L")), _d(crossing.get("H"))
+            extreme = min(lo, c_lo if c_lo is not None else lo) if side == "long" else max(hi, c_hi if c_hi is not None else hi)
+            fills.append({"mode": "stop_at_line", "entry": level, "at": int(crossing.get("known_at") or crossing.get("end")), "stop": (extreme - LEVEL_COINCIDENCE) if side == "long" else (extreme + LEVEL_COINCIDENCE), "evidence_at": max(int(placed_at), int(crossing.get("known_at") or crossing.get("end")))})
+    pack = confirm_pack(market, int(contact["end"]), side, level, min(end, int(contact["end"]) + CONFIRM_HORIZON_MIN * NS_MINUTE))
+    confirmed = pack.get("confirmed")
+    if confirmed is not None:
+        fills.append({"mode": "signature_close", "entry": confirmed["entry"], "at": int(confirmed["at"]), "stop": confirmed["stop"], "evidence_at": int(confirmed["at"]), "signature": confirmed.get("kind"), "pack": pack})
+        if confirmed.get("signal_close") is not None:
+            fills.append({"mode": "rejection_close", "entry": confirmed["signal_close"], "at": int(confirmed.get("signal_at") or confirmed["at"]), "stop": confirmed["stop"], "evidence_at": int(confirmed.get("signal_at") or confirmed["at"]), "signature": confirmed.get("kind"), "pack": pack})
+    turn = _spike_turn(market, level=level, side=side, bar=contact, end=end)
+    if turn is not None:
+        fills.append({"mode": "next_bar_open", "entry": turn["entry"], "at": int(turn["at"]), "stop": turn["stop"], "evidence_at": int(turn["at"]), "fitted": True})
+    return fills
+
+
+def _first_break(market, *, begin: int, end: int, edge: Decimal, side: str) -> dict[str, Any] | None:
+    """The first bar that trades beyond the edge (above it for a short, below it for a long)."""
+    for row in _bars(market, begin, end, 60):
+        hi, lo = _d(row.get("H")), _d(row.get("L"))
+        if side == "short" and hi is not None and hi > edge:
+            return row
+        if side == "long" and lo is not None and lo < edge:
+            return row
+    return None
+
+
+def _forward_objective(rungs: Sequence[Mapping[str, Any]], entry: Decimal, side: str) -> Decimal | None:
+    for row in rungs:
+        price = _d(row.get("price"))
+        if price is not None and sign(side) * (price - entry) > 0:
+            return price
+    return None
+
+
+def _nearest_drawn(context: Mapping[str, Any], entry: Decimal, side: str, known_by: int) -> Decimal | None:
+    forward = [
+        row["price"]
+        for row in context.get("levels") or []
+        if int(row["known_at"]) <= known_by and sign(side) * (row["price"] - entry) > 0 and row["kind"] not in {"eq", "q25", "q75", "range_open", "prth_poc"}
+    ]
+    if not forward:
+        return None
+    return min(forward) if side == "long" else max(forward)
+
+
+def _line_episodes(
+    market,
+    context: Mapping[str, Any],
+    *,
+    branch: str,
+    side: str,
+    level: Decimal,
+    kind: str,
+    location_kind: str,
+    reference: Mapping[str, Any] | None,
+    trigger: Mapping[str, Any] | None,
+    fills: Sequence[Mapping[str, Any]],
+    objective: Any,
+    begin: int,
+    cycle: int,
+    location_ok: bool = True,
+    location_reason: str | None = None,
+    extra_values: Mapping[str, Any] | None = None,
+    extra_location: Mapping[str, Any] | None = None,
+) -> list[dict[str, Any]]:
+    """One episode per alternative fill of one opportunity at one line."""
+    out: list[dict[str, Any]] = []
+    rows = list(fills) if (fills and location_ok) else [None]
+    for fill in rows:
+        entry = None if fill is None else _d(fill.get("entry"))
+        at_ns = None if fill is None else int(fill["at"])
+        stop = None if fill is None else _d(fill.get("stop"))
+        mode = None if fill is None else fill["mode"]
+        target = None
+        if entry is not None:
+            target = objective(entry) if callable(objective) else _forward_objective(objective, entry, side)
+        stages = [
+            _context_stage(context, begin, branch=branch, location_kind=location_kind),
+            _stage("reference", "pass", int((reference or {}).get("known_at") or begin), id=(reference or {}).get("id"), level=level, kind=kind),
+            _stage(
+                "location",
+                "pass" if (trigger is not None and location_ok) else "fail",
+                None if trigger is None else int(trigger["start"]),
+                level=level,
+                kind=kind,
+                location_kind=location_kind,
+                reason=None if (trigger is not None and location_ok) else (location_reason or "line_not_taken_in_the_window"),
+                **{k: v for k, v in (extra_location or {}).items()},
+            ),
+            _stage("trigger", "pass" if trigger is not None else "fail", None if trigger is None else int(trigger.get("known_at") or trigger.get("end"))),
+            _stage(
+                "confirmation",
+                "pass" if fill is not None else "fail",
+                None if fill is None else int(fill.get("evidence_at") or fill["at"]),
+                mode=mode,
+                signature=None if fill is None else fill.get("signature"),
+                fitted=None if fill is None else bool(fill.get("fitted")),
+                reason=None if fill is not None else "no_fill_after_the_failure",
+            ),
+            _stage("risk", "pass" if entry is not None and stop is not None and sign(side) * (entry - stop) > 0 else "fail", at_ns, entry=entry, stop=stop),
+            _stage("objective", "pass" if entry is not None and target is not None and sign(side) * (target - entry) > 0 else "fail", at_ns, first_objective=target),
+            _stage("management", "pass", at_ns, scale_out="along the ladder"),
+        ]
+        values = {
+            "reference_px": level,
+            "reference_kind": kind,
+            "reference_id": (reference or {}).get("id"),
+            "location_kind": location_kind,
+            "cycle": cycle,
+            "confirmation_mode": mode,
+            "signature": None if fill is None else fill.get("signature"),
+        }
+        if extra_values:
+            values.update(extra_values)
+        out.append(
+            _episode(
+                market,
+                branch=branch,
+                side=side,
+                stages=stages,
+                decision_at=at_ns,
+                entry=entry,
+                stop=stop,
+                target=target,
+                reference=reference,
+                trigger=trigger,
+                values=values,
+                geometry={"first_objective": target},
+            )
+        )
+    return out
+
+
+def _sweep_levels(context: Mapping[str, Any], *, sides: tuple[str, ...] = ("long", "short"), exclude_box: bool = False) -> list[dict[str, Any]]:
+    out = []
+    for row in context.get("levels") or []:
+        if row.get("role") != "sweep":
+            continue
+        if exclude_box and row["kind"] in {"box_low", "box_high"}:
+            continue
+        if row["side"] in sides:
+            out.append(row)
+    return out
+
+
+def _coincident(context: Mapping[str, Any], price: Decimal, *, exclude_kind: str | None = None, beyond: Decimal | None = None, side: str | None = None) -> list[str]:
+    """Drawn levels within LEVEL_COINCIDENCE of ``price``. With ``beyond`` and
+    ``side`` only levels on the far side of that edge count: the exhaustion
+    area lies beyond the box edge, a level inside the box does not make a
+    5-point poke of the edge a Judas."""
+    hits = []
+    for row in context.get("levels") or []:
+        if row["kind"] == exclude_kind or row.get("role") not in {"sweep", "marker"}:
+            continue
+        if beyond is not None and side is not None:
+            outside = (row["price"] >= beyond) if side == "short" else (row["price"] <= beyond)
+            if not outside:
+                continue
+        if abs(row["price"] - price) <= LEVEL_COINCIDENCE:
+            hits.append(row["kind"])
+    return hits
+
+
+def _box_objective(box: Mapping[str, Any], side: str):
+    return objective_ladder(box, side)
+
+
+def _trend_objective(box: Mapping[str, Any], side: str) -> list[dict[str, Any]]:
+    """Single-break days: the objective is the far edge, then the projections
+    (J12: "the projection, not the range edge" for the purged case)."""
+    if side == "short":
+        return [
+            {"name": "box_low", "price": box["low"]},
+            {"name": "minus_0.5", "price": box["ladder"]["minus_0.5"]},
+            {"name": "minus_1", "price": box["ladder"]["minus_1"]},
+            {"name": "minus_1.33", "price": box["ladder"]["minus_1.33"]},
+        ]
+    return [
+        {"name": "box_high", "price": box["high"]},
+        {"name": "plus_0.5", "price": box["ladder"]["plus_0.5"]},
+        {"name": "plus_1", "price": box["ladder"]["plus_1"]},
+        {"name": "plus_1.33", "price": box["ladder"]["plus_1.33"]},
+    ]
+
+
+# ---------------------------------------------------------------------------
+# the plays
+
+
+def _scan_judas_reversal(market) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """The double-break / Judas day (audit §1.1): one edge is swept, the sweep
+    extends into the exhaustion area (the 0.33-0.66 band, the 0.5 projection,
+    a P-zone, an overnight / London / Asia / prior-day extreme, an EVRange
+    line), price fails back and reverses through the mid toward the untouched
+    edge. Three location kinds, each traded on the failure of the line:
+
+    * the box edge, every raid of it ("first stage of the move taking both
+      high and low of the range before the full reversal", JR p.20,
+      2025-10-13: the 09:05 short is an 11-point sweep of the R-Hi on a
+      147-point range); the depth class and the coincident exhaustion levels
+      are recorded, not gated;
+    * a projection line beyond the edge, reached after the edge broke;
+    * a liquidity level the author has drawn, swept and failed.
+    Internals (EQ, quadrants, range open) are never Judas locations."""
+    context = session_context(market)
+    box = context.get("box")
+    if box is None:
+        return [], [{"reason": "ny_range_unavailable", "branch": "judas_reversal"}]
+    begin, end = _at(market, NY_ACTION[0]), _at(market, NY_ACTION[1])
+    end = min(end, int(market.end))
+    episodes: list[dict[str, Any]] = []
+
+    # 1. the box edges. Every raid of the edge is a Judas location: the author
+    # sells the 2025-10-13 R-Hi at 09:05 on an 11-point sweep of a 147-point
+    # range ("taking both high and low of the range before the full reversal",
+    # JR p.20). The first two raids of an edge are the opportunities; how far
+    # the raid reached (its depth class, the exhaustion levels it met) is
+    # recorded on the episode for the context study, not used as a gate.
+    for name, side, level in (("box_high", "short", box["high"]), ("box_low", "long", box["low"])):
+        for cycle in sweep_cycles(market, level=level, side=side, begin=begin, end=end, max_cycles=2):
+            extreme = cycle["extreme"]
+            depth = (level - extreme) if side == "long" else (extreme - level)
+            klass = depth_class(depth, box["width"])
+            hits = _coincident(context, extreme, exclude_kind=name, beyond=level, side=side)
+            reached = True
+            fills = _line_failure_fills(market, level=level, side=side, cycle=cycle, end=end, evidence_at=int(cycle["sweep"]["end"]), internal=box["q25"] if side == "long" else box["q75"])
+            episodes.extend(
+                _line_episodes(
+                    market, context,
+                    branch="judas_reversal", side=side, level=level, kind=name, location_kind="edge_sweep",
+                    reference=box, trigger=cycle["sweep"], fills=fills, objective=_box_objective(box, side), begin=begin,
+                    cycle=int(cycle["cycle"]), location_ok=reached, location_reason=None if reached else "sweep_short_of_exhaustion_area",
+                    extra_values={"sweep_extreme": extreme, "depth_class": klass, "coincident_levels": hits},
+                    extra_location={"sweep_extreme": extreme, "depth_points": depth, "depth_class": klass, "coincident_levels": hits},
+                )
+            )
+
+    # 2. the projection lines beyond the edge, reached after the edge broke
+    band_drawn = (_as_day(market) or date.min) >= MEAN_REVERSAL_BAND_FROM
+    for name, side, edge in (("plus_0.33", "short", box["high"]), ("plus_0.5", "short", box["high"]), ("plus_0.66", "short", box["high"]),
+                             ("minus_0.33", "long", box["low"]), ("minus_0.5", "long", box["low"]), ("minus_0.66", "long", box["low"])):
+        if not band_drawn and name not in {"plus_0.5", "minus_0.5"}:
+            continue
+        line = box["ladder"][name]
+        first_break = _first_break(market, begin=begin, end=end, edge=edge, side=side)
+        if first_break is None:
+            continue
+        contacts = level_contacts(market, level=line, begin=int(first_break["start"]), end=end, departure=box["width"] / 10, max_contacts=2)
+        for index, contact in enumerate(contacts):
+            fills = _contact_fills(market, level=line, side=side, contact=contact, end=end, placed_at=int(first_break["start"]))
+            episodes.extend(
+                _line_episodes(
+                    market, context,
+                    branch="judas_reversal", side=side, level=line, kind=name, location_kind="exhaustion_projection",
+                    reference=box, trigger=contact, fills=fills, objective=_box_objective(box, side), begin=begin, cycle=index,
+                    extra_values={"edge_broken_at": int(first_break["start"])},
+                )
+            )
+
+    # 3. a drawn liquidity level BEYOND the box edge, swept and failed (the
+    # overnight, London, Asia and prior-day extremes he deletes when purged).
+    # An extreme lying inside the 6-9 range is an objective, not a location:
+    # the mid-box London/Asia extremes on 2026-07-06, 2025-09-09 and
+    # 2026-07-10 are where he takes profit.
+    for row in _sweep_levels(context, exclude_box=True):
+        side, level = row["side"], row["price"]
+        if int(row["known_at"]) > begin:
+            continue
+        outside = (level > box["high"]) if side == "short" else (level < box["low"])
+        if not outside:
+            continue  # inside the range the extremes are objectives; the raid he fades is beyond the edge
+        for cycle in sweep_cycles(market, level=level, side=side, begin=begin, end=end, max_cycles=2):
+            fills = _line_failure_fills(market, level=level, side=side, cycle=cycle, end=end, evidence_at=int(cycle["sweep"]["end"]))
+            episodes.extend(
+                _line_episodes(
+                    market, context,
+                    branch="judas_reversal", side=side, level=level, kind=row["kind"], location_kind="swept_liquidity",
+                    reference=box, trigger=cycle["sweep"], fills=fills, objective=_box_objective(box, side), begin=begin,
+                    cycle=int(cycle["cycle"]), extra_values={"sweep_extreme": cycle["extreme"]},
+                )
+            )
+    return episodes, []
+
+
+def _scan_judas_outbound(market) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """The single-break continuation at the open: the opening drive breaks the
+    box edge in the day's direction and the trade runs with it from the retest
+    of the broken edge to the projection (audit §1.1 'Trade #1'; no dated
+    ticket prints this trade after the 2026-07-16 re-read)."""
+    context = session_context(market)
+    box = context.get("box")
+    read = context.get("read") or {}
+    if box is None:
+        return [], []
+    direction = read.get("trend_direction")
+    if read.get("classification") != "single_break" or direction is None:
+        return [], [{"reason": "play_not_in_the_day_read", "branch": "judas_outbound", "play": "single_break"}]
+    open_ns, end = _at(market, "09:30"), min(_at(market, "10:30"), int(market.end))
+    edge = box["low"] if direction == "short" else box["high"]
+    rows = _bars(market, open_ns, end, 60)
+    break_bar = _first_break(market, begin=open_ns, end=end, edge=edge, side="long" if direction == "short" else "short")
+    if break_bar is None:
+        return [], []
+    retest = _touch_after(market, level=edge, side=direction, begin=int(break_bar["end"]), end=end)
+    fills = []
+    if retest is not None:
+        stop = (edge + LEVEL_COINCIDENCE) if direction == "short" else (edge - LEVEL_COINCIDENCE)
+        fills.append({"mode": "stop_at_line", "entry": edge, "at": int(retest.get("known_at") or retest.get("end")), "stop": stop, "evidence_at": int(break_bar["end"])})
+    return _line_episodes(
+        market, context,
+        branch="judas_outbound", side=direction, level=edge, kind="box_low" if direction == "short" else "box_high", location_kind="broken_edge_retest",
+        reference=box, trigger=break_bar, fills=fills, objective=_trend_objective(box, direction)[1:], begin=open_ns, cycle=0,
+    ), []
+
+
+def _scan_eq_branch(market, branch: str) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """The plays traded at the box internals and the prior value area.
+
+    single_extended: the single-break day, from 09:00 -- the EQ / quadrant /
+    range-open retest in the break direction after the line is taken and fails
+    (2026-07-27 sells the EQ tag at 09:02; 2026-07-16 sells the failure of the
+    EQ at 09:35), objective the far edge then the projections.
+    single_purged: the same lines from 09:30 on a day that opens outside prior
+    value on the purged side (2026-07-28 "RTH open below the prior RTH value
+    low"), objective the projection (J12), the 15-minute opening range mid and
+    quartiles added (J3).
+    internal_rotation: "open inside prior RTH value: range scalps" (2026-07-10)
+    -- the box edges and the prior value edges, both ways, from 09:30; on a big
+    6-9 range (>=0.8%, 2026-09-02) the EQ and quadrants join it."""
+    context = session_context(market)
+    box = context.get("box")
+    read = context.get("read") or {}
+    if box is None:
+        return [], []
+    direction = read.get("trend_direction")
+    if branch in {"single_extended", "single_purged"}:
+        sides = ("long", "short") if branch == "single_extended" or direction is None else (direction,)
+        begin = _at(market, "09:00" if branch == "single_extended" else "09:30")
+        end = min(_at(market, "10:30" if branch == "single_extended" else "12:00"), int(market.end))
+        lines = [("eq", box["eq"])] if branch == "single_extended" else [("eq", box["eq"]), ("q25", box["q25"]), ("q75", box["q75"]), ("range_open", box["range_open"])]
+        if branch == "single_purged":
+            span = _span(_bars(market, _at(market, "09:30"), _at(market, "09:45"), 60), known_at=_at(market, "09:45"))
+            if span is not None:
+                width = span["high"] - span["low"]
+                lines += [("or15_mid", (span["low"] + span["high"]) / 2), ("or15_q25", span["low"] + width / 4), ("or15_q75", span["low"] + width * 3 / 4)]
+        objective = {side: _trend_objective(box, side) for side in ("long", "short")}
+    else:
+        sides = ("long", "short")
+        begin, end = _at(market, "09:30"), min(_at(market, "16:00"), int(market.end))
+        lines = [("box_low", box["low"]), ("box_high", box["high"])]
+        value = context.get("prior_value") or {}
+        for kind, key in (("prth_val", "val"), ("prth_vah", "vah"), ("prth_poc", "poc")):
+            price = _d(value.get(key))
+            if price is not None:
+                lines.append((kind, price))
+        # "open inside prior RTH value: range scalps" (2026-07-10): the scalps
+        # are taken at the range's own lines -- the quadrants and the EQ beside
+        # the edges and the value edges (his 11:05 long sits on the lower
+        # quadrant 29,800 / his pRTHVAL 29,790); on a big range (>=0.8%) the EQ
+        # and quadrants are traded the same way (2026-09-02).
+        if read.get("big_range") or read.get("open_inside_value"):
+            lines += [("eq", box["eq"]), ("q25", box["q25"]), ("q75", box["q75"])]
+        objective = {"long": [{"name": "eq", "price": box["eq"]}, {"name": "box_high", "price": box["high"]}, {"name": "plus_0.5", "price": box["ladder"]["plus_0.5"]}],
+                     "short": [{"name": "eq", "price": box["eq"]}, {"name": "box_low", "price": box["low"]}, {"name": "minus_0.5", "price": box["ladder"]["minus_0.5"]}]}
+        if not (read.get("open_inside_value") or read.get("big_range")):
+            return [], [{"reason": "play_not_in_the_day_read", "branch": branch, "play": "big_range_eq"}]
+    episodes: list[dict[str, Any]] = []
+    for kind, level in lines:
+        for side in sides:
+            if side is None:
+                continue
+            known = box["known_at"] if not kind.startswith("or15") else _at(market, "09:45")
+            start = max(begin, int(known))
+            for cycle in sweep_cycles(market, level=level, side=side, begin=start, end=end, max_cycles=4 if branch == "internal_rotation" else 2):
+                fills = _line_failure_fills(market, level=level, side=side, cycle=cycle, end=end, evidence_at=int(cycle["sweep"]["end"]))
+                episodes.extend(
+                    _line_episodes(
+                        market, context,
+                        branch=branch, side=side, level=level, kind=kind, location_kind="line_failure",
+                        reference=box, trigger=cycle["sweep"], fills=fills, objective=objective[side], begin=begin,
+                        cycle=int(cycle["cycle"]), extra_values={"trend_direction": direction, "range_bin": (context.get("range_class") or {}).get("bin")},
+                    )
+                )
+    return episodes, []
+
+
 def _eq_locations(market, box: Mapping[str, Any], branch: str) -> list[dict[str, Any]]:
-    """EQ, the quadrants, the range open and -- J3 -- the 15-minute opening range."""
-    rows = [
+    """The internals the EQ plays trade (kept for the rules table)."""
+    return [
         {"kind": "eq", "price": box["eq"], "known_at": box["known_at"]},
         {"kind": "q25", "price": box["q25"], "known_at": box["known_at"]},
         {"kind": "q75", "price": box["q75"], "known_at": box["known_at"]},
         {"kind": "range_open", "price": box["range_open"], "known_at": box["known_at"]},
     ]
-    if branch == "internal_rotation":
-        rows.append({"kind": "box_low", "price": box["low"], "known_at": box["known_at"]})
-        rows.append({"kind": "box_high", "price": box["high"], "known_at": box["known_at"]})
-        # The rotation play is "open inside prior RTH value: range scalps", and
-        # the author quotes the prior value edges beside his own box: 2026-07-10
-        # buys "after the test of pRTHVAL / R-Lo" (JR p.42, pRTHVAL 29,790,
-        # R-Lo 29,770). The value area is already read for the day's context, so
-        # its edges and POC are locations of this play too.
-        value = prior_value_area(market)
-        if value:
-            known = int(value.get("known_at") or market.start)
-            for kind, key in (("prth_val", "val"), ("prth_vah", "vah"), ("prth_poc", "poc")):
-                price = _d(value.get(key))
-                if price is not None:
-                    rows.append({"kind": kind, "price": price, "known_at": known})
-    if branch in {"single_extended", "single_purged"}:
-        span = _span(_bars(market, _at(market, "09:30"), _at(market, "09:45"), 60), known_at=_at(market, "09:45"))
-        if span is not None:
-            mid = (span["low"] + span["high"]) / 2
-            rows.append({"kind": "or15_mid", "price": mid, "known_at": _at(market, "09:45")})
-            rows.append({"kind": "or15_q25", "price": span["low"] + (span["high"] - span["low"]) / 4, "known_at": _at(market, "09:45")})
-            rows.append({"kind": "or15_q75", "price": span["low"] + (span["high"] - span["low"]) * 3 / 4, "known_at": _at(market, "09:45")})
-    return rows
 
 
-def _context_sides(branch: str, context: Mapping[str, Any]) -> tuple[str, ...]:
-    """Which way the day's read points. J10: the purge admits both directions.
-
-    The single-break branches read the location of the RTH open, which is what
-    the author quotes ("RTH open below the prior RTH value low", 2026-07-28);
-    the rotation branch reads the same location.
-    """
-    label = context.get("rth_open_location") or context.get("open_location")
-    purge = context.get("purge") or {}
-    if branch == "internal_rotation":
-        # "same framework when having a big 6-9 range > long/short the EQ": the
-        # EQ play runs both ways on every day (J-C).
-        return ("long", "short")
-    if branch == "single_purged":
-        if not purge.get("available"):
-            return ()
-        sides: list[str] = []
-        if purge.get("purged_high") is True:
-            sides.append("long")
-        if purge.get("purged_low") is True:
-            sides.append("short")
-        return tuple(sides)
-    if branch == "single_extended":
-        # the side is the break the session shows, read at the entry time by
-        # ``break_state``; both are enumerated and the operand records which
-        return ("long", "short")
-    return ("long", "short")
-
-
-def break_state(market, box: Mapping[str, Any], at_ns: int) -> dict[str, Any]:
-    """Which box edge has been broken by ``at_ns``, and which is untouched.
-
-    J-C: "single break behaviour through A period, range mid provided the entry
-    area" (2026-07-27) -- the play is admissible when one edge has gone and the
-    other has not, and the side is the break's own direction.
-    """
-    rows = _bars(market, _at(market, "09:00"), int(at_ns), 60)
-    high = max((_d(row["H"]) for row in rows if row.get("H") is not None), default=None)
-    low = min((_d(row["L"]) for row in rows if row.get("L") is not None), default=None)
-    broke_high = high is not None and high > box["high"]
-    broke_low = low is not None and low < box["low"]
-    side = None
-    if broke_high and not broke_low:
-        side = "long"
-    elif broke_low and not broke_high:
-        side = "short"
-    return {"broke_high": broke_high, "broke_low": broke_low, "single_break": side is not None, "side": side}
-
-
-def _scan_eq_branch(market, branch: str) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+def _scan_other_session(market) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """London: the overnight box that closes at 03:00, traded 03:00-07:00 with
+    the same internals and projections; the drawn liquidity levels are live
+    through the London session from 02:00 (2025-05-23 buys the prior RTH low
+    at 02:20)."""
     context = session_context(market)
-    box = context.get("box")
-    if box is None:
-        return [], []
-    size = context["range_class"]
-    sides = _context_sides(branch, context)
-    if branch == "single_extended":
-        # J2: "the author enters from 09:00". 2026-07-27's execution trace sells
-        # 28,685.75 at 09:02 ET on the EQ tag of the 06:00-09:00 box, half an
-        # hour before the RTH open; the read that admits it is the 09:00 one
-        # (the range low broken 07:30-08:10, price below it at 09:00), which
-        # _context_sides already falls back to. "Out by 10:00" is carried on the
-        # management stage.
-        begin, end = _at(market, "09:00"), _at(market, "10:30")
-    elif branch == "single_purged":
-        begin, end = _at(market, "09:30"), _at(market, "12:00")
-    else:
-        # The rotation play is defined by where the RTH OPEN sits -- "open
-        # inside prior RTH value: range scalps" -- so it cannot trade before
-        # that open. Starting at 09:00 let it fill at 09:02 and 09:04, half an
-        # hour before the input that admits it exists.
-        begin, end = _at(market, "09:30"), _at(market, "16:00")
+    london = box_geometry(market, "london")
+    begin, end = _at(market, LONDON_TRADE[0]), min(_at(market, LONDON_TRADE[1]), int(market.end))
+    live_from = _at(market, "02:00")
     episodes: list[dict[str, Any]] = []
-    modal_lo, modal_hi = _at(market, MODAL_WINDOW[0]), _at(market, MODAL_WINDOW[1])
-    for row in _eq_locations(market, box, branch):
-        for side in sides:
-            start = max(begin, int(row["known_at"]))
-            touches = level_contacts(
-                market, level=row["price"], begin=start, end=end, departure=box["width"] / 20, max_contacts=6
+    if london is not None:
+        ladder = london["ladder"]
+        # the edges: a sweep that fails (the box low on 2025-10-08)
+        for name, side, level in (("london_high", "short", london["high"]), ("london_low", "long", london["low"])):
+            for cycle in sweep_cycles(market, level=level, side=side, begin=begin, end=end, max_cycles=2):
+                fills = _line_failure_fills(market, level=level, side=side, cycle=cycle, end=end, evidence_at=int(cycle["sweep"]["end"]))
+                if not fills:
+                    touch = _touch_after(market, level=level, side=side, begin=begin, end=end)
+                    if touch is not None:
+                        fills = _contact_fills(market, level=level, side=side, contact=touch, end=end, placed_at=london["known_at"])
+                episodes.extend(_line_episodes(market, context, branch="other_session", side=side, level=level, kind=name, location_kind="edge_sweep", reference=london, trigger=cycle["sweep"], fills=fills, objective=objective_ladder(london, side), begin=begin, cycle=int(cycle["cycle"])))
+            # the edge tested from inside without a sweep: a resting limit at the edge
+            if not sweep_cycles(market, level=level, side=side, begin=begin, end=end, max_cycles=1):
+                touch = _touch_after(market, level=level, side=side, begin=begin, end=end)
+                if touch is not None:
+                    fills = _contact_fills(market, level=level, side=side, contact=touch, end=end, placed_at=london["known_at"])
+                    episodes.extend(_line_episodes(market, context, branch="other_session", side=side, level=level, kind=name, location_kind="edge_test", reference=london, trigger=touch, fills=fills, objective=objective_ladder(london, side), begin=begin, cycle=0))
+        # the internals: a line taken and failed, both ways (2025-10-06 and 10-07 buy the 25% line)
+        for kind, level in (("eq", london["eq"]), ("q25", london["q25"]), ("q75", london["q75"])):
+            for side in ("long", "short"):
+                for cycle in sweep_cycles(market, level=level, side=side, begin=begin, end=end, max_cycles=2):
+                    fills = _line_failure_fills(market, level=level, side=side, cycle=cycle, end=end, evidence_at=int(cycle["sweep"]["end"]))
+                    episodes.extend(_line_episodes(market, context, branch="other_session", side=side, level=level, kind=kind, location_kind="line_failure", reference=london, trigger=cycle["sweep"], fills=fills, objective=objective_ladder(london, side), begin=begin, cycle=int(cycle["cycle"])))
+        # the projections beyond the edge, reached after the edge broke (2026-06-05 buys the -1.66)
+        for name, side, edge in (("plus_0.33", "short", london["high"]), ("plus_0.5", "short", london["high"]), ("plus_0.66", "short", london["high"]), ("plus_1.33", "short", london["high"]), ("plus_1.66", "short", london["high"]),
+                                 ("minus_0.33", "long", london["low"]), ("minus_0.5", "long", london["low"]), ("minus_0.66", "long", london["low"]), ("minus_1.33", "long", london["low"]), ("minus_1.66", "long", london["low"])):
+            line = ladder[name]
+            first_break = _first_break(market, begin=begin, end=end, edge=edge, side=side)
+            if first_break is None:
+                continue
+            for index, contact in enumerate(level_contacts(market, level=line, begin=int(first_break["start"]), end=end, departure=london["width"] / 10, max_contacts=2)):
+                fills = _contact_fills(market, level=line, side=side, contact=contact, end=end, placed_at=int(first_break["start"]))
+                episodes.extend(_line_episodes(market, context, branch="other_session", side=side, level=line, kind=name, location_kind="exhaustion_projection", reference=london, trigger=contact, fills=fills, objective=objective_ladder(london, side), begin=begin, cycle=index))
+    # the drawn liquidity levels, live from 02:00
+    for row in _sweep_levels(context, exclude_box=True):
+        if not (row["kind"].startswith("prth_") or row["kind"][:2] in {"d1", "d2", "d3"}):
+            continue  # the Asia / overnight extremes are the London box itself
+        start = max(live_from, int(row["known_at"]))
+        if start >= end:
+            continue
+        for cycle in sweep_cycles(market, level=row["price"], side=row["side"], begin=start, end=end, max_cycles=2):
+            fills = _line_failure_fills(market, level=row["price"], side=row["side"], cycle=cycle, end=end, evidence_at=int(cycle["sweep"]["end"]))
+            objective = (objective_ladder(london, row["side"]) if london is not None and int(cycle["sweep"]["start"]) >= int(london["known_at"]) else None)
+            episodes.extend(
+                _line_episodes(
+                    market, context, branch="other_session", side=row["side"], level=row["price"], kind=row["kind"], location_kind="swept_liquidity",
+                    reference={"id": f"jj-london-levels:{getattr(market, 'instrument_id', 'view')}:{_as_day(market)}", "known_at": int(row["known_at"])}, trigger=cycle["sweep"], fills=fills,
+                    objective=(lambda entry, s=row["side"], known=int(cycle["sweep"]["end"]): _nearest_drawn(context, entry, s, known)) if objective is None else objective,
+                    begin=start, cycle=int(cycle["cycle"]),
+                )
             )
-            for contact_index, touch in enumerate(touches or [None]):
-             state = break_state(market, box, int(touch["start"])) if touch is not None else {"single_break": None, "side": None, "broke_high": None, "broke_low": None}
-             # J-C round 2: the observed break is recorded, not a gate -- the
-            # 2026-07-16 EQ rejection short fires with both edges still intact.
-             pack = (
-                 confirm_pack(market, int(touch["end"]), side, row["price"], min(end, int(touch["end"]) + CONFIRM_HORIZON_MIN * NS_MINUTE))
-                 if touch is not None
-                 else {"verdict": "fail", "confirmed": None, "ob_2m": None, "ob_3m": None, "ob_5m": None, "rejection_block": None, "absorption": None}
-             )
-             confirmed = pack.get("confirmed")
-             entry = None if confirmed is None else confirmed["entry"]
-             at_ns = None if confirmed is None else confirmed["at"]
-             stop = None if confirmed is None else confirmed["stop"]
-             if branch == "single_purged":
-                 # J12: the objective is the projection, not the range edge.
-                 target = box["ladder"]["plus_1.33" if side == "long" else "minus_1.33"]
-             else:
-                 target = box["high"] if side == "long" else box["low"]
-             in_add_window = touch is not None and modal_lo <= int(touch["start"]) < modal_hi
-             reduced = at_ns is not None and at_ns >= _at(market, "10:00")
-             stages = [
-                 _context_stage(
-                     context,
-                     begin,
-                     branch=branch,
-                     range_gate=">=0.3% for the single-break cases" if branch.startswith("single") else "inside prior value",
-                     evrange=context.get("evrange"),
-                 ),
-                 _stage("reference", "pass", max(int(box["known_at"]), int(row["known_at"])), id=box["id"], level=row["price"], kind=row["kind"], box_low=box["low"], box_high=box["high"], width=box["width"]),
-                 _stage(
-                     "location",
-                     "pass" if touch is not None else "fail",
-                     None if touch is None else int(touch["start"]),
-                     level=row["price"],
-                     single_break=state["single_break"],
-                     broke_high=state["broke_high"],
-                     broke_low=state["broke_low"],
-                     reason=None if touch is not None else "level_not_contacted_in_window",
-                 ),
-                 _stage("trigger", "pass" if touch is not None else "fail", None if touch is None else int(touch["start"]), add_window=list(MODAL_WINDOW), in_add_window=in_add_window),
-                 _stage("confirmation", pack["verdict"], at_ns, ob_2m=pack["ob_2m"], ob_3m=pack["ob_3m"], ob_5m=pack["ob_5m"], rejection_block=pack["rejection_block"], absorption=pack["absorption"], kind=None if confirmed is None else confirmed["kind"]),
-                 _stage("risk", "pass" if entry is not None and stop is not None and sign(side) * (entry - stop) > 0 else "fail", at_ns, entry=entry, stop=stop),
-                 _stage("objective", "pass" if entry is not None and sign(side) * (target - entry) > 0 else "fail", at_ns, target=target, label="projection" if branch == "single_purged" else "range edge"),
-                 _stage("management", "pass", at_ns, reduced_expectations=reduced, out_by_1000=branch == "single_extended"),
-             ]
-             episodes.append(
-                 _episode(
-                     market,
-                     branch=branch,
-                     side=side,
-                     stages=stages,
-                     decision_at=at_ns,
-                     entry=entry,
-                     stop=stop,
-                     target=target,
-                     reference=box,
-                     trigger=touch,
-                     values={"reference_px": row["price"], "reference_kind": row["kind"], "cycle": contact_index, "confirmation_mode": None if confirmed is None else confirmed["kind"], "range_bin": size.get("bin"), "in_add_window": in_add_window},
-                     geometry={"first_objective": target},
-                 )
-             )
-             # J-B / round 3: the author confirms on the TWO-minute clock and
-             # sells the close of the candle that puts price back through the
-             # line. 2026-07-16: the 09:30 spike runs above the EQ 29,460 into
-             # the prior value low and the two-minute candle closing back below
-             # the EQ by 09:35 is his fill at 29,451.50 (JR p.41).
-             if touch is not None:
-                 two_min = _two_minute_reclaim(market, level=row["price"], side=side, begin=int(touch["end"]), end=end)
-                 if two_min is not None:
-                     tm_stop = two_min["extreme"] + LEVEL_COINCIDENCE if side == "short" else two_min["extreme"] - LEVEL_COINCIDENCE
-                     episodes.append(
-                         _episode(
-                             market,
-                             branch=branch,
-                             side=side,
-                             stages=[
-                                 stages[0],
-                                 stages[1],
-                                 stages[2],
-                                 _stage("trigger", "pass", int(touch["start"]), add_window=list(MODAL_WINDOW), in_add_window=in_add_window, mode="two_minute_close"),
-                                 _stage("confirmation", "pass", two_min["at"], kind="two_minute_close", clock_seconds=120, close=two_min["entry"], rule="the two-minute candle closes back through the line"),
-                                 _stage("risk", "pass" if sign(side) * (two_min["entry"] - tm_stop) > 0 else "fail", two_min["at"], entry=two_min["entry"], stop=tm_stop),
-                                 _stage("objective", "pass" if sign(side) * (target - two_min["entry"]) > 0 else "fail", two_min["at"], target=target, label="projection" if branch == "single_purged" else "range edge"),
-                                 _stage("management", "pass", two_min["at"], reduced_expectations=two_min["at"] >= _at(market, "10:00"), out_by_1000=branch == "single_extended"),
-                             ],
-                             decision_at=two_min["at"],
-                             entry=two_min["entry"],
-                             stop=tm_stop,
-                             target=target,
-                             reference=box,
-                             trigger=touch,
-                             values={"reference_px": row["price"], "reference_kind": row["kind"], "cycle": contact_index, "confirmation_mode": "two_minute_close", "range_bin": size.get("bin"), "in_add_window": in_add_window},
-                             geometry={"first_objective": target},
-                         )
-                     )
-             # The turn of the tagging bar itself, filled at the next bar's
-             # open. 2026-07-27: the 09:00 bar tags the EQ 28,693.625 (H
-             # 28,700.00) and closes back below it at 28,683.75; the execution
-             # trace prints Sell 5 @ 28,685.75 and the 09:01 open is 28,683.00.
-             # Same stated criterion as the Green Bird spike turn -- the bar
-             # gives back SPIKE_GIVE_BACK of its own range from the extreme it
-             # made -- and the same FITTED status.
-             if touch is not None:
-                 turn = _spike_turn(market, level=row["price"], side=side, bar=touch, end=end)
-                 if turn is not None:
-                     episodes.append(
-                         _episode(
-                             market,
-                             branch=branch,
-                             side=side,
-                             stages=[
-                                 stages[0],
-                                 stages[1],
-                                 stages[2],
-                                 _stage("trigger", "pass", int(touch["start"]), add_window=list(MODAL_WINDOW), in_add_window=in_add_window, mode="next_bar_open"),
-                                 _stage("confirmation", "pass", turn["at"], kind="next_bar_open", give_back=str(turn["give_back"]), rule="the tagging bar turns and the fill is the next bar's open"),
-                                 _stage("risk", "pass" if sign(side) * (turn["entry"] - turn["stop"]) > 0 else "fail", turn["at"], entry=turn["entry"], stop=turn["stop"]),
-                                 _stage("objective", "pass" if sign(side) * (target - turn["entry"]) > 0 else "fail", turn["at"], target=target, label="projection" if branch == "single_purged" else "range edge"),
-                                 _stage("management", "pass", turn["at"], reduced_expectations=turn["at"] >= _at(market, "10:00"), out_by_1000=branch == "single_extended"),
-                             ],
-                             decision_at=turn["at"],
-                             entry=turn["entry"],
-                             stop=turn["stop"],
-                             target=target,
-                             reference=box,
-                             trigger=touch,
-                             values={"reference_px": row["price"], "reference_kind": row["kind"], "cycle": contact_index, "confirmation_mode": "next_bar_open", "range_bin": size.get("bin"), "in_add_window": in_add_window},
-                             geometry={"first_objective": target},
-                         )
-                     )
-             # R4 (coordinator round 3): the author rests a limit AT each line
-             # the move reaches, not only at the line his commentary names, and
-             # takes the fill at the line rather than at the confirming close.
-             # 2026-07-10 the 11:05 dip to 29,785 fills the q25 limit 29,812
-             # (his 29,809); 2026-07-16 the 09:30 spike fills the EQ limit
-             # 29,461.125 (his 29,451.50). Any rung the session reaches counts.
-             if touch is not None:
-                 limit_at = int(touch.get("known_at") or touch.get("end"))
-                 t_hi, t_lo = _d(touch.get("H")), _d(touch.get("L"))
-                 limit_stop = None
-                 if t_hi is not None and t_lo is not None:
-                     limit_stop = (t_hi + LEVEL_COINCIDENCE) if side == "short" else (t_lo - LEVEL_COINCIDENCE)
-                 episodes.append(
-                     _episode(
-                         market,
-                         branch=branch,
-                         side=side,
-                         stages=[
-                             stages[0],
-                             stages[1],
-                             stages[2],
-                             _stage("trigger", "pass", int(touch["start"]), add_window=list(MODAL_WINDOW), in_add_window=in_add_window, mode="at_level"),
-                             _stage("confirmation", "pass", limit_at, kind="at_level", rule="the limit rests at the line"),
-                             _stage("risk", "pass" if limit_stop is not None and sign(side) * (row["price"] - limit_stop) > 0 else "fail", limit_at, entry=row["price"], stop=limit_stop),
-                             _stage("objective", "pass" if sign(side) * (target - row["price"]) > 0 else "fail", limit_at, target=target, label="projection" if branch == "single_purged" else "range edge"),
-                             _stage("management", "pass", limit_at, reduced_expectations=limit_at >= _at(market, "10:00"), out_by_1000=branch == "single_extended"),
-                         ],
-                         decision_at=limit_at,
-                         entry=row["price"],
-                         stop=limit_stop,
-                         target=target,
-                         reference=box,
-                         trigger=touch,
-                         values={"reference_px": row["price"], "reference_kind": row["kind"], "cycle": contact_index, "confirmation_mode": "at_level", "range_bin": size.get("bin"), "in_add_window": in_add_window},
-                         geometry={"first_objective": target},
-                     )
-                 )
+    if not episodes and london is None:
+        return [], [{"reason": "london_range_unavailable", "branch": "other_session"}]
     return episodes, []
 
 
 def _scan_pzone(market) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
-    """P-zones are proprietary: only the author's printed boxes are available.
-
-    J-G: the fill is the limit inside the printed zone (2026-01-09 buys
-    25,664.25 inside the 25,655-25,665 box), with the signature close as the
-    alternative fill of the same opportunity.
-    """
+    """The P-zone play: a resting limit inside the zone the author drew
+    (2026-01-09 buys 25,664.25 inside 25,655-25,665; 2026-01-02 at 09:22 in the
+    09:00 T1 box), with the signature at the zone as the alternative fill.
+    Printed zones where the author printed them; elsewhere the fitted recipe,
+    labelled as an approximation."""
     context = session_context(market)
     box = context.get("box")
-    zones = PZONE_FIXTURES.get(str(_as_day(market)))
+    zones = context.get("pzones") or []
     if not zones:
-        return [], [{"reason": "pzone_generator_unknown", "branch": "timed_pzone_reversal", "operand": "pzone_generator"}]
+        return [], [{"reason": "pzone_generator_unavailable", "branch": "timed_pzone_reversal", "operand": "pzone_generator"}]
     episodes: list[dict[str, Any]] = []
-    for zone in zones:
+    price_at_nine = context.get("price_at_0900")
+    for index, zone in enumerate(zones):
         anchor = zone.get("anchor", "09:00")
         begin = _at(market, anchor)
         end = min(_at(market, "12:00"), int(market.end))
-        side = zone.get("side") or ("long" if box is None or zone["high"] < box["eq"] else "short")
-        level = (zone["low"] + zone["high"]) / 2
-        touch = first_touch(market, level=level, begin=begin, end=end)
-        pack = (
-            confirm_pack(market, int(touch["end"]), side, level, min(end, int(touch["end"]) + CONFIRM_HORIZON_MIN * NS_MINUTE))
-            if touch is not None
-            else {"verdict": "unknown", "confirmed": None, "ob_2m": None, "ob_3m": None, "ob_5m": None, "rejection_block": None, "absorption": None}
+        low, high = _d(zone["low"]), _d(zone["high"])
+        side = zone.get("side") or ("long" if (price_at_nine is not None and high < price_at_nine) or (box is not None and high < box["eq"]) else "short")
+        near = high if side == "long" else low
+        contact = _touch_after(market, level=near, side=side, begin=begin, end=end)
+        fills = [] if contact is None else _contact_fills(market, level=near, side=side, contact=contact, end=end, placed_at=begin)
+        for fill in fills:
+            if fill["mode"] == "stop_at_line":
+                fill["mode"] = "zone_limit"
+                fill["stop"] = (low - TICK) if side == "long" else (high + TICK)
+        reference = {"id": f"pzone:{_as_day(market)}:{anchor}:{low}-{high}", "low": low, "high": high, "known_at": begin, "tier": zone.get("tier")}
+        objective = (lambda entry, s=side, known=int((contact or {}).get("end") or begin): _nearest_drawn(context, entry, s, known)) if box is None else (
+            [{"name": "box_low", "price": box["low"]}, {"name": "eq", "price": box["eq"]}, {"name": "box_high", "price": box["high"]}, {"name": "plus_0.5", "price": box["ladder"]["plus_0.5"]}]
+            if side == "long" else [{"name": "box_high", "price": box["high"]}, {"name": "eq", "price": box["eq"]}, {"name": "box_low", "price": box["low"]}, {"name": "minus_0.5", "price": box["ladder"]["minus_0.5"]}]
         )
-        confirmed = pack.get("confirmed")
-        target = zone.get("target") or (None if box is None else (box["high"] if side == "long" else box["low"]))
-        fills = _fill_modes(confirmed, level)
-        if touch is not None:
-            # J-G round 2: the printed zone is a resting limit; the author is
-            # filled on the touch (2026-01-02 at 09:22), not after a signature.
-            fills.append(("zone_limit", level, int(touch["known_at"])))
-        for mode, entry, at_ns in fills:
-            stop = None if confirmed is None else confirmed["stop"]
-            if mode == "zone_limit" and touch is not None:
-                stop = (_d(zone["low"]) - TICK) if side == "long" else (_d(zone["high"]) + TICK)
-            stages = [
-                _context_stage(context, begin, branch="timed_pzone_reversal", anchor=anchor, pzone_source="author_printed_fixture"),
-                _stage("reference", "pass", begin, zone=[zone["low"], zone["high"]], anchor=anchor),
-                _stage("location", "pass" if touch is not None else "fail", None if touch is None else int(touch["start"]), zone=[zone["low"], zone["high"]]),
-                _stage("trigger", "pass" if touch is not None else "fail", None if touch is None else int(touch["end"])),
-                _stage("confirmation", "pass" if mode == "zone_limit" else pack["verdict"], at_ns, mode=mode, kind="zone_limit" if mode == "zone_limit" else (None if confirmed is None else confirmed["kind"]), absorption=pack["absorption"], timeframe_seconds=None if confirmed is None else confirmed.get("timeframe_seconds")),
-                _stage("risk", "pass" if entry is not None and stop is not None and sign(side) * (entry - stop) > 0 else "fail", at_ns, entry=entry, stop=stop),
-                _stage("objective", "pass" if entry is not None and target is not None and sign(side) * (target - entry) > 0 else "fail", at_ns, target=target),
-                _stage("management", "pass", at_ns),
-            ]
-            episodes.append(
-                _episode(
-                    market,
-                    branch="timed_pzone_reversal",
-                    side=side,
-                    stages=stages,
-                    decision_at=at_ns,
-                    entry=entry,
-                    stop=stop,
-                    target=target,
-                    reference={"id": f"pzone:{_as_day(market)}:{zone['low']}-{zone['high']}", "low": zone["low"], "high": zone["high"]},
-                    trigger=touch,
-                    values={"reference_px": level, "reference_kind": "pzone", "cycle": 0, "confirmation_mode": mode, "pzone_anchor": anchor, "pzone": [zone["low"], zone["high"]]},
-                    geometry={"first_objective": target},
-                )
+        episodes.extend(
+            _line_episodes(
+                market, context, branch="timed_pzone_reversal", side=side, level=near, kind=f"pzone_{zone.get('tier') or anchor}", location_kind="pzone",
+                reference=reference, trigger=contact, fills=fills, objective=objective, begin=begin, cycle=index,
+                extra_values={"pzone": [low, high], "pzone_anchor": anchor, "pzone_source": zone.get("source") or context.get("pzone_source")},
             )
-    return episodes, [{"reason": "pzone_generator_unknown", "branch": "timed_pzone_reversal", "operand": "pzone_generator", "detail": "only the author's printed boxes are available"}]
+        )
+    return episodes, []
 
 
 _SCANNERS = {
@@ -2353,39 +2345,119 @@ _SCANNERS = {
     "internal_rotation": lambda market: _scan_eq_branch(market, "internal_rotation"),
 }
 
-# The author's clock: the 09:00-12:00 "three-hour candle" plus the London
-# 03:00-06:00 action window; extension entries run to 16:00.
+# The author's two sessions, each with its own thesis and its own cap (audit
+# §1.1 clocks): London 03:00-06:00 on the overnight box, NY 09:00-12:00 with
+# the extension entries running to 16:00.
+SEGMENTS = {"london": ("02:00", "07:00"), "ny": ("09:00", "16:00")}
 SELECTION_CLOCK = ("02:00", "16:00")
+# The list is bounded by the opportunities (two per line and side, one
+# position at a time), not by a count: 2026-07-10 "had a couple diabolical Ls
+# and roundtrips" before the 11:05 rotation long (JR p.42).
+NY_ROUND_TRIPS = 8
+LONDON_ROUND_TRIPS = 4
+MAX_PER_LINE = 2
+# The 0.33/0.66 mean-reversal band is drawn on the author's charts from
+# December 2025 (audit §1.1: "the 'mean reversal' band, drawn from December
+# 2025"); before that his projections are the 0.5 and the 1.33/1.66 band.
+MEAN_REVERSAL_BAND_FROM = date(2025, 12, 1)
+PLAY_CANDIDATES = {
+    "double_break": ("judas_reversal", "extension_reaction"),
+    "single_break": ("single_extended", "single_purged", "judas_outbound", "extension_reaction"),
+    "unknown": ("judas_reversal", "extension_reaction", "single_extended", "single_purged", "judas_outbound"),
+}
 
 
 def _rec_branch(rec: Any) -> str | None:
-    if rec is None:
-        return None
-    if isinstance(rec, str):
-        return rec
     if isinstance(rec, Mapping):
-        value = rec.get("branch") or rec.get("source_branch")
-        return None if value is None else str(value)
-    return None
+        return rec.get("branch")
+    return getattr(rec, "branch", None)
 
 
 def selection_for(market, episodes, *, primary_play: str | None = None) -> dict[str, Any]:
-    """The author's trade list: the chosen play first, at most three entries."""
-    clock_window = (_at(market, SELECTION_CLOCK[0]), _at(market, SELECTION_CLOCK[1]))
+    """The author's trade list: London and NY selected on their own clocks; in
+    NY the day's play first (its own branches, in time order), the rotation
+    play beside it when the read admits it; one position at a time; up to
+    three entries a segment; a stopped idea may be followed by the next
+    qualifying setup ("after a failed idea the author flips"); a full
+    objective does not end the session (that rule is Green Bird's)."""
     start = getattr(market, "start", None)
     end = getattr(market, "end", None)
-    bars = _bars(market, int(start), int(end), 60) if start is not None and end is not None else _bars(market, clock_window[0], clock_window[1], 60)
-    chosen = [ep for ep in episodes if (ep.get("values") or {}).get("play") == primary_play] if primary_play else list(episodes)
-    result = select_session_trades(chosen, bars=bars, clock=clock_window, max_entries=MAX_ENTRIES_PER_SESSION)
-    fallback = False
-    if not result["n_entries"] and primary_play:
-        rest = [ep for ep in episodes if (ep.get("values") or {}).get("play") != primary_play]
-        if rest:
-            result = select_session_trades(rest, bars=bars, clock=clock_window, max_entries=MAX_ENTRIES_PER_SESSION)
-            fallback = bool(result["n_entries"])
-    result["primary_play"] = primary_play
-    result["fallback_play_used"] = fallback
-    return result
+    bars = _bars(market, int(start), int(end), 60) if start is not None and end is not None else []
+    context = session_context(market)
+    read = context.get("read") or {}
+    classification = primary_play if primary_play in PLAY_CANDIDATES else (read.get("classification") if read.get("classification") in PLAY_CANDIDATES else "unknown")
+    if primary_play == "london":
+        classification = read.get("classification") if read.get("classification") in PLAY_CANDIDATES else "unknown"
+    branches = set(PLAY_CANDIDATES[classification])
+    if read.get("open_inside_value") or read.get("big_range") or primary_play == "big_range_eq":
+        branches.add("internal_rotation")
+    if primary_play == "pzone":
+        branches.add("timed_pzone_reversal")
+    passing = [ep for ep in episodes if ep.get("research_verdict") == "pass"]
+    if classification == "double_break":
+        # "cycle 1 from 09:30 to the 09:40-09:50 window (the Judas), cycle 2 from
+        # there to 12:00" (audit §1.1 clocks): the first hour belongs to the
+        # Judas; the range scalps of the rotation play join from 10:00. The
+        # pre-open EQ tag ("range mid provided the entry area", 2026-07-27
+        # 09:02) is taken before the RTH open when the read supports it: the
+        # open outside prior value on the purged side (07-27 opens above the
+        # VAH with the overnight high purged, JR p.34) or a big 6-9 range
+        # ("when having a big 6-9 range > long/short the EQ", JR p.3). On any
+        # other read the tag fired on 16 replay days and stopped on 15.
+        ten, open_ns = _at(market, "10:00"), _at(market, "09:30")
+        passing = [ep for ep in passing if ep.get("branch") != "internal_rotation" or int(ep.get("decision_at") or 0) >= ten]
+        branches.add("single_extended")
+        tag_admitted = bool(read.get("aligned") or read.get("big_range"))
+        pre_open_eq = [ep for ep in passing if tag_admitted and ep.get("branch") == "single_extended" and int(ep.get("decision_at") or 0) < open_ns and (ep.get("values") or {}).get("cycle") == 0]
+        if pre_open_eq:
+            first_side = min(pre_open_eq, key=lambda ep: int(ep.get("decision_at") or 0)).get("side")
+            pre_open_eq = [ep for ep in pre_open_eq if ep.get("side") == first_side]
+        passing = [ep for ep in passing if ep.get("branch") != "single_extended"] + pre_open_eq
+    for one_shot in ("single_purged", "judas_outbound"):
+        # "one thesis per session": the purged-day retest and the outbound are
+        # taken once, at the first line that gives the entry (2026-07-28 09:35)
+        group = [ep for ep in passing if ep.get("branch") == one_shot]
+        if group:
+            first = min(group, key=lambda ep: int(ep.get("decision_at") or 0))
+            first_values = first.get("values") or {}
+            keep = [
+                ep for ep in group
+                if (ep.get("values") or {}).get("reference_kind") == first_values.get("reference_kind")
+                and (ep.get("values") or {}).get("cycle") == first_values.get("cycle")
+                and ep.get("side") == first.get("side")
+            ]
+            passing = [ep for ep in passing if ep.get("branch") != one_shot] + keep
+    # "scaling in at the lines and out at the next line" (audit 1.1): the
+    # Judas is entered at the edge and added at the projection and internal
+    # lines it reaches (2026-09-01 buys the -0.33 at 09:40 with the box low
+    # taken at 09:30); an add is a fill of the open thesis and does not use a
+    # round trip. A setup on the other side flips the position (2025-10-13).
+    # The CANDIDATE list is the object he chooses from: every opportunity the
+    # framework admits, once (user instruction 2026-09-17: the list is per
+    # play and small, not a cap on a crowd). The EXECUTED list beside it is
+    # one position at a time with his adds and flips.
+    def segment(pool, clock, cap):
+        candidates = select_session_trades(pool, bars=bars, clock=clock, max_entries=cap, stop_after_target=False, edge_first=True, max_per_line=MAX_PER_LINE, one_position=False)
+        candidates["executed"] = select_session_trades(pool, bars=bars, clock=clock, max_entries=cap, stop_after_target=False, edge_first=True, allow_adds=True, max_per_line=MAX_PER_LINE, allow_flips=True)
+        return candidates
+    london = segment([ep for ep in passing if ep.get("branch") == "other_session"], (_at(market, SEGMENTS["london"][0]), _at(market, SEGMENTS["london"][1])), LONDON_ROUND_TRIPS)
+    ny = segment([ep for ep in passing if ep.get("branch") in branches], (_at(market, SEGMENTS["ny"][0]), _at(market, SEGMENTS["ny"][1])), NY_ROUND_TRIPS)
+    entries = list(london.get("entries") or []) + list(ny.get("entries") or [])
+    entries.sort(key=lambda row: int(row.get("decision_at") or 0))
+    executed = list(london["executed"].get("entries") or []) + list(ny["executed"].get("entries") or [])
+    executed.sort(key=lambda row: int(row.get("decision_at") or 0))
+    return {
+        "entries": entries,
+        "n_entries": len(entries),
+        "executed": {"entries": executed, "n_entries": len(executed), "n_round_trips": int(london["executed"].get("n_round_trips") or 0) + int(ny["executed"].get("n_round_trips") or 0)},
+        "n_candidates": int(london.get("n_candidates") or 0) + int(ny.get("n_candidates") or 0),
+        "segments": {"london": london, "ny": ny},
+        "primary_play": primary_play or read.get("primary_play"),
+        "classification": classification,
+        "branches": sorted(branches),
+        "fallback_play_used": False,
+        "mode_preference_fallback": sorted(set(london.get("mode_preference_fallback") or []) | set(ny.get("mode_preference_fallback") or [])),
+    }
 
 
 def scan_b02(market, rec, *, overrides=None) -> dict[str, Any]:
@@ -2413,17 +2485,12 @@ def _scan_b02_impl(market, rec, *, overrides=None) -> dict[str, Any]:
     branches = BRANCHES if not branch or branch in {"*", "all", "B0.2", "B0.3"} else (branch,)
     context = session_context(market)
     read = context.get("read") or {}
-    allowed = set(read.get("plays") or ())
     episodes: list[dict[str, Any]] = []
     omissions: list[dict[str, Any]] = []
     for item in branches:
         scanner = _SCANNERS.get(item)
         if scanner is None:
             omissions.append({"reason": "unknown_branch", "branch": item})
-            continue
-        play = PLAY_OF_BRANCH.get(item)
-        if play not in allowed:
-            omissions.append({"reason": "play_not_in_the_day_read", "branch": item, "play": play, "classification": read.get("classification")})
             continue
         try:
             part, omit = scanner(market)
@@ -2433,30 +2500,14 @@ def _scan_b02_impl(market, rec, *, overrides=None) -> dict[str, Any]:
         episodes.extend(part)
         omissions.extend(omit)
     episodes = list(enumeration_point("contacts", episodes, market=market, family=FAMILY) or episodes)
-    open_ns = _at(market, "09:30")
-    pre_open_plays = set(read.get("plays_pre_open") or ())
     for episode in episodes:
         play = PLAY_OF_BRANCH.get(episode.get("branch"))
         episode["values"]["play"] = play
         episode["values"]["is_primary_play"] = play == read.get("primary_play")
-        decided = episode.get("decision_at")
-        readable = play in pre_open_plays if (decided is not None and int(decided) < open_ns) else True
-        episode["values"]["read_used"] = "09:00" if (decided is not None and int(decided) < open_ns) else "09:30"
-        if not readable and episode.get("research_verdict") == "pass":
-            episode["research_verdict"] = "fail"
-            episode["failed"] = list(episode.get("failed") or []) + ["context"]
-            episode["strategy_assessment"]["status"] = "no_setup"
-            for stage in episode["stages"]:
-                if stage["stage"] == "context":
-                    stage["verdict"] = "fail"
-                    stage["operands"]["reason"] = "play_not_readable_before_the_open"
     selection = selection_for(market, episodes, primary_play=read.get("primary_play"))
-    label = branch if branch and branch in _SCANNERS else "B0.3"
+    label = branch if branch and branch not in {"*", "all", "B0.2", "B0.3"} else "all"
     return finish(_document(market, label, episodes, omissions, selection=selection, day_read=read))
 
-
-# ---------------------------------------------------------------------------
-# rules
 
 
 RULES = {
@@ -2807,6 +2858,19 @@ def _mode_supported(branch: str | None, mode: str | None) -> bool:
     return str(mode) in order
 
 
+def _expected_play(entry: Mapping[str, Any]) -> str | None:
+    """The play of the record's primary branch (the first of its alternatives)."""
+    for branch in branch_alternatives(entry.get("branch")):
+        play = PLAY_OF_BRANCH.get(branch)
+        if play is not None:
+            return play
+    return None
+
+
+def _expected_plays(entry: Mapping[str, Any]) -> set[str]:
+    return {PLAY_OF_BRANCH[branch] for branch in branch_alternatives(entry.get("branch")) if branch in PLAY_OF_BRANCH}
+
+
 def match_entry(market, episodes, entry, *, strict_points: Decimal = REPLAY_LEVEL_TOLERANCE) -> dict[str, Any]:
     """Does any episode produce this narrated entry, on this side, at this time?
 
@@ -2825,11 +2889,11 @@ def match_entry(market, episodes, entry, *, strict_points: Decimal = REPLAY_LEVE
         risk = abs(entry["stop"] - price)
     tolerance = risk if risk is not None else TICKET_RISK_FALLBACK
     rows = []
-    want_play = PLAY_OF_BRANCH.get(entry.get("branch"))
+    want_plays = _expected_plays(entry)
     for ep in episodes:
         if ep.get("research_verdict") != "pass" or ep.get("side") != side:
             continue
-        if want_play is not None and PLAY_OF_BRANCH.get(ep.get("branch")) != want_play:
+        if want_plays and PLAY_OF_BRANCH.get(ep.get("branch")) not in want_plays:
             continue
         geometry = ep.get("geometry") or {}
         got = _d(geometry.get("entry")) if compare_field == "entry" else _d(geometry.get("reference_level"))
@@ -2852,12 +2916,12 @@ def match_entry(market, episodes, entry, *, strict_points: Decimal = REPLAY_LEVE
     # five-minute bar; a time read off a chart is a chart read and gets three.
     bars_allowed = 1.0 if entry.get("marked_by") == "rr_tool" else 3.0
     in_time = [row for row in rows if row["bars_from_printed"] is not None and row["bars_from_printed"] <= bars_allowed]
-    want_branch = entry.get("branch")
+    want_branches = set(branch_alternatives(entry.get("branch")))
     if in_time:
         scored = sorted(
             in_time,
             key=lambda row: (
-                0 if want_branch and row["branch"] == want_branch else 1,
+                0 if want_branches and row["branch"] in want_branches else 1,
                 Decimal("1e9") if row["delta_points"] is None else row["delta_points"],
             ),
         )
@@ -2866,7 +2930,7 @@ def match_entry(market, episodes, entry, *, strict_points: Decimal = REPLAY_LEVE
             rows,
             key=lambda row: (
                 9e9 if row["bars_from_printed"] is None else row["bars_from_printed"],
-                0 if want_branch and row["branch"] == want_branch else 1,
+                0 if want_branches and row["branch"] in want_branches else 1,
             ),
         )
     best = scored[0] if scored else None
@@ -2886,7 +2950,7 @@ def match_entry(market, episodes, entry, *, strict_points: Decimal = REPLAY_LEVE
     framework = [
         row
         for row in rows
-        if row["branch"] == want_branch and _mode_supported(row["branch"], row["mode"])
+        if row["branch"] in want_branches and _mode_supported(row["branch"], row["mode"])
     ]
     framework_in_time = [
         row for row in framework if row["bars_from_printed"] is not None and row["bars_from_printed"] <= bars_allowed
@@ -2919,7 +2983,7 @@ def match_entry(market, episodes, entry, *, strict_points: Decimal = REPLAY_LEVE
             best
             and ok_time
             and (no_price or (best["delta_points"] is not None and best["delta_points"] <= tolerance))
-            and PLAY_OF_BRANCH.get(best["branch"]) == PLAY_OF_BRANCH.get(entry.get("branch"))
+            and PLAY_OF_BRANCH.get(best["branch"]) in _expected_plays(entry)
         ),
         # R3 rule A: where the ticket prints no price the match is play + side +
         # time; there is no price to be strict about, so the strict column is
@@ -2936,7 +3000,7 @@ def match_entry(market, episodes, entry, *, strict_points: Decimal = REPLAY_LEVE
             and best["bars_from_printed"] is not None
             and best["bars_from_printed"] <= 3.0
             and (no_price or (best["delta_points"] is not None and best["delta_points"] <= tolerance))
-            and PLAY_OF_BRANCH.get(best["branch"]) == PLAY_OF_BRANCH.get(entry.get("branch"))
+            and PLAY_OF_BRANCH.get(best["branch"]) in _expected_plays(entry)
         ),
         "our_entry": None if best is None else float(best["value"]),
         "our_entry_ns": None if best is None else best["at_ns"],
@@ -2944,8 +3008,8 @@ def match_entry(market, episodes, entry, *, strict_points: Decimal = REPLAY_LEVE
         "our_mode": None if best is None else best["mode"],
         "our_reference": None if best is None else best["reference_kind"],
         "our_play": None if best is None else PLAY_OF_BRANCH.get(best["branch"]),
-        "expected_play": PLAY_OF_BRANCH.get(entry.get("branch")),
-        "play_matches": None if best is None else PLAY_OF_BRANCH.get(best["branch"]) == PLAY_OF_BRANCH.get(entry.get("branch")),
+        "expected_play": _expected_play(entry),
+        "play_matches": None if best is None else PLAY_OF_BRANCH.get(best["branch"]) in _expected_plays(entry),
         "delta_points": None if best is None or best["delta_points"] is None else float(best["delta_points"]),
         "bars_from_printed": None if best is None or best["bars_from_printed"] is None else float(best["bars_from_printed"]),
         "n_pass_episodes": len(rows),
