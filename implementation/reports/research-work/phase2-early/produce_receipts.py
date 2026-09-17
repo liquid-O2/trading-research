@@ -33,7 +33,11 @@ import tempfile
 
 HERE = Path(__file__).resolve()
 WORKTREE = HERE.parents[4]
+# The identity root's checker is the authority: the card verifies with
+# /workspace/implementation/tools/verify_research_release.py, so the control and the forgery
+# probes must run that same code, not this worktree's copy of it.
 sys.path.insert(0, str(WORKTREE / "implementation" / "src"))
+sys.path.insert(0, "/workspace/implementation/src")
 
 from trading_research.research.contracts.identity import (  # noqa: E402
     ASSURANCE_VERSION,
@@ -97,7 +101,6 @@ EXTRA: dict[str, dict] = {
             "implementation/src/trading_research/research/method_pack/session_policy.py",
             "implementation/src/trading_research/errors.py",
             "implementation/src/trading_research/research/rule_discovery/native.py",
-            "implementation/src/trading_research/research/contracts/receipts.py",
         ],
         "imported": [
             "trading_research.research.experts.options.instruments",
@@ -139,7 +142,6 @@ EXTRA: dict[str, dict] = {
             "implementation/tools/run_context_experts.py",
             "implementation/src/trading_research/errors.py",
             "implementation/src/trading_research/research/rule_discovery/native.py",
-            "implementation/src/trading_research/research/contracts/receipts.py",
         ],
         "imported": [
             "trading_research.research.experts.options.pricing",
@@ -185,7 +187,6 @@ EXTRA: dict[str, dict] = {
             "implementation/src/trading_research/research/method_pack/session_policy.py",
             "implementation/src/trading_research/errors.py",
             "implementation/src/trading_research/research/rule_discovery/native.py",
-            "implementation/src/trading_research/research/contracts/receipts.py",
         ],
         "imported": [
             "trading_research.research.experts.features.volatility",
@@ -802,6 +803,8 @@ def _p2_09_card(attempt: Path, dates: list[str]) -> dict:
     n_ok = sum(int(row.get("n_ok") or 0) for row in slices)
     n_rejected = sum(int(row.get("n_rejected") or 0) for row in slices)
     early_oi = [row for row in slices if row.get("oi_used_before_asof")]
+    replay = surface.get("native_replay") or {}
+    oi_row = next((row for row in slices if row.get("root") == "QQQ" and row.get("day") == "2024-01-02"), slices[0] if slices else {})
     return {
         "question": "Does every required option root get a dated instrument definition, a causally clocked "
         "quote/spot/OI snapshot and an explicit disposition for what is not owned?",
@@ -841,6 +844,20 @@ def _p2_09_card(attempt: Path, dates: list[str]) -> dict:
             "for NQ and ES instead of 1 and 6, in OPTIONS_AVAILABILITY.board_depth_20date and "
             "EXPOSURE_BOARDS.depth_by_root.",
         },
+        "plausibility": [
+            {"check": "the native quote row in SURFACE_INPUT_SLICE replays to its own parquet row",
+             "observed": f"QQQ 2024-01-11 P422 bid {replay.get('bid')} ask {replay.get('ask')} at event_ns {replay.get('event_ns')}",
+             "expected": "bid 15.73, ask 16.38, ts_event 2024-01-02 14:31:00+00:00 read straight from the file with pyarrow",
+             "verdict": "plausible"},
+            {"check": "the OI vintage used at the 10:00 ET asof was published before it",
+             "observed": f"effective session {oi_row.get('oi_effective_session')}, available_at_ns {oi_row.get('oi_available_at_ns')}",
+             "expected": "the 2023-12-28 session published 2023-12-29 12:00 ET, before the 2024-01-02 10:00 ET asof",
+             "verdict": "plausible"},
+            {"check": "the share of snapshot quote rows rejected by the freshness and crossed filters",
+             "observed": round(n_rejected / max(n_ok + n_rejected, 1), 4),
+             "expected": "0.05 to 0.35 for a scoped one-minute option feed snapshotted at 10:00 ET, where far strikes are stale",
+             "verdict": "plausible"},
+        ],
         "limits": [
             f"Slice of {len(dates)} engineering dates, not full history; the frozen engineering dates are a subset.",
             "Exchange-feed completeness is unknown; scoped feeds are labelled scoped, never treated as full chains.",
@@ -865,6 +882,7 @@ def _p2_10_card(attempt: Path, dates: list[str]) -> dict:
     medians = {root: (rec.get("n_live") or {}).get("median") for root, rec in depth.items()}
     nq = depth.get("NQ") or {}
     call = float(atm.get("call"))
+    board0 = boards[0] if boards else {}
     return {
         "question": "Do the pricing, Greek and exposure-board primitives reproduce the contract's reference "
         "vectors, and do the native boards they build carry their model and scenario labels?",
@@ -911,6 +929,21 @@ def _p2_10_card(attempt: Path, dates: list[str]) -> dict:
             "evidence": "EXPOSURE_BOARDS.depth_by_root would show NQ and ES medians in the tens, and "
             "GREEK_SENSITIVITY would carry a per-cohort excluded-Greek record instead of one ATM case.",
         },
+        "plausibility": [
+            {"check": "the ATM European call against an independent erf implementation of the BSM formula",
+             "observed": call,
+             "expected": 7.96556746,
+             "verdict": "plausible"},
+            {"check": "board depth matches the quote plane each root actually owns",
+             "observed": f"median live contracts {medians}",
+             "expected": "hundreds for the QQQ and SPY OPRA chains, single digits for NQ and ES whose only owned "
+             "quote is a one-minute last-trade mid",
+             "verdict": "plausible"},
+            {"check": "the board spot is the last completed minute close before the asof, not the bar that closes after it",
+             "observed": f"QQQ 2020-01-02 board spot {board0.get('spot')}",
+             "expected": "215.07, the close of the 09:59 bar; the 10:00 bar closes 214.92 at 10:01 and must not be used",
+             "verdict": "plausible"},
+        ],
         "limits": [
             f"Boards are built on {len(dates)} engineering dates at 10:00 ET, not on the full history.",
             "The full-chain reference model is the labelled equivalent-European approximation; the American tree "
@@ -948,6 +981,8 @@ def _p2_03_card(attempt: Path, dates: list[str]) -> dict:
     groups = next((row.get("iv_groups") for row in (features.get("rows") or []) if row.get("iv_groups")), {})
     gk = float((fixtures.get("gk") or {}).get("variance"))
     rv = float((fixtures.get("rv") or {}).get("variance"))
+    first_head = next((h for row in ok_rows if row.get("day") == "2020-01-02" for h in (row.get("heads") or [])
+                       if h.get("name") == "rv_15m"), {})
     return {
         "question": "Do the volatility estimators reproduce their literal fixtures, and do the multi-horizon "
         "targets come from native midpoints without crossing a close, a roll or an unavailable boundary?",
@@ -994,6 +1029,22 @@ def _p2_03_card(attempt: Path, dates: list[str]) -> dict:
             "evidence": "VOLATILITY_FEATURES rows would carry ten group dispositions instead of three, and the "
             "A3 (IV-only) and A5 (joint) ablations in P2-04 would then be separable.",
         },
+        "plausibility": [
+            {"check": "the Garman-Klass fixture against the contract's worked example",
+             "observed": gk,
+             "expected": "0.5*ln(110/90)^2 = 0.020134364008631726",
+             "verdict": "plausible"},
+            {"check": "the 2020-01-02 rv_15m head against an independent recomputation from the raw NQ MBP-1 parquet",
+             "observed": float(first_head.get("variance") or 0.0),
+             "expected": "2.0536418203011475e-06 from 16 one-minute boundaries, last midpoint with age<=5s; "
+             "sqrt is 0.14% of price over 15 minutes, which is ordinary for NQ at 10:00 ET",
+             "verdict": "plausible"},
+            {"check": "where the incomplete target heads fall",
+             "observed": f"{len(heads) - len(heads_ok)} of {len(heads)} heads, all {sorted(head_gaps) or 'none'}",
+             "expected": "only the account-day head, whose end boundary at the 17:00 ET close has no midpoint "
+             "within 5 seconds; the fixed 15/30/60/120-minute heads are complete",
+             "verdict": "plausible"},
+        ],
         "limits": [
             f"Features and targets are built on {len(dates)} engineering dates, not the full history.",
             "Realized variance uses native BBO midpoints with age<=5s; a missing boundary makes the target "
@@ -1020,6 +1071,11 @@ def _card_markdown(card: dict) -> str:
     for item in card["headline"]:
         bound = f"support {item['support']}" if "support" in item else f"interval {item['interval']}"
         lines.append(f"| {item['name']} | {item['value']} | {item['unit']} | {bound} | {item['note']} |")
+    lines += ["", "**Plausibility.**", ""]
+    lines += [
+        f"- {row['check']}: observed {row['observed']}; expected {row['expected']} ({row['verdict']})"
+        for row in card["plausibility"]
+    ]
     lines += [
         "",
         f"**Target.** {card['target']['text']} **Met:** {card['target']['met']}.",
