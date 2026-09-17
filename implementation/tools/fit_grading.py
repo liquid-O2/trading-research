@@ -24,20 +24,41 @@ from pathlib import Path
 
 import numpy as np
 
-NUMERIC = ["coincident_levels_n", "cycle", "sweep_depth_points", "minutes_from_open", "stop_points", "first_objective_points", "rr_far"]
-BOOL = ["read_aligned", "read_big_range", "read_open_inside_value", "side_with_bias"]
-CATEGORICAL = ["play", "mode", "reference_kind", "read_classification", "read_day_model", "depth_class"]
+# Not features: identities, the label, anything decided after the fill, and
+# free-text lists (their count is a feature).
+META = {"family", "example_id", "session", "label", "outcome", "coincident_levels", "box"}
 
 
 def load(path: Path) -> list[dict]:
     return [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
 
 
+def feature_types(rows: list[dict]) -> tuple[list[str], list[str], list[str]]:
+    """Every pre-decision field the rows carry, typed from its values: bools,
+    numbers, and categoricals (one-hot)."""
+    keys = sorted({k for r in rows for k in r} - META)
+    numeric, boolean, categorical = [], [], []
+    for key in keys:
+        values = [r.get(key) for r in rows if r.get(key) is not None]
+        if not values:
+            continue
+        if all(isinstance(v, bool) for v in values):
+            boolean.append(key)
+        elif all(isinstance(v, (int, float)) and not isinstance(v, bool) for v in values):
+            numeric.append(key)
+        else:
+            categorical.append(key)
+    return numeric, boolean, categorical
+
+
 def design(rows: list[dict], vocab: dict | None = None):
     """A dense feature matrix; categorical values one-hot on a vocabulary
     frozen from the training rows."""
     if vocab is None:
-        vocab = {c: sorted({str(r.get(c)) for r in rows if r.get(c) is not None}) for c in CATEGORICAL}
+        NUMERIC, BOOL, CATEGORICAL = feature_types(rows)
+        vocab = {"__types__": (NUMERIC, BOOL, CATEGORICAL)}
+        vocab.update({c: sorted({str(r.get(c)) for r in rows if r.get(c) is not None}) for c in CATEGORICAL})
+    NUMERIC, BOOL, CATEGORICAL = vocab["__types__"]
     cols = list(NUMERIC) + list(BOOL) + [f"{c}={v}" for c in CATEGORICAL for v in vocab[c]]
     X = np.zeros((len(rows), len(cols)))
     for i, r in enumerate(rows):

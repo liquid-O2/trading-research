@@ -3195,11 +3195,11 @@
    "id": "MB-2026-07-K10",
    "family": "MEMBER-TWO-REASONS",
    "source": "K10 pp.7-8, 12-13",
-   "date": "2026-07 (undated day; presentation 2026-07-01)",
+   "date": "2026-08-03",
    "session": "NY",
    "instrument": "ES-202609",
    "chart_clock": "deepchart ET",
-   "inside_tape": false,
+   "inside_tape": true,
    "levels": {
     "resistance_pair": [
      7558.75,
@@ -3225,17 +3225,32 @@
    },
    "actions": [
     {
-     "time_et": "trade 1",
+     "time_et": "09:25-09:28",
      "action": "sell",
      "qty": 2,
-     "note": "SELL 2 | R:R 1.00; stop 20 ticks (-500)"
+     "price": 7558.75,
+     "note": "SELL 2 | R:R 1.00 (graphic); stop 20 ticks above (7,563.75, 'above the high of the rejection', the 7,564 line); target 20 ticks below (7,553.75, hit by 09:28). K10 p.7: a short off the marked resistance lined up with a minor HVN.",
+     "proper_entry": true,
+     "side": "short",
+     "branch": "resistance_rejection",
+     "marked_by": "rr_tool",
+     "stop": 7563.75,
+     "target": 7553.75,
+     "level": "resistance_pair"
     },
     {
-     "time_et": "trade 2",
+     "time_et": "09:30-09:32",
      "action": "buy",
      "qty": 2,
-     "price": 7530,
-     "note": "BUY 2 | R:R 9.60; stop 20 ticks; target 192 ticks (+4800) to 7578"
+     "price": 7548.0,
+     "note": "BUY 2 | R:R 9.60 box = 4800$ / 192 ticks (the realised leg to 7,596), stop 20 ticks (7,543). K10 p.8: 'when price came back down to that level and he saw absorption there, buyers stepping in and holding, he took the long'; planned target 1.5R.",
+     "proper_entry": true,
+     "side": "long",
+     "branch": "second_tap_absorption",
+     "marked_by": "rr_tool",
+     "stop": 7543.0,
+     "target": 7555.5,
+     "level": "green_pair"
     },
     {
      "time_et": "p.13",
@@ -3245,9 +3260,11 @@
    "expected_detection": {
     "branch": "member two reasons",
     "side": "short then long",
-    "reference": "ES tape required; data_unavailable on the NQ census tape",
-    "entry_window_et": "unknown"
-   }
+    "reference": "resistance pair 7,558.75-7,564 (short), green pair 7,544.75-7,547.75 (long); ES-202609 tape",
+    "entry_window_et": "09:25-09:32"
+   },
+   "dated_by": "fidelity round 8 (2026-09-17): the K10 PDF's creation stamp is 2026-08-04 11:52 UTC and the ES-202609 tape on 2026-08-03 prints every number on the two charts: the hold under the red pair 7,558.75-7,564 from 06:30 (07:15 high 7,564.00), the 09:29 bar's drop to 7,544.75 (the green pair's lower line), the 7,542.75 low of the 09:30 bar, 7,596 (the 192-tick box top) at 10:16 and the left panel's last price 7,614.50 at 12:16; the session later reaches 7,637.75, inside the drawn objective band. The record's earlier 'presentation 2026-07-01' and the buy price 7,530 (read off the left panel's axis) were wrong: the BUY box sits on the green pair at about 7,548 with its 20-tick stop at 7,543-7,544.75.",
+   "n_proper_entries": 2
   },
   {
    "id": "GB-2026-09-15",

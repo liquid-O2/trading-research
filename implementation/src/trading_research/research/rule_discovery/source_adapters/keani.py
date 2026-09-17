@@ -404,6 +404,9 @@ def scan_keani_branch_b02(market, branch: str) -> tuple[list[dict[str, Any]], di
                 except Exception:
                     footprint = None
                 if footprint and not any(u > 0 for _px, _b, _s, u in footprint["rows"]):
+                    from trading_research.research.method_pack.branch_coverage import setting
+                    from trading_research.research.method_pack.historical_features import Q
+
                     cfg = setting("imbalance")
                     try:
                         im = market.domain(
@@ -472,7 +475,17 @@ def scan_keani_branch_b02(market, branch: str) -> tuple[list[dict[str, Any]], di
         {"retest": True if retest else False, "three_tick_reward": True if reward else False, "expiry_60m": False},
     )
     entry = dec((retest or breakout or {}).get("C") or (a.get("high") if a else 0))
-    stop = (band[0] - B02_Q) if band else (dec(a["low"]) - B02_Q if a.get("low") is not None else None)
+    # Entry-side structural invalidation (O139): the stop sits a tick below the
+    # structure that held -- the imbalance band AND the retest bar's low. A
+    # retest that closes below the band otherwise left the stop above the
+    # entry (fidelity round 8: 2020-06-30, 2021-02-10, 2023-12-27).
+    if band:
+        floor = dec(band[0])
+        if retest is not None and retest.get("L") is not None:
+            floor = min(floor, dec(retest["L"]))
+        stop = floor - B02_Q
+    else:
+        stop = dec(a["low"]) - B02_Q if a.get("low") is not None else None
     name, target = _nearest_htf(entry, prior_high, prior_vah, weekly)
     used_a_width = False
     if target is None:
