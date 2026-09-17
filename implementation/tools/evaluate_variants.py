@@ -164,15 +164,32 @@ def render(report: dict) -> str:
     return "\n".join(lines)
 
 
+def merge_rescans(sessions: list[dict], rescans: dict[str, Path]) -> list[dict]:
+    """A rescan candidate's run carries its own executed result under the name
+    B0.3 (the scanner was different); fold it into the baseline sessions under
+    the candidate's name so the same paired evaluation applies."""
+    by_date = {s["date"]: s for s in sessions}
+    for name, path in rescans.items():
+        for s in load_sessions(path):
+            base = by_date.get(s["date"])
+            if base is None or BASELINE not in s["variants"]:
+                continue
+            base["variants"][name] = s["variants"][BASELINE]
+    return sessions
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--rows", type=Path, required=True)
+    parser.add_argument("--rows", type=Path, required=True, help="the baseline run's rows.jsonl (B0.3 plus its selection variants)")
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--families", default="JJ-TBR,GB-FAIL")
+    parser.add_argument("--rescan", action="append", default=[], help="name=path/to/rows.jsonl of a rescan candidate's run (repeatable)")
     args = parser.parse_args(argv)
     sessions = load_sessions(args.rows)
     if not sessions:
         raise SystemExit("no session lines in the rows file")
+    if args.rescan:
+        sessions = merge_rescans(sessions, {item.split("=", 1)[0]: Path(item.split("=", 1)[1]) for item in args.rescan})
     names = sorted({v for s in sessions for v in s["variants"]} - {BASELINE})
     report = {}
     for family in args.families.split(","):
