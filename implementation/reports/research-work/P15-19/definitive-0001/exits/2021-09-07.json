@@ -1,0 +1,130 @@
+{
+ "account_day": "2021-09-07",
+ "e0_mismatches": 0,
+ "entries": 1,
+ "rules": {
+  "SIRES:clean_squeeze:M1:max_prior_contacts=0": [
+   {
+    "e0_matches_entry_run": true,
+    "entry_id": "b02:SIRES:clean_squeeze:short:1631033347932048335",
+    "fill_at_ns": 1631033347932048335,
+    "fill_price": "15699.50",
+    "initial_stop": "15701.50",
+    "objective": "15689.50",
+    "policies": {
+     "E0": {
+      "complete": true,
+      "entry_id": "b02:SIRES:clean_squeeze:short:1631033347932048335",
+      "exit_at_ns": 1631034214121777965,
+      "exit_price": "15687.50",
+      "net_dollars": "235.00",
+      "net_points": "11.75",
+      "occupancy_flagged": false,
+      "policy_id": "E0",
+      "reason": "objective",
+      "stop_updates": []
+     },
+     "E1": {
+      "complete": true,
+      "entry_id": "b02:SIRES:clean_squeeze:short:1631033347932048335",
+      "exit_at_ns": 1631034214121777965,
+      "exit_price": "15687.50",
+      "net_dollars": "235.00",
+      "net_points": "11.75",
+      "occupancy_flagged": false,
+      "policy_id": "E1",
+      "reason": "objective",
+      "stop_updates": []
+     },
+     "E2": {
+      "complete": true,
+      "entry_id": "b02:SIRES:clean_squeeze:short:1631033347932048335",
+      "exit_at_ns": 1631034214121777965,
+      "exit_price": "15687.50",
+      "net_dollars": "235.00",
+      "net_points": "11.75",
+      "occupancy_flagged": false,
+      "policy_id": "E2",
+      "reason": "objective",
+      "stop_updates": []
+     },
+     "E3": {
+      "complete": true,
+      "entry_id": "b02:SIRES:clean_squeeze:short:1631033347932048335",
+      "exit_at_ns": 1631034214121777965,
+      "exit_price": "15687.50",
+      "net_dollars": "235.00",
+      "net_points": "11.75",
+      "occupancy_flagged": false,
+      "policy_id": "E3",
+      "reason": "objective",
+      "stop_updates": [
+       {
+        "effective_after_batch_id": "1631033354864187345",
+        "effective_available_at_ns": 1631033354864187345,
+        "kind": "break_even",
+        "stop": "15699.25",
+        "trigger_available_at_ns": 1631033354858471707,
+        "trigger_batch_id": "1631033354858471707"
+       }
+      ]
+     },
+     "E4": {
+      "complete": true,
+      "entry_id": "b02:SIRES:clean_squeeze:short:1631033347932048335",
+      "exit_at_ns": 1631033402446118679,
+      "exit_price": "15699.00",
+      "net_dollars": "5.00",
+      "net_points": "0.25",
+      "occupancy_flagged": false,
+      "policy_id": "E4",
+      "reason": "trailing stop",
+      "stop_updates": [
+       {
+        "effective_after_batch_id": "1631033354864187345",
+        "effective_available_at_ns": 1631033354864187345,
+        "kind": "trailing",
+        "stop": "15699.50",
+        "trigger_available_at_ns": 1631033354858471707,
+        "trigger_batch_id": "1631033354858471707"
+       },
+       {
+        "effective_after_batch_id": "1631033356757790129",
+        "effective_available_at_ns": 1631033356757790129,
+        "kind": "trailing",
+        "stop": "15699.25",
+        "trigger_available_at_ns": 1631033356756228351,
+        "trigger_batch_id": "1631033356756228351"
+       },
+       {
+        "effective_after_batch_id": "1631033361680609531",
+        "effective_available_at_ns": 1631033361680609531,
+        "kind": "trailing",
+        "stop": "15699.00",
+        "trigger_available_at_ns": 1631033361655711027,
+        "trigger_batch_id": "1631033361655711027"
+       },
+       {
+        "effective_after_batch_id": "1631033362258726327",
+        "effective_available_at_ns": 1631033362258726327,
+        "kind": "trailing",
+        "stop": "15698.75",
+        "trigger_available_at_ns": 1631033362258605509,
+        "trigger_batch_id": "1631033362258605509"
+       }
+      ]
+     }
+    },
+    "recorded_e0": {
+     "exit_at_ns": 1631034214121777965,
+     "exit_reason": "objective",
+     "net_points": "11.75"
+    },
+    "round_trip_cost": "5.00",
+    "side": -1
+   }
+  ]
+ },
+ "schema_version": "research-p15-19-exit-shard-v1",
+ "task_id": "P15-19"
+}

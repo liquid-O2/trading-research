@@ -1,0 +1,24 @@
+RECOMPUTE
+  SIRES:absorption_reward_retest:M1:max_prior_contacts=0 | E2 over 898 common complete days
+  mean paired improvement vs E0 recomputed 0.016425  artifact 0.016425  delta 0.00e+00
+  eligible days recomputed 898  artifact 898
+  hold-out days skipped by this recomputation 105 (artifact says 112)
+TRACE
+  SIRES:absorption_reward_retest:M1:max_prior_contacts=0 2020-01-06 entry b02:SIRES:absorption_reward_retest:short:1578265714558414311
+    E0 complete=True reason=stop exit_at=1578265860450078651 net=-2.50
+    E1 complete=True reason=stop exit_at=1578265860450078651 net=-2.50
+    E2 complete=True reason=stop exit_at=1578265860450078651 net=-2.50
+    E3 complete=True reason=stop exit_at=1578265860450078651 net=-2.50
+    E4 complete=True reason=stop exit_at=1578265860450078651 net=-2.50
+  E0 net points recomputed -2.50 artifact -2.50 equal True
+  E0 reproduces the entry run's E0: True (recorded -2.50 at 1578265860450078651)
+  entry document SIRES--absorption_reward_retest--M1--max_prior_contacts=0.json.gz in attempt-0001: fill 8756.25 stop 8758.25 objective 8746.25
+  pairing baseline SIRES--branch--absorption_reward_retest.json.gz sha256 matches: True
+SEPARATION
+  comparisons 72 = 18 rules x 4 non-baseline policies: True
+  every comparison carries the entry stage's own disposition and entry_rescued false: True
+  entry dispositions unchanged by this study: True
+LEDGER
+  rows 72  unique 72  all with parent_trial_ids True
+  dispositions {'rejected_by_evidence': 13, 'retained_baseline': 47, 'inconclusive_support': 12}
+  e0 mismatches across the study: 0

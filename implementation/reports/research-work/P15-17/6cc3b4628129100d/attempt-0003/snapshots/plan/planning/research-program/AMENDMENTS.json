@@ -1,0 +1,2325 @@
+{
+  "schema": "research-plan-amendments-v1",
+  "amendments": [
+    {
+      "id": "research-assurance-2026-09-14-v2",
+      "date": "2026-09-14",
+      "prior_plan_version": "research-plan-2026-09-13-v1",
+      "new_plan_version": "research-plan-2026-09-14-v2",
+      "scope": "All 46 Phase 1.5/Phase 2 tasks and all 17 subphases",
+      "reason": "Independent foundation audit found false acceptance; user requested concrete prevention of silent failures throughout both packs.",
+      "original_foundation_admission_rejected": [
+        {
+          "path": "implementation/reports/research-work/P15-00/b291864ccceaca9a/attempt-0001/TASK_RECEIPT.json",
+          "sha256": "a4c5e6bcecdae8af24b69021bf3d9da50f084ee4a2e96c18857e621d69785d20"
+        },
+        {
+          "path": "implementation/reports/research-work/P15-01/039267553e8bf721/attempt-0001/TASK_RECEIPT.json",
+          "sha256": "549429da5d43ff6fc347723fe4f4c8eda4550b31190bb94324ab82e2afba2c4f"
+        },
+        {
+          "path": "implementation/reports/research-work/00-foundation/f7135f8d696ff1f5/attempt-0001/SUBPHASE_RECEIPT.json",
+          "sha256": "e1046c17650332378273a0c6e2a2c796ba3abd6a0d1113fb371aef998143cfea"
+        }
+      ],
+      "review": "planning/research-program/reviews/00-foundation-2026-09-14/REVIEW.md",
+      "changes": [
+        "Per-task evidence matrix and assigned adversarial cases; coordinator review sidecar for every subphase",
+        "Required artifact/schema/identity/dependency/command verification with current assurance version",
+        "Native coverage by input group, same-contract lookbacks, actual native replay and clock boundaries",
+        "Fixed independent foundation acceptance suite; immutable failed/superseded attempts",
+        "Acyclic task, subphase, phase and review finalization"
+      ],
+      "unchanged": [
+        "Research formulas and source attribution",
+        "Finite candidate/trial budgets and statistical selection rules",
+        "Accepted Phase 1 code/data/report identities"
+      ],
+      "execution_rule": "Preserve old reports and their original plan identities. Repair P15-00/P15-01 under new snapshots/draft/run identities, then obtain a matching passing review before 01-native-and-outcomes. Later tasks start under this amended contract.",
+      "exposure_rule": "Carry all previously exposed dates and inspected coverage forward. Record the coverage-rule correction and deterministic per-group reselection before any new outcome inspection."
+    },
+    {
+      "id": "research-plan-2026-09-14-v3",
+      "date": "2026-09-14",
+      "prior_plan_version": "research-plan-2026-09-14-v2",
+      "new_plan_version": "research-plan-2026-09-14-v3",
+      "assurance_version": "research-assurance-2026-09-14-v2",
+      "scope": "Planning contracts, Phase 1.5/Phase 2 task graph, Strategy Book acceptance, Phase 2 entry-gate exception for P2-09/P2-10/P2-03",
+      "reason": "Add Strategy Book deliverables, retention/failure-attribution/revisit bookkeeping, and a bounded Phase 2 start exception for strategy-agnostic native adapters and volatility arithmetic. No formula, budget, gate threshold or date of the existing banks is changed.",
+      "plan_version_decision": "Bumped to research-plan-2026-09-14-v3. Plan-version continuity between predecessor and successor receipts is not enforced. receipts.py _check_predecessors (lines 553-638) requires TASK_GRAPH dependencies, matching SHA-256 digests and recursive verification; it never reads a plan_version field. identity.py RECEIPT_KEYS (lines 29-44) and validate_receipt_shape (lines 172-194) bind plan_sha256 and predecessor digest maps, not a plan version string. receipts.py _check_identities (lines 1188-1190) recomputes this receipt's plan_sha256 from PLAN_SNAPSHOT.files only. Therefore a plan-file amendment does not require predecessor receipts to share the successor's plan version string.",
+      "changes": [
+        "ROADMAP.md: plan version v3; retention section summarizing RETENTION.md rules 1-5 and the Phase 2 split; Phase 2 gate exception for P2-09, P2-10 and P2-03 from verified P15-02 with re-verification under P2-00 before P2-04, P2-11 or method experts consume those receipts",
+        "EVALUATION.md: TrialRecord.failure_attribution with RETENTION.md rule 2 labels and thresholds; bounded revisit rule 3; support section states a disposition never deletes a candidate",
+        "SEARCH_CONTRACT.md: same TrialRecord.failure_attribution field and bounded revisit rule",
+        "P15-20 and P2-24: Strategy Book version 1/2 acceptance keys, DELIVERABLES.md and RETENTION.md on the read-first lists",
+        "TASK_GRAPH.json required reads: DELIVERABLES.md and RETENTION.md on P15-17, P15-18, P15-20, P2-22, P2-23, P2-24",
+        "TASK_GRAPH.json dependencies: P2-09 starts from P15-02; P2-10 unchanged (P2-09); P2-03 starts from P15-02 and P2-10; P2-00 re-verifies P2-09, P2-10 and P2-03; P2-04 waits for that P2-00 re-verification. No other dependency lists changed.",
+        "Phase 2 SPEC.md and P2-00/P2-09/P2-10/P2-03/P2-04 cards state the same exception",
+        "Generated runbooks, PROMPTS.md and phase READMEs rebuilt from canonical sources"
+      ],
+      "unchanged": [
+        "Research formulas and source attribution",
+        "Finite candidate/trial budgets and statistical selection rules",
+        "Acceptance amendment research-assurance-2026-09-14-v2",
+        "Accepted Phase 1 code/data/report identities"
+      ],
+      "changed_files": [
+        {
+          "path": "planning/ROADMAP.md",
+          "sha256_before": "3af3ebfeab8479584787597894861e82b8fbc185b22abfc940a9542c4e9eff10",
+          "sha256_after": "a2a5187de01a183f1b04db94c310d19c4dfc646d74b7f6d30c566d9e4af1796b"
+        },
+        {
+          "path": "planning/phase-1-5/PROMPTS.md",
+          "sha256_before": "e5fba6c0e4638b208b246e709ce62151f7045cdf6b1b95a57d0968c1a2e4a140",
+          "sha256_after": "1daeccb06662eb582a0c0ce8bcfe6a6175b6d8cecfe34e6c0181c926405ce4ea"
+        },
+        {
+          "path": "planning/phase-1-5/README.md",
+          "sha256_before": "a156e092f533ce3055df2fc348b53926e0e70aed841f0b20ee249eb1962314dd",
+          "sha256_after": "b3af86be048851eaab433ddb70dc6cc6e474e82b9c49f626a8cf2973142ecb19"
+        },
+        {
+          "path": "planning/phase-1-5/SEARCH_CONTRACT.md",
+          "sha256_before": "f301fd2586737aa4ffcf798355f4873325ce535b52de14c3eb77dadea3767a62",
+          "sha256_after": "c3ac03a84139c228b45fbab113383e4c13a8af535c4100e599796d7c344b0589"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/00-foundation/RUNBOOK.md",
+          "sha256_before": "71409730fa93f2020edda6f797db6de36468e733770594e5dfdecb8ddccbff80",
+          "sha256_after": "0cb63b98da547febd74cfd4f4f4ea2b92eafe23e591c59fb60281234af22b069"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/01-native-and-outcomes/RUNBOOK.md",
+          "sha256_before": "534ec1e86193da5e7d1bcda6333c33ecdb73be6d87003f0b5b3bf2716f5790d7",
+          "sha256_after": "235c30efa9c57362aa79c270caa468a94a09fff0a1b4c65af390970ed8edf446"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/02-source-reconstruction/RUNBOOK.md",
+          "sha256_before": "c95b5e27fa8d05297004a8b38d55bef6c12fb2c845c7aa242f93392b8762f20a",
+          "sha256_after": "221316c031edabc99085fa2c32d91dccc15d1aee4613faa9cc89bb3a3834eacb"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/03-primitives/RUNBOOK.md",
+          "sha256_before": "5528f4b796b41dae45834dc83163e364daaac922370f3a8125da2b9c60da8dcd",
+          "sha256_after": "c4ed600bc8ec8b5ec141a63ef58988faa5fc0ff486afd0bfa3dde8da7a25a00d"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/04-family-adapters/RUNBOOK.md",
+          "sha256_before": "f8010426bf937dbc7a32f7da3777bedfe23f3bd22d0c36be4722b7096854e5e6",
+          "sha256_after": "f201770cec6ca0c9a63689299d4285ae3b0170636c06bebefc64acf82c3ec830"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/05-finite-search/RUNBOOK.md",
+          "sha256_before": "bc6150970acdcf6147923ae4e0af1c171d8d879052fe651f87375aa490b888bb",
+          "sha256_after": "58a81c06c513dff53b05901058153098ab5b493a59ac4283a23fe82f907816f4"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/06-exit-controls/RUNBOOK.md",
+          "sha256_before": "42a120d4aaaf5d61eaea565829c99dd1cdee99074d3f7f62d615d25bf52682e5",
+          "sha256_after": "72bda904b834d3288ea5bee1e2eb4641c07c1a445cfff33363aa8f78ae54ae9d"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/07-release/RUNBOOK.md",
+          "sha256_before": "57397e2cc759d8fed5611cc54eaac0a3e8a6dafe04596117e6ffbb042b1f2787",
+          "sha256_after": "3d4b13dd869eaa8ad50d95cda9bcaf2d442ba73ddd71003a761195bbde0d2c14"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-20.md",
+          "sha256_before": "f5d9e3aa9afdf26ec1206d9bdbff57416f58633dc82be01eaf110756e6fe568c",
+          "sha256_after": "b02759d936894eabbef6faae35ef664b8529a25272ae35b766cbb1253887fdc4"
+        },
+        {
+          "path": "planning/phase-2/PROMPTS.md",
+          "sha256_before": "42528498586be4f1ef91542acf3c086f2fb1e936f551270015ed9d20e53a233b",
+          "sha256_after": "acb02ce086d389fe60cbf3ffcb39a5b3c2b65d40e73cb9c509d06e5bd0418d9c"
+        },
+        {
+          "path": "planning/phase-2/README.md",
+          "sha256_before": "ab91aefb42ef5031ae8bd5295d2530f5b28bb6c3c33a1bd65b43a6bf351f2cb8",
+          "sha256_after": "88606063fa6768181baf969e536435ff65323feab18cc921636e8be6aba23dbf"
+        },
+        {
+          "path": "planning/phase-2/SPEC.md",
+          "sha256_before": "61dc33d207b10a984cbf02969195ec31f97a5a99c1f232d558d4c2549424b9d0",
+          "sha256_after": "4d8367f2203536d24720ef0a7f8507c9097988e2a474590c62794d7eabd17a76"
+        },
+        {
+          "path": "planning/phase-2/subphases/00-entry-gate/RUNBOOK.md",
+          "sha256_before": "d7953fa24e66de9cbec725c1acab5b7f68f143d161a88caee58b5d632a383f36",
+          "sha256_after": "f0c90a303bec23be7e1a255682409bcbf2878d63a146ec76596ad0fa4d86f524"
+        },
+        {
+          "path": "planning/phase-2/subphases/01-datasets-and-fitting/RUNBOOK.md",
+          "sha256_before": "3592648de8d242bba7ba1804240149abcf6120906c5d370cdeedf6ec3e07c695",
+          "sha256_after": "f0e53458add0ab8f4973695bdef779fe0f2829cc2a8b8982aeb2a8b3c809bd84"
+        },
+        {
+          "path": "planning/phase-2/subphases/02-native-options-baseline/RUNBOOK.md",
+          "sha256_before": "72e6a155c4a6e42744823846e69eab5120e76f9fb31e8d21d9741e5eb5d0b056",
+          "sha256_after": "31907e03af02047d9154ae0628adbe1fd69156ae6136f06501d8736a6965f483"
+        },
+        {
+          "path": "planning/phase-2/subphases/03-joint-volatility/RUNBOOK.md",
+          "sha256_before": "951c87f3e02af40bf3c7ce599591523b070cdd0068ce38805cb1cfbc947e2eae",
+          "sha256_after": "d1aaeccd5060179a89ceabfd99cadff6a0caad879c6bc8a1c63cb00edd59c9fa"
+        },
+        {
+          "path": "planning/phase-2/subphases/04-context-mechanisms/RUNBOOK.md",
+          "sha256_before": "f6c0f3218fb077df66951676e75ca6404fc191f3105344211947d30a49020f70",
+          "sha256_after": "9e75cee2b9d0a823a51ae3bc57de4f91f4b8a95fda1158c8f08b9308af5bec6e"
+        },
+        {
+          "path": "planning/phase-2/subphases/05-intraday-oi/RUNBOOK.md",
+          "sha256_before": "2c028f6bec3022a9eb79d9b17f2501280a8753436d454aa93d8c88fe3eefefce",
+          "sha256_after": "a8e3d10d760c35f6ddd8787352273d13e95d79a6cf6de288178447e2dc2d660d"
+        },
+        {
+          "path": "planning/phase-2/subphases/06-method-experts/RUNBOOK.md",
+          "sha256_before": "3bf54d4dfa47d80c5f090884f4552d7dfd24c0a765cc456a60b5fffaafba3a9b",
+          "sha256_after": "39e5721e8ae6401c9043bce1df9fe44dbf578812b7d693486786ca9621853262"
+        },
+        {
+          "path": "planning/phase-2/subphases/07-plans-and-adaptation/RUNBOOK.md",
+          "sha256_before": "dfcb5e9815c71bd854fec9ef67e53cc07b32686bb0c3bf5342fb9cfc88ed5d5e",
+          "sha256_after": "6aa3d1feca9115f32ca7d2e18084401bcfc195588a44bd3060789ee0b28107d3"
+        },
+        {
+          "path": "planning/phase-2/subphases/08-release/RUNBOOK.md",
+          "sha256_before": "85bfc1ae057f048458eccba869322f3f1667fc6a27a02863b6d8d471c82a57f6",
+          "sha256_after": "3f0c21943ca493382438101f66ee6d1af78bbb8566df5affae3a74b5e2727df2"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-00.md",
+          "sha256_before": "302c071e4674c27c364972424269938ac5f76c1186e945232f462080d436da1b",
+          "sha256_after": "4a62e89b542572c0b83b83e0d57f384331e0e726fe1671550d580792d113b70a"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-03.md",
+          "sha256_before": "e82b32e9a82f5d667e455ad105a88509b602290d540256870f899cbeccf79b1a",
+          "sha256_after": "f2dbed2c03e0558a55ed8a033bf1911ac8595e102972897b2ef58bca505807d7"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-04.md",
+          "sha256_before": "c5c5745ebdd5a97cd674210e95604dd7e25c3a531920af3bf5299b70e8837f28",
+          "sha256_after": "1dd19ea1653412b192d6f535b6a02e4586f0294faaf2f724254712f91bc1496e"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-09.md",
+          "sha256_before": "143dc118f34d3f99a1426e690d13d320f659c4da7658efa86312c5d9e24d7284",
+          "sha256_after": "e9334be755072f8d23c4749b673681a7de45ad48a02fdf3b28d499166b18357d"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-10.md",
+          "sha256_before": "9e5cbd9380692593064d6754d87ee293adf74f7d882dff57624154e3be699539",
+          "sha256_after": "61c3423227100fcc71c761401916f0712dddd0fda1fe1d05ad7208382f89c6b3"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-24.md",
+          "sha256_before": "7e8e8b68cc7f228601a039e4105ada3e485a59cfc9aad2c479b68b21246032ab",
+          "sha256_after": "f77f1eca269f68ea149170fca086d8c66e005e09a2a6f540ae5c12dc9604335b"
+        },
+        {
+          "path": "planning/research-program/DELIVERABLES.md",
+          "sha256_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "sha256_after": "64c9cc548dc21d5646ae5526fa95a8702aad502f5b07f6ba987a0b40ab713372"
+        },
+        {
+          "path": "planning/research-program/EVALUATION.md",
+          "sha256_before": "febf04e6cfcee3f07bd08afb609bf8f2801c31f38e4afafe40b826dff11686a7",
+          "sha256_after": "344d343233b61fc80016a62b62f1b9eda522b6f5721202f2d6556d88202c7f44"
+        },
+        {
+          "path": "planning/research-program/RETENTION.md",
+          "sha256_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "sha256_after": "2dcfa87bcb2519adba8a7ea95a710ed6eed092124cf3dacedc8cc1588cd59fdc"
+        },
+        {
+          "path": "planning/research-program/TASK_GRAPH.json",
+          "sha256_before": "90dc3be7bd99d90fc0e15e0b62a5424608b7dbaa867a1d02f8692830e56931f4",
+          "sha256_after": "f0aedc9efa00799df9a5e4aa1854c8024952a194f761aecac4ec20e2da41df92"
+        }
+      ],
+      "execution_rule": "Preserve old reports and their original plan identities. New work after this amendment binds research-plan-2026-09-14-v3. P2-09, P2-10 and P2-03 may proceed from a verified P15-02 receipt; P2-00 must re-verify those receipts before P2-04, P2-11 or any method expert consumes them.",
+      "exposure_rule": "Carry all previously exposed dates and inspected coverage forward. Retention statuses and first attributions are reporting fields; they do not reopen a closed search budget.",
+      "previous_entry_sha256": "63db41d844f8685c202ad7a726395828d6e57451d9c654b9fce7dc4d34f2a8d4"
+    },
+    {
+      "id": "research-assurance-2026-09-14-v3",
+      "date": "2026-09-14",
+      "prior_plan_version": "research-plan-2026-09-14-v3",
+      "new_plan_version": "research-plan-2026-09-14-v3",
+      "assurance_version": "research-assurance-2026-09-14-v3",
+      "scope": "Verifier supersession rule, assurance v3 pin, and planning files changed since research-plan-2026-09-14-v3",
+      "reason": "Replace live-byte identity checks with a supersession rule so a planning amendment and later legitimate code edits do not invalidate earlier receipts. Pins research-assurance-2026-09-14-v3. Records every planning file changed since the research-plan-2026-09-14-v3 entry, including the orchestrator's EVALUATION.md deduplication. Independent outcome-fixture checker remains tools/check_outcome_fixtures.py sha256 0cd6910c9e9024342678df1d197c625d049eebb3cd5883f74499518092a6752d; that tool is not edited.",
+      "previous_entry_sha256": "ef4ed7acdd1dd40852755eb59a01a57d382433bffac2e6a36f01e36ba735d84e",
+      "changed_files": [
+        {
+          "path": "planning/phase-1-5/PROMPTS.md",
+          "sha256_before": "1daeccb06662eb582a0c0ce8bcfe6a6175b6d8cecfe34e6c0181c926405ce4ea",
+          "sha256_after": "e5fba6c0e4638b208b246e709ce62151f7045cdf6b1b95a57d0968c1a2e4a140"
+        },
+        {
+          "path": "planning/phase-1-5/README.md",
+          "sha256_before": "b3af86be048851eaab433ddb70dc6cc6e474e82b9c49f626a8cf2973142ecb19",
+          "sha256_after": "a156e092f533ce3055df2fc348b53926e0e70aed841f0b20ee249eb1962314dd"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/00-foundation/RUNBOOK.md",
+          "sha256_before": "0cb63b98da547febd74cfd4f4f4ea2b92eafe23e591c59fb60281234af22b069",
+          "sha256_after": "a5d4676861710ab6e9b1c1db89df90cfdbc58f2cb14220799ef64d0507126311"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/01-native-and-outcomes/RUNBOOK.md",
+          "sha256_before": "235c30efa9c57362aa79c270caa468a94a09fff0a1b4c65af390970ed8edf446",
+          "sha256_after": "b457e19ab863c06c61e97849e209d93ab4ea9da60595363a40e045bc1a6e3fa0"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/02-source-reconstruction/RUNBOOK.md",
+          "sha256_before": "221316c031edabc99085fa2c32d91dccc15d1aee4613faa9cc89bb3a3834eacb",
+          "sha256_after": "95c52df221c216eb2c2c4103053990a0a8b257c69403ba4e0435de727361a09a"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/03-primitives/RUNBOOK.md",
+          "sha256_before": "c4ed600bc8ec8b5ec141a63ef58988faa5fc0ff486afd0bfa3dde8da7a25a00d",
+          "sha256_after": "68f7c9bfbb622d151f8ee310c5284e002fc36bab40e7e43cc2e85a81482aca49"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/04-family-adapters/RUNBOOK.md",
+          "sha256_before": "f201770cec6ca0c9a63689299d4285ae3b0170636c06bebefc64acf82c3ec830",
+          "sha256_after": "0d65a9c8d306b603b9f338d0d292fbe3b7efb521912e1b1bbff38895ad1a4838"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/05-finite-search/RUNBOOK.md",
+          "sha256_before": "58a81c06c513dff53b05901058153098ab5b493a59ac4283a23fe82f907816f4",
+          "sha256_after": "27c1fee43da17a3a67b53f692aedccf75935bd04f188a202949af1d59988e5c8"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/06-exit-controls/RUNBOOK.md",
+          "sha256_before": "72bda904b834d3288ea5bee1e2eb4641c07c1a445cfff33363aa8f78ae54ae9d",
+          "sha256_after": "e706c63df8cb8c0f60090829320904619bdcec39e3341427014fc5da5abbba90"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/07-release/RUNBOOK.md",
+          "sha256_before": "3d4b13dd869eaa8ad50d95cda9bcaf2d442ba73ddd71003a761195bbde0d2c14",
+          "sha256_after": "fad47b1888acc77d9cfd9bdeb798602fbe2dd7c87765ad58246835014cca4cde"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-00.md",
+          "sha256_before": "12133aa7a4d522d6e7ca9bd526e91526fa577f90c886df03052f4970dbca145f",
+          "sha256_after": "c103ad8636afeda1a475524d591d9fb678e6d6059d1288f30d6f37492a0b7e1f"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-01.md",
+          "sha256_before": "111b6833417de823280e49742fe4d55143533a19943b6bc4e5c3c25795fdf469",
+          "sha256_after": "4a3af3bad17cc571e7feb55b8f90bf5e73e4b4432f79a0041439e11ab6570af0"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-02.md",
+          "sha256_before": "49e326604f3da6c5695cb46b9911b1e453261211a61eb57970e29e4e2d8dc4f8",
+          "sha256_after": "859ef466fbe06a88ea00ec6629970c10d0aa7f63e50e4ab4d2fbbef8e1f93645"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-03.md",
+          "sha256_before": "557dc087fa4d69ed1044fe20a0f128e263438b0240a8fb6a331d950e3c0810fb",
+          "sha256_after": "598bc10662be944c5b1f0d6ed9923b35d845f7a3d31e27c4a029edbf0a7dcfa4"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-04.md",
+          "sha256_before": "29f5fa6cbade206adb742b90fbe99a9a5d8a6491a6acea1bd8f3b6902c1d9471",
+          "sha256_after": "c3b0b690e5fa0783fdbb5dffb963bc068839516878722562718e04f99cfb3f43"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-05.md",
+          "sha256_before": "84f761716893317f47fc081e3ba8a9ce0eb93a1fd468635b0dea06bebdfb677f",
+          "sha256_after": "9cde3c4da6a5eef716d6ca53a4c35c83a208c9959c94a2e0575eedf0a0f0bf5e"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-06.md",
+          "sha256_before": "4dda33d1b2ea58b8f00fefb9924de1642db044946dcfdf9a0030f1653a15634b",
+          "sha256_after": "150cb76d05b75e647fa101c87652ba624d2ead26fd7d3303fb8c4e4fbfb369eb"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-07.md",
+          "sha256_before": "1bb71ba1ade90072a7553a9d0808147abd6cd3deb8c370fe12362d1bf5b981ba",
+          "sha256_after": "7a74557f3f64546e288ac271ab8a0b5215ba1333f2c04d667ac9f3b6112bba50"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-08.md",
+          "sha256_before": "c265f202b5175e50f25f7e8308511233571ebcb48f70b4625138910c631245dd",
+          "sha256_after": "942c9358890970d143c3a461fdb61efbbd6c3bcce16a57ab49fb36beda89b7b3"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-09.md",
+          "sha256_before": "4ba8d8f1f5d37f4c12e4e68bf1162913a32d9ad120a660692f8dc4827c4a1128",
+          "sha256_after": "183657cf0c704de0c75e033b979cf0b10504568900a81f277f6fcfd2d4d405db"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-10.md",
+          "sha256_before": "97984f10457491d4c15b466b026e503ba1d2856c2ec8dc08ffe6d13977d547f2",
+          "sha256_after": "57d49aa5ebd8fedbbc01c11a5d1513455884bec2fcccae57797b50bb99220e77"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-11.md",
+          "sha256_before": "6d8967486a8c0a7839e99f2c9464b48ffa540d0a803c772c5aa06e2756f58aba",
+          "sha256_after": "b5517850677d07b1a09d5a49aff846a467596d861acf56e9d5c7887ad9da8323"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-12.md",
+          "sha256_before": "5576f9c23601dc17681c70f3fa38c581d7d7e613447495c778c68ea7bdf5b29c",
+          "sha256_after": "5c0d5486e9d8ac679cbed4205bb363720bbe292fa8af94250a2232a014a83f0b"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-13.md",
+          "sha256_before": "8fadfdff2a40b6ece9c883ceccfac96127a50d85ffddf26a70502f9db88c0166",
+          "sha256_after": "9c1c520256c031e6234bec4e79678efd91087207a470bd000f763934770a9b36"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-14.md",
+          "sha256_before": "79468a20da287e5e1e54cfdd8ab44b433b6d69f2bfbbedbf466eb0220781837e",
+          "sha256_after": "e2983127c414efb44a2e6116f121b5b706f17cf755244da8af6d28fa54ecb713"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-15.md",
+          "sha256_before": "b27d097f0bcaac35ac02cad63291fbaa6170b22dff0a9ee24585e069f9e340d0",
+          "sha256_after": "36eca822f469a64cdfc14b1336b90385bf5576ed8b83ca3b88be9400f1e603c6"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-16.md",
+          "sha256_before": "1461b0036f6f43a7dd67a3f3ccb9ce4573cc5d5f1b9043b50c01bfb8fcf4f73b",
+          "sha256_after": "87885d92f52557a5d40a6e80a359ecf7d5ccc3341388ef942941e7e241c27466"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-17.md",
+          "sha256_before": "1e9a27a3d3538e416295ede017f2ed0bc1730825ad941c7a4a472bf722e8631d",
+          "sha256_after": "f2f41325e967f95849de071c0674b68cb2a6f6944f615efb902e404878d67c60"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-18.md",
+          "sha256_before": "a8d20e78a548d670d6c2ec4a7a492eb50be8a6b8ede5ed2c052f739e9b0e43a9",
+          "sha256_after": "21e2593b0596242968f3330b20b3918ae96488d0b12c9cc6cd9f41aa154bc308"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-19.md",
+          "sha256_before": "95f231ac0a720528b3f8aad0004b9410b5b6da27e29c2203809753949548fee4",
+          "sha256_after": "dff474165c7c4e6913210bd0349f5bde86fda3b503ac95e55bf4da12fb06b9ab"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-20.md",
+          "sha256_before": "b02759d936894eabbef6faae35ef664b8529a25272ae35b766cbb1253887fdc4",
+          "sha256_after": "04601fbbbc31d45c93fe5b2e60d314bea7270a9f58b16db49460aae115ce1ee3"
+        },
+        {
+          "path": "planning/phase-2/PROMPTS.md",
+          "sha256_before": "acb02ce086d389fe60cbf3ffcb39a5b3c2b65d40e73cb9c509d06e5bd0418d9c",
+          "sha256_after": "42528498586be4f1ef91542acf3c086f2fb1e936f551270015ed9d20e53a233b"
+        },
+        {
+          "path": "planning/phase-2/README.md",
+          "sha256_before": "88606063fa6768181baf969e536435ff65323feab18cc921636e8be6aba23dbf",
+          "sha256_after": "ab91aefb42ef5031ae8bd5295d2530f5b28bb6c3c33a1bd65b43a6bf351f2cb8"
+        },
+        {
+          "path": "planning/phase-2/subphases/00-entry-gate/RUNBOOK.md",
+          "sha256_before": "f0c90a303bec23be7e1a255682409bcbf2878d63a146ec76596ad0fa4d86f524",
+          "sha256_after": "a8890b47e114669ed4df6c23aa3ac94b60c147d5ef5f5217c0daf549549feb7a"
+        },
+        {
+          "path": "planning/phase-2/subphases/01-datasets-and-fitting/RUNBOOK.md",
+          "sha256_before": "f0e53458add0ab8f4973695bdef779fe0f2829cc2a8b8982aeb2a8b3c809bd84",
+          "sha256_after": "6514f57d4c277dd6e446ea49a0bbfe26aeca4d619c9bd59e121a61bcbcc07274"
+        },
+        {
+          "path": "planning/phase-2/subphases/02-native-options-baseline/RUNBOOK.md",
+          "sha256_before": "31907e03af02047d9154ae0628adbe1fd69156ae6136f06501d8736a6965f483",
+          "sha256_after": "2103620d667a4f551c4a2a04c97a7de025fc11a550648aca322b7b9ec99125d5"
+        },
+        {
+          "path": "planning/phase-2/subphases/03-joint-volatility/RUNBOOK.md",
+          "sha256_before": "d1aaeccd5060179a89ceabfd99cadff6a0caad879c6bc8a1c63cb00edd59c9fa",
+          "sha256_after": "3e95e236d991c71ef688ed20b6818c5d55c0d3c2fe12812113413bb466620a62"
+        },
+        {
+          "path": "planning/phase-2/subphases/04-context-mechanisms/RUNBOOK.md",
+          "sha256_before": "9e75cee2b9d0a823a51ae3bc57de4f91f4b8a95fda1158c8f08b9308af5bec6e",
+          "sha256_after": "9d5897678e89806614ec7a74fbb9bddd9defce4e5390e2f99a60bdfefd552570"
+        },
+        {
+          "path": "planning/phase-2/subphases/05-intraday-oi/RUNBOOK.md",
+          "sha256_before": "a8e3d10d760c35f6ddd8787352273d13e95d79a6cf6de288178447e2dc2d660d",
+          "sha256_after": "f34c936b2f3396631bc87ba78cb0fbefe7dd499f2d5252ca110a57944e69037d"
+        },
+        {
+          "path": "planning/phase-2/subphases/06-method-experts/RUNBOOK.md",
+          "sha256_before": "39e5721e8ae6401c9043bce1df9fe44dbf578812b7d693486786ca9621853262",
+          "sha256_after": "c1502ce86c19f79d191c5b4a223d941cefd659f8f0fda3fdfb6534f1f76a4004"
+        },
+        {
+          "path": "planning/phase-2/subphases/07-plans-and-adaptation/RUNBOOK.md",
+          "sha256_before": "6aa3d1feca9115f32ca7d2e18084401bcfc195588a44bd3060789ee0b28107d3",
+          "sha256_after": "18f7e76aa4a50d256f62279a2dc81bd6921f78e4e469214a651748ef57d146bd"
+        },
+        {
+          "path": "planning/phase-2/subphases/08-release/RUNBOOK.md",
+          "sha256_before": "3f0c21943ca493382438101f66ee6d1af78bbb8566df5affae3a74b5e2727df2",
+          "sha256_after": "6931c43064b91c9adbebdf050129c2c1b249f78bde544815e8d663d4023c1325"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-00.md",
+          "sha256_before": "4a62e89b542572c0b83b83e0d57f384331e0e726fe1671550d580792d113b70a",
+          "sha256_after": "0d3a5008e0319c707f8b1dbc757fff04f2c54743dd25ad02d75d06b7cf382862"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-01.md",
+          "sha256_before": "4c4d631ca75098182a5aceabeea62e4b353edfdb99a97396c9c968dd345a9fd6",
+          "sha256_after": "ba89b1d15cdaad734007818b807e8179b787ae5d064fe63cce681444405e5559"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-02.md",
+          "sha256_before": "d1ab62fd2d1e55acf6466d88297d8499ed46b5e8b66413057bdf62bb5d43bcb6",
+          "sha256_after": "4598df27948a3238615777a9a85529600e34b1c3b8711282da369c42f0285648"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-03.md",
+          "sha256_before": "f2dbed2c03e0558a55ed8a033bf1911ac8595e102972897b2ef58bca505807d7",
+          "sha256_after": "3ea1abed7683b2acdc100370fe918de360ad5db2ad968fad105d5ef326fdefe7"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-04.md",
+          "sha256_before": "1dd19ea1653412b192d6f535b6a02e4586f0294faaf2f724254712f91bc1496e",
+          "sha256_after": "da8dfc8e20a5964867a018a79515121ed644f91314ceb2816bcdeb09907c13ee"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-05.md",
+          "sha256_before": "89630002e51fff3447ff9867273eda7ecbd07d6cfd6bd7d0ef57ceaab9101aca",
+          "sha256_after": "26dcbba7e1cf112e1d44e8aeb5ebfb3d9381666e10cd3701257c1c78dbbc432c"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-06.md",
+          "sha256_before": "a547e232486ac2bb8c74d3125d39b5638bc1b817fb8d14e62f9bf8e9c788a08d",
+          "sha256_after": "ac61fd231e7bd52a2c8830138ae7a8dc922dcef8dff3acea1c9f3d499c575c6a"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-07.md",
+          "sha256_before": "2222fea2612f1ae7493c7f05e1a0aab66bbfcbcecae5c4f861842ac2c43a0160",
+          "sha256_after": "43d6f8881f46ad936675025aad6c186be012bb45d9447e722c4d8ce46908273a"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-08.md",
+          "sha256_before": "d664c10c2753351b3ad72761514aaa3c85ffe8518177e7737c1f41d8cecce427",
+          "sha256_after": "91f360d51936b9b0eab49284c5151275d74993bb6a8984cfef295bb421be6462"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-09.md",
+          "sha256_before": "e9334be755072f8d23c4749b673681a7de45ad48a02fdf3b28d499166b18357d",
+          "sha256_after": "08b39d97089e5b63a71945fcb975185a59f3ca051b4bb244320c2037f8f70261"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-10.md",
+          "sha256_before": "61c3423227100fcc71c761401916f0712dddd0fda1fe1d05ad7208382f89c6b3",
+          "sha256_after": "6d5bd4f82e780e8c8546b1e2f8f31b4ffb182337deafcbc89e54f5bb93826ee8"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-11.md",
+          "sha256_before": "52a0a0affee1ddd03e149e796cc9186928b9c87c2adad53a2b479b24f804243e",
+          "sha256_after": "7f38d5c1aaf80bedbd547782670c7e1335aaa4f3a3f39345cfd3fb2f791fcdab"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-12.md",
+          "sha256_before": "1f4cd55b11cefb60bb43334145a9e51ae616bf602d24c707177ea998513c2d59",
+          "sha256_after": "a770f4d08e96ce5ae55f1e1e58ee17e4581ab0eb960631d3b900807fd56e7cd6"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-13.md",
+          "sha256_before": "31100d78e9e160cc82d74048b3e57f11275f5230d6386de8953c4d61ba136c9b",
+          "sha256_after": "ec6aaa9bd6159881c5666948d78eeaffcb921d018ffdc28241f7803d3ed5b56f"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-14.md",
+          "sha256_before": "2011881918b1eab3a3ae4dcb33215a789f394f0d5d06d6682b6b6ea4e20c2784",
+          "sha256_after": "35a59b4fde62206b2ea48d0859c4bd07cf85cdf513e19d12cfb2bd5ee23bbfd2"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-15.md",
+          "sha256_before": "ee9a9526358391a243e3cf5b441c3957b16d97eb4f4dee79bb2e33b8f3f9307b",
+          "sha256_after": "09fd428ef5279f75a8ad25f5be7e173b55d98c014eb6ef58f8c3e1caa22242e7"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-16.md",
+          "sha256_before": "d4a66006e71c4a5d3c6ed523833d24a2ae1c400f6946e236e694ffe25d0dfeca",
+          "sha256_after": "a4803c5358a85b072205934cca081e5abaae69df62b6d194e6d22c8ef692116c"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-17.md",
+          "sha256_before": "d52f0c867a448a7f9f4dea2595a49f2f95de60921582ddf6d2707e138b4b9d08",
+          "sha256_after": "c354ba81fc9cf9289728f9b112a1107a5ddd21faf71a48ea771e9035cf8284e5"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-18.md",
+          "sha256_before": "e76748da7af49dc956cc17a6dd91206a5851b99b24b8712d185cb2e003c649f3",
+          "sha256_after": "a8bd085a96da9e267a89d7fd35e8ebc432f295ca35c6201fac93ec6db2799326"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-19.md",
+          "sha256_before": "7a1b47665497843ff091df289fd287815f32c9e3ba230f9179492daf3c449467",
+          "sha256_after": "0c9b84ce41f8dd3dbdef82ba842306f77c5296e227c7e962a5e22a05770532a1"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-20.md",
+          "sha256_before": "925605d8d807b8aa972aa01217b7f74497fb83bf101d14d848c8515392749488",
+          "sha256_after": "67ad4f6ed5324911ec3e6717381ecca93bb5b92178ba926ffc99e25f0bb3eb35"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-21.md",
+          "sha256_before": "fd3769f04be82f9fb5d7a35bdc863a06cf69bb91f957729ad720fbe9e20533d7",
+          "sha256_after": "debb51e7d191f0a24749b58fefdebfc174637cdc9559637361b073c06cce505b"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-22.md",
+          "sha256_before": "d669ba1735c08ef5990705b2080f716cbda972fb6527bcb926122dbd62eafc2d",
+          "sha256_after": "e1b64962e4033d4c7914dfd4410644438bfa341771d64778b15d4157bcf902a1"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-23.md",
+          "sha256_before": "8c1224ff7532fa37c6abc7e3ee78cfe15e9b671823801dff84510c5a6e0e898a",
+          "sha256_after": "c00872107304dec4a34a71a39c2a0b940b64021f9300bf909404768175193fe4"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-24.md",
+          "sha256_before": "f77f1eca269f68ea149170fca086d8c66e005e09a2a6f540ae5c12dc9604335b",
+          "sha256_after": "c9082328066d72ab7f07461f279d49fb1ef4cb7102aa3609afb62cceba3b780c"
+        },
+        {
+          "path": "planning/research-program/ASSURANCE.md",
+          "sha256_before": "f8d791051f645007db0d0935e9b438321081d14dd0f55e037244802c36246eb4",
+          "sha256_after": "ffc5acfe2551a42ad6553a0eea46c821ef7ead32436f91bea13e69fa2304ca35"
+        },
+        {
+          "path": "planning/research-program/ASSURANCE_CASES.json",
+          "sha256_before": "2967a01721052e8d250b9aeb1e42f619eacbcb76a80386654a87b8e28161ba90",
+          "sha256_after": "88324dcfb44de2269fd59783d1671b6d52f5e301ec70f1b0f2210c1a0c523bee"
+        },
+        {
+          "path": "planning/research-program/EVALUATION.md",
+          "sha256_before": "344d343233b61fc80016a62b62f1b9eda522b6f5721202f2d6556d88202c7f44",
+          "sha256_after": "3c0628acd7db481adfa41e4b6a11fc87368909c67bf213d82061643cc2cfadd1"
+        },
+        {
+          "path": "planning/research-program/TASK_GRAPH.json",
+          "sha256_before": "f0aedc9efa00799df9a5e4aa1854c8024952a194f761aecac4ec20e2da41df92",
+          "sha256_after": "859d5c6e84de08cfe81f050bbb5da8f4a937f95898b34e695c1acc19027729c7"
+        },
+        {
+          "path": "planning/research-program/WORKFLOW.md",
+          "sha256_before": "32e3a490917feb0b7a7ad96c42ac1187f57df142be6746e54144d8c1b8200bc3",
+          "sha256_after": "c499743426deb9865a02d1d8cca3938070fe9797af7bb8147beb2d40e618f4cb"
+        }
+      ],
+      "unchanged": [
+        "Research formulas and source attribution",
+        "Finite candidate/trial budgets and statistical selection rules",
+        "Accepted Phase 1 code/data/report identities",
+        "Pinned foundation checker tools/check_foundation_adversarial.py",
+        "Pinned outcome fixture checker tools/check_outcome_fixtures.py"
+      ],
+      "execution_rule": "Preserve old reports and their original plan identities. New work after this amendment binds research-assurance-2026-09-14-v3. Plan-file live mismatches verify through this amendment chain; code-file live mismatches verify through a later verified successor receipt.",
+      "exposure_rule": "Carry all previously exposed dates and inspected coverage forward."
+    },
+    {
+      "prior_plan_version": "research-plan-2026-09-14-v3",
+      "new_plan_version": "research-plan-2026-09-14-v3",
+      "assurance_version": "research-assurance-2026-09-14-v3",
+      "unchanged": [
+        "Research formulas and source attribution",
+        "Finite candidate/trial budgets and statistical selection rules",
+        "Accepted Phase 1 code/data/report identities",
+        "Pinned foundation checker tools/check_foundation_adversarial.py",
+        "Pinned outcome fixture checker tools/check_outcome_fixtures.py"
+      ],
+      "execution_rule": "Preserve old reports and their original plan identities. New work after this amendment binds research-assurance-2026-09-14-v3. Plan-file live mismatches verify through this amendment chain; code-file live mismatches verify through a later verified successor receipt.",
+      "exposure_rule": "Carry all previously exposed dates and inspected coverage forward.",
+      "id": "amendment-2026-09-14-timing-t4-and-stage-status",
+      "date": "2026-09-14",
+      "scope": "planning-only; no formula, gate, budget or date of existing banks changed",
+      "reason": "Timing bank T4 (no clock limit) registered before any search result; per-stage status list required in the Strategy Book; A15 added to both release cards. Orchestrator-authored text.",
+      "changes": [
+        "SEARCH_CONTRACT.md: Timing row gains T4 and its eligible population; custom reversal timing recipe gains the T4 paragraph",
+        "DELIVERABLES.md section 1: per-stage status list and literal-operand disclosure",
+        "P15-20.md and P2-24.md: acceptance key A15",
+        "generated runbooks and prompts rebuilt",
+        "TASK_GRAPH.json: acceptance lists of P15-20 and P2-24 gain A15"
+      ],
+      "changed_files": [
+        {
+          "path": "planning/phase-1-5/SEARCH_CONTRACT.md",
+          "sha256_before": "c3ac03a84139c228b45fbab113383e4c13a8af535c4100e599796d7c344b0589",
+          "sha256_after": "70001063cb309bd8626bd767cb4788a420d0a7b155fb401ea4b7dd893929577b"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/03-primitives/RUNBOOK.md",
+          "sha256_before": "68f7c9bfbb622d151f8ee310c5284e002fc36bab40e7e43cc2e85a81482aca49",
+          "sha256_after": "71c4770b71446aecd1eb90906edbe47cafda51dfa10d57916d49842bfaa5fa36"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/04-family-adapters/RUNBOOK.md",
+          "sha256_before": "0d65a9c8d306b603b9f338d0d292fbe3b7efb521912e1b1bbff38895ad1a4838",
+          "sha256_after": "aa006397cea114565d2f83193a95806bdf4cb786bfedba247f7980336a5465c0"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/05-finite-search/RUNBOOK.md",
+          "sha256_before": "27c1fee43da17a3a67b53f692aedccf75935bd04f188a202949af1d59988e5c8",
+          "sha256_after": "de164cae7d0eaf08c665198e2fefdce7a5f98ba07267c84f93fce789eaca0bad"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/06-exit-controls/RUNBOOK.md",
+          "sha256_before": "e706c63df8cb8c0f60090829320904619bdcec39e3341427014fc5da5abbba90",
+          "sha256_after": "89bcc4a3c7ed6077c7bc20733b5240385d96e34b65a25d6e8606a21626e7f5c8"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/07-release/RUNBOOK.md",
+          "sha256_before": "fad47b1888acc77d9cfd9bdeb798602fbe2dd7c87765ad58246835014cca4cde",
+          "sha256_after": "e51b55ce7b65583bc5aa95a75b48860743782625da96f8d3f4b92550b5deb23c"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-20.md",
+          "sha256_before": "04601fbbbc31d45c93fe5b2e60d314bea7270a9f58b16db49460aae115ce1ee3",
+          "sha256_after": "91f32804bb69bdd0e36e98e5da7f56ca6194f3b1cfbe642318c55de269e56c17"
+        },
+        {
+          "path": "planning/phase-2/subphases/07-plans-and-adaptation/RUNBOOK.md",
+          "sha256_before": "18f7e76aa4a50d256f62279a2dc81bd6921f78e4e469214a651748ef57d146bd",
+          "sha256_after": "36173d87aeeabc0ebc81aa61a95a7b7b555d026f8265367f7258680f76ef1bab"
+        },
+        {
+          "path": "planning/phase-2/subphases/08-release/RUNBOOK.md",
+          "sha256_before": "6931c43064b91c9adbebdf050129c2c1b249f78bde544815e8d663d4023c1325",
+          "sha256_after": "27d4d6ca91c53d71c3fe72c3760ecb8e78056e6c30bcf55026e20f8a22a177b5"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-24.md",
+          "sha256_before": "c9082328066d72ab7f07461f279d49fb1ef4cb7102aa3609afb62cceba3b780c",
+          "sha256_after": "f970ccece7b37d4bd416cb22011c7d6b6d6ac7d9a83f9d18a0d7c64ebe4a756b"
+        },
+        {
+          "path": "planning/research-program/DELIVERABLES.md",
+          "sha256_before": "64c9cc548dc21d5646ae5526fa95a8702aad502f5b07f6ba987a0b40ab713372",
+          "sha256_after": "7ee3d882f43c9aa2d53b7b4db7a281e719d78b2bb16669b894d33cf884d300cd"
+        },
+        {
+          "path": "planning/research-program/TASK_GRAPH.json",
+          "sha256_before": "859d5c6e84de08cfe81f050bbb5da8f4a937f95898b34e695c1acc19027729c7",
+          "sha256_after": "938c847ee1bb0511c53a54a72542ceaaf7057f5b2d1db35a6c71a9ccf713e9ca"
+        }
+      ],
+      "previous_entry_sha256": "591852ab27062eda5954ce62edd14551aa6e9b73bc21df43485472ca32e4890d"
+    },
+    {
+      "prior_plan_version": "research-plan-2026-09-14-v3",
+      "new_plan_version": "research-plan-2026-09-14-v3",
+      "assurance_version": "research-assurance-2026-09-14-v3",
+      "unchanged": [
+        "Research formulas and source attribution",
+        "Finite candidate/trial budgets and statistical selection rules",
+        "Accepted Phase 1 code/data/report identities",
+        "Pinned foundation checker tools/check_foundation_adversarial.py",
+        "Pinned outcome fixture checker tools/check_outcome_fixtures.py",
+        "Acceptance amendment research-assurance-2026-09-14-v3"
+      ],
+      "execution_rule": "Preserve old reports and their original plan identities. New work after this amendment binds research-assurance-2026-09-14-v3. Plan-file live mismatches verify through this amendment chain starting at the declared hash; code-file live mismatches verify through a later verified successor receipt.",
+      "exposure_rule": "Carry all previously exposed dates and inspected coverage forward.",
+      "id": "amendment-2026-09-14-verifier-mid-chain-walk",
+      "date": "2026-09-14",
+      "scope": "Verifier plan-file amendment walk and gate-review graph binding; no formula, gate, budget or date of existing banks changed",
+      "reason": "verifier defect: amendment walk started at the chain root; gate-review graph binding had no chain tolerance",
+      "changes": [
+        "receipts.py _plan_superseded_by_amendments starts the path walk at the first chained entry whose sha256_before for that path equals the declared hash",
+        "previous_entry_sha256 is checked for every new-shape entry from the first chained entry onward even when the path walk starts mid-chain",
+        "an entry dated before the receipt draft is skipped unless it supplies the declared hash's successor",
+        "GATE_REVIEW graph hash and independent-results current-graph binding accept a mid-chain hash when the same walk connects it to the live graph",
+        "subphase and phase CLI gain --amendments",
+        "tests in tests/rule_discovery/test_p15_01.py for mid-chain, missing later entry, wrong later previous_entry_sha256, gate-review graph binding, and predating skip/reject",
+        "runner.py predecessor pins retargeted to the new P15-00/P15-01 receipts after those attempts existed"
+      ],
+      "changed_files": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/receipts.py",
+          "sha256_before": "b5e8d55e220554f9dda1b878444496cc3c6f3337c7677bc40871f5cfb5b1d3e2",
+          "sha256_after": "60f29b851c9d924f603ee029c1b48a79cbc9da5296050f0a4d3db21f79e5b29a"
+        },
+        {
+          "path": "implementation/tests/rule_discovery/test_p15_01.py",
+          "sha256_before": "512a851c3035eb95fce31c27491dbf7428eeaf52ab6e5b7fbb43e66318046945",
+          "sha256_after": "c0308999a81f1b219b01f590c564d68e776ded08179f8ac7e1b6269fcf513055"
+        },
+        {
+          "path": "implementation/tools/verify_research_release.py",
+          "sha256_before": "331cd7434d4a54b09a0b28b8df133f1fe973f6710a6a5663458c20dff6a0ffcb",
+          "sha256_after": "e4e8c4efe83cf985dea844b474f6bc12560d576e2c612d2d110638cd5a1e7c60"
+        },
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/runner.py",
+          "sha256_before": "d2c86e38243f52e6cbd971431d430c6a353990d6d82c8ede07a138fbc22c1c19",
+          "sha256_after": "0b421f5111a88e3b7815204470c7e0d60554622fea9120f812126bbca41f2782"
+        }
+      ],
+      "previous_entry_sha256": "fd854349f5670c3b996e334c97808b8f664f6395a62b5c74c3750b3dd59edccb"
+    },
+    {
+      "prior_plan_version": "research-plan-2026-09-14-v3",
+      "new_plan_version": "research-plan-2026-09-14-v3",
+      "assurance_version": "research-assurance-2026-09-14-v3",
+      "unchanged": [
+        "Research formulas and source attribution",
+        "Finite candidate/trial budgets and statistical selection rules",
+        "Accepted Phase 1 code/data/report identities",
+        "Pinned foundation checker tools/check_foundation_adversarial.py",
+        "Pinned outcome fixture checker tools/check_outcome_fixtures.py",
+        "Acceptance amendment research-assurance-2026-09-14-v3"
+      ],
+      "execution_rule": "Preserve old reports and their original plan identities. New work after this amendment binds research-assurance-2026-09-14-v3. Plan-file live mismatches verify through this amendment chain starting at the declared hash; code-file live mismatches verify through a later verified successor receipt.",
+      "exposure_rule": "Carry all previously exposed dates and inspected coverage forward. Descriptive regime cuts in the B0 Strategy Book edition do not select candidates, thresholds or dates.",
+      "id": "amendment-2026-09-14-source-additions-and-p15-04-ledger",
+      "date": "2026-09-14",
+      "scope": "Green Bird A1-A4 acceptance lines, P-zone media-frame authority, 04 runbook rebuild; no formula, gate, budget or date of existing banks changed",
+      "reason": "SOURCE_ADDITIONS_2026-09-14.md writer window: name A1-A4 on P15-10/P15-11, rebuild bundles, correct source-catalog media-archive sentence for frames f02/f05.",
+      "changes": [
+        "P15-10 acceptance checklist names A1 london_box, A2 asia_box, A3 overnight scan window from SOURCE_ADDITIONS_2026-09-14.md",
+        "P15-11 acceptance checklist names A4 golden_pocket_continuation from SOURCE_ADDITIONS_2026-09-14.md",
+        "04-family-adapters RUNBOOK rebuilt from those cards",
+        "wiki/source-catalog.md records frames f02 and f05 as the only owned print of the 500-session window and three P-zone session anchors"
+      ],
+      "changed_files": [
+        {
+          "path": "planning/phase-1-5/tasks/P15-10.md",
+          "sha256_before": "57d49aa5ebd8fedbbc01c11a5d1513455884bec2fcccae57797b50bb99220e77",
+          "sha256_after": "53abd89d134b6419b6547eb2f0fe93199495e7fc01771f34978789e007e91491"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-11.md",
+          "sha256_before": "b5517850677d07b1a09d5a49aff846a467596d861acf56e9d5c7887ad9da8323",
+          "sha256_after": "a367afe611b1c10327ab1a5a3e9599e68dddf3c7dfc5e2ee01ff66e08dd81407"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/04-family-adapters/RUNBOOK.md",
+          "sha256_before": "aa006397cea114565d2f83193a95806bdf4cb786bfedba247f7980336a5465c0",
+          "sha256_after": "8240d959753c4dd3a6ac8bd8e1bca30ffc7d0b6204d7dea04ea78a99dd52110e"
+        },
+        {
+          "path": "wiki/source-catalog.md",
+          "sha256_before": "4cb75f66a53a73316584c7ad1a4982501f768ae515dd7a63f9c2146cbdec44b8",
+          "sha256_after": "389a43e7916c560038456a17050a12128288230519f08f8ca95b51e2d1e8207c"
+        }
+      ],
+      "previous_entry_sha256": "1cf27d2b461dcc84e1284b87a464f4643d19474c553b507229434aa63c69d0bb"
+    },
+    {
+      "prior_plan_version": "research-plan-2026-09-14-v3",
+      "new_plan_version": "research-plan-2026-09-14-v3",
+      "assurance_version": "research-assurance-2026-09-14-v3",
+      "unchanged": [
+        "Research formulas and source attribution",
+        "Finite candidate/trial budgets and statistical selection rules",
+        "Accepted Phase 1 code/data/report identities",
+        "Pinned foundation checker tools/check_foundation_adversarial.py",
+        "Pinned outcome fixture checker tools/check_outcome_fixtures.py",
+        "Acceptance amendment research-assurance-2026-09-14-v3"
+      ],
+      "execution_rule": "Preserve old reports and their original plan identities. New work after this amendment binds research-assurance-2026-09-14-v3. Plan-file live mismatches verify through this amendment chain starting at the declared hash; code-file live mismatches verify through a later verified successor receipt.",
+      "exposure_rule": "Carry all previously exposed dates and inspected coverage forward. Descriptive regime cuts in the B0 Strategy Book edition do not select candidates, thresholds or dates.",
+      "id": "amendment-2026-09-15-source-fidelity-task-p15-16a",
+      "date": "2026-09-15",
+      "scope": "Adds task P15-16A (source-fidelity baseline B0.2 and author-example replay) to 05-finite-search as P15-17's predecessor; corrects three SOURCE_ADDITIONS lines the fidelity review found overstated; rebuilds the 05 bundles. No formula, gate, budget, bank or date of existing banks changed.",
+      "reason": "Astra source-fidelity review (planning/research-program/reviews/astra-fidelity-2026-09-15/REVIEW.md, commit 4a775b07) and the orchestrating session's rulings (DISPOSITION.md addendum 'source-fidelity rulings (2026-09-15)'): the entry-strategy baselines are not yet faithful replications; upgrades may not be searched against an unfaithful baseline.",
+      "changes": [
+        "TASK_GRAPH.json: new task P15-16A in 05-finite-search; P15-17 depends on it",
+        "planning/phase-1-5/tasks/P15-16A.md: new canonical card with acceptance keys A01-A08",
+        "planning/phase-1-5/tasks/P15-17.md: dependency and pairing baseline B0.2",
+        "SILENT_FAILURES.md: P15-16A assigned the same cases as P15-16",
+        "SOURCE_ADDITIONS_2026-09-14.md: A1 retest mandatory; A4 pocket drawn in the leg's direction; drawn target is not a realized exit",
+        "05-finite-search RUNBOOK, README and PROMPTS rebuilt",
+        "SILENT_FAILURES assurance JSON: P15-16A added to the same cases as P15-16; check_research_plan.py counts 47 tasks, 22 Phase 1.5 tasks, 73 prompts"
+      ],
+      "changed_files": [
+        {
+          "path": "planning/research-program/TASK_GRAPH.json",
+          "sha256_before": "938c847ee1bb0511c53a54a72542ceaaf7057f5b2d1db35a6c71a9ccf713e9ca",
+          "sha256_after": "3e3438e2b5d75589ec7218d6301236a558566229dc4c578f59c9e38a27e453da"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-17.md",
+          "sha256_before": "f2f41325e967f95849de071c0674b68cb2a6f6944f615efb902e404878d67c60",
+          "sha256_after": "a03d8df09e2fa9fa585b463f2d04cd80a634e9e0088507b1966e3fb972b929da"
+        },
+        {
+          "path": "planning/research-program/SILENT_FAILURES.md",
+          "sha256_before": "487c492df36161b6cda72bdeb54fa45a027b870793b19c08bc2577a0cc60679b",
+          "sha256_after": "75fd0c8c3bb0ae4f55ac621db114afacf619371660c3497d0a1926c222f72155"
+        },
+        {
+          "path": "planning/phase-1-5/SOURCE_ADDITIONS_2026-09-14.md",
+          "sha256_before": "7c4f42188b90af411a0261b9df759c60017e8a65a2436a330c8083768ab0c06d",
+          "sha256_after": "42f7970a2a280629e95d36439c1cec72164bc04a674c941b78c40d3d75d6cc44"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/05-finite-search/RUNBOOK.md",
+          "sha256_before": "de164cae7d0eaf08c665198e2fefdce7a5f98ba07267c84f93fce789eaca0bad",
+          "sha256_after": "39223a89381fabea4224b6e1da9d194ffbbec9a60b0ecb2f1a545e86a80ba9c2"
+        },
+        {
+          "path": "planning/phase-1-5/README.md",
+          "sha256_before": "a156e092f533ce3055df2fc348b53926e0e70aed841f0b20ee249eb1962314dd",
+          "sha256_after": "76ad0dcb3b3b294190d5518c07c294d8f795f618546370c6da3a16600515b40a"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-16A.md",
+          "sha256_before": null,
+          "sha256_after": "2f586e53d78069c0cb1095ae930998a759d52bf47cefb4a6eea7034d5ed78898"
+        },
+        {
+          "path": "planning/research-program/ASSURANCE_CASES.json",
+          "sha256_before": "88324dcfb44de2269fd59783d1671b6d52f5e301ec70f1b0f2210c1a0c523bee",
+          "sha256_after": "93024ac8800d426d3d871535a670e6b9bd51ca179309071607409755ca5a10de"
+        }
+      ],
+      "previous_entry_sha256": "043439c5c7406a63915bb2c03f38a0dc510ffd01b442a4d4abe5cc935625ede9"
+    },
+    {
+      "prior_plan_version": "research-plan-2026-09-14-v3",
+      "new_plan_version": "research-plan-2026-09-14-v3",
+      "assurance_version": "research-assurance-2026-09-14-v3",
+      "unchanged": [
+        "Research formulas and source attribution",
+        "Finite candidate/trial budgets and statistical selection rules",
+        "Accepted Phase 1 code/data/report identities",
+        "Pinned foundation checker tools/check_foundation_adversarial.py",
+        "Pinned outcome fixture checker tools/check_outcome_fixtures.py",
+        "Acceptance amendment research-assurance-2026-09-14-v3"
+      ],
+      "execution_rule": "Preserve old reports and their original plan identities. New work after this amendment binds research-assurance-2026-09-14-v3. Plan-file live mismatches verify through this amendment chain starting at the declared hash; code-file live mismatches verify through a later verified successor receipt.",
+      "exposure_rule": "Carry all previously exposed dates and inspected coverage forward. Descriptive regime cuts in the B0 Strategy Book edition do not select candidates, thresholds or dates.",
+      "id": "amendment-2026-09-15-source-fidelity-re-read",
+      "date": "2026-09-15",
+      "scope": "Adds a \"Source fidelity re-read, 2026-09-15\" section to all twelve method wiki pages and a dated-example inventory to wiki/source-catalog.md; corrects five in-place sentences (Jumbo London clock, Green Bird box bounds, Sires clean_squeeze note, Saint failed_auction_return and session scope note, Member instrument). The 05-finite-search RUNBOOK is regenerated by the bundle builder. Documentation only: no formula, gate, budget, bank, receipt or Phase 1 predicate changed.",
+      "reason": "The orchestrating session re-read every family against its raw sources with all charts and tickets zoomed (wiki/log.md entry 2026-09-15); the method pages are plan-snapshot members of the 04-family-adapters receipts, so their edits must be carried by the amendment chain for the verifier.",
+      "changes": [
+        "wiki/method-jumbo-tbr.md: fidelity re-read section and in-place corrections",
+        "wiki/method-green-bird-failure.md: fidelity re-read section and in-place corrections",
+        "wiki/method-green-bird-directional-scalps.md: fidelity re-read section",
+        "wiki/method-green-bird-vwap-continuation.md: fidelity re-read section",
+        "wiki/method-sires-thesis-flow.md: fidelity re-read section and in-place corrections",
+        "wiki/method-saint-amt.md: fidelity re-read section and in-place corrections",
+        "wiki/method-member-two-reasons.md: fidelity re-read section and in-place corrections",
+        "wiki/method-keani-open-above-value.md: fidelity re-read section",
+        "wiki/method-refill-effect.md: fidelity re-read section",
+        "wiki/method-jetbundle-auction-states.md: fidelity re-read section",
+        "wiki/method-stoic-asymmetric-compounding.md: fidelity re-read section",
+        "wiki/method-stoic-data-engine.md: fidelity re-read section",
+        "wiki/source-catalog.md: fidelity re-read section",
+        "planning/phase-1-5/subphases/05-finite-search/RUNBOOK.md: regenerated bundle (source-content hash and the A4 stop wording carried from the DISPOSITION rulings)"
+      ],
+      "changed_files": [
+        {
+          "path": "wiki/method-jumbo-tbr.md",
+          "sha256_before": "5df5b5338ffa798037e4474ea2ca9ddce73da6cfcc8a9dee02d1365fa01fc979",
+          "sha256_after": "8ab3d1e0b0ddb54f2e15b5224907c6f5288c87bd4e89387c0a8c48e17f0b4f0a"
+        },
+        {
+          "path": "wiki/method-green-bird-failure.md",
+          "sha256_before": "084272bfa6b6d878fb4f7957b8f2f5a13c10ca3d3e991be9f4141fb1374682f6",
+          "sha256_after": "60de6cb04dbaa43e7b7dba7b36d89196e71f27f2ed1194e6465dbec9194ba435"
+        },
+        {
+          "path": "wiki/method-green-bird-directional-scalps.md",
+          "sha256_before": "e40a872a184af64497e8849b712d251f96fb9bbc15ed4a560fa764a2ab1668a5",
+          "sha256_after": "93168f86121670818a2c7efa065d88bcd064bc4a76a8e3f28117340821c74e89"
+        },
+        {
+          "path": "wiki/method-green-bird-vwap-continuation.md",
+          "sha256_before": "a81ed01f0d95d2a01e5e5d432f5ad041b023a63a6061585024450ad0a3886aa6",
+          "sha256_after": "ba4a305229d8a4a1d97ddab84852785ba25a9bf7aadca5168d7c233ef9e85163"
+        },
+        {
+          "path": "wiki/method-sires-thesis-flow.md",
+          "sha256_before": "95f5bae3139e1d55ae5268501f63fc9517bf5e1b9b2a59e5b22f6a31edda69d9",
+          "sha256_after": "e0c0806a1884919fd1d7f92e930dcc8044fc2614b20abfe57e7de9dfee8d6ede"
+        },
+        {
+          "path": "wiki/method-saint-amt.md",
+          "sha256_before": "1a35a03af9f9fa489b5d26dbf5f2e9c8711950aeb96741db6cf0d1f6bc6d6edd",
+          "sha256_after": "9fc498de42cd8dd8e5b9ce32f73170124d5e7cf8349685994e07b6ceefdfe227"
+        },
+        {
+          "path": "wiki/method-member-two-reasons.md",
+          "sha256_before": "aa3c579df17a5bdf08cb8269f5b42b23ddc93bcd01ee2512584db8398f6d15be",
+          "sha256_after": "19b05d922d0be2204a3dc74015550d4b8cb0f23f99e6cce0ae5b2014fbb4ff39"
+        },
+        {
+          "path": "wiki/method-keani-open-above-value.md",
+          "sha256_before": "3a2c4e1efd371a6aa722e3a956a68f21eec1182e406e108c29ff36040f8b7a72",
+          "sha256_after": "459d54c6b968cebcbb8730d6a33490be4696b1dd6c5ddb410e665ad3baecc4c9"
+        },
+        {
+          "path": "wiki/method-refill-effect.md",
+          "sha256_before": "0ab604fbd4bef55682d52e3ca87c2245f6548c43f893934c2f796b98d242c60c",
+          "sha256_after": "921b3a60d02addda77351078713ad3748ad163ac472c4092c5635bce810d240c"
+        },
+        {
+          "path": "wiki/method-jetbundle-auction-states.md",
+          "sha256_before": "b57512b60f4748a7a38773575d9d368a7a42382f9cf469f937eb636bd4458d0e",
+          "sha256_after": "1c0e396f68e3420f8257334f2728a699b681f0ed1e988d7c500fb46cc5000647"
+        },
+        {
+          "path": "wiki/method-stoic-asymmetric-compounding.md",
+          "sha256_before": "34a321ccfdd82aac3dd3998acbf5afa9a8adb1b2ec5c161a05d2afc33b698635",
+          "sha256_after": "baa2a9454d79abaa73925f19b9efec8f8d7a2a260e246d154822d19f3b1314c3"
+        },
+        {
+          "path": "wiki/method-stoic-data-engine.md",
+          "sha256_before": "b445e7e86db69031e44036cba23dceecc5b533507a32f3cbcf21eb1278c12542",
+          "sha256_after": "825ac89e2d7d3b51c0673d706b1079883211ff9259cfb11dfe97068cfaa9b19b"
+        },
+        {
+          "path": "wiki/source-catalog.md",
+          "sha256_before": "389a43e7916c560038456a17050a12128288230519f08f8ca95b51e2d1e8207c",
+          "sha256_after": "bc988060bf3ef086137f29caec4c9492b5c9324dccad46b014c05f0eca8f7590"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/05-finite-search/RUNBOOK.md",
+          "sha256_before": "39223a89381fabea4224b6e1da9d194ffbbec9a60b0ecb2f1a545e86a80ba9c2",
+          "sha256_after": "490f0f2beb23f2e2671e4909019e1b47f5ae33a62f045e826e86bd59ff744cf3"
+        }
+      ],
+      "previous_entry_sha256": "aba2222d3ee0c5d3033873cf9e2828fa300014bbefc816894723c3c412840ce4"
+    },
+    {
+      "prior_plan_version": "research-plan-2026-09-14-v3",
+      "new_plan_version": "research-plan-2026-09-14-v3",
+      "assurance_version": "research-assurance-2026-09-14-v3",
+      "unchanged": [
+        "Research formulas and source attribution",
+        "Finite candidate/trial budgets and statistical selection rules",
+        "Accepted Phase 1 code/data/report identities",
+        "Pinned foundation checker tools/check_foundation_adversarial.py",
+        "Pinned outcome fixture checker tools/check_outcome_fixtures.py",
+        "Acceptance amendment research-assurance-2026-09-14-v3"
+      ],
+      "execution_rule": "Preserve old reports and their original plan identities. New work after this amendment binds research-assurance-2026-09-14-v3. Plan-file live mismatches verify through this amendment chain starting at the declared hash; code-file live mismatches verify through a later verified successor receipt.",
+      "exposure_rule": "Carry all previously exposed dates and inspected coverage forward. Descriptive regime cuts in the B0 Strategy Book edition do not select candidates, thresholds or dates.",
+      "id": "amendment-2026-09-15-astra-dossier-corrections",
+      "date": "2026-09-15",
+      "scope": "Applies the Astra family-dossier corrections SD01 to SD15 to the method wiki pages (an \"Astra dossier corrections\" sub-section per affected page and six in-place sentence corrections) and adds the dossier pointer to wiki/source-catalog.md. Documentation only: no formula, gate, budget, bank, receipt or Phase 1 predicate changed.",
+      "reason": "Astra per-family dossiers at max effort (planning/research-program/reviews/astra-family-dossiers-2026-09-15/) ruled in the DISPOSITION addendum \"Astra family-dossier rulings SD01 to SD15 (2026-09-15, night)\"; the method pages are plan-snapshot members and their edits are carried by the amendment chain.",
+      "changes": [
+        "wiki/method-jumbo-tbr.md: dossier corrections",
+        "wiki/method-green-bird-failure.md: dossier corrections",
+        "wiki/method-green-bird-directional-scalps.md: dossier corrections",
+        "wiki/method-green-bird-vwap-continuation.md: dossier corrections",
+        "wiki/method-sires-thesis-flow.md: dossier corrections",
+        "wiki/method-saint-amt.md: dossier corrections",
+        "wiki/method-member-two-reasons.md: dossier corrections",
+        "wiki/method-keani-open-above-value.md: dossier corrections",
+        "wiki/method-refill-effect.md: dossier corrections",
+        "wiki/method-jetbundle-auction-states.md: dossier corrections",
+        "wiki/method-stoic-asymmetric-compounding.md: dossier corrections",
+        "wiki/method-stoic-data-engine.md: dossier corrections",
+        "wiki/source-catalog.md: dossier corrections",
+        "planning/phase-1-5/subphases/05-finite-search/RUNBOOK.md: regenerated bundle"
+      ],
+      "changed_files": [
+        {
+          "path": "wiki/method-jumbo-tbr.md",
+          "sha256_before": "8ab3d1e0b0ddb54f2e15b5224907c6f5288c87bd4e89387c0a8c48e17f0b4f0a",
+          "sha256_after": "9b1f363455884ab426441647a07408890eb2d02ec0f5f4ff73a4db0f46a7b592"
+        },
+        {
+          "path": "wiki/method-green-bird-failure.md",
+          "sha256_before": "60de6cb04dbaa43e7b7dba7b36d89196e71f27f2ed1194e6465dbec9194ba435",
+          "sha256_after": "553657ae3f73972d2e30d3a875deaadc04e8414eca7959e5a639589e7535d21f"
+        },
+        {
+          "path": "wiki/method-green-bird-directional-scalps.md",
+          "sha256_before": "93168f86121670818a2c7efa065d88bcd064bc4a76a8e3f28117340821c74e89",
+          "sha256_after": "467f06b146bb53bb7c8aa67fb5fb8e9bde7bc502f02b0f9d44bd5f4438db4b1a"
+        },
+        {
+          "path": "wiki/method-green-bird-vwap-continuation.md",
+          "sha256_before": "ba4a305229d8a4a1d97ddab84852785ba25a9bf7aadca5168d7c233ef9e85163",
+          "sha256_after": "076042a32575b249bcda90eb5aec6ded3821bff28fc8d58bb8ec60e96db9fd40"
+        },
+        {
+          "path": "wiki/method-sires-thesis-flow.md",
+          "sha256_before": "e0c0806a1884919fd1d7f92e930dcc8044fc2614b20abfe57e7de9dfee8d6ede",
+          "sha256_after": "899dc12f195f74a41c3fdba27e776919def2f04c27936042f7fb1c3b65b63a92"
+        },
+        {
+          "path": "wiki/method-saint-amt.md",
+          "sha256_before": "9fc498de42cd8dd8e5b9ce32f73170124d5e7cf8349685994e07b6ceefdfe227",
+          "sha256_after": "803541fd7d543ee1175e85405fb080a96ac7664d79c03d9e1f87d81b978849e8"
+        },
+        {
+          "path": "wiki/method-member-two-reasons.md",
+          "sha256_before": "19b05d922d0be2204a3dc74015550d4b8cb0f23f99e6cce0ae5b2014fbb4ff39",
+          "sha256_after": "febde871d841e7fd8c3027ac630afe3c9c29bc9ddfa3590ad7870c9924799f49"
+        },
+        {
+          "path": "wiki/method-keani-open-above-value.md",
+          "sha256_before": "459d54c6b968cebcbb8730d6a33490be4696b1dd6c5ddb410e665ad3baecc4c9",
+          "sha256_after": "7c44eb5286afafba22c432d2aec5d918d29f2b775602214cec4a59965e0f4201"
+        },
+        {
+          "path": "wiki/method-refill-effect.md",
+          "sha256_before": "921b3a60d02addda77351078713ad3748ad163ac472c4092c5635bce810d240c",
+          "sha256_after": "4be0250f7172466e654ead551daee4fc819b519dce5ddf9a89d094f9297bcfac"
+        },
+        {
+          "path": "wiki/method-jetbundle-auction-states.md",
+          "sha256_before": "1c0e396f68e3420f8257334f2728a699b681f0ed1e988d7c500fb46cc5000647",
+          "sha256_after": "89bc9a90f8cc40536f7937f083a7d00add524faeb8266c726040b78b32895358"
+        },
+        {
+          "path": "wiki/method-stoic-asymmetric-compounding.md",
+          "sha256_before": "baa2a9454d79abaa73925f19b9efec8f8d7a2a260e246d154822d19f3b1314c3",
+          "sha256_after": "8c6f7e603e5750b9537b64e1dfc2e729a916d57b94cee3ff95109ffd53e0c679"
+        },
+        {
+          "path": "wiki/method-stoic-data-engine.md",
+          "sha256_before": "825ac89e2d7d3b51c0673d706b1079883211ff9259cfb11dfe97068cfaa9b19b",
+          "sha256_after": "3d536815d74eccd2913862743f4f01922c94337a8b1573a8af61bd271c72e961"
+        },
+        {
+          "path": "wiki/source-catalog.md",
+          "sha256_before": "bc988060bf3ef086137f29caec4c9492b5c9324dccad46b014c05f0eca8f7590",
+          "sha256_after": "c3a8c197eca1c8f1e491159299f83245ee98f62dc1ef24101f8741fabf877300"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/05-finite-search/RUNBOOK.md",
+          "sha256_before": "c41ee12d775c7199614a1f6497e440f4b17ad4954c26d5e8268531149dd0cafe",
+          "sha256_after": "d026733209c64fd47ca34514231c58db1e79130ccc17f773a7ff38453f932e70"
+        }
+      ],
+      "previous_entry_sha256": "c40ddd53d2785f2a219fe13e91fcdf41d1f9114ebd23a5b76e43d391539a0658"
+    },
+    {
+      "prior_plan_version": "research-plan-2026-09-14-v3",
+      "new_plan_version": "research-plan-2026-09-14-v3",
+      "assurance_version": "research-assurance-2026-09-14-v3",
+      "unchanged": [
+        "Research formulas and source attribution",
+        "Finite candidate/trial budgets and statistical selection rules",
+        "Accepted Phase 1 code/data/report identities",
+        "Pinned foundation checker tools/check_foundation_adversarial.py",
+        "Pinned outcome fixture checker tools/check_outcome_fixtures.py",
+        "Acceptance amendment research-assurance-2026-09-14-v3"
+      ],
+      "execution_rule": "Preserve old reports and their original plan identities. New work after this amendment binds research-assurance-2026-09-14-v3. Plan-file live mismatches verify through this amendment chain starting at the declared hash; code-file live mismatches verify through a later verified successor receipt.",
+      "exposure_rule": "Carry all previously exposed dates and inspected coverage forward. Descriptive regime cuts in the B0 Strategy Book edition do not select candidates, thresholds or dates.",
+      "id": "amendment-2026-09-15-greenbird-post-2099958990486798753",
+      "date": "2026-09-15",
+      "scope": "Adds the Green Bird post of 2026-09-15 (raw capture sources/x-raw-2026-09-15/greenbirdtrader, rulings in planning/phase-1-5/SOURCE_ADDITIONS_2026-09-15.md) as a dated author example GB-2026-09-15 in AUTHOR_EXAMPLES_2026-09-15.json, a dated table row and a source-addition sub-section on wiki/method-green-bird-failure.md, and an addition paragraph in wiki/source-catalog.md. Documentation and example data only: no formula, gate, budget, bank, receipt or Phase 1 predicate changed; the B0.2 branch ny_session_extreme it names is registered by the P15-16A repair track under the P15-16A card.",
+      "reason": "The author posted a new dated session on 2026-09-15 with printed entries, stops, ladders and a framework statement; read with zoomed crops it refines the structural-stop rule (two dated placements) and shows the New York session extreme traded as a level, neither of which the registry carried.",
+      "changes": [
+        "AUTHOR_EXAMPLES_2026-09-15.json gains example GB-2026-09-15 (inside_tape false, data_unavailable for replay).",
+        "wiki/method-green-bird-failure.md gains the 2026-09-15 table row and the 'Source addition, 2026-09-15 post' sub-section (stop rule with two placements, ny_session_extreme, ladder spacing 8-33).",
+        "wiki/source-catalog.md gains the 'Addition 2026-09-15' paragraph."
+      ],
+      "changed_files": [
+        {
+          "path": "planning/phase-1-5/AUTHOR_EXAMPLES_2026-09-15.json",
+          "sha256_before": "8449d9a786b5559541fa0f97e3f68dfe0fa678c8068265106b54f252703a0229",
+          "sha256_after": "820f195645daefb687a3d375580876df6d9e04dc061c4e1126f2deb45165668a"
+        },
+        {
+          "path": "wiki/method-green-bird-failure.md",
+          "sha256_before": "553657ae3f73972d2e30d3a875deaadc04e8414eca7959e5a639589e7535d21f",
+          "sha256_after": "f6c81a3878a5d34905f4c48ede0c77e5140716b1d451a69555b94438df8420b8"
+        },
+        {
+          "path": "wiki/source-catalog.md",
+          "sha256_before": "c3a8c197eca1c8f1e491159299f83245ee98f62dc1ef24101f8741fabf877300",
+          "sha256_after": "1c77be76d7d420fa26ae2559405933a302a486bc125a14c39bcbfd1e556493d5"
+        }
+      ],
+      "previous_entry_sha256": "55d73d010fb15c9e84efffdc0ca8c4fe761e2b1823c52d4ef86a189082da4896"
+    },
+    {
+      "prior_plan_version": "research-plan-2026-09-14-v3",
+      "new_plan_version": "research-plan-2026-09-14-v3",
+      "assurance_version": "research-assurance-2026-09-14-v3",
+      "unchanged": [
+        "Research formulas and source attribution",
+        "Finite candidate/trial budgets and statistical selection rules",
+        "Accepted Phase 1 code/data/report identities",
+        "Pinned foundation checker tools/check_foundation_adversarial.py",
+        "Pinned outcome fixture checker tools/check_outcome_fixtures.py",
+        "Acceptance amendment research-assurance-2026-09-14-v3"
+      ],
+      "execution_rule": "Preserve old reports and their original plan identities. New work after this amendment binds research-assurance-2026-09-14-v3. Plan-file live mismatches verify through this amendment chain starting at the declared hash; code-file live mismatches verify through a later verified successor receipt.",
+      "exposure_rule": "Carry all previously exposed dates and inspected coverage forward. Descriptive regime cuts in the B0 Strategy Book edition do not select candidates, thresholds or dates.",
+      "id": "amendment-2026-09-16-native-calendar-endpoint",
+      "date": "2026-09-16",
+      "scope": "Corrects the stated end of the native calendar from 2026-08-19 to 2026-09-03 (the run-1.0.1 evaluation calendar's last, partial session) in AUTHOR_EXAMPLES_2026-09-15.json, wiki/method-green-bird-failure.md and wiki/source-catalog.md, and marks the eight author examples dated 2026-08-27 to 2026-09-03 (JJ-2026-08-28, JJ-2026-09-01, JJ-2026-09-02, GB-2026-08-27, GB-2026-08-28, GB-2026-08-31, GB-2026-09-01, GB-2026-09-03) as inside the tape. Documentation and example metadata only: no formula, gate, budget, bank, receipt or Phase 1 predicate changed.",
+      "reason": "The frozen census manifest 20def36e065c13d7 lists 1,742 dates ending 2026-09-03; the examples file and two wiki sentences carried 2026-08-19 as the endpoint, which made eight replayable examples data_unavailable and made the after-tape cache guard reject a valid date.",
+      "changes": [
+        "native_calendar.last_date 2026-08-19 -> 2026-09-03 with a dated note; inside_tape true on the eight examples named in scope.",
+        "Green Bird page: the replay-scope sentence names 2026-09-03 as the endpoint and 2026-09-08 onward as after the tape.",
+        "Source catalog: the dated-sessions paragraph names 2026-09-03."
+      ],
+      "changed_files": [
+        {
+          "path": "planning/phase-1-5/AUTHOR_EXAMPLES_2026-09-15.json",
+          "sha256_before": "820f195645daefb687a3d375580876df6d9e04dc061c4e1126f2deb45165668a",
+          "sha256_after": "5da810bff266f495c88b3193706de699361a781abcb18428532017ab339f2ee7"
+        },
+        {
+          "path": "wiki/method-green-bird-failure.md",
+          "sha256_before": "f6c81a3878a5d34905f4c48ede0c77e5140716b1d451a69555b94438df8420b8",
+          "sha256_after": "2ad8f53204b64eda64ce44c9eea24b3ac5b70b3aaa5f1a39d5db1498bb5e0e67"
+        },
+        {
+          "path": "wiki/source-catalog.md",
+          "sha256_before": "1c77be76d7d420fa26ae2559405933a302a486bc125a14c39bcbfd1e556493d5",
+          "sha256_after": "37fc2e705c49850fa38f569d4ac316dfde34f64b35ac93d5005fd730d74a8936"
+        }
+      ],
+      "previous_entry_sha256": "6ff19b97b699c9e48ca1fa514e847533fc0482a5ed0bc49ddbb027f4729bb5fd"
+    },
+    {
+      "prior_plan_version": "research-plan-2026-09-14-v3",
+      "new_plan_version": "research-plan-2026-09-14-v3",
+      "assurance_version": "research-assurance-2026-09-14-v3",
+      "unchanged": [
+        "Research formulas and source attribution",
+        "Finite candidate/trial budgets and statistical selection rules",
+        "Accepted Phase 1 code/data/report identities",
+        "Pinned foundation checker tools/check_foundation_adversarial.py",
+        "Pinned outcome fixture checker tools/check_outcome_fixtures.py",
+        "Acceptance amendment research-assurance-2026-09-14-v3"
+      ],
+      "execution_rule": "Preserve old reports and their original plan identities. New work after this amendment binds research-assurance-2026-09-14-v3. Plan-file live mismatches verify through this amendment chain starting at the declared hash; code-file live mismatches verify through a later verified successor receipt.",
+      "exposure_rule": "Carry all previously exposed dates and inspected coverage forward. Descriptive regime cuts in the B0 Strategy Book edition do not select candidates, thresholds or dates.",
+      "id": "amendment-2026-09-16-agents-working-rules",
+      "date": "2026-09-16",
+      "scope": "Replaces the root AGENTS.md working rules (the user's edit of 2026-09-16 17:19Z): must-follow delivery rules, code quality and delivery, where to find context, research and execution safeguards, and data and evidence preservation. It replaces legacy model routing, mandatory agent panels and playbook-copying instructions in workflow documents while preserving every scientific requirement and acceptance gate. Operating policy only: no formula, gate, budget, bank, split, seed, receipt or Phase 1 predicate changed.",
+      "reason": "Two full breadth runs were lost on 2026-09-16 to unmeasured container limits (77.3 GB cgroup) and per-process cache growth, and verification round trips and repeated full-suite runs consumed hours; the new rules require measuring runtime and peak memory before scaling, verifying a representative end-to-end case before an expensive run, one main owner with exclusive write ownership per delegated worker, targeted checks, and profiling before optimizing.",
+      "changes": [
+        "AGENTS.md: Must-follow rules (completion, small end-to-end case before expensive runs, test economy, defect method, review against requirements, targeted checks, comparable performance measurement, one main owner, concise updates).",
+        "AGENTS.md: Code quality and delivery (shared rules, computation separate from loading and evidence writing, no silent successes, independent test expectations, review the actual candidate, fix the cause across paths, measure before scaling, merge and remove merged worktrees).",
+        "AGENTS.md: Find the relevant context (ROADMAP, wiki/current-status.md, task cards and packs, ASSURANCE.md, runners).",
+        "AGENTS.md: Research and execution safeguards (native positive and negative cases, assurance contract acceptance, bounded independent review, premise revisits, evidence reuse rules, test hygiene, helpers for recurring errors, profile before optimizing, worker budgets, delegation limits, compact state, the PHASE and audit tables).",
+        "AGENTS.md: Preserve data and evidence (read-only packs, /workspace/data off git, new run directories, instruction changes as future plan inputs)."
+      ],
+      "changed_files": [
+        {
+          "path": "AGENTS.md",
+          "sha256_before": "60f63e9e08fbff7750be6b7ff87a4a6e6e17d04d0a6e3b9b97edd999572a2c8d",
+          "sha256_after": "d4d18592d3fb1bfeea90e017ecaea5fe2c73c0a78acd75baaa504da62c980a90"
+        }
+      ],
+      "previous_entry_sha256": "daae46c1d5a562eef8d6ded94f07672a02057e4e8b848da2b80ecafecbc056ce"
+    },
+    {
+      "prior_plan_version": "research-plan-2026-09-14-v3",
+      "new_plan_version": "research-plan-2026-09-14-v3",
+      "assurance_version": "research-assurance-2026-09-14-v3",
+      "unchanged": [
+        "Research formulas and source attribution",
+        "Finite candidate/trial budgets and statistical selection rules",
+        "Accepted Phase 1 code/data/report identities",
+        "Pinned foundation checker tools/check_foundation_adversarial.py",
+        "Pinned outcome fixture checker tools/check_outcome_fixtures.py",
+        "Acceptance amendment research-assurance-2026-09-14-v3"
+      ],
+      "execution_rule": "Preserve old reports and their original plan identities. New work after this amendment binds research-assurance-2026-09-14-v3. Plan-file live mismatches verify through this amendment chain starting at the declared hash; code-file live mismatches verify through a later verified successor receipt.",
+      "exposure_rule": "Carry all previously exposed dates and inspected coverage forward. Descriptive regime cuts in the B0 Strategy Book edition do not select candidates, thresholds or dates.",
+      "id": "amendment-2026-09-16-agents-simplicity-surgical",
+      "date": "2026-09-16",
+      "scope": "Adds two must-follow rules to the root AGENTS.md (the user's edit of 2026-09-16 18:02Z): 'Simplicity first' (fully implement the requested behavior, edge cases, failure handling and verification with a clear design and no unnecessary moving parts; flexibility only for demonstrated needs; simplicity judged by clarity and maintainability) and 'Surgical changes' (every change needed to deliver the request and fix its underlying cause including affected callers and sibling paths, each edit tied to that purpose, unrelated refactors kept separate, scope complete when the affected behavior and required checks are satisfied). Operating policy only: no formula, gate, budget, bank, split, seed, receipt or Phase 1 predicate changed.",
+      "reason": "The user added the two rules after adopting the rewritten working rules earlier today, to keep delivered changes complete but minimal.",
+      "changes": [
+        "AGENTS.md: Must-follow rules gain \"Simplicity first\" and \"Surgical changes\"."
+      ],
+      "changed_files": [
+        {
+          "path": "AGENTS.md",
+          "sha256_before": "d4d18592d3fb1bfeea90e017ecaea5fe2c73c0a78acd75baaa504da62c980a90",
+          "sha256_after": "5392d47f0f77acc79bf9aaed9dc57701cfb205732d2944097dafab47407ca8fd"
+        }
+      ],
+      "previous_entry_sha256": "718319dea2348ac5818d2d43d665a0fcb1d3305ebd82ff72b3069c869a2625c2"
+    },
+    {
+      "prior_plan_version": "research-plan-2026-09-14-v3",
+      "new_plan_version": "research-plan-2026-09-14-v3",
+      "assurance_version": "research-assurance-2026-09-14-v3",
+      "unchanged": [
+        "Research formulas and source attribution",
+        "Finite candidate/trial budgets and statistical selection rules",
+        "Accepted Phase 1 code/data/report identities",
+        "Pinned foundation checker tools/check_foundation_adversarial.py",
+        "Pinned outcome fixture checker tools/check_outcome_fixtures.py",
+        "Acceptance amendment research-assurance-2026-09-14-v3"
+      ],
+      "execution_rule": "Preserve old reports and their original plan identities. New work after this amendment binds research-assurance-2026-09-14-v3. Plan-file live mismatches verify through this amendment chain starting at the declared hash; code-file live mismatches verify through a later verified successor receipt.",
+      "exposure_rule": "Carry all previously exposed dates and inspected coverage forward. Descriptive regime cuts in the B0 Strategy Book edition do not select candidates, thresholds or dates.",
+      "id": "amendment-2026-09-16-plan-cleanup-1",
+      "date": "2026-09-16",
+      "scope": "Plan cleanup pass 1 (PLAN_CLEANUP_2026-09-16.md sections 2 and 7.1): PSTACK_EXECUTION.md, both PROMPTS.md files and the 17 generated subphase RUNBOOK.md files become retirement notices pointing to AGENTS.md and the new HOW_TO_RUN.md; WORKFLOW.md drops its pstack/Grok paragraphs, the Work shape and Task loop sections now stated in HOW_TO_RUN.md, and the fixed worker default in favour of the cgroup budget; ROADMAP.md and both phase READMEs point to HOW_TO_RUN.md and the task cards instead of prompts and runbooks; the open cards P15-17 to P15-20 lose their copyable worker prompt and the retired read pointers. Operating policy and navigation only: no formula, gate, budget, bank, split, seed, receipt, disposition, receipt schema or Phase 1 predicate changed. Retired paths are kept because the verifier requires them in every PLAN_SNAPSHOT.",
+      "reason": "The user's decision after the simplification review: the process layers duplicated each other and the rewritten AGENTS.md, and were what an agent had to read before its card.",
+      "changes": [
+        "planning/ROADMAP.md: edited as described in scope",
+        "planning/phase-1-5/PROMPTS.md: retirement notice",
+        "planning/phase-1-5/subphases/00-foundation/RUNBOOK.md: retirement notice",
+        "planning/phase-1-5/subphases/01-native-and-outcomes/RUNBOOK.md: retirement notice",
+        "planning/phase-1-5/subphases/02-source-reconstruction/RUNBOOK.md: retirement notice",
+        "planning/phase-1-5/subphases/03-primitives/RUNBOOK.md: retirement notice",
+        "planning/phase-1-5/subphases/04-family-adapters/RUNBOOK.md: retirement notice",
+        "planning/phase-1-5/subphases/05-finite-search/RUNBOOK.md: retirement notice",
+        "planning/phase-1-5/subphases/06-exit-controls/RUNBOOK.md: retirement notice",
+        "planning/phase-1-5/subphases/07-release/RUNBOOK.md: retirement notice",
+        "planning/phase-1-5/tasks/P15-17.md: edited as described in scope",
+        "planning/phase-1-5/tasks/P15-18.md: edited as described in scope",
+        "planning/phase-1-5/tasks/P15-19.md: edited as described in scope",
+        "planning/phase-1-5/tasks/P15-20.md: edited as described in scope",
+        "planning/phase-2/PROMPTS.md: retirement notice",
+        "planning/phase-2/subphases/00-entry-gate/RUNBOOK.md: retirement notice",
+        "planning/phase-2/subphases/01-datasets-and-fitting/RUNBOOK.md: retirement notice",
+        "planning/phase-2/subphases/02-native-options-baseline/RUNBOOK.md: retirement notice",
+        "planning/phase-2/subphases/03-joint-volatility/RUNBOOK.md: retirement notice",
+        "planning/phase-2/subphases/04-context-mechanisms/RUNBOOK.md: retirement notice",
+        "planning/phase-2/subphases/05-intraday-oi/RUNBOOK.md: retirement notice",
+        "planning/phase-2/subphases/06-method-experts/RUNBOOK.md: retirement notice",
+        "planning/phase-2/subphases/07-plans-and-adaptation/RUNBOOK.md: retirement notice",
+        "planning/phase-2/subphases/08-release/RUNBOOK.md: retirement notice",
+        "planning/research-program/PSTACK_EXECUTION.md: retirement notice",
+        "planning/research-program/WORKFLOW.md: edited as described in scope"
+      ],
+      "changed_files": [
+        {
+          "path": "planning/ROADMAP.md",
+          "sha256_before": "a2a5187de01a183f1b04db94c310d19c4dfc646d74b7f6d30c566d9e4af1796b",
+          "sha256_after": "6fe20e71cd9c39cabaf4509efb0c9d743a717063b157c0aed88cc3829f622aa5"
+        },
+        {
+          "path": "planning/phase-1-5/PROMPTS.md",
+          "sha256_before": "e5fba6c0e4638b208b246e709ce62151f7045cdf6b1b95a57d0968c1a2e4a140",
+          "sha256_after": "0669c2675401d18e35c7c521111d2c11413766a0bcf2139ed123e26607ce4b53"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/00-foundation/RUNBOOK.md",
+          "sha256_before": "e2e39706289d3b86dc8de37da0e16987234c8c879cbbf1bd187d91c9a8d449af",
+          "sha256_after": "9c06685f1c4d04ccec484429b0b8976f217b51194f1c736d666cabd52b8b6ea0"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/01-native-and-outcomes/RUNBOOK.md",
+          "sha256_before": "723a9a6cc4bc0118d7591eb628c6bbe9a359231af41935066927c72348f5fb12",
+          "sha256_after": "824d4bb749f480e0360d6e38cb159edd1bd2f142fca03b3cac1e6274d24cee93"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/02-source-reconstruction/RUNBOOK.md",
+          "sha256_before": "976df4498ba64f5ba6dbe0c78606672f0853bbcd56754b63be676b664320be87",
+          "sha256_after": "0b23c811ae4c78fc937aec2fe022361fbe13744336330dae8d825f089e77db9e"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/03-primitives/RUNBOOK.md",
+          "sha256_before": "b73c37ac1ca18740abf869ea0e54f8b5edeb455152b84be92de41bc65e4f56e6",
+          "sha256_after": "869322e5dfc797ac6e5a370f2170cfdd6d29eb5ec189033f1fba462099a6b3ef"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/04-family-adapters/RUNBOOK.md",
+          "sha256_before": "c373cae12852b5ea9d91a93d101adf5a9b4ae0f8c1e101d35f0544217d21bd28",
+          "sha256_after": "fb91247772c44c621de0dec9a43a1affacc862dbc1e3bd964fccfbfd322ab980"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/05-finite-search/RUNBOOK.md",
+          "sha256_before": "d026733209c64fd47ca34514231c58db1e79130ccc17f773a7ff38453f932e70",
+          "sha256_after": "3957761380bbe3a6b3790fe0159cd0491ce49b07db029464cb31e9912c14c93e"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/06-exit-controls/RUNBOOK.md",
+          "sha256_before": "6c941a5c18d26ec260b88f418b2ba942595f199a10034ab0f8cebf78ae2904ac",
+          "sha256_after": "bffa533463a1cf6fbe1fd7f58f6ef7c193638735d0ff5dac9d3f2e601141ead4"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/07-release/RUNBOOK.md",
+          "sha256_before": "60ffc104e1b14efdec5ef0c5def7c99c959d5209465d4e9971d7e94f6c32a6eb",
+          "sha256_after": "b2b139bed9a5904e7df7491f4199ff1799dadbcb0f22ffc1cfef5fe3ef7bf182"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-17.md",
+          "sha256_before": "a03d8df09e2fa9fa585b463f2d04cd80a634e9e0088507b1966e3fb972b929da",
+          "sha256_after": "dc6d3d25f9ceb3f876546661a8d20f15fa4a27eaaa923578ff5e388446dd3366"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-18.md",
+          "sha256_before": "21e2593b0596242968f3330b20b3918ae96488d0b12c9cc6cd9f41aa154bc308",
+          "sha256_after": "9fdeb7d5682ad0a15417e8c4130d699289393010cdd21f874ae3c63b1f913fee"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-19.md",
+          "sha256_before": "dff474165c7c4e6913210bd0349f5bde86fda3b503ac95e55bf4da12fb06b9ab",
+          "sha256_after": "d527011c918013e26f02ea9ba6edb79f0e6303b12a1d4d151c23ca4c42c8071b"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-20.md",
+          "sha256_before": "91f32804bb69bdd0e36e98e5da7f56ca6194f3b1cfbe642318c55de269e56c17",
+          "sha256_after": "5c69a1438a8fe285c5880a43ba3cc04cc66b2d20720f8decee58c30068629019"
+        },
+        {
+          "path": "planning/phase-2/PROMPTS.md",
+          "sha256_before": "42528498586be4f1ef91542acf3c086f2fb1e936f551270015ed9d20e53a233b",
+          "sha256_after": "ce9bc890af2cf84e4eabade6e31bfa6f64a835ab8d74c674ff997f84420e2180"
+        },
+        {
+          "path": "planning/phase-2/subphases/00-entry-gate/RUNBOOK.md",
+          "sha256_before": "9dadba32dc4cc48093f4e63b19524306d6647e447e5084a2662d7e07fa7d9cea",
+          "sha256_after": "a90488ee93deed7eb5f52e51b61d8e36b7ac23dde8d7c1ca17f3a2292d435ec5"
+        },
+        {
+          "path": "planning/phase-2/subphases/01-datasets-and-fitting/RUNBOOK.md",
+          "sha256_before": "e2ad6bb6b22a186d0528ea4852f4182e9ab6ef91faca197207c8c70f308b775a",
+          "sha256_after": "3250321ba2a73c4e2aca735182ca25806125b5073127fad54cbfb8e6b64b24a0"
+        },
+        {
+          "path": "planning/phase-2/subphases/02-native-options-baseline/RUNBOOK.md",
+          "sha256_before": "94c6ef47f40d5186bd946b0b730a88bde2b19f499537977d63430d5524853127",
+          "sha256_after": "ec8f56e2388573e0d168394aff3547ed34db99c6ffc3f92aef7c9125220ed4c8"
+        },
+        {
+          "path": "planning/phase-2/subphases/03-joint-volatility/RUNBOOK.md",
+          "sha256_before": "e2fa7eee29780d738129ec815744bd40e618c1fac87d25e34a12d5d2781e096c",
+          "sha256_after": "0f44e879ca552193c0bd91cc1b7ce9830df81ae3f2f9df816d5fa76a618ec866"
+        },
+        {
+          "path": "planning/phase-2/subphases/04-context-mechanisms/RUNBOOK.md",
+          "sha256_before": "cebbe9720b66c568b9e3de1b27d8249d1ead9fad519cdab0f0f8a6c9e6803c72",
+          "sha256_after": "7004a59f171936d30f8b61f7704b455a23d4c8a592ee46fab15b0ed8e6790d97"
+        },
+        {
+          "path": "planning/phase-2/subphases/05-intraday-oi/RUNBOOK.md",
+          "sha256_before": "4a25c2eec41011d6ee328d8ae61cc8ead697531104b87df2821c879c32adc2cc",
+          "sha256_after": "b5cb3297713070f6ad6c0d003607172d0e9c084831f8018e3dbbc76ec73debaa"
+        },
+        {
+          "path": "planning/phase-2/subphases/06-method-experts/RUNBOOK.md",
+          "sha256_before": "7e737a1e13899804fd66d338c2d1cfb56aca5b7b12f492bd8582bd751ad869ac",
+          "sha256_after": "cfe64052c049ff9d2bd92dad4c92089776ccce2095d3c45ba42f4618f828af3f"
+        },
+        {
+          "path": "planning/phase-2/subphases/07-plans-and-adaptation/RUNBOOK.md",
+          "sha256_before": "ac560239405336eea69e784fe16625a336c732251c33ed21e285f2dadbd7c7ef",
+          "sha256_after": "826af190e029ad7d5664f73332d4b9d05295341186c6cb3c81aa876f411a6e59"
+        },
+        {
+          "path": "planning/phase-2/subphases/08-release/RUNBOOK.md",
+          "sha256_before": "484e8e54827a6cdf412b674884b278521c9db8942175ca29d1d4855b6bfc0fb6",
+          "sha256_after": "030c2ce9e90ee3c7dececa5961c9a854e4f4f3b545813c80597cff069afb3da2"
+        },
+        {
+          "path": "planning/research-program/PSTACK_EXECUTION.md",
+          "sha256_before": "5414d02f3a34e6df8957a63ef03c61e44ed8dfc0e5400b6a02a1fcc80aaaa999",
+          "sha256_after": "386c00728989095b7ad6f36742d49fe888d793f885ba9e19194c07333e88c274"
+        },
+        {
+          "path": "planning/research-program/WORKFLOW.md",
+          "sha256_before": "c499743426deb9865a02d1d8cca3938070fe9797af7bb8147beb2d40e618f4cb",
+          "sha256_after": "1be9448c5feded3bf20fae9821768702af4067173695c898d54126b152893d3d"
+        }
+      ],
+      "previous_entry_sha256": "7c4c481635b08365b2ca34f93d106da1e7599a31b1444aac0872d0b4a4d87e48"
+    },
+    {
+      "prior_plan_version": "research-plan-2026-09-14-v3",
+      "new_plan_version": "research-plan-2026-09-14-v3",
+      "assurance_version": "research-assurance-2026-09-14-v3",
+      "unchanged": [
+        "Research formulas and source attribution",
+        "Finite candidate/trial budgets and statistical selection rules",
+        "Accepted Phase 1 code/data/report identities",
+        "Pinned foundation checker tools/check_foundation_adversarial.py",
+        "Pinned outcome fixture checker tools/check_outcome_fixtures.py",
+        "Acceptance amendment research-assurance-2026-09-14-v3"
+      ],
+      "execution_rule": "Preserve old reports and their original plan identities. New work after this amendment binds research-assurance-2026-09-14-v3. Plan-file live mismatches verify through this amendment chain starting at the declared hash; code-file live mismatches verify through a later verified successor receipt.",
+      "exposure_rule": "Carry all previously exposed dates and inspected coverage forward. Descriptive regime cuts in the B0 Strategy Book edition do not select candidates, thresholds or dates.",
+      "id": "amendment-2026-09-16-plan-cleanup-2-phase-2-recut",
+      "date": "2026-09-16",
+      "scope": "Plan cleanup pass 2 (PLAN_CLEANUP_2026-09-16.md sections 3 and 4, Phase 2 only): P2-06 is absorbed into P2-05, P2-08 into P2-07 and P2-14 to P2-20 into P2-13, each merged card carrying every acceptance key and every assigned research case of the cards it absorbs; the other open Phase 2 cards are rewritten onto TASK_CARD_TEMPLATE.md with their requirement text unchanged; TASK_GRAPH.json drops the absorbed ids, remaps dependencies, replaces the retired PSTACK_EXECUTION.md read pointer with HOW_TO_RUN.md, and removes the verifier cases S01 to S03 from every Phase 2 task except the release P2-24 (they are cited from the P15-01 bound evidence); ASSURANCE_CASES.json and SILENT_FAILURES.md carry the same assignments; phase-2 README, CONTEXT.md and METHOD_EXPERTS.md name the new owners. Phase 1.5 entries, subphases, gates, formulas, budgets, splits, seeds, banks and retention rules are unchanged.",
+      "reason": "The user's decision after the simplification review: one task per unit of work with one owner; eight per-method cards were one engine with a configuration table.",
+      "changes": [
+        "planning/phase-2/CONTEXT.md",
+        "planning/phase-2/METHOD_EXPERTS.md",
+        "planning/phase-2/README.md",
+        "planning/phase-2/tasks/P2-00.md",
+        "planning/phase-2/tasks/P2-01.md",
+        "planning/phase-2/tasks/P2-02.md",
+        "planning/phase-2/tasks/P2-03.md",
+        "planning/phase-2/tasks/P2-04.md",
+        "planning/phase-2/tasks/P2-06.md",
+        "planning/phase-2/tasks/P2-08.md",
+        "planning/phase-2/tasks/P2-09.md",
+        "planning/phase-2/tasks/P2-10.md",
+        "planning/phase-2/tasks/P2-11.md",
+        "planning/phase-2/tasks/P2-12.md",
+        "planning/phase-2/tasks/P2-14.md",
+        "planning/phase-2/tasks/P2-15.md",
+        "planning/phase-2/tasks/P2-16.md",
+        "planning/phase-2/tasks/P2-17.md",
+        "planning/phase-2/tasks/P2-18.md",
+        "planning/phase-2/tasks/P2-19.md",
+        "planning/phase-2/tasks/P2-20.md",
+        "planning/phase-2/tasks/P2-21.md",
+        "planning/phase-2/tasks/P2-22.md",
+        "planning/phase-2/tasks/P2-23.md",
+        "planning/phase-2/tasks/P2-24.md",
+        "planning/research-program/ASSURANCE_CASES.json",
+        "planning/research-program/SILENT_FAILURES.md",
+        "planning/research-program/TASK_GRAPH.json"
+      ],
+      "changed_files": [
+        {
+          "path": "planning/phase-2/CONTEXT.md",
+          "sha256_before": "37c913b0a2932385f7bcf59460ca185cd01620c43366f77057da968027918537",
+          "sha256_after": "c667de8ccb6fe272a0c10a10b2509a9dfd369138d1a928458b9b08a0ca03ea23"
+        },
+        {
+          "path": "planning/phase-2/METHOD_EXPERTS.md",
+          "sha256_before": "895c702540660a4b51b897a8ad450f96427bf3786eb165b3020e3bd5edd47557",
+          "sha256_after": "51a7e4110fdb0312e623455b69a3a374672d4c7237160b1a3be7446fd7e25873"
+        },
+        {
+          "path": "planning/phase-2/README.md",
+          "sha256_before": "2ada6d573904f95dc6e70f130646aabbf2fca978cb4afed9209b6786d08ca697",
+          "sha256_after": "dec2504b04db38f54335fa2dfd39ee2f3d1edbe56d440a6fc668868c03c9886e"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-00.md",
+          "sha256_before": "0d3a5008e0319c707f8b1dbc757fff04f2c54743dd25ad02d75d06b7cf382862",
+          "sha256_after": "434989174b61a145de252ee6a101f4f1dbdb6de0af47b335f173a797a3176a09"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-01.md",
+          "sha256_before": "ba89b1d15cdaad734007818b807e8179b787ae5d064fe63cce681444405e5559",
+          "sha256_after": "2f17e811c2612d942ad4a2bbe3838fae4c4986007692741be8fbe44a7dc9cffa"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-02.md",
+          "sha256_before": "4598df27948a3238615777a9a85529600e34b1c3b8711282da369c42f0285648",
+          "sha256_after": "29db519dee4b5e3ab545493d19474bfa9117750b6654b42de12a59f7cfdbb38b"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-03.md",
+          "sha256_before": "3ea1abed7683b2acdc100370fe918de360ad5db2ad968fad105d5ef326fdefe7",
+          "sha256_after": "6a8651fff47344d88673fcd28a8594f67c1e3cd58a663d5ea2b9a4788d42dea1"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-04.md",
+          "sha256_before": "da8dfc8e20a5964867a018a79515121ed644f91314ceb2816bcdeb09907c13ee",
+          "sha256_after": "cff78736a1241c23a762da42d0c10155a0dde0f25c224250440e8830da033075"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-06.md",
+          "sha256_before": "ac61fd231e7bd52a2c8830138ae7a8dc922dcef8dff3acea1c9f3d499c575c6a",
+          "sha256_after": "cbfa76f2db897d750e8b15d976528d256e4beafca73d1e931eb966752c8cc045"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-08.md",
+          "sha256_before": "91f360d51936b9b0eab49284c5151275d74993bb6a8984cfef295bb421be6462",
+          "sha256_after": "3bac5cca36942134d7dbd669ada4015d2313a01d47057946fed47319a8c2ed56"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-09.md",
+          "sha256_before": "08b39d97089e5b63a71945fcb975185a59f3ca051b4bb244320c2037f8f70261",
+          "sha256_after": "fe1eb27f600389ad24102fc12e5a027e91ef68668bc82321a5ff24fdb5072a05"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-10.md",
+          "sha256_before": "6d5bd4f82e780e8c8546b1e2f8f31b4ffb182337deafcbc89e54f5bb93826ee8",
+          "sha256_after": "f061f07a2cdd5d6b6e36bb9a21ee850afc0f9d8ba65d619043c2c5f9637d8dbf"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-11.md",
+          "sha256_before": "7f38d5c1aaf80bedbd547782670c7e1335aaa4f3a3f39345cfd3fb2f791fcdab",
+          "sha256_after": "acb8b9cbbb81909cb9fee261de9356bebeff9ed83d3e95357e532844ebbd4b26"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-12.md",
+          "sha256_before": "a770f4d08e96ce5ae55f1e1e58ee17e4581ab0eb960631d3b900807fd56e7cd6",
+          "sha256_after": "345765b5a637078cd7143d28fbca9158403c3a6e00777ed4c658a71c21074e4f"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-14.md",
+          "sha256_before": "35a59b4fde62206b2ea48d0859c4bd07cf85cdf513e19d12cfb2bd5ee23bbfd2",
+          "sha256_after": "24dcd6f050a908ea8691d09e7312c90daa6541e011d8e9fde444e2372629a882"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-15.md",
+          "sha256_before": "09fd428ef5279f75a8ad25f5be7e173b55d98c014eb6ef58f8c3e1caa22242e7",
+          "sha256_after": "3f4f007a217f4a9ffe707e66e02386fd5325524d0747f5423d68bfa53855b66b"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-16.md",
+          "sha256_before": "a4803c5358a85b072205934cca081e5abaae69df62b6d194e6d22c8ef692116c",
+          "sha256_after": "d748b86c6e3bfe8f618c78f0717a88dfcb21be863dd4d8e947a149284e2eb07a"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-17.md",
+          "sha256_before": "c354ba81fc9cf9289728f9b112a1107a5ddd21faf71a48ea771e9035cf8284e5",
+          "sha256_after": "d9be19bf36e0945561173c4277c91f233ecc6bcf2b360d69e7c4b98819b499f8"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-18.md",
+          "sha256_before": "a8bd085a96da9e267a89d7fd35e8ebc432f295ca35c6201fac93ec6db2799326",
+          "sha256_after": "a61fee1fa181cc7ef2c68c32b76b005a309b74e3c1f0b9af579ad5d4e2eafc47"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-19.md",
+          "sha256_before": "0c9b84ce41f8dd3dbdef82ba842306f77c5296e227c7e962a5e22a05770532a1",
+          "sha256_after": "24169548d78a8bb5c1ebcea1f965bcc5c960332764c765714ae828ee86b5ada6"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-20.md",
+          "sha256_before": "67ad4f6ed5324911ec3e6717381ecca93bb5b92178ba926ffc99e25f0bb3eb35",
+          "sha256_after": "6b38ba40d5c5d7c412e9c9879a38746e19718559b0427df413f7891e9752cac4"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-21.md",
+          "sha256_before": "debb51e7d191f0a24749b58fefdebfc174637cdc9559637361b073c06cce505b",
+          "sha256_after": "1592857b9e1f5de3fa4f03ad558d95d3924ed0306d621363c3b5c9cbf123ee76"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-22.md",
+          "sha256_before": "e1b64962e4033d4c7914dfd4410644438bfa341771d64778b15d4157bcf902a1",
+          "sha256_after": "319ce0e6d6b70d6fe9446f6959cebf16a06d4ee274749d1cf46c068b20cd6b63"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-23.md",
+          "sha256_before": "c00872107304dec4a34a71a39c2a0b940b64021f9300bf909404768175193fe4",
+          "sha256_after": "308196eff6eb418b304f097e3a687048e69e0cd3553fe42083b926aec426af01"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-24.md",
+          "sha256_before": "f970ccece7b37d4bd416cb22011c7d6b6d6ac7d9a83f9d18a0d7c64ebe4a756b",
+          "sha256_after": "d06b1df7b43438b2ccd01d8f874491ff7163e6a8e4b36d1bb8fedf63175d9896"
+        },
+        {
+          "path": "planning/research-program/ASSURANCE_CASES.json",
+          "sha256_before": "93024ac8800d426d3d871535a670e6b9bd51ca179309071607409755ca5a10de",
+          "sha256_after": "e7412d35e159bf2543b156f8a298c0a56ac2e4ab0be9665f54b672e2b28284b9"
+        },
+        {
+          "path": "planning/research-program/SILENT_FAILURES.md",
+          "sha256_before": "75fd0c8c3bb0ae4f55ac621db114afacf619371660c3497d0a1926c222f72155",
+          "sha256_after": "70658413d5122efda9372a4dee6386d0ba2a49eddf74b8cde1f47ddaf8e6613f"
+        },
+        {
+          "path": "planning/research-program/TASK_GRAPH.json",
+          "sha256_before": "3e3438e2b5d75589ec7218d6301236a558566229dc4c578f59c9e38a27e453da",
+          "sha256_after": "56820b1360afcc7bd5102091122ade97aeab11d12d6e8973ff738b8e24fad856"
+        }
+      ],
+      "previous_entry_sha256": "d069945d52f37d06669fa63e60f5a0495c52f987caedaa23cff8084c52497fcd"
+    },
+    {
+      "prior_plan_version": "research-plan-2026-09-14-v3",
+      "new_plan_version": "research-plan-2026-09-14-v3",
+      "assurance_version": "research-assurance-2026-09-14-v3",
+      "unchanged": [
+        "Research formulas and source attribution",
+        "Finite candidate/trial budgets and statistical selection rules",
+        "Accepted Phase 1 code/data/report identities",
+        "Pinned foundation checker tools/check_foundation_adversarial.py",
+        "Pinned outcome fixture checker tools/check_outcome_fixtures.py",
+        "Acceptance amendment research-assurance-2026-09-14-v3"
+      ],
+      "execution_rule": "Preserve old reports and their original plan identities. New work after this amendment binds research-assurance-2026-09-14-v3. Plan-file live mismatches verify through this amendment chain starting at the declared hash; code-file live mismatches verify through a later verified successor receipt.",
+      "exposure_rule": "Carry all previously exposed dates and inspected coverage forward. Descriptive regime cuts in the B0 Strategy Book edition do not select candidates, thresholds or dates.",
+      "id": "amendment-2026-09-16-plan-cleanup-3-phase-1-5-open-tasks",
+      "date": "2026-09-16",
+      "scope": "Plan cleanup pass 3 (open Phase 1.5 tasks only): TASK_GRAPH.json replaces the retired PSTACK_EXECUTION.md read pointer with HOW_TO_RUN.md for P15-17 to P15-20 and removes the verifier cases S01 to S03 from P15-17, P15-18 and P15-19 (cited from the P15-01 bound evidence; P15-20 keeps them as the phase closure); ASSURANCE_CASES.json, SILENT_FAILURES.md and the four cards carry the same assignments; the bundle generator and checker under tools/ are retired. Closed tasks P15-00 to P15-16A, the base plan-file set, formulas, gates, budgets, splits, seeds, banks and retention rules are unchanged.",
+      "reason": "The user's decision after the simplification review (PLAN_CLEANUP_2026-09-16.md section 3).",
+      "changes": [
+        "planning/phase-1-5/tasks/P15-17.md",
+        "planning/phase-1-5/tasks/P15-18.md",
+        "planning/phase-1-5/tasks/P15-19.md",
+        "planning/research-program/ASSURANCE_CASES.json",
+        "planning/research-program/SILENT_FAILURES.md",
+        "planning/research-program/TASK_GRAPH.json"
+      ],
+      "changed_files": [
+        {
+          "path": "planning/phase-1-5/tasks/P15-17.md",
+          "sha256_before": "dc6d3d25f9ceb3f876546661a8d20f15fa4a27eaaa923578ff5e388446dd3366",
+          "sha256_after": "19780e950e215b74e175cdf9aebed52cf2dbe9899a6f39bd02d982bde12594e9"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-18.md",
+          "sha256_before": "9fdeb7d5682ad0a15417e8c4130d699289393010cdd21f874ae3c63b1f913fee",
+          "sha256_after": "6d7a5771e33a85b1d015352c28df90e1b85059df92af271efb81d0973cfaf991"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-19.md",
+          "sha256_before": "d527011c918013e26f02ea9ba6edb79f0e6303b12a1d4d151c23ca4c42c8071b",
+          "sha256_after": "2a3ac4927c19197900d221ba1cb74e80fd1f289d4ae719b5fb0992902fde3e91"
+        },
+        {
+          "path": "planning/research-program/ASSURANCE_CASES.json",
+          "sha256_before": "e7412d35e159bf2543b156f8a298c0a56ac2e4ab0be9665f54b672e2b28284b9",
+          "sha256_after": "9d98c1f6005a70abe664dc3ea4887fa7bcde8b4722715f4affa13d9cdd0dd8bd"
+        },
+        {
+          "path": "planning/research-program/SILENT_FAILURES.md",
+          "sha256_before": "70658413d5122efda9372a4dee6386d0ba2a49eddf74b8cde1f47ddaf8e6613f",
+          "sha256_after": "a58495caa90b5ac00427838d440dae3a90a4b82b36168066e615931597f5aeb6"
+        },
+        {
+          "path": "planning/research-program/TASK_GRAPH.json",
+          "sha256_before": "56820b1360afcc7bd5102091122ade97aeab11d12d6e8973ff738b8e24fad856",
+          "sha256_after": "43efa50795a3d75aa40175b68c0e53e3a6f47dcd9899f54284f14c9a6b1e2b3c"
+        }
+      ],
+      "previous_entry_sha256": "6ddbb55657a18df746321915597568d0b8abc85a0b539f6a9a4285df5e87a100"
+    },
+    {
+      "prior_plan_version": "research-plan-2026-09-14-v3",
+      "new_plan_version": "research-plan-2026-09-14-v3",
+      "assurance_version": "research-assurance-2026-09-14-v3",
+      "unchanged": [
+        "Research formulas and source attribution",
+        "Finite candidate/trial budgets and statistical selection rules",
+        "Accepted Phase 1 code/data/report identities",
+        "Pinned foundation checker tools/check_foundation_adversarial.py",
+        "Pinned outcome fixture checker tools/check_outcome_fixtures.py",
+        "Acceptance amendment research-assurance-2026-09-14-v3"
+      ],
+      "execution_rule": "Preserve old reports and their original plan identities. New work after this amendment binds research-assurance-2026-09-14-v3. Plan-file live mismatches verify through this amendment chain starting at the declared hash; code-file live mismatches verify through a later verified successor receipt.",
+      "exposure_rule": "Carry all previously exposed dates and inspected coverage forward. Descriptive regime cuts in the B0 Strategy Book edition do not select candidates, thresholds or dates.",
+      "id": "amendment-2026-09-16-process-pages-created",
+      "date": "2026-09-16",
+      "scope": "Records the creation of the process pages introduced by the plan cleanup (HOW_TO_RUN.md, TASK_CARD_TEMPLATE.md, AGENT_OPERATIONS.md) and of CLAUDE.md, which imports AGENTS.md, so that the guard test implementation/tests/test_agents_md_pinned.py pins them to this chain: any later edit needs a new entry; a revert fails the suite. sha256_before is null for a created file. No formula, gate, budget, bank, split, seed, receipt or Phase 1 predicate changed.",
+      "reason": "The user asked that the workspace rules be followed no matter how many sessions or agents come and go; pages that carry the rules are guarded the same way as AGENTS.md.",
+      "changes": [
+        "CLAUDE.md: created",
+        "planning/research-program/HOW_TO_RUN.md: created",
+        "planning/research-program/TASK_CARD_TEMPLATE.md: created",
+        "planning/research-program/AGENT_OPERATIONS.md: created"
+      ],
+      "changed_files": [
+        {
+          "path": "CLAUDE.md",
+          "sha256_before": null,
+          "sha256_after": "747ed368b9e2ac0a170fedbd728db08112d495f8c32386d6eb7922d5dc09e3b8"
+        },
+        {
+          "path": "planning/research-program/HOW_TO_RUN.md",
+          "sha256_before": null,
+          "sha256_after": "2d5dc6fb24b882bd2b8b61697769b362029edac32ce611b595894827aad6a106"
+        },
+        {
+          "path": "planning/research-program/TASK_CARD_TEMPLATE.md",
+          "sha256_before": null,
+          "sha256_after": "bb20ef2d5c972533419c097f074757d94706450e8c0e129ed7660d47360fd668"
+        },
+        {
+          "path": "planning/research-program/AGENT_OPERATIONS.md",
+          "sha256_before": null,
+          "sha256_after": "0c05fa1bf0b505588b6e86e7299c1626c158c9737da6a664c69fc4d39816f0b2"
+        }
+      ],
+      "previous_entry_sha256": "0d5a09c615b26b062cf155b06b6a7a7c427c04ecdb193692919579d6a0afa49c"
+    },
+    {
+      "prior_plan_version": "research-plan-2026-09-14-v3",
+      "new_plan_version": "research-plan-2026-09-14-v3",
+      "assurance_version": "research-assurance-2026-09-14-v3",
+      "unchanged": [
+        "Research formulas and source attribution",
+        "Finite candidate/trial budgets and statistical selection rules",
+        "Accepted Phase 1 code/data/report identities",
+        "Pinned foundation checker tools/check_foundation_adversarial.py",
+        "Pinned outcome fixture checker tools/check_outcome_fixtures.py",
+        "Acceptance amendment research-assurance-2026-09-14-v3"
+      ],
+      "execution_rule": "Preserve old reports and their original plan identities. New work after this amendment binds research-assurance-2026-09-14-v3. Plan-file live mismatches verify through this amendment chain starting at the declared hash; code-file live mismatches verify through a later verified successor receipt.",
+      "exposure_rule": "Carry all previously exposed dates and inspected coverage forward. Descriptive regime cuts in the B0 Strategy Book edition do not select candidates, thresholds or dates.",
+      "id": "amendment-2026-09-16-plan-cleanup-4-closed-cards-and-status",
+      "date": "2026-09-16",
+      "scope": "Plan cleanup pass 4: the closed Phase 1.5 cards P15-00 to P15-16 lose their copyable worker prompt sections and the retired read pointers (requirement text unchanged; P15-16A is left for its closure); the phase READMEs and ROADMAP.md state the execution status instead of \"not implemented by this planning task\"; FOUNDATION_REPAIR.md and SCOPE_AUDIT.md carry a historical banner; the shared-contracts README drops the retired pointer. Closed receipts that pin these cards verify through this chain from their declared hash. No formula, gate, budget, bank, split, seed, receipt or Phase 1 predicate changed.",
+      "reason": "The user's decision to make the entire plan lean, not only the open tasks.",
+      "changes": [
+        "planning/ROADMAP.md",
+        "planning/phase-1-5/README.md",
+        "planning/phase-1-5/tasks/P15-00.md",
+        "planning/phase-1-5/tasks/P15-01.md",
+        "planning/phase-1-5/tasks/P15-02.md",
+        "planning/phase-1-5/tasks/P15-03.md",
+        "planning/phase-1-5/tasks/P15-04.md",
+        "planning/phase-1-5/tasks/P15-05.md",
+        "planning/phase-1-5/tasks/P15-06.md",
+        "planning/phase-1-5/tasks/P15-07.md",
+        "planning/phase-1-5/tasks/P15-08.md",
+        "planning/phase-1-5/tasks/P15-09.md",
+        "planning/phase-1-5/tasks/P15-10.md",
+        "planning/phase-1-5/tasks/P15-11.md",
+        "planning/phase-1-5/tasks/P15-12.md",
+        "planning/phase-1-5/tasks/P15-13.md",
+        "planning/phase-1-5/tasks/P15-14.md",
+        "planning/phase-1-5/tasks/P15-15.md",
+        "planning/phase-1-5/tasks/P15-16.md",
+        "planning/phase-2/README.md",
+        "planning/research-program/FOUNDATION_REPAIR.md",
+        "planning/research-program/README.md",
+        "planning/research-program/SCOPE_AUDIT.md"
+      ],
+      "changed_files": [
+        {
+          "path": "planning/ROADMAP.md",
+          "sha256_before": "6fe20e71cd9c39cabaf4509efb0c9d743a717063b157c0aed88cc3829f622aa5",
+          "sha256_after": "e3ad487019d43bca58f22ac9ff1b8d85be8a435f0ea434e3e2585b0f5b13bd44"
+        },
+        {
+          "path": "planning/phase-1-5/README.md",
+          "sha256_before": "8efa7016690c538922e7616e7281ca1c4ad6254d94e611cd6a12c9b65b4246c2",
+          "sha256_after": "50d51b7207b147775a2b2e4ef35c1e6f21cda347f73f47924f1292aa8b462b87"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-00.md",
+          "sha256_before": "c103ad8636afeda1a475524d591d9fb678e6d6059d1288f30d6f37492a0b7e1f",
+          "sha256_after": "b0bff8aba29295ef6bf6e8438446f7ee2d500e08da422d087f1ee054d8155c48"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-01.md",
+          "sha256_before": "4a3af3bad17cc571e7feb55b8f90bf5e73e4b4432f79a0041439e11ab6570af0",
+          "sha256_after": "c127dd7a6451cedfbe7b4f79fe90bb200bf0c37693350f0006fdbf2225179cd4"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-02.md",
+          "sha256_before": "859ef466fbe06a88ea00ec6629970c10d0aa7f63e50e4ab4d2fbbef8e1f93645",
+          "sha256_after": "0e9c828b2f694a376478a2ef7f74e50d035e0989146828835f2945fcd1376bb5"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-03.md",
+          "sha256_before": "598bc10662be944c5b1f0d6ed9923b35d845f7a3d31e27c4a029edbf0a7dcfa4",
+          "sha256_after": "15d70681e95c2cb0feee6be54695cc58b7d5a44f136690d84596d01fe7688852"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-04.md",
+          "sha256_before": "c3b0b690e5fa0783fdbb5dffb963bc068839516878722562718e04f99cfb3f43",
+          "sha256_after": "bf2b968a530e244cd3355b791d4365388ea9050d34fb0cfc43d56e1d69f44b5f"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-05.md",
+          "sha256_before": "9cde3c4da6a5eef716d6ca53a4c35c83a208c9959c94a2e0575eedf0a0f0bf5e",
+          "sha256_after": "5f6a152592f783f83a7adfe23533478913baf84adbc2dcb001d826f39c7f05ec"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-06.md",
+          "sha256_before": "150cb76d05b75e647fa101c87652ba624d2ead26fd7d3303fb8c4e4fbfb369eb",
+          "sha256_after": "9464ee39d3af400f11e863b0ae49f65aa1f51465b5af9696d248e13fa708caf8"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-07.md",
+          "sha256_before": "7a74557f3f64546e288ac271ab8a0b5215ba1333f2c04d667ac9f3b6112bba50",
+          "sha256_after": "d4402014b8db13f9529fe1e655c42ada77bbdd4c51d4612bf3748f0be5db01fc"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-08.md",
+          "sha256_before": "942c9358890970d143c3a461fdb61efbbd6c3bcce16a57ab49fb36beda89b7b3",
+          "sha256_after": "1277f4d24b39fa60131c604553c412ccffccc1b2c2be41a0c0b4a84bce511dd3"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-09.md",
+          "sha256_before": "183657cf0c704de0c75e033b979cf0b10504568900a81f277f6fcfd2d4d405db",
+          "sha256_after": "bb2cbd6df52060f42b6637a03276d9e41269a113006f08da90fe56dc5343badb"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-10.md",
+          "sha256_before": "53abd89d134b6419b6547eb2f0fe93199495e7fc01771f34978789e007e91491",
+          "sha256_after": "da01f237d048673536a670b4db4f2d41fa1cb5b3557faa27cb78796bf6cf2dd4"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-11.md",
+          "sha256_before": "a367afe611b1c10327ab1a5a3e9599e68dddf3c7dfc5e2ee01ff66e08dd81407",
+          "sha256_after": "1861fc2e9fad69c8fb824fa6a9b8beaf8ecf95d35e20e7115d06a9cf38829693"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-12.md",
+          "sha256_before": "5c0d5486e9d8ac679cbed4205bb363720bbe292fa8af94250a2232a014a83f0b",
+          "sha256_after": "a18cef302f2dd9443e487944ec617420faaf3d4ca647100f8514f964e134576a"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-13.md",
+          "sha256_before": "9c1c520256c031e6234bec4e79678efd91087207a470bd000f763934770a9b36",
+          "sha256_after": "8268e017d9fe6d22fefe108b9450b1639b4c391baa3f7a099927452c5a67c978"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-14.md",
+          "sha256_before": "e2983127c414efb44a2e6116f121b5b706f17cf755244da8af6d28fa54ecb713",
+          "sha256_after": "b2723f1a5cc33fadc50d4afc7bcef0a34a57fd5ab809628f2a1ef3a590007874"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-15.md",
+          "sha256_before": "36eca822f469a64cdfc14b1336b90385bf5576ed8b83ca3b88be9400f1e603c6",
+          "sha256_after": "5e8e15919f7f036de0d956e4cd810bb3f3746f6efdc8a5bec727b902d80cf41f"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-16.md",
+          "sha256_before": "87885d92f52557a5d40a6e80a359ecf7d5ccc3341388ef942941e7e241c27466",
+          "sha256_after": "bf13968a5812f9677d54c700409da133380fdd8f931d1ce337c6c2776417cd2f"
+        },
+        {
+          "path": "planning/phase-2/README.md",
+          "sha256_before": "dec2504b04db38f54335fa2dfd39ee2f3d1edbe56d440a6fc668868c03c9886e",
+          "sha256_after": "6dca9ffed1640e094e8e2e4b2db99fd80d75c32c0989d6aa893481876f7351c0"
+        },
+        {
+          "path": "planning/research-program/FOUNDATION_REPAIR.md",
+          "sha256_before": "c68f0dc0cc22989550ee11062811d5efeef9bfe7b5121fab157b72cba68aa9f9",
+          "sha256_after": "59757c2d954927a1712dc2b31c5b56120fed9374cb019b800079bf3e4988df0f"
+        },
+        {
+          "path": "planning/research-program/README.md",
+          "sha256_before": "88dfbd879b40a2951b5329c86e85266970d1e02b1fba7586c7b69af58c9b48b1",
+          "sha256_after": "e2dc07c91a30a85927421dfed70a3c932a14e6e48f881d9bfa133d87b260589b"
+        },
+        {
+          "path": "planning/research-program/SCOPE_AUDIT.md",
+          "sha256_before": "bcfc506794342c11ea9319ea4263d31d3dc4e0355da949e824050639f1d8d37e",
+          "sha256_after": "a3f11fb5dcb18383b208b56b3de6b6786bba9b2a9d3e9018ec5a60134ce787bf"
+        }
+      ],
+      "previous_entry_sha256": "3590124862ab6e64358f9c5b54f8e5b013297faa6b153555e1f5ac8a7b53ac79"
+    },
+    {
+      "prior_plan_version": "research-plan-2026-09-14-v3",
+      "new_plan_version": "research-plan-2026-09-14-v3",
+      "assurance_version": "research-assurance-2026-09-14-v3",
+      "unchanged": [
+        "Research formulas and source attribution",
+        "Finite candidate/trial budgets and statistical selection rules",
+        "Accepted Phase 1 code/data/report identities",
+        "Pinned foundation checker tools/check_foundation_adversarial.py",
+        "Pinned outcome fixture checker tools/check_outcome_fixtures.py",
+        "Acceptance amendment research-assurance-2026-09-14-v3"
+      ],
+      "execution_rule": "Preserve old reports and their original plan identities. New work after this amendment binds research-assurance-2026-09-14-v3. Plan-file live mismatches verify through this amendment chain starting at the declared hash; code-file live mismatches verify through a later verified successor receipt.",
+      "exposure_rule": "Carry all previously exposed dates and inspected coverage forward. Descriptive regime cuts in the B0 Strategy Book edition do not select candidates, thresholds or dates.",
+      "id": "amendment-2026-09-16-source-context-baselines",
+      "date": "2026-09-16",
+      "scope": "Adds Phase 2 task P2-02A (subphase 03, first task): the discretionary authors' own context reads (Jumbo range width, range path and break topology, AMD phases, opening location, session cleanliness, relative volume, EVRange and SessionStat; Sires gamma regime, flip, walls, max pain, Vol Trigger, VOL-GEX, hedging pressure, KG1, VIX, VVIX, expected daily move, term structure, day taxonomy; Saint balance/trend/new-balance read; Member area memory; Keani open read; Green Bird session read; jetbundle, Stoic and Refill process labels; news context) implemented deterministically from the wiki predicates, measured on the full population with plausibility gates, and issued on the P2-01 rows as the comparison baseline for every fitted context expert. P2-04, P2-05, P2-07, P2-11, P2-12 and P2-13 gain the dependency and one acceptance key: paired comparison against the source read with the promotion gates, source read retained when not beaten. CONTEXT.md, VOLATILITY.md and METHOD_EXPERTS.md carry the baseline paragraph. No existing formula, gate, budget, bank, split, seed or receipt changed; this adds a baseline family, it does not relax anything.",
+      "reason": "The user's direction: the source authors' context reads are the baseline; forward-volatility, gamma and IV models are upgrades on top of them and must be tested against them.",
+      "changes": [
+        "planning/PROJECT_OVERVIEW.md",
+        "planning/phase-2/CONTEXT.md",
+        "planning/phase-2/METHOD_EXPERTS.md",
+        "planning/phase-2/README.md",
+        "planning/phase-2/VOLATILITY.md",
+        "planning/phase-2/tasks/P2-04.md",
+        "planning/phase-2/tasks/P2-05.md",
+        "planning/phase-2/tasks/P2-07.md",
+        "planning/phase-2/tasks/P2-11.md",
+        "planning/phase-2/tasks/P2-12.md",
+        "planning/phase-2/tasks/P2-13.md",
+        "planning/research-program/TASK_GRAPH.json"
+      ],
+      "changed_files": [
+        {
+          "path": "planning/PROJECT_OVERVIEW.md",
+          "sha256_before": "b3dee94c9631e650bdfdd01e2e707defd72e060b73769ec0aa14cbc3ab651607",
+          "sha256_after": "ca4c2d310039e377d6ff0c1176ef36b0973abe333d8bfd5cdcc1c774757a004b"
+        },
+        {
+          "path": "planning/phase-2/CONTEXT.md",
+          "sha256_before": "c667de8ccb6fe272a0c10a10b2509a9dfd369138d1a928458b9b08a0ca03ea23",
+          "sha256_after": "c9375aa7184fa4f901b726b21823e631d6c916b261ebbe737e9e176566a0ba38"
+        },
+        {
+          "path": "planning/phase-2/METHOD_EXPERTS.md",
+          "sha256_before": "51a7e4110fdb0312e623455b69a3a374672d4c7237160b1a3be7446fd7e25873",
+          "sha256_after": "f01c6e416b3e6e6ef561157f8bec120043bc4140283c486a07215f79035f3d63"
+        },
+        {
+          "path": "planning/phase-2/README.md",
+          "sha256_before": "6dca9ffed1640e094e8e2e4b2db99fd80d75c32c0989d6aa893481876f7351c0",
+          "sha256_after": "7b03c480fdf768de38541ecdf533a36f9225fa5eb27dd9ad770b594ef1caa4eb"
+        },
+        {
+          "path": "planning/phase-2/VOLATILITY.md",
+          "sha256_before": "511d81b9500ec6d8f14141dfc18fa0372407d4998003a6c985cdc50798577766",
+          "sha256_after": "a5269844751e2f4d5aefc9d4178bd0090d3cbc9a80328f40f8fb662150adb88e"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-04.md",
+          "sha256_before": "cff78736a1241c23a762da42d0c10155a0dde0f25c224250440e8830da033075",
+          "sha256_after": "4fd28d25ca3aefe9bacafed70b0ed367e1954b06b502e65861f480ba0d25a727"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-05.md",
+          "sha256_before": "1ec4c973a06010a23c64d28b84b1925078bf44feca98c8f42413545a45762060",
+          "sha256_after": "b5149d29884d6b785009d722c62154bf4c6f67aa7af1ca0d73e6bf879b12d1ae"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-07.md",
+          "sha256_before": "c233fe9fb59e89123db9ef6677dc19f148f8489c88b6f0a2c2dcf0fe723263ad",
+          "sha256_after": "ba75fcba8ae29b62e0655180eb3105cb002f51f06148ef168883500e80b87fca"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-11.md",
+          "sha256_before": "acb8b9cbbb81909cb9fee261de9356bebeff9ed83d3e95357e532844ebbd4b26",
+          "sha256_after": "419f86b069af07acb4f4dec99b30c6230e21d19d8a158738927c5f1a835ea3b6"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-12.md",
+          "sha256_before": "345765b5a637078cd7143d28fbca9158403c3a6e00777ed4c658a71c21074e4f",
+          "sha256_after": "4f7c16c09115e7459b57aef42fa3d72e6f0ff831c43214644f5d0c83c07972fc"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-13.md",
+          "sha256_before": "41a1e3ebce3ba6ec8edd1fc73d038885a03a4484a9cd51af4de5614db75b268f",
+          "sha256_after": "7ab63a14e394540689ebbaa3871cae5fd1f805e53565fd6c1ffde3b4b6900845"
+        },
+        {
+          "path": "planning/research-program/TASK_GRAPH.json",
+          "sha256_before": "43efa50795a3d75aa40175b68c0e53e3a6f47dcd9899f54284f14c9a6b1e2b3c",
+          "sha256_after": "c575b226db6a926634b2981e50490aaef96101dc6c0c22950397957a73ab4cfb"
+        }
+      ],
+      "previous_entry_sha256": "d49b0c97d2e987aacdb04147f5319ca536ef8d36a1eb5dd49c721ba235e5786f"
+    },
+    {
+      "prior_plan_version": "research-plan-2026-09-14-v3",
+      "new_plan_version": "research-plan-2026-09-14-v3",
+      "assurance_version": "research-assurance-2026-09-14-v3",
+      "unchanged": [
+        "Research formulas and source attribution",
+        "Finite candidate/trial budgets and statistical selection rules",
+        "Accepted Phase 1 code/data/report identities",
+        "Pinned foundation checker tools/check_foundation_adversarial.py",
+        "Pinned outcome fixture checker tools/check_outcome_fixtures.py",
+        "Acceptance amendment research-assurance-2026-09-14-v3"
+      ],
+      "execution_rule": "Preserve old reports and their original plan identities. New work after this amendment binds research-assurance-2026-09-14-v3. Plan-file live mismatches verify through this amendment chain starting at the declared hash; code-file live mismatches verify through a later verified successor receipt.",
+      "exposure_rule": "Carry all previously exposed dates and inspected coverage forward. Descriptive regime cuts in the B0 Strategy Book edition do not select candidates, thresholds or dates.",
+      "id": "amendment-2026-09-16-baseline-principle-every-phase",
+      "date": "2026-09-16",
+      "scope": "ROADMAP.md gains one preserved decision: the authors' own reads are the baseline for every component (B0.2 for entries, P2-02A for context, source location reads first in Phase 3, source entries in Phase 4); fitted models are upgrades only under the promotion gates; the Phase 3 and 4 packs are authored at the Phase 2 release from this rule and the retention set. No formula, gate, budget, bank, split, seed or receipt changed.",
+      "reason": "The user's direction that forward-volatility, gamma and IV models are upgrades on top of the authors' reads, generalised so the principle is not lost between phases.",
+      "changes": [
+        "planning/ROADMAP.md"
+      ],
+      "changed_files": [
+        {
+          "path": "planning/ROADMAP.md",
+          "sha256_before": "e3ad487019d43bca58f22ac9ff1b8d85be8a435f0ea434e3e2585b0f5b13bd44",
+          "sha256_after": "7b83db244833a52e45d3a066bc74f983c09a853db7bfba5ade8042406eb9b180"
+        }
+      ],
+      "previous_entry_sha256": "e89bf7c47940a22eb3cd8ebb0775ef2fba4b68b2c9b867a2b426f28bbdb38c71"
+    },
+    {
+      "prior_plan_version": "research-plan-2026-09-14-v3",
+      "new_plan_version": "research-plan-2026-09-14-v3",
+      "assurance_version": "research-assurance-2026-09-14-v3",
+      "unchanged": [
+        "Research formulas and source attribution",
+        "Finite candidate/trial budgets and statistical selection rules",
+        "Accepted Phase 1 code/data/report identities",
+        "Pinned foundation checker tools/check_foundation_adversarial.py",
+        "Pinned outcome fixture checker tools/check_outcome_fixtures.py",
+        "Acceptance amendment research-assurance-2026-09-14-v3"
+      ],
+      "execution_rule": "Preserve old reports and their original plan identities. New work after this amendment binds research-assurance-2026-09-14-v3. Plan-file live mismatches verify through this amendment chain starting at the declared hash; code-file live mismatches verify through a later verified successor receipt.",
+      "exposure_rule": "Carry all previously exposed dates and inspected coverage forward. Descriptive regime cuts in the B0 Strategy Book edition do not select candidates, thresholds or dates.",
+      "id": "amendment-2026-09-16-blind-holdout-and-walk-forward",
+      "date": "2026-09-16",
+      "scope": "EVALUATION.md gains a blind hold-out (2026-04-01 to 2026-09-03: no fit, tune, calibration, selection, Holm family, promotion gate, refinement, exit choice, expert fit, cadence choice or decision-facing table from this amendment on; the 2026 outer block ends 2026-03-31; one sealed HOLDOUT_REPORT.json per phase release after selections are frozen; prior exposure recorded) and states walk-forward explicitly (expanding, purged, embargoed by calendar year; rolling variants compared in P2-23 under the same rules). P15-17, P15-18, P15-19, P15-20, P2-02, P2-23 and P2-24 each gain one acceptance key; P15-20 and P2-24 gain the HOLDOUT_REPORT.json artifact. This strengthens the evaluation; no gate, budget, bank, split identity, seed or receipt is relaxed.",
+      "reason": "The user's direction: after baselines and statistics, walk-forward and purged walk-forward, and several months of 2026 held out blind to actually test.",
+      "changes": [
+        "planning/PROJECT_OVERVIEW.md",
+        "planning/phase-1-5/tasks/P15-17.md",
+        "planning/phase-1-5/tasks/P15-18.md",
+        "planning/phase-1-5/tasks/P15-19.md",
+        "planning/phase-1-5/tasks/P15-20.md",
+        "planning/phase-2/tasks/P2-02.md",
+        "planning/phase-2/tasks/P2-23.md",
+        "planning/phase-2/tasks/P2-24.md",
+        "planning/research-program/EVALUATION.md",
+        "planning/research-program/TASK_GRAPH.json"
+      ],
+      "changed_files": [
+        {
+          "path": "planning/PROJECT_OVERVIEW.md",
+          "sha256_before": "b1e074490fad68ceeecff47592895f432764432f97a5d6a469620025d99b02b0",
+          "sha256_after": "4921f7cce222a14d03681bc0f7218fc4d2268ca0a0010a2f05be54bcde5c2a59"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-17.md",
+          "sha256_before": "19780e950e215b74e175cdf9aebed52cf2dbe9899a6f39bd02d982bde12594e9",
+          "sha256_after": "53b0c60198012eb17f154b3e21e335a26d9afab22eb96072f43427c6cb63c910"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-18.md",
+          "sha256_before": "6d7a5771e33a85b1d015352c28df90e1b85059df92af271efb81d0973cfaf991",
+          "sha256_after": "5a23c47c3fda7a9c3633fce99802569d8475ab248e9d4c63c45ecd7935fd70ba"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-19.md",
+          "sha256_before": "2a3ac4927c19197900d221ba1cb74e80fd1f289d4ae719b5fb0992902fde3e91",
+          "sha256_after": "3f1dd5e0d0477edf798f2b6c141ba89e9b2fcad5ef322f63f0fbc068d57fec81"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-20.md",
+          "sha256_before": "5c69a1438a8fe285c5880a43ba3cc04cc66b2d20720f8decee58c30068629019",
+          "sha256_after": "c29223b17a100d8833e266b79b85dc658fda72641bc1853f9756bb2725b8b003"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-02.md",
+          "sha256_before": "29db519dee4b5e3ab545493d19474bfa9117750b6654b42de12a59f7cfdbb38b",
+          "sha256_after": "dabb525882498319106a77965821f15b883c93c2db1a8bcbe8445f014239ba6b"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-23.md",
+          "sha256_before": "308196eff6eb418b304f097e3a687048e69e0cd3553fe42083b926aec426af01",
+          "sha256_after": "388ea1131c59a62a292a8c677e1c14d328e1b5335cb543bd5e732a8ee7e810af"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-24.md",
+          "sha256_before": "d06b1df7b43438b2ccd01d8f874491ff7163e6a8e4b36d1bb8fedf63175d9896",
+          "sha256_after": "be225886df9131d1e43630d90d662bd476a5b24fecfbfe9638db4098fc31e995"
+        },
+        {
+          "path": "planning/research-program/EVALUATION.md",
+          "sha256_before": "3c0628acd7db481adfa41e4b6a11fc87368909c67bf213d82061643cc2cfadd1",
+          "sha256_after": "1b91c4897eb2b79c0a75062ba7b7831d0c5d315d8b12b6b5b1a46a0edd8e6682"
+        },
+        {
+          "path": "planning/research-program/TASK_GRAPH.json",
+          "sha256_before": "c575b226db6a926634b2981e50490aaef96101dc6c0c22950397957a73ab4cfb",
+          "sha256_after": "f60f897af68affe0b5ca7b22e4ef5a37b4e7dd17075cff7dd0f8cd02cc5c5791"
+        }
+      ],
+      "previous_entry_sha256": "44dd19a4e3e25ce2b2bc7e6c03659e8a81c6e422578a79723e224fa47b5cd214"
+    },
+    {
+      "prior_plan_version": "research-plan-2026-09-14-v3",
+      "new_plan_version": "research-plan-2026-09-14-v3",
+      "assurance_version": "research-assurance-2026-09-14-v3",
+      "unchanged": [
+        "Research formulas and source attribution",
+        "Finite candidate/trial budgets and statistical selection rules",
+        "Accepted Phase 1 code/data/report identities",
+        "Pinned foundation checker tools/check_foundation_adversarial.py",
+        "Pinned outcome fixture checker tools/check_outcome_fixtures.py",
+        "Acceptance amendment research-assurance-2026-09-14-v3"
+      ],
+      "execution_rule": "Preserve old reports and their original plan identities. New work after this amendment binds research-assurance-2026-09-14-v3. Plan-file live mismatches verify through this amendment chain starting at the declared hash; code-file live mismatches verify through a later verified successor receipt.",
+      "exposure_rule": "Carry all previously exposed dates and inspected coverage forward. Descriptive regime cuts in the B0 Strategy Book edition do not select candidates, thresholds or dates.",
+      "id": "amendment-2026-09-16-result-cards",
+      "date": "2026-09-16",
+      "scope": "Every open and future task (P15-17 to P15-20 and all Phase 2 tasks) writes RESULT_CARD.json (schema research-result-card-v1, defined in DELIVERABLES.md): the question, at most five headline numbers with intervals and pointers, the target and whether it was met, a verdict (done_well, needs_upgrade, not_reaching_target, not_applicable), the smallest lever if not done well, and limits; TASK_GRAPH.json lists it among those tasks' artifacts; HOW_TO_RUN.md step 11 requires it; closed tasks get cards in the wiki results ledger written by the orchestrator from their receipts. Adds a reporting requirement; changes no formula, gate, budget, bank, split, seed or receipt schema.",
+      "reason": "The user's direction: each task must end with a result a person can look at to decide whether it is done well, needs an upgrade or is not reaching the target, so upgrades happen in small parts rather than at the end of a phase.",
+      "changes": [
+        "planning/phase-1-5/tasks/P15-17.md",
+        "planning/phase-1-5/tasks/P15-18.md",
+        "planning/phase-1-5/tasks/P15-19.md",
+        "planning/phase-1-5/tasks/P15-20.md",
+        "planning/phase-2/tasks/P2-00.md",
+        "planning/phase-2/tasks/P2-01.md",
+        "planning/phase-2/tasks/P2-02.md",
+        "planning/phase-2/tasks/P2-02A.md",
+        "planning/phase-2/tasks/P2-03.md",
+        "planning/phase-2/tasks/P2-04.md",
+        "planning/phase-2/tasks/P2-05.md",
+        "planning/phase-2/tasks/P2-07.md",
+        "planning/phase-2/tasks/P2-09.md",
+        "planning/phase-2/tasks/P2-10.md",
+        "planning/phase-2/tasks/P2-11.md",
+        "planning/phase-2/tasks/P2-12.md",
+        "planning/phase-2/tasks/P2-13.md",
+        "planning/phase-2/tasks/P2-21.md",
+        "planning/phase-2/tasks/P2-22.md",
+        "planning/phase-2/tasks/P2-23.md",
+        "planning/phase-2/tasks/P2-24.md",
+        "planning/research-program/DELIVERABLES.md",
+        "planning/research-program/HOW_TO_RUN.md",
+        "planning/research-program/TASK_GRAPH.json"
+      ],
+      "changed_files": [
+        {
+          "path": "planning/phase-1-5/tasks/P15-17.md",
+          "sha256_before": "53b0c60198012eb17f154b3e21e335a26d9afab22eb96072f43427c6cb63c910",
+          "sha256_after": "c6fdf1b23fa70d8da7e3462f1398b5d4523e23aa3b6b4ba38e73ba7522cfafbb"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-18.md",
+          "sha256_before": "5a23c47c3fda7a9c3633fce99802569d8475ab248e9d4c63c45ecd7935fd70ba",
+          "sha256_after": "df656919b11dd7c079e148c2c2c5a5a135dc11621413ef8dec1a590a4dbc5352"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-19.md",
+          "sha256_before": "3f1dd5e0d0477edf798f2b6c141ba89e9b2fcad5ef322f63f0fbc068d57fec81",
+          "sha256_after": "d1c15dcf5f725c21b0bfad6049a145cebe408f420c73a758492e8fa51d7dae1e"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-20.md",
+          "sha256_before": "c29223b17a100d8833e266b79b85dc658fda72641bc1853f9756bb2725b8b003",
+          "sha256_after": "d1ea7f757bfbca4c657d4fad5c09d48ab58665fe4b1c1001881e917ae68fbfea"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-00.md",
+          "sha256_before": "434989174b61a145de252ee6a101f4f1dbdb6de0af47b335f173a797a3176a09",
+          "sha256_after": "b837a117b2c15c50abe1965b5c49329af61f27f1016d0fa5457b5d3d58553d52"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-01.md",
+          "sha256_before": "2f17e811c2612d942ad4a2bbe3838fae4c4986007692741be8fbe44a7dc9cffa",
+          "sha256_after": "4caeef8d420c74d5add43b3bb11da017f75eddd03aa03a02bb20a99a61f30878"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-02.md",
+          "sha256_before": "dabb525882498319106a77965821f15b883c93c2db1a8bcbe8445f014239ba6b",
+          "sha256_after": "51da35f4d276365d95ad264e748ac21bb7cced48ada07610dc869eeeb52a7d84"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-02A.md",
+          "sha256_before": "7c5373550650a260bc91b10b1d10fee58cb79aa08d28ea20f37c4a1acb58cb64",
+          "sha256_after": "2fcfd71576d45744612818a2f0ed6e46bb6a4bb6128b606072a7cb152dbad5c8"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-03.md",
+          "sha256_before": "6a8651fff47344d88673fcd28a8594f67c1e3cd58a663d5ea2b9a4788d42dea1",
+          "sha256_after": "66493ac811acfbf253b04aab2553ef08bfa2d79b581e803e39d4b855aa40473c"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-04.md",
+          "sha256_before": "4fd28d25ca3aefe9bacafed70b0ed367e1954b06b502e65861f480ba0d25a727",
+          "sha256_after": "956da9d45af1abc2e0d5274fec439cd80547ea8d1881bb4ec119c8741b9f0343"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-05.md",
+          "sha256_before": "b5149d29884d6b785009d722c62154bf4c6f67aa7af1ca0d73e6bf879b12d1ae",
+          "sha256_after": "dc6d9995fc2784b90f80aa2dc1199792881e4453decf59be6b939b8b7022caba"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-07.md",
+          "sha256_before": "ba75fcba8ae29b62e0655180eb3105cb002f51f06148ef168883500e80b87fca",
+          "sha256_after": "7caf3e61d40c8a5eb780662ed428d1b4ae4fb40fa0e64cb4ae21c4346bfe22a7"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-09.md",
+          "sha256_before": "fe1eb27f600389ad24102fc12e5a027e91ef68668bc82321a5ff24fdb5072a05",
+          "sha256_after": "f78aa0b509d4d4b8bc3c79cf89a0f82624c3cd100e3cb6cc7a90b8c1ae5f9274"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-10.md",
+          "sha256_before": "f061f07a2cdd5d6b6e36bb9a21ee850afc0f9d8ba65d619043c2c5f9637d8dbf",
+          "sha256_after": "c7552df07cfdde2276afc76f28a33a13e5233bb9a7f34901d09692ec8e501783"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-11.md",
+          "sha256_before": "419f86b069af07acb4f4dec99b30c6230e21d19d8a158738927c5f1a835ea3b6",
+          "sha256_after": "af7e4337cd29cb0306a0362ac553e67b9c94875c2d691acec05e1aa5a8cd5898"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-12.md",
+          "sha256_before": "4f7c16c09115e7459b57aef42fa3d72e6f0ff831c43214644f5d0c83c07972fc",
+          "sha256_after": "b6cf27195e997f1ef5b3d03f24a08c9eb94ac6376cb50ae4d078cb33deebdac0"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-13.md",
+          "sha256_before": "7ab63a14e394540689ebbaa3871cae5fd1f805e53565fd6c1ffde3b4b6900845",
+          "sha256_after": "438186586e8c2eb2720a5d49a4f727d5f8d6216fa07b697e3dc51647e5b80265"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-21.md",
+          "sha256_before": "1592857b9e1f5de3fa4f03ad558d95d3924ed0306d621363c3b5c9cbf123ee76",
+          "sha256_after": "0d762184f3cce4de28a3953b3d41d27b651fd5a8b8d1b59c64397f6456e9a469"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-22.md",
+          "sha256_before": "319ce0e6d6b70d6fe9446f6959cebf16a06d4ee274749d1cf46c068b20cd6b63",
+          "sha256_after": "9f76f677e0d7c9a15413d595d074c83f2e2f4633ede102a3ce13450c84bdee29"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-23.md",
+          "sha256_before": "388ea1131c59a62a292a8c677e1c14d328e1b5335cb543bd5e732a8ee7e810af",
+          "sha256_after": "18423fab2e34d7f3b29b43910aac1d63178ce7623f9fb54fb3e33b1913162a62"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-24.md",
+          "sha256_before": "be225886df9131d1e43630d90d662bd476a5b24fecfbfe9638db4098fc31e995",
+          "sha256_after": "f108cccddf4e99bd4e7ca74cbcd82f750d1c7324f9e5300b689e6cbc3ef5e2cc"
+        },
+        {
+          "path": "planning/research-program/DELIVERABLES.md",
+          "sha256_before": "7ee3d882f43c9aa2d53b7b4db7a281e719d78b2bb16669b894d33cf884d300cd",
+          "sha256_after": "d0450066660bdeb5f87acb600342351fc2d03b43b7b90690385c43cad17b7ad9"
+        },
+        {
+          "path": "planning/research-program/HOW_TO_RUN.md",
+          "sha256_before": "2d5dc6fb24b882bd2b8b61697769b362029edac32ce611b595894827aad6a106",
+          "sha256_after": "c9cc23f661ee86826d1ae2676b05b8639c39414153a927106f2c660953b331a7"
+        },
+        {
+          "path": "planning/research-program/TASK_GRAPH.json",
+          "sha256_before": "f60f897af68affe0b5ca7b22e4ef5a37b4e7dd17075cff7dd0f8cd02cc5c5791",
+          "sha256_after": "b572938c688d146c144fde72d111dce1f067a9222e3bb1b1c74f46840d1d6a79"
+        }
+      ],
+      "previous_entry_sha256": "1ea01702c0cb73d68ac6d9ae1c37fb74bfbe1f1c2edcee242e03845661eaa0db"
+    },
+    {
+      "prior_plan_version": "research-plan-2026-09-14-v3",
+      "new_plan_version": "research-plan-2026-09-14-v3",
+      "assurance_version": "research-assurance-2026-09-14-v3",
+      "unchanged": [
+        "Research formulas and source attribution",
+        "Finite candidate/trial budgets and statistical selection rules",
+        "Accepted Phase 1 code/data/report identities",
+        "Pinned foundation checker tools/check_foundation_adversarial.py",
+        "Pinned outcome fixture checker tools/check_outcome_fixtures.py",
+        "Acceptance amendment research-assurance-2026-09-14-v3"
+      ],
+      "execution_rule": "Preserve old reports and their original plan identities. New work after this amendment binds research-assurance-2026-09-14-v3. Plan-file live mismatches verify through this amendment chain starting at the declared hash; code-file live mismatches verify through a later verified successor receipt.",
+      "exposure_rule": "Carry all previously exposed dates and inspected coverage forward. Descriptive regime cuts in the B0 Strategy Book edition do not select candidates, thresholds or dates.",
+      "id": "amendment-2026-09-16-value-area-widths-and-breakdown-report",
+      "date": "2026-09-16",
+      "scope": "Phase 1.5 tests value-area widths: profile supplement P3 (.68) and P4 (.40) on the ten profile branches, declared before any of their results existed, run as their own P15-17 attempt and evaluated in one Holm family with the 160; the refinement gains a value-area-fraction neighbourhood. The release adds a breakdown edition (BREAKDOWN.json, BREAKDOWN_REPORT.md): the same metrics by year, by every frozen regime dimension and by day, for B0.2 and the selected rule of every branch, descriptive only.",
+      "reason": "The user's direction of 2026-09-16 evening: the value-area percentages (68, 40) must be tested as candidates, and every report needs a full edition and a breakdown edition per year, per regime and per day so that a baseline judgement of conditions exists in Phase 1.5 before Phase 2 makes it formal.",
+      "changes": [
+        "planning/phase-1-5/SEARCH_CONTRACT.md",
+        "planning/phase-1-5/tasks/P15-17.md",
+        "planning/phase-1-5/tasks/P15-20.md",
+        "planning/research-program/DELIVERABLES.md",
+        "planning/research-program/TASK_GRAPH.json"
+      ],
+      "changed_files": [
+        {
+          "path": "planning/phase-1-5/SEARCH_CONTRACT.md",
+          "sha256_before": "70001063cb309bd8626bd767cb4788a420d0a7b155fb401ea4b7dd893929577b",
+          "sha256_after": "554fae12b7481138eab57e70ef97d7880e98269d816f44faddbe06be4f949da7"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-17.md",
+          "sha256_before": "c6fdf1b23fa70d8da7e3462f1398b5d4523e23aa3b6b4ba38e73ba7522cfafbb",
+          "sha256_after": "fa394750eff1805b0af84de6e7ed8a07df919d5bc827c9dd88e454b07dde9095"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-20.md",
+          "sha256_before": "d1ea7f757bfbca4c657d4fad5c09d48ab58665fe4b1c1001881e917ae68fbfea",
+          "sha256_after": "c0e40c3164c4f42e4e7e47c0d616af3a33d5358a06ea5e221b8ca88bc7e447ba"
+        },
+        {
+          "path": "planning/research-program/DELIVERABLES.md",
+          "sha256_before": "d0450066660bdeb5f87acb600342351fc2d03b43b7b90690385c43cad17b7ad9",
+          "sha256_after": "d6ce9b4775d50ff34591006f29f4398525b4443fa25a5264657fe9ed782ebbce"
+        },
+        {
+          "path": "planning/research-program/TASK_GRAPH.json",
+          "sha256_before": "b572938c688d146c144fde72d111dce1f067a9222e3bb1b1c74f46840d1d6a79",
+          "sha256_after": "96dc1e5bbd714477f8bdae911ceb46472c9d0aa858e70effc1da18f519132d88"
+        }
+      ],
+      "previous_entry_sha256": "f0da3331c0437232e25adfa173d165516c01707eeed778e636235e94dfa09336"
+    }
+  ]
+}

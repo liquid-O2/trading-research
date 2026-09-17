@@ -1,0 +1,130 @@
+{
+ "account_day": "2026-07-07",
+ "e0_mismatches": 0,
+ "entries": 1,
+ "rules": {
+  "GB-FAIL:previous_hour:F3:efficiency=0.5": [
+   {
+    "e0_matches_entry_run": true,
+    "entry_id": "b02:68ee54aaa67082fca0077270f4a89a71",
+    "fill_at_ns": 1783447500000000000,
+    "fill_price": "29568.0",
+    "initial_stop": "29574.50",
+    "objective": "29528.25",
+    "policies": {
+     "E0": {
+      "complete": true,
+      "entry_id": "b02:68ee54aaa67082fca0077270f4a89a71",
+      "exit_at_ns": 1783448876472753987,
+      "exit_price": "29529.25",
+      "net_dollars": "770.00",
+      "net_points": "38.50",
+      "occupancy_flagged": false,
+      "policy_id": "E0",
+      "reason": "objective",
+      "stop_updates": []
+     },
+     "E1": {
+      "complete": true,
+      "entry_id": "b02:68ee54aaa67082fca0077270f4a89a71",
+      "exit_at_ns": 1783448876472753987,
+      "exit_price": "29529.25",
+      "net_dollars": "770.00",
+      "net_points": "38.50",
+      "occupancy_flagged": false,
+      "policy_id": "E1",
+      "reason": "objective",
+      "stop_updates": []
+     },
+     "E2": {
+      "complete": true,
+      "entry_id": "b02:68ee54aaa67082fca0077270f4a89a71",
+      "exit_at_ns": 1783448876472753987,
+      "exit_price": "29529.25",
+      "net_dollars": "770.00",
+      "net_points": "38.50",
+      "occupancy_flagged": false,
+      "policy_id": "E2",
+      "reason": "objective",
+      "stop_updates": []
+     },
+     "E3": {
+      "complete": true,
+      "entry_id": "b02:68ee54aaa67082fca0077270f4a89a71",
+      "exit_at_ns": 1783448876472753987,
+      "exit_price": "29529.25",
+      "net_dollars": "770.00",
+      "net_points": "38.50",
+      "occupancy_flagged": false,
+      "policy_id": "E3",
+      "reason": "objective",
+      "stop_updates": [
+       {
+        "effective_after_batch_id": "1783447500027058681",
+        "effective_available_at_ns": 1783447500027058681,
+        "kind": "break_even",
+        "stop": "29567.75",
+        "trigger_available_at_ns": 1783447500024419625,
+        "trigger_batch_id": "1783447500024419625"
+       }
+      ]
+     },
+     "E4": {
+      "complete": true,
+      "entry_id": "b02:68ee54aaa67082fca0077270f4a89a71",
+      "exit_at_ns": 1783447509765981751,
+      "exit_price": "29557.00",
+      "net_dollars": "215.00",
+      "net_points": "10.75",
+      "occupancy_flagged": false,
+      "policy_id": "E4",
+      "reason": "trailing stop",
+      "stop_updates": [
+       {
+        "effective_after_batch_id": "1783447500027058681",
+        "effective_available_at_ns": 1783447500027058681,
+        "kind": "trailing",
+        "stop": "29558.50",
+        "trigger_available_at_ns": 1783447500024419625,
+        "trigger_batch_id": "1783447500024419625"
+       },
+       {
+        "effective_after_batch_id": "1783447500377655159",
+        "effective_available_at_ns": 1783447500377655159,
+        "kind": "trailing",
+        "stop": "29558.00",
+        "trigger_available_at_ns": 1783447500210000523,
+        "trigger_batch_id": "1783447500210000523"
+       },
+       {
+        "effective_after_batch_id": "1783447500688454143",
+        "effective_available_at_ns": 1783447500688454143,
+        "kind": "trailing",
+        "stop": "29557.75",
+        "trigger_available_at_ns": 1783447500537829371,
+        "trigger_batch_id": "1783447500537829371"
+       },
+       {
+        "effective_after_batch_id": "1783447501723485419",
+        "effective_available_at_ns": 1783447501723485419,
+        "kind": "trailing",
+        "stop": "29557.25",
+        "trigger_available_at_ns": 1783447501636717243,
+        "trigger_batch_id": "1783447501636717243"
+       }
+      ]
+     }
+    },
+    "recorded_e0": {
+     "exit_at_ns": 1783448876472753987,
+     "exit_reason": "objective",
+     "net_points": "38.50"
+    },
+    "round_trip_cost": "5.00",
+    "side": -1
+   }
+  ]
+ },
+ "schema_version": "research-p15-19-exit-shard-v1",
+ "task_id": "P15-19"
+}

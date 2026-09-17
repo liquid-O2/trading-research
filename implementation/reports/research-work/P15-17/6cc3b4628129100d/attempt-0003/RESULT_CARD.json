@@ -1,60 +1,69 @@
 {
- "attempt": "reports/research-work/P15-17/6cc3b4628129100d/attempt-0003",
+ "attempt": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003",
  "headline": [
   {
-   "artifact": "attempt-0003/BREADTH_RESULTS.json#decisions",
+   "artifact": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/BREADTH_RESULTS.json",
    "name": "candidates promoted",
-   "support": "5 outer folds, Holm across the stage",
-   "unit": "candidates of 148 supported",
+   "sha256": "a81948e90ba77040a1db58d32eacb3b31f3a99eba7d68096b63e9d00179c1c3d",
+   "support": 164,
+   "unit": "candidates of 164 in the Holm family",
    "value": 0
   },
   {
-   "artifact": "attempt-0003/BREADTH_RESULTS.json#decisions",
-   "candidate": "SIRES:absorption_reward_retest:S1",
+   "artifact": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/BREADTH_RESULTS.json",
    "interval": [
-    24.7714,
-    26.7971
+    24.771400822669104,
+    26.79708638025594
    ],
    "name": "best mean paired improvement",
-   "support": "1094 days, 10325 resolved entries",
-   "unit": "net points per common complete day",
+   "sha256": "a81948e90ba77040a1db58d32eacb3b31f3a99eba7d68096b63e9d00179c1c3d",
+   "unit": "net points per common complete day (SIRES:absorption_reward_retest:S1)",
    "value": 25.7799
   },
   {
-   "artifact": "attempt-0003/TRIALS.jsonl",
-   "name": "dispositions",
+   "artifact": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/TRIALS.jsonl",
+   "name": "candidates left inconclusive on support",
+   "sha256": "598d039293add35c99a93980b0ecd3fccc4fe8c8c9149569c815e0e2b2d4913b",
+   "support": 880,
    "unit": "candidates",
-   "value": {
-    "inconclusive_support": 101,
-    "rejected_by_evidence": 19,
-    "retained_baseline": 44
-   }
+   "value": 101
   },
   {
-   "artifact": "attempt-0003/RUN_COMPLETE.json",
+   "artifact": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/RUN_COMPLETE.json",
    "name": "declared jobs reconciled",
-   "unit": "278560 written + 160 absent = 278720 declared",
-   "value": true
+   "sha256": "adc1a080b54b20460bf667efcc0c056a4e215161d7579047ea64df0817087e7f",
+   "support": 278720,
+   "unit": "job documents written, plus 160 absent on the retained failure date",
+   "value": 278560
   },
   {
-   "artifact": "attempt-0003/BREADTH_RESULTS.json#holdout_excluded",
+   "artifact": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0003/BREADTH_RESULTS.json",
    "name": "hold-out days excluded",
-   "unit": "account days, 2026-04-01..2026-09-03",
+   "sha256": "a81948e90ba77040a1db58d32eacb3b31f3a99eba7d68096b63e9d00179c1c3d",
+   "support": 112,
+   "unit": "account days, 2026-04-01 to 2026-09-03",
    "value": 112
   }
  ],
  "label": "definitive",
  "lever": {
-  "change": "raise the entry count of the location-limited candidates before re-screening: the most common first attribution is location_miss (54 candidates), which Phase 3's improved locations address directly under the bounded-revisit rule",
-  "evidence_that_it_worked": "the same breadth screen, re-run on the retained candidates with Phase 3 locations, moves candidates out of inconclusive_support into a decided disposition and at least one clears the support gate"
+  "change": "re-screen the retained candidates whose first attribution is location_miss on Phase 3's improved locations, under the bounded-revisit rule, rather than widening the bank",
+  "evidence": "candidates move out of inconclusive_support into a decided disposition and at least one clears the support gate with its 95% lower bound above zero"
  },
- "limits": "Mean daily net points in the one-mini benchmark on an isolated family under a fixed scheduler; not a portfolio, not a claim about the user's daily target, and no statement about the blind hold-out, which no number here touches.",
- "met": "no",
- "question": "Does any of the 160 registered one-axis candidates beat the source-faithful baseline B0.2 well enough to replace it as a family's entry rule?",
+ "limits": [
+  "Mean daily net points in the deterministic one-mini benchmark on an isolated family under a fixed scheduler; not a portfolio and not a claim about the user's daily target.",
+  "No number here touches the blind hold-out (2026-04-01 to 2026-09-03).",
+  "The P15-16A receipt digest is still pending; the pairing bytes are pinned by path and sha256 in the run's own job documents."
+ ],
+ "question": "Does any registered one-axis candidate, including the 2026-09-16 profile supplement, beat the source-faithful baseline B0.2 well enough to replace it as a family's entry rule?",
  "schema_version": "research-result-card-v1",
- "target": "EVALUATION.md promotion gates: paired mean improvement with a 95% lower bound above zero, Holm-adjusted p <= .05, support (100 resolved opportunities, 30 days, 3 blocks), positive in 60% of supported blocks, no cost-stress reversal, no unexplained coverage loss",
+ "target": {
+  "met": "no",
+  "text": "EVALUATION.md promotion gates: paired mean improvement with a 95% lower bound above zero, Holm-adjusted p <= .05, support of 100 resolved opportunities on 30 days in 3 blocks, positive in 60% of supported blocks, no cost-stress reversal, no unexplained coverage loss"
+ },
  "task_id": "P15-17",
- "verdict": "not_reaching_target",
- "verdict_reason": "No candidate clears the gates: 91 of 148 fail support outright and the rest fall at Holm, coverage or the cost stress, so the source-faithful baseline is retained in every family.",
- "written_at": "2026-09-16T21:53:52.890643+00:00"
+ "verdict": {
+  "reason": "No candidate clears the gates: most fail support outright and the rest fall at Holm, coverage or the cost stress, so the source-faithful baseline is retained in every family. The finite screen is complete and its result is a verified negative.",
+  "value": "not_reaching_target"
+ }
 }
