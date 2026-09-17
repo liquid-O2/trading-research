@@ -227,13 +227,15 @@ def test_j5_a_one_tick_poke_does_not_reach_the_exhaustion_area():
     """The negative control: a sweep that stops one tick beyond the edge is not
     the author's location."""
     market = _session(sweep_to=21257)  # a single tick below the 21258 low
-    _document, passes = _scan(market, "judas_reversal")
-    box_lows = [ep for ep in passes if ep["values"]["reference_kind"] == "box_low"]
-    assert not box_lows
     document = jj.scan_b02(market, {"branch": "judas_reversal"})
-    failed = [ep for ep in document["episodes"] if ep["values"].get("reference_kind") == "box_low"]
-    assert failed
-    stage = next(row for row in failed[0]["stages"] if row["stage"] == "location")
+    swept = [
+        ep
+        for ep in document["episodes"]
+        if ep["values"].get("location_kind") == "swept_liquidity" and ep["values"].get("reference_kind") == "box_low"
+    ]
+    assert swept
+    assert all(ep["research_verdict"] != "pass" for ep in swept)
+    stage = next(row for row in swept[0]["stages"] if row["stage"] == "location")
     assert stage["verdict"] == "fail"
     assert stage["operands"]["reason"] == "sweep_short_of_exhaustion_area"
 
@@ -256,17 +258,38 @@ def test_j6_the_day_read_is_recorded_with_its_inputs_and_gates_the_plays():
     assert skipped.isdisjoint(set(read["plays"]))
 
 
-def test_j6_a_decisive_trend_read_turns_the_judas_play_off():
-    """'Discard mean reversion and range double breaks when these things align'
-    (2026-07-28): the open outside prior value on the side the overnight
-    already purged, with a range above the 1.2% bin where the author's own
-    table finally puts a single break ahead."""
-    market = _session(box_low=21000, box_high=21500, open_price=20900, rth_open=20900, prior_low=21200, prior_high=21600, val=21250, vah=21550)
-    read = jj.session_context(market)["read"]
-    assert read["inputs"]["range_pct"] > jj.DOUBLE_BREAK_MAX_PCT
-    assert read["inputs"]["open_location"] == "below_pdl"
+def test_j6_the_classification_chooses_the_primary_play_and_never_empties_the_day():
+    """Coordinator guidance J-C, 2026-09-17: the plays are observed, not
+    switched by a threshold. "Discard mean reversion and range double breaks
+    when these things align" (2026-07-28) chooses which play leads, and the
+    author still trades the EQ on any day ("same framework when having a big
+    6-9 range > long/short the EQ")."""
+    trend = _session(box_low=21000, box_high=21500, open_price=20900, rth_open=20900, prior_low=21200, prior_high=21600, val=21250, vah=21550)
+    read = jj.session_context(trend)["read"]
     assert read["classification"] == "single_break"
-    assert "double_break" not in read["plays"]
+    assert read["primary_play"] == "single_break"
+    assert {"double_break", "single_break", "big_range_eq", "london"} <= set(read["plays"])
+
+    balanced = _session()
+    other = jj.session_context(balanced)["read"]
+    assert other["classification"] == "double_break"
+    assert other["primary_play"] == "double_break"
+    assert {"double_break", "single_break", "big_range_eq", "london"} <= set(other["plays"])
+
+
+def test_j_c_the_single_break_side_follows_the_break_the_session_shows():
+    """2026-07-27: "single break behaviour through A period, range mid provided
+    the entry area" -- one edge gone, the other untouched, and the trade is the
+    break's own direction."""
+    market = _session()
+    box = jj.box_geometry(market, "ny")
+    after_sweep = jj.break_state(market, box, market.at("10:00"))
+    assert after_sweep["broke_low"] is True
+    assert after_sweep["broke_high"] is False
+    assert after_sweep["single_break"] is True
+    assert after_sweep["side"] == "short"
+    before = jj.break_state(market, box, market.at("09:10"))
+    assert before["single_break"] is False
 
 
 # --------------------------------------------------------------------------- J7 and J8
@@ -309,13 +332,17 @@ def test_j9_range_size_bins_are_the_authors_five(pct, expected):
     assert jj.range_class(width, price)["bin"] == expected
 
 
-def test_j9_single_break_branches_read_the_range_size():
-    """Audit 1.3 J9: the old single_extended never read the range size at all."""
+def test_j9_the_range_size_bin_is_recorded_on_every_episode_and_in_the_read():
+    """Audit 1.3 J9: the old single_extended never read the range size at all.
+    It is now an input of the day read and an operand of every episode; after
+    the coordinator's J-C it is the primary-play choice, not a gate."""
     market = _session(box_low=21290, box_high=21310)  # a 20-point range, about 0.09%
     read = jj.session_context(market)["read"]
     assert read["inputs"]["range_bin"] == "0-0.3"
-    document = jj.scan_b02(market, {"branch": "single_extended"})
-    assert all(ep["branch"] != "single_extended" for ep in document["episodes"])
+    assert read["inputs"]["range_pct"] < Decimal("0.3")
+    document = jj.scan_b02(market, {"branch": "all"})
+    bins = {ep["stages"][0]["operands"].get("range_bin") for ep in document["episodes"]}
+    assert bins == {"0-0.3"}
 
 
 # --------------------------------------------------------------------------- J10 / J11 / J12

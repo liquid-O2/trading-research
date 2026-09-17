@@ -470,7 +470,7 @@ def session_references(market) -> tuple[list[dict[str, Any]], list[dict[str, Any
     refs: list[dict[str, Any]] = []
     omissions: list[dict[str, Any]] = []
 
-    def add_box(kind: str, branch: str, start: int, end: int, label: str) -> None:
+    def add_box(kind: str, branch: str, start: int, end: int, label: str, *, running_after: int | None = None) -> None:
         ref = _range(market, start, end, label)
         if ref is None:
             omissions.append({"reason": "reference_window_unavailable", "kind": kind})
@@ -488,11 +488,37 @@ def session_references(market) -> tuple[list[dict[str, Any]], list[dict[str, Any
                 "sides": ("long", "short"),
             }
         )
+        # G-D (coordinator guidance 2026-09-17): while a session is open its
+        # high and low so far are the reference the author trades -- 2026-07-30
+        # bought the London low at 04:00, inside the 02:00-05:00 box. The
+        # running reference goes live an hour after the session opens and is
+        # superseded by the frozen box at its close. The 09:00-10:00 NY box is
+        # the stated exception ("I wait until after 10AM").
+        if running_after is None:
+            return
+        running = _range(market, start, running_after, f"{label}-running")
+        if running is None:
+            return
+        refs.append(
+            {
+                "id": f"{kind}_running:{market.instrument_id}:{start}:{running_after}",
+                "kind": f"{kind}_running",
+                "branch": branch,
+                "low": _dec(running["low"]),
+                "high": _dec(running["high"]),
+                "known_at": int(running_after),
+                "live_from": int(running_after),
+                "window": [int(start), int(running_after)],
+                "sides": ("long", "short"),
+                "running": True,
+                "frozen_at": int(end),
+            }
+        )
 
     a_start, a_end = _box_ns(market, ASIA_BOX)
-    add_box("asia_box", "asia_box", a_start, a_end, "asia-box-20:00-00:00")
+    add_box("asia_box", "asia_box", a_start, a_end, "asia-box-20:00-00:00", running_after=a_start + HOUR)
     l_start, l_end = _box_ns(market, LONDON_BOX)
-    add_box("london_box", "london_box", l_start, l_end, "london-box-02:00-05:00")
+    add_box("london_box", "london_box", l_start, l_end, "london-box-02:00-05:00", running_after=l_start + HOUR)
     add_box("ny_box_09_10", "nyam_box", int(market.at("09:00")), int(market.at("10:00")), "ny-box-09-10")
     add_box("ny_box_10_11", "nyam_box", int(market.at("10:00")), int(market.at("11:00")), "ny-box-10-11")
     for hour in range(11, 16):
@@ -717,6 +743,10 @@ def sweep_cycles(
     return cycles
 
 
+def _five_minute_fail(cycle: Mapping[str, Any]) -> dict[str, Any] | None:
+    return cycle.get("fail")
+
+
 def failure_close(market, *, level: Decimal, side: str, cycle: Mapping[str, Any], end: int) -> dict[str, Any] | None:
     """The one-minute close back through the level: the author's fast fill.
 
@@ -727,46 +757,56 @@ def failure_close(market, *, level: Decimal, side: str, cycle: Mapping[str, Any]
     and the ticket prints inside that same five-minute bar). This mode reads the
     same failure on the one-minute clock and enters at its close.
     """
+    fail = _five_minute_fail(cycle)
+    if fail is None:
+        return None
+    # G-B (coordinator guidance 2026-09-17): the cycle ends with the failure the
+    # author waits for, not with the first one-minute poke back inside while
+    # price is still making new extremes (2026-08-27 13:00: ours fired at 12:38
+    # on the first poke; he waited for the sweep to 29,675). The one-minute read
+    # is therefore taken inside the five-minute bar that failed.
     sweep_at = int(cycle["sweep_at"])
-    deadline = min(int(end), sweep_at + FAIL_WINDOW_NS)
     extreme = _d(cycle.get("extreme"))
-    for row in _safe_bars(market, sweep_at, deadline):
+    window_end = min(int(end), int(fail.get("end") or (sweep_at + FIVE)))
+    for row in _safe_bars(market, sweep_at, window_end):
         close = _d(row.get("C"))
         hi, lo = _d(row.get("H")), _d(row.get("L"))
         beyond = (hi is not None and hi > level) if side == "short" else (lo is not None and lo < level)
-        if not beyond:
-            continue
-        if close is None:
+        if not beyond or close is None:
             continue
         through = close <= level if side == "short" else close >= level
-        if through:
-            return {
-                "entry": close,
-                "decision_at": int(row.get("known_at") or row.get("end")),
-                "bar": row,
-                "extreme": extreme,
-            }
-    return None
+        if through and (extreme is None or ((hi is not None and hi >= extreme) if side == "short" else (lo is not None and lo <= extreme))):
+            return {"entry": close, "decision_at": int(row.get("known_at") or row.get("end")), "bar": row, "extreme": extreme}
+    return {
+        "entry": _d(fail.get("C")),
+        "decision_at": int(fail.get("known_at") or fail.get("end")),
+        "bar": fail,
+        "extreme": extreme,
+    }
+
+
+RETEST_WINDOW_NS = 4 * HOUR
 
 
 def at_level_fill(market, *, level: Decimal, side: str, cycle: Mapping[str, Any], end: int) -> dict[str, Any] | None:
-    """The resting limit at the level, filled only after the failure is visible.
+    """The resting limit at the level, filled on the retest after the failure.
 
-    The author parks the limit at the level once the failure is visible
-    (2026-09-15 filled on the 10:05 retest of the 09:00-10:00 high; 2026-09-03
-    filled exactly at the swept Asia high). The fill is taken at the first bar
-    at or after the one-minute failure close whose range contains the level, so
-    nothing is filled before the evidence that admitted it.
+    "Once closed below, low risk entry on any retracement with stops above PDL"
+    (GB p.3). G-A (coordinator guidance 2026-09-17): the fill is the retest of
+    the level, not the confirming close -- 2026-09-03 closes below the True Day
+    Open at 00:30 and fills 29,238.25 at 00:45; 2026-07-13 closes below the PDL
+    at 19:01 and fills at 20:40; 2026-09-14 closes above the London low at 09:35
+    and fills 28,903 at 09:40. The retest is searched for the rest of the
+    session, bounded at four hours, and nothing is filled before the close that
+    made the failure observable.
     """
     visible = failure_close(market, level=level, side=side, cycle=cycle, end=end)
     if visible is None:
         return None
     from_ns = int(visible["decision_at"])
-    for row in _safe_bars(market, from_ns, min(int(end), int(cycle["sweep_at"]) + FAIL_WINDOW_NS)):
+    for row in _safe_bars(market, from_ns, min(int(end), from_ns + RETEST_WINDOW_NS)):
         lo, hi = _d(row.get("L")), _d(row.get("H"))
-        if lo is None or hi is None:
-            continue
-        if int(row.get("start") or 0) < from_ns:
+        if lo is None or hi is None or int(row.get("start") or 0) < from_ns:
             continue
         if lo <= level <= hi:
             return {"entry": level, "decision_at": int(row.get("known_at") or row.get("end")), "visible_at": from_ns}
@@ -1379,6 +1419,30 @@ def _fail_branch_episodes(market, refs: Sequence[Mapping[str, Any]], objectives:
                         minute_cycle,
                     )
                 )
+                # G-G: an overnight sweep is re-entered after the open at the
+                # same level (2025-11-19 swept and reclaimed the previous week's
+                # low at 04:18 and the author bought it at 10:00). It is a second
+                # fill of the same opportunity, not a second setup.
+                open_ns = int(market.at("09:30"))
+                if minute is not None and int(minute["decision_at"]) < open_ns < int(end):
+                    post = None
+                    for row in _safe_bars(market, open_ns, min(int(end), open_ns + RETEST_WINDOW_NS)):
+                        row_lo, row_hi = _d(row.get("L")), _d(row.get("H"))
+                        if row_lo is None or row_hi is None:
+                            continue
+                        if row_lo <= level <= row_hi:
+                            post = row
+                            break
+                    modes.append(
+                        (
+                            "post_open_retest",
+                            None if post is None else level,
+                            None if post is None else int(post.get("known_at") or post.get("end")),
+                            ("GB-FAIL-limit-at-level",),
+                            {"overnight_failure_at_ns": int(minute["decision_at"])},
+                            minute_cycle,
+                        )
+                    )
                 for mode, entry, at_ns, rule_ids, extra, use_cycle in modes:
                     episodes.append(
                         _level_trade(
@@ -1406,8 +1470,15 @@ def _scan_nyam(market, refs, objectives) -> list[dict[str, Any]]:
 
 
 def _scan_previous_hour(market, refs, objectives) -> list[dict[str, Any]]:
-    """The completed hour as the portable reference, from 12:00 ("if you are
-    trading later hours", GB p.7)."""
+    """The previous hour's high and low, "if you are trading later hours".
+
+    G-E (coordinator guidance 2026-09-17): the author's reference is the swing
+    of the trailing sixty minutes, not only a completed clock hour -- 2026-04-23
+    and 2026-08-27 sell at 13:00 the sweep of a high made at 12:15-12:45, and
+    2026-08-13 sells at 11:45 the failure of the 11:30 spike. The rolling
+    reference is re-cut every fifteen minutes and sits beside the completed
+    clock-hour boxes.
+    """
     gated = []
     for ref in refs:
         if not str(ref["kind"]).startswith("hour_box_"):
@@ -1415,6 +1486,28 @@ def _scan_previous_hour(market, refs, objectives) -> list[dict[str, Any]]:
         item = dict(ref)
         item["live_from"] = max(int(ref["live_from"]), int(market.at(PREVIOUS_HOUR_FROM)))
         gated.append(item)
+    step = 15 * MINUTE
+    cursor = int(market.at("11:00"))
+    session_end = int(market.at("16:00"))
+    while cursor <= session_end:
+        window_start = cursor - HOUR
+        span = _range(market, window_start, cursor, f"trailing-hour-{cursor}")
+        if span is not None:
+            gated.append(
+                {
+                    "id": f"trailing_hour:{market.instrument_id}:{cursor}",
+                    "kind": "trailing_hour",
+                    "branch": "previous_hour",
+                    "low": _dec(span["low"]),
+                    "high": _dec(span["high"]),
+                    "known_at": cursor,
+                    "live_from": cursor,
+                    "window": [window_start, cursor],
+                    "sides": ("long", "short"),
+                    "rolling": True,
+                }
+            )
+        cursor += step
     return _fail_branch_episodes(market, gated, objectives, kinds={ref["kind"] for ref in gated})
 
 
@@ -1557,91 +1650,115 @@ def _scan_london(market, refs, objectives) -> list[dict[str, Any]]:
 
 
 def _scan_cash_open(market, refs, objectives) -> list[dict[str, Any]]:
-    """G4: the 09:30 manipulation, reclaim, and the retracement objective.
+    """G4/G-C: the 09:30 manipulation, the reclaim, and the retracement.
 
     "9:30am manipulation below, reclaim, enter for longs targeting retracement
-    into discount, stops at lows" (GB p.3). The objective is the retracement of
-    the pre-open range, not ``open + 0.5 x sweep depth``; the stop is the
-    manipulation extreme. Both directions: the mirror of the long is the short
-    after a manipulation above.
+    into discount, stops at lows" (GB p.3). G-C (coordinator guidance
+    2026-09-17): the reference the open reaction sweeps is the pre-open range --
+    the 09:00-09:30 extremes, the 06:00-09:30 extremes and the overnight
+    extremes -- and the fill is the limit at that level, not the open print
+    (2026-08-31 sells 29,510.5 at the swept pre-open high at 09:33, not 29,467
+    at the open). This is the one play in which the 09:00-09:30 range is a
+    reference; the 09:00-10:00 box itself stays "after 10AM".
     """
-    pre = _range(market, int(market.at("06:00")), int(market.at("09:30")), "gb-preopen-06-0930")
     open_rows = _safe_bars(market, int(market.at("09:30")), int(market.at("09:31")))
-    if pre is None or not open_rows:
+    if not open_rows:
         return []
     open_px = _d(open_rows[0].get("O"))
     if open_px is None:
         return []
-    pre_low, pre_high = _dec(pre["low"]), _dec(pre["high"])
-    ref = {
-        "id": f"cash_open:{market.instrument_id}:{market.day}",
-        "kind": "cash_open",
-        "branch": "cash_open_reclaim_case",
-        "low": pre_low,
-        "high": pre_high,
-        "known_at": int(market.at("09:30")),
-        "live_from": int(market.at("09:30")),
+    windows = {
+        "pre_open_09_0930": (int(market.at("09:00")), int(market.at("09:30"))),
+        "pre_open_06_0930": (int(market.at("06:00")), int(market.at("09:30"))),
+        "overnight": (int(market.start), int(market.at("09:30"))),
     }
+    spans = {}
+    for name, (start, stop) in windows.items():
+        span = _range(market, start, stop, f"gb-{name}")
+        if span is not None:
+            spans[name] = span
+    if not spans:
+        return []
+    pre = spans.get("pre_open_06_0930") or next(iter(spans.values()))
+    pre_low, pre_high = _dec(pre["low"]), _dec(pre["high"])
     out: list[dict[str, Any]] = []
-    levels = [("cash_open", open_px), ("pre_open_high", pre_high), ("pre_open_low", pre_low)]
-    for side, (level_name, level_px) in [(s, item) for s in ("long", "short") for item in levels]:
-        cycles = sweep_cycles(
-            market,
-            level=level_px,
-            side=side,
-            begin=int(market.at("09:30")),
-            end=min(int(market.end), int(market.at("11:00"))),
-            max_cycles=1,
-        )
-        if not cycles:
-            continue
-        cycle = cycles[0]
-        fail = cycle.get("fail")
-        minute = failure_close(market, level=level_px, side=side, cycle=cycle, end=min(int(market.end), int(market.at("11:00"))))
-        if minute is not None:
-            cycle = {**cycle, "fail": minute["bar"], "fail_at": minute["decision_at"], "status": "failed"}
-            fail = minute["bar"]
-            entry, at_ns = minute["entry"], minute["decision_at"]
-        else:
-            entry = None if fail is None else _d(fail.get("C"))
-            at_ns = None if fail is None else int(fail.get("known_at") or fail.get("end"))
-        # objective: the pocket of the pre-open range in the trade's direction,
-        # then the range extreme.
-        pocket = pocket_in_leg_direction(pre_low, pre_high, "long" if side == "long" else "short")
-        first = pocket[0] if side == "long" else pocket[1]
-        target = pre_high if side == "long" else pre_low
-        extreme = _d(cycle.get("extreme"))
-        stop = None if extreme is None else (extreme - SWEEP_STOP_BUFFER if side == "long" else extreme + SWEEP_STOP_BUFFER)
-        out.append(
-            _level_trade(
-                market,
-                family="GB-FAIL",
-                branch="cash_open_reclaim_case",
-                side=side,
-                ref={**ref, "low": pre_low, "high": pre_high},
-                level=level_px,
-                cycle=cycle,
-                mode="five_minute_close",
-                entry=entry,
-                decision_at=at_ns,
-                objectives=objectives,
-                rule_ids=("GB-CASH-OPEN-reclaim",),
-                stop_override=stop,
-                target_override=target,
-                first_objective_override=first,
-                extra_values={"cash_open": open_px, "pre_open_range": [pre_low, pre_high], "retracement_first_rung": first, "cash_open_level": level_name},
-                extra_stages=[
-                    _stage(
-                        "objective",
-                        "pass" if entry is not None and target is not None and sign(side) * (target - entry) > 0 else "fail",
-                        at_ns,
-                        first_objective=first,
-                        far_objective=target,
-                        rule="retracement of the pre-open range, then its extreme",
-                    )
-                ],
+    end = min(int(market.end), int(market.at("11:00")))
+    seen: set[tuple] = set()
+    levels = [("cash_open", open_px)]
+    for name, span in spans.items():
+        levels.append((f"{name}_high", _dec(span["high"])))
+        levels.append((f"{name}_low", _dec(span["low"])))
+    for side in ("long", "short"):
+        for level_name, level_px in levels:
+            key = (side, str(level_px))
+            if key in seen:
+                continue
+            seen.add(key)
+            ref = {
+                "id": f"cash_open:{market.instrument_id}:{market.day}:{level_name}",
+                "kind": "cash_open",
+                "branch": "cash_open_reclaim_case",
+                "low": pre_low,
+                "high": pre_high,
+                "known_at": int(market.at("09:30")),
+                "live_from": int(market.at("09:30")),
+            }
+            cycles = sweep_cycles(
+                market, level=level_px, side=side,
+                begin=int(market.at("09:30")), end=end,
+                box_low=pre_low, box_high=pre_high, max_cycles=1,
             )
-        )
+            if not cycles:
+                continue
+            cycle = cycles[0]
+            extreme = _d(cycle.get("extreme"))
+            stop = None if extreme is None else (extreme - SWEEP_STOP_BUFFER if side == "long" else extreme + SWEEP_STOP_BUFFER)
+            pocket = pocket_in_leg_direction(pre_low, pre_high, side)
+            first = pocket[0] if side == "long" else pocket[1]
+            target = pre_high if side == "long" else pre_low
+            minute = failure_close(market, level=level_px, side=side, cycle=cycle, end=end)
+            use_cycle = cycle if minute is None else {**cycle, "fail": minute["bar"], "fail_at": minute["decision_at"], "status": "failed"}
+            fill = at_level_fill(market, level=level_px, side=side, cycle=cycle, end=end)
+            modes = [
+                ("at_level", None if fill is None else fill["entry"], None if fill is None else fill["decision_at"]),
+                ("failure_close_1m", None if minute is None else minute["entry"], None if minute is None else minute["decision_at"]),
+            ]
+            for mode, entry, at_ns in modes:
+                out.append(
+                    _level_trade(
+                        market,
+                        family="GB-FAIL",
+                        branch="cash_open_reclaim_case",
+                        side=side,
+                        ref=ref,
+                        level=level_px,
+                        cycle=use_cycle,
+                        mode=mode,
+                        entry=entry,
+                        decision_at=at_ns,
+                        objectives=objectives,
+                        rule_ids=("GB-CASH-OPEN-reclaim",),
+                        stop_override=stop,
+                        target_override=target,
+                        first_objective_override=first,
+                        extra_values={
+                            "cash_open": open_px,
+                            "pre_open_range": [pre_low, pre_high],
+                            "retracement_first_rung": first,
+                            "cash_open_level": level_name,
+                        },
+                        extra_stages=[
+                            _stage(
+                                "objective",
+                                "pass" if entry is not None and sign(side) * (target - entry) > 0 else "fail",
+                                at_ns,
+                                first_objective=first,
+                                far_objective=target,
+                                rule="retracement of the pre-open range, then its extreme",
+                            )
+                        ],
+                    )
+                )
     return out
 
 
