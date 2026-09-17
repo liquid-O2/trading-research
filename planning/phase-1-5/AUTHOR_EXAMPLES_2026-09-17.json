@@ -2487,7 +2487,11 @@
      "action": "sell",
      "qty": 1,
      "price": 29246.5,
-     "note": "SELL 1 | R:R 1.48; stop 27 ticks (29253.25); target 40 ticks (29236.50)"
+     "note": "SELL 1 | R:R 1.48; stop 27 ticks (29253.25); target 40 ticks (29236.50) | proper entry marked 2026-09-17 (pass 9): the ticketed fill, per the user's rule for Sires/Saint",
+     "proper_entry": true,
+     "side": "short",
+     "branch": "ofm",
+     "marked_by": "ticket"
     }
    ],
    "expected_detection": {
@@ -2495,7 +2499,8 @@
     "side": "short",
     "reference": "failed squeeze into 29246-29251",
     "entry_window_et": "10:40-10:52"
-   }
+   },
+   "n_proper_entries": 1
   },
   {
    "id": "SI-2026-07-09",
@@ -2523,14 +2528,22 @@
      "action": "buy",
      "qty": 1,
      "price": 29812.25,
-     "note": "stop 29798.25 (57 ticks), target +145 ticks (29848.50), R:R 2.54"
+     "note": "stop 29798.25 (57 ticks), target +145 ticks (29848.50), R:R 2.54 | proper entry marked 2026-09-17 (pass 9): the ticketed fill, per the user's rule for Sires/Saint",
+     "proper_entry": true,
+     "side": "long",
+     "branch": "ofm",
+     "marked_by": "ticket"
     },
     {
      "time_et": "09:51",
      "action": "buy",
      "qty": 1,
      "price": 29856,
-     "note": "BUY 1 | R:R 1.31 toward 29888"
+     "note": "BUY 1 | R:R 1.31 toward 29888 | proper entry marked 2026-09-17 (pass 9): the ticketed fill, per the user's rule for Sires/Saint",
+     "proper_entry": true,
+     "side": "long",
+     "branch": "refill",
+     "marked_by": "ticket"
     }
    ],
    "expected_detection": {
@@ -2538,7 +2551,8 @@
     "side": "long",
     "reference": "OFM 29811.25 with the aggression box 29790-29797",
     "entry_window_et": "09:31-10:06"
-   }
+   },
+   "n_proper_entries": 2
   },
   {
    "id": "SI-2026-07-10",
@@ -2566,14 +2580,22 @@
      "action": "sell",
      "qty": 1,
      "price": 29901.75,
-     "note": "replay: stop 29911.75 (-200); later flat with daily +565; the exact exit fill is not printed (29873.50 is the inferred level)"
+     "note": "replay: stop 29911.75 (-200); later flat with daily +565; the exact exit fill is not printed (29873.50 is the inferred level) | proper entry marked 2026-09-17 (pass 9): the ticketed fill, per the user's rule for Sires/Saint",
+     "proper_entry": true,
+     "side": "short",
+     "branch": "ofm",
+     "marked_by": "ticket"
     },
     {
      "time_et": "10:24",
      "action": "sell",
      "qty": 1,
      "price": 29909.75,
-     "note": "plan ticket SELL 1 | R:R 5.71; stop 7 ticks (29911.50); target 40 ticks (29900.00)"
+     "note": "plan ticket SELL 1 | R:R 5.71; stop 7 ticks (29911.50); target 40 ticks (29900.00) | proper entry marked 2026-09-17 (pass 9): the ticketed fill, per the user's rule for Sires/Saint",
+     "proper_entry": true,
+     "side": "short",
+     "branch": "ofm",
+     "marked_by": "ticket"
     }
    ],
    "expected_detection": {
@@ -2581,7 +2603,8 @@
     "side": "short",
     "reference": "SQ C 29908.64 reclaimed then failed",
     "entry_window_et": "10:13-10:33"
-   }
+   },
+   "n_proper_entries": 2
   },
   {
    "id": "SI-2026-07-14",
@@ -2616,28 +2639,44 @@
      "action": "buy",
      "qty": 1,
      "price": 29757.25,
-     "note": "stop 29744.25, target 29804.25; +755 (exit 29795)"
+     "note": "stop 29744.25, target 29804.25; +755 (exit 29795) | proper entry marked 2026-09-17 (pass 9): the ticketed fill, per the user's rule for Sires/Saint",
+     "proper_entry": true,
+     "side": "long",
+     "branch": "refill",
+     "marked_by": "ticket"
     },
     {
      "time_et": "10:15",
      "action": "sell",
      "qty": 1,
      "price": 29608.5,
-     "note": "third retest, no buyers; image shows -100 floating with a -235 working stop at 29621.25, not a filled -100 stop"
+     "note": "third retest, no buyers; image shows -100 floating with a -235 working stop at 29621.25, not a filled -100 stop | proper entry marked 2026-09-17 (pass 9): the ticketed fill, per the user's rule for Sires/Saint",
+     "proper_entry": true,
+     "side": "short",
+     "branch": "band_failure",
+     "marked_by": "ticket"
     },
     {
      "time_et": "10:17",
      "action": "buy",
      "qty": 1,
      "price": 29654.5,
-     "note": "stop 29640.00 (58 ticks, unchanged in the images); target extended from 40 to 106 ticks (R:R 0.69 -> 1.83), narrated trail not visible; band 29680.25"
+     "note": "stop 29640.00 (58 ticks, unchanged in the images); target extended from 40 to 106 ticks (R:R 0.69 -> 1.83), narrated trail not visible; band 29680.25 | proper entry marked 2026-09-17 (pass 9): the ticketed fill, per the user's rule for Sires/Saint",
+     "proper_entry": true,
+     "side": "long",
+     "branch": "kg1_retest",
+     "marked_by": "ticket"
     },
     {
      "time_et": "10:36",
      "action": "sell",
      "qty": 1,
      "price": 29764.25,
-     "note": "stop 29769.25, target 29721.50 (+855 limit); position still open in the image (-55 floating); day about +1000 per the six-account card"
+     "note": "stop 29769.25, target 29721.50 (+855 limit); position still open in the image (-55 floating); day about +1000 per the six-account card | proper entry marked 2026-09-17 (pass 9): the ticketed fill, per the user's rule for Sires/Saint",
+     "proper_entry": true,
+     "side": "short",
+     "branch": "resistance_fade",
+     "marked_by": "ticket"
     }
    ],
    "expected_detection": {
@@ -2645,7 +2684,8 @@
     "side": "long; short; long; short",
     "reference": "as listed",
     "entry_window_et": "09:30-10:40"
-   }
+   },
+   "n_proper_entries": 4
   },
   {
    "id": "SI-2026-07-15-OVERNIGHT",
@@ -2683,7 +2723,11 @@
      "action": "sell",
      "qty": 1,
      "price": 30045,
-     "note": "SELL 1 | R:R 2.00; stop 20 ticks (-100); target 40 ticks (+200)"
+     "note": "SELL 1 | R:R 2.00; stop 20 ticks (-100); target 40 ticks (+200) | proper entry marked 2026-09-17 (pass 9): the ticketed fill, per the user's rule for Sires/Saint",
+     "proper_entry": true,
+     "side": "short",
+     "branch": "absorption_short",
+     "marked_by": "ticket"
     }
    ],
    "expected_detection": {
@@ -2691,7 +2735,8 @@
     "side": "short",
     "reference": "absorption box 30050-30056 with the speed-of-tape and CVD read",
     "entry_window_et": "00:55-01:05"
-   }
+   },
+   "n_proper_entries": 1
   },
   {
    "id": "SI-2026-07-23",
@@ -2719,7 +2764,8 @@
     "side": "as attempted",
     "reference": "band 28700-28765",
     "entry_window_et": "10:05-10:35"
-   }
+   },
+   "no_proper_entry_reason": "nine attempts in the 28,700-28,765 band without individual tickets (ANAT pp.5-9); the drawn BUY/SELL on pp.8-9 are risk illustrations"
   },
   {
    "id": "SI-2026-07-31",
@@ -2769,14 +2815,22 @@
      "action": "sell",
      "qty": 1,
      "price": 28693.5,
-     "note": "pre-file; -40"
+     "note": "pre-file; -40 | proper entry marked 2026-09-17 (pass 9): the ticketed fill, per the user's rule for Sires/Saint",
+     "proper_entry": true,
+     "side": "short",
+     "branch": "ofm",
+     "marked_by": "ticket"
     },
     {
      "time_et": "09:35",
      "action": "sell",
      "qty": 1,
      "price": 28670.75,
-     "note": "OFM short; stop trailed to 28632.00 (09:38) then 28608.75 (09:39); target 28555.75 then 28538.50 (+2645)"
+     "note": "OFM short; stop trailed to 28632.00 (09:38) then 28608.75 (09:39); target 28555.75 then 28538.50 (+2645) | proper entry marked 2026-09-17 (pass 9): the ticketed fill, per the user's rule for Sires/Saint",
+     "proper_entry": true,
+     "side": "short",
+     "branch": "ofm",
+     "marked_by": "ticket"
     },
     {
      "time_et": "09:42",
@@ -2788,7 +2842,8 @@
     "side": "short",
     "reference": "OFM 28685; third attempt with refreshing sellers; entry 28670.75",
     "entry_window_et": "09:31-09:40"
-   }
+   },
+   "n_proper_entries": 2
   },
   {
    "id": "SI-2026-08-04",
@@ -2830,7 +2885,11 @@
      "action": "buy",
      "qty": 1,
      "price": 29304.25,
-     "note": "stop raised to 29321.50; target 29358.25"
+     "note": "stop raised to 29321.50; target 29358.25 | proper entry marked 2026-09-17 (pass 9): the ticketed fill, per the user's rule for Sires/Saint",
+     "proper_entry": true,
+     "side": "long",
+     "branch": "drive",
+     "marked_by": "ticket"
     },
     {
      "time_et": "09:33",
@@ -2843,7 +2902,11 @@
      "time_et": "09:37-09:38",
      "action": "sell_stop",
      "price": 29370.25,
-     "note": "resting entry below the failed-squeeze wick; target limit 29354.75 (+310)"
+     "note": "resting entry below the failed-squeeze wick; target limit 29354.75 (+310) | proper entry marked 2026-09-17 (pass 9): the ticketed fill, per the user's rule for Sires/Saint",
+     "proper_entry": true,
+     "side": "short",
+     "branch": "ofm",
+     "marked_by": "ticket"
     }
    ],
    "expected_detection": {
@@ -2851,7 +2914,8 @@
     "side": "long then short",
     "reference": "09:30 drive from the 29290 aggression box; OFM 29362.50",
     "entry_window_et": "09:30-09:40"
-   }
+   },
+   "n_proper_entries": 2
   },
   {
    "id": "SI-2026-08-06",
@@ -2911,28 +2975,44 @@
      "action": "buy",
      "qty": 1,
      "price": 29258,
-     "note": "BUY 1 | R:R 6.78; stop 29242 (-315)"
+     "note": "BUY 1 | R:R 6.78; stop 29242 (-315) | proper entry marked 2026-09-17 (pass 9): the ticketed fill, per the user's rule for Sires/Saint",
+     "proper_entry": true,
+     "side": "long",
+     "branch": "band_defence",
+     "marked_by": "ticket"
     },
     {
      "time_et": "09:36",
      "action": "buy",
      "qty": 1,
      "price": 29380.75,
-     "note": "BUY 1 | R:R 4.85; stop 29362.75 (-360); target 29468 (+1745)"
+     "note": "BUY 1 | R:R 4.85; stop 29362.75 (-360); target 29468 (+1745) | proper entry marked 2026-09-17 (pass 9): the ticketed fill, per the user's rule for Sires/Saint",
+     "proper_entry": true,
+     "side": "long",
+     "branch": "failed_auction",
+     "marked_by": "ticket"
     },
     {
      "time_et": "09:52-10:04",
      "action": "sell",
      "qty": 1,
      "price": 29550,
-     "note": "SELL 1 | R:R 3.67; stop 29559 (-180); target 29517 (+660); and SELL 1 | R:R 5.00 stop 29558.50 target 29507.50"
+     "note": "SELL 1 | R:R 3.67; stop 29559 (-180); target 29517 (+660); and SELL 1 | R:R 5.00 stop 29558.50 target 29507.50 | proper entry marked 2026-09-17 (pass 9): the ticketed fill, per the user's rule for Sires/Saint",
+     "proper_entry": true,
+     "side": "short",
+     "branch": "balance_fade",
+     "marked_by": "ticket"
     },
     {
      "time_et": "10:04",
      "action": "buy",
      "qty": 1,
      "price": 29500,
-     "note": "BUY 1 | R:R 5.68; stop 29486 (-285); target 29580"
+     "note": "BUY 1 | R:R 5.68; stop 29486 (-285); target 29580 | proper entry marked 2026-09-17 (pass 9): the ticketed fill, per the user's rule for Sires/Saint",
+     "proper_entry": true,
+     "side": "long",
+     "branch": "refill",
+     "marked_by": "ticket"
     }
    ],
    "expected_detection": {
@@ -2940,7 +3020,8 @@
     "side": "long; long; short; long",
     "reference": "as listed",
     "entry_window_et": "09:30-10:10"
-   }
+   },
+   "n_proper_entries": 4
   },
   {
    "id": "SI-2026-08-19",
@@ -2986,7 +3067,11 @@
      "action": "sell",
      "qty": 1,
      "price": 29665,
-     "note": "OFM short; price ran 29660 -> 29565 by 09:48"
+     "note": "OFM short; price ran 29660 -> 29565 by 09:48 | proper entry marked 2026-09-17 (pass 9): the ticketed fill, per the user's rule for Sires/Saint",
+     "proper_entry": true,
+     "side": "short",
+     "branch": "ofm",
+     "marked_by": "ticket"
     }
    ],
    "expected_detection": {
@@ -2994,7 +3079,8 @@
     "side": "short",
     "reference": "refill zone 29720-29740; OFM 29657",
     "entry_window_et": "08:30-09:50"
-   }
+   },
+   "n_proper_entries": 1
   },
   {
    "id": "SA-2026-08-10-ASIA",
@@ -3033,7 +3119,11 @@
      "action": "sell",
      "qty": null,
      "price": 29729.25,
-     "note": "retest short after the break below 29740; drawn stop 29736.75 (7.5 points), drawn target 29678.75 (50.5 points, 6.73R); quantity not printed (a 5-lot MNQ read of the +$501.50 realized panel is an inference)"
+     "note": "retest short after the break below 29740; drawn stop 29736.75 (7.5 points), drawn target 29678.75 (50.5 points, 6.73R); quantity not printed (a 5-lot MNQ read of the +$501.50 realized panel is an inference) | proper entry marked 2026-09-17 (pass 9): the ticketed fill, per the user's rule for Sires/Saint",
+     "proper_entry": true,
+     "side": "short",
+     "branch": "continuation_retest",
+     "marked_by": "ticket"
     },
     {
      "time_et": "later",
@@ -3047,7 +3137,8 @@
     "side": "short",
     "reference": "balance 29600-29960; break below 29740; single retest",
     "entry_window_et": "19:30-20:15"
-   }
+   },
+   "n_proper_entries": 1
   },
   {
    "id": "SA-2026-08-04-12-WIC",
@@ -3097,7 +3188,8 @@
     "side": "short",
     "reference": "29740 break and retest",
     "entry_window_et": "session of the retest"
-   }
+   },
+   "no_proper_entry_reason": "a week-long chart with the break and retest narrated, no ticket"
   },
   {
    "id": "MB-2026-07-K10",
