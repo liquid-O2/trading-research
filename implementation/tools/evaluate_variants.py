@@ -196,7 +196,11 @@ def main(argv=None) -> int:
     names = sorted({v for s in sessions for v in s["variants"]} - {BASELINE})
     report = {}
     for family in args.families.split(","):
-        applicable = [v for v in names if v.startswith(family.split("-")[0])]
+        # a family's candidates carry its prefix (JJ-..., GB-...); a policy that
+        # applies to every family (the exit policies E1..E4) carries the
+        # family's stats in its session lines instead
+        prefix = family.split("-")[0]
+        applicable = [v for v in names if v.startswith(prefix) or any(family in (s["variants"].get(v) or {}) for s in sessions[:200])]
         report[family] = evaluate(sessions, family, applicable)
         print(json.dumps({"family": family, "variants": len(applicable), "sessions": report[family]["baseline_sessions"]}))
     args.out.mkdir(parents=True, exist_ok=True)

@@ -80,7 +80,7 @@ def objective_for(boxes: list[dict], entry: Decimal, side: str, at_ns: int) -> D
     return best
 
 
-def scan_one(day: str, table_path: str, variants: list[dict]) -> dict:
+def scan_one(day: str, table_path: str, variants: list[dict], export_candidates: bool = False) -> dict:
     from trading_research.research.method_pack import historical_runner as hr
     from trading_research.research.method_pack.historical_features import HistoricalFeatures
     from trading_research.research.rule_discovery.baseline import PHASE1_RUN
@@ -128,7 +128,12 @@ def scan_one(day: str, table_path: str, variants: list[dict]) -> dict:
                 if box["consumed_at"] is not None and at > box["consumed_at"] and box["known_at"] < session_open:
                     continue
                 entry, stop = _d(fill["entry"]), _d(fill.get("stop"))
-                if entry is None or stop is None or entry == stop:
+                if stop is None:
+                    # the mechanics that carry no stop of their own (defended
+                    # band, reclaim, break-retest) rest it a tick beyond the
+                    # box's far edge: "stop below the aggression" (OFM)
+                    stop = (lo - _RS.STOP_BEYOND) if side == "long" else (hi + _RS.STOP_BEYOND)
+                if entry is None or stop is None or entry == stop or ((entry <= stop) if side == "long" else (entry >= stop)):
                     continue
                 target = objective_for(boxes, entry, side, at)
                 if target is None or abs(target - entry) / abs(entry - stop) < MIN_RR:
@@ -153,7 +158,11 @@ def scan_one(day: str, table_path: str, variants: list[dict]) -> dict:
         stats = _POP.executed_points(executed)
         stats["n_candidates"] = len(pool)
         results[variant["name"]] = {"SIRES": stats}
-    return {"date": day, "seconds": round(time.monotonic() - started, 2), "n_boxes": len(boxes), "n_candidates": len(pool), "variants": results, "reads": {}}
+    out = {"date": day, "seconds": round(time.monotonic() - started, 2), "n_boxes": len(boxes), "n_candidates": len(pool), "variants": results, "reads": {}}
+    if export_candidates:
+        # the admitted opportunities themselves (the grading study's candidate list)
+        out["candidates"] = pool
+    return out
 
 
 def main(argv=None) -> int:
@@ -164,6 +173,7 @@ def main(argv=None) -> int:
     parser.add_argument("--dates", default=None)
     parser.add_argument("--limit", type=int, default=None)
     parser.add_argument("--selection-variants", type=Path, default=None)
+    parser.add_argument("--export-candidates", action="store_true", help="write each session's admitted candidate list into its session line (the grading study's rows)")
     args = parser.parse_args(argv)
     from trading_research.research.method_pack import historical_runner as hr
     from trading_research.research.rule_discovery.baseline import PHASE1_RUN
@@ -189,7 +199,7 @@ def main(argv=None) -> int:
     started = time.monotonic()
     with (args.out / "rows.jsonl").open("w") as sink:
         with ProcessPoolExecutor(max_workers=max(1, args.workers)) as pool:
-            futures = {pool.submit(scan_one, day, str(args.boxes), variants): day for day in dates}
+            futures = {pool.submit(scan_one, day, str(args.boxes), variants, args.export_candidates): day for day in dates}
             done = 0
             for future in as_completed(futures):
                 day = futures[future]
