@@ -1347,7 +1347,9 @@ def _scan_judas_reversal(market) -> tuple[list[dict[str, Any]], list[dict[str, A
             at_ns = None if confirmed is None else confirmed["at"]
             stop = None if confirmed is None else confirmed["stop"]
             ladder = objective_ladder(box, side)
-            forward = [row for row in ladder if sign(side) * (row["price"] - level) > 0]
+            # the first rung the fill has not already passed
+            anchor = entry if entry is not None else level
+            forward = [row for row in ladder if sign(side) * (row["price"] - anchor) > 0]
             target = forward[0]["price"] if forward else None
             in_modal = modal_lo <= int(cycle["sweep_at"]) < modal_hi
             stages = [

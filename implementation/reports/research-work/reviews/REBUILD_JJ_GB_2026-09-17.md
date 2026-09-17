@@ -157,3 +157,78 @@ clock, which is how the tickets are filled inside the five-minute bar
 (2026-08-28 prints at 10:05 inside the 10:00-10:05 bar). All three are
 alternative fills of one opportunity; the selection layer and the opportunity
 count treat them as one.
+
+## 6. Open questions
+
+Parameters the sources do not state, and readings only the user or a new source
+can settle. None of them was chosen to make a number come out.
+
+1. **The Green Bird fail window.** `FAIL_WINDOW_BARS = 12` (60 minutes) bounds
+   the gap between a sweep and its failing five-minute close. The source states
+   no window. The bound is four times the longest sweep-to-entry gap on the
+   tickets (15 minutes on 2026-09-15, 2026-08-27 and 2026-04-23), chosen so no
+   ticket is excluded while a level that "fails" hours later is not counted.
+2. **Sweep cycles per level.** `MAX_CYCLES_PER_LEVEL = 6`. The author re-trades
+   a level inside one session (2026-08-27 traded the 09:00-10:00 box high on a
+   later excursion at 13:00) but never says how often. Six is our bound; the
+   population is reported per cycle so a different bound can be read off it.
+3. **"Hold".** `CONTINUATION_HOLD_BARS = 2`. "Break out and hold" is not
+   quantified anywhere in the archive.
+4. **The stop buffer.** `SWEEP_STOP_BUFFER = 2` points beyond the sweep wick.
+   The source says "beyond the wick" and the tickets bracket it: 2026-09-03
+   stops exactly on the sweep extreme, 2026-08-31 stops 22 points past it,
+   2026-09-15 and 2026-08-27 stop *inside* the wick above the retest high.
+5. **The big-range threshold.** `BIG_RANGE_MIN_PCT = 0.8%` for "same framework
+   when having a big 6-9 range > long/short the EQ". The author never gives a
+   number; the bin boundary is his.
+6. **The trend switch.** `DOUBLE_BREAK_MAX_PCT = 1.2%` is read off the author's
+   own 3,249-day table as the first bin where a single break leads by modal
+   category. He states the table, not the switch.
+7. **PWH/PWL as an entry reference.** The audit calls it "unverifiable as an
+   entry" (2.2) yet `GB-2025-11-19` prints a previous-week-low sweep, reclaim
+   and long at 24,625 with the PDH as the objective. It is kept as both a
+   reference and an objective rung. Which reading does the user want?
+8. **The mirrored session entries** (audit 2.5). We enumerate both edges of
+   every session box on both sides; no dated chart shows an Asia-low long or a
+   London-high short as the entry.
+9. **PDH/PDL scope.** The previous CME session (18:00-16:00) reproduces the
+   printed PDL on 2026-09-01 (ours 29,273.50 against his 29,270) where the
+   RTH-only scope does not (29,355). PWH/PWL stay RTH-only: the shared
+   prior-period loader supplies only RTH windows, recorded as
+   `full_session_scope_unmeasured`.
+10. **Unsupported inputs.** EVRange and the P-zone generator remain proprietary.
+    `JJ-2026-09-01`'s narrated entry is at the EVRange lower line and
+    `JJ-2026-01-02` / `JJ-2026-01-09` are P-zone entries; only the six printed
+    P-zone dates and two EVRange readouts exist as fixtures.
+11. **SessionStat.** Computed (J13) but off by default in the scattered-date
+    replay, where sixty cached-window reads per session buy nothing: the
+    envelope only ever decorates an operand and never gates an entry. It is on
+    in the population run when `--sessionstat` is passed.
+12. **The 09:00-09:30 half box (G13)** is dropped. `GB-2026-04-28`'s two
+    narrated fills sit at 09:30 and 09:45 inside the still-forming 09:00-10:00
+    box, which the author's own "I wait until after 10AM" excludes. Keep it
+    dropped, or admit it as an unverified variant?
+13. **Population density.** Even after the corrections the branch population is
+    one to two orders above the author's trade count; the selection layer is
+    what brings it to the authors' one-to-three entries a session. Whether
+    Phase 1.5 scores the branch population or the selected trade list is the
+    coordinator's call, and it changes what "faithful" means downstream.
+14. **`tools/produce_p15_16a.py`** maps fidelity rule ids and test names
+    (`RR-11`, `RR-13`, `F06-A*`,
+    `test_rr11_september_uses_asia_0000_and_london_0200_0500`) that this
+    rebuild renamed or retired. It produces the closed P15-16A bundle, so it is
+    untouched here; it must be re-pointed when the restructured plan binds a
+    new task card.
+
+## 7. Reproducing this
+
+```
+git -C /workspace worktree add /workspace/.worktrees/fidelity-jj-gb fidelity/jj-gb
+cd /workspace/.worktrees/fidelity-jj-gb
+PYTHONPATH=implementation/src /workspace/implementation/.venv/bin/python \
+  implementation/tools/replay_jj_gb.py --out <run-root> --charts
+PYTHONPATH=implementation/src /workspace/implementation/.venv/bin/python \
+  implementation/tools/run_jj_gb_population.py --out <run-root> --workers 12
+PYTHONPATH=src /workspace/implementation/.venv/bin/python -m pytest \
+  tests/rule_discovery/ tests/contracts/ -q      # from implementation/
+```

@@ -24,7 +24,15 @@ from trading_research.research.rule_discovery.source_adapters.green_vwap_scalp i
 )
 from trading_research.research.rule_discovery.source_adapters.trade_selection import select_session_trades
 
-from .fake_market import FakeMarket, bar, flat_series
+# ``test_A01_imports_track_fixtures`` loads this module by file path, with no
+# parent package, so the shared fake-market helper is imported both ways.
+try:  # pragma: no cover - the path taken depends on how the module is loaded
+    from .fake_market import FakeMarket, bar, flat_series
+except ImportError:  # pragma: no cover
+    import sys as _sys
+
+    _sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from fake_market import FakeMarket, bar, flat_series
 
 REPO = Path(__file__).resolve().parents[3]
 EXAMPLES = REPO / "planning/phase-1-5/AUTHOR_EXAMPLES_2026-09-17.json"
