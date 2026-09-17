@@ -156,7 +156,7 @@ def _why(match) -> str:
 # charts
 
 
-def chart(markets: Markets, payload, out_dir: Path) -> list[str]:
+def chart(markets: Markets, payload, out_dir: Path, example=None) -> list[str]:
     import matplotlib
 
     matplotlib.use("Agg")
@@ -195,12 +195,23 @@ def chart(markets: Markets, payload, out_dir: Path) -> list[str]:
                     zorder=3,
                 )
             )
+        low = min(float(b["L"]) for b in bars)
+        high = max(float(b["H"]) for b in bars)
+        pad = (high - low) * 0.08 or 10.0
+        lo_lim, hi_lim = low - pad, high + pad
         for level, label in _our_levels(market, family):
-            ax.axhline(float(level), color="#3465a4", linewidth=0.9, alpha=0.75, zorder=1)
-            ax.annotate(label, (len(bars) - 1, float(level)), color="#3465a4", fontsize=7, va="center", ha="left", xytext=(3, 0), textcoords="offset points")
-        for label, value in _author_levels(payload).items():
-            ax.axhline(float(value), color="#c77800", linewidth=1.2, linestyle="--", alpha=0.9, zorder=1)
-            ax.annotate(f"author {label}", (0, float(value)), color="#c77800", fontsize=7, va="center", ha="left", xytext=(3, 0), textcoords="offset points")
+            value = float(level)
+            if not (lo_lim <= value <= hi_lim):
+                continue
+            ax.axhline(value, color="#3465a4", linewidth=0.9, alpha=0.7, zorder=1)
+            ax.annotate(label, (len(bars) - 1, value), color="#3465a4", fontsize=7, va="center", ha="left", xytext=(3, 0), textcoords="offset points")
+        for label, value in _author_levels(payload, example).items():
+            value = float(value)
+            if not (lo_lim <= value <= hi_lim):
+                continue
+            ax.axhline(value, color="#c77800", linewidth=1.3, linestyle="--", alpha=0.95, zorder=4)
+            ax.annotate(f"author {label}", (0, value), color="#c77800", fontsize=7, va="center", ha="left", xytext=(3, 0), textcoords="offset points")
+        ax.set_ylim(lo_lim, hi_lim)
         stamps = [int(b["start"]) for b in bars]
         for row in rows:
             if row.get("printed_price") is not None:
@@ -256,15 +267,22 @@ def _x_of(stamps, ns) -> float:
     return len(stamps) - 1
 
 
+HOUR_NS = 3600 * 10**9
+
+
 def _chart_window(market, family, rows) -> tuple[int, int]:
+    """The author's own chart window: Jumbo 06:00-12:00 on a NY day and
+    01:00-07:00 on a London day; Green Bird the overnight and the NY AM."""
     stamps = [_printed_ns(market, row) for row in rows if row.get("printed_time_et")]
+    if not stamps:
+        return (int(market.at("06:00")), int(market.at("13:00"))) if family == "JJ" else (
+            int(market.at("18:00", -1)),
+            int(market.at("16:00")),
+        )
+    lo = min(stamps) - 3 * HOUR_NS
+    hi = max(stamps) + 3 * HOUR_NS
     if family == "JJ":
-        lo, hi = int(market.at("02:00")), int(market.at("16:00"))
-    else:
-        lo, hi = int(market.at("18:00", -1)), int(market.at("16:00"))
-    if stamps:
-        lo = min(lo, min(stamps) - 2 * 3600 * 10**9)
-        hi = max(min(hi, max(stamps) + 3 * 3600 * 10**9), min(stamps) + 3600 * 10**9)
+        lo = min(lo, int(market.at("06:00"))) if min(stamps) >= int(market.at("06:00")) else lo
     return max(lo, int(market.start)), min(hi, int(market.end))
 
 
@@ -304,8 +322,15 @@ def _our_levels(market, family) -> list[tuple[Decimal, str]]:
     return unique
 
 
-def _author_levels(payload) -> dict[str, float]:
-    out = {}
+def _author_levels(payload, example=None) -> dict[str, float]:
+    """Every level the author drew on his own chart, plus the ticket's stop."""
+    out: dict[str, float] = {}
+    for key, raw in ((example or {}).get("levels") or {}).items():
+        if isinstance(raw, (int, float)):
+            out[key] = float(raw)
+        elif isinstance(raw, (list, tuple)) and len(raw) == 2 and all(isinstance(v, (int, float)) for v in raw):
+            out[f"{key}[0]"] = float(raw[0])
+            out[f"{key}[1]"] = float(raw[1])
     for row in payload["entries"]:
         if row.get("printed_stop") is not None:
             out[f"{row['printed_time_et']} stop"] = row["printed_stop"]
@@ -402,7 +427,7 @@ def main(argv=None) -> int:
         payload = replay(markets, example)
         results.append(payload)
         if args.charts:
-            for name in chart(markets, payload, charts_dir):
+            for name in chart(markets, payload, charts_dir, example):
                 chart_index.append((name, example.get("source"), example.get("id")))
         print(json.dumps({"example": example.get("id"), "entries": payload["n_proper_entries"],
                           "detected": sum(1 for r in payload["entries"] if r.get("detected"))}), flush=True)

@@ -638,8 +638,34 @@ BIG_RANGE_MIN_PCT = Decimal("0.8")
 OUTSIDE_VALUE = {"below_pdl", "below_val", "above_vah", "above_pdh"}
 
 
+def _plays_for(location, pct, purge, *, pzone: bool) -> tuple[str, list[str]]:
+    """The plays one open-location read admits, and the case it classifies."""
+    aligned = (location in {"above_vah", "above_pdh"} and purge.get("purged_high") is True) or (
+        location in {"below_val", "below_pdl"} and purge.get("purged_low") is True
+    )
+    decisive_trend = bool(aligned and pct is not None and pct >= DOUBLE_BREAK_MAX_PCT)
+    if pct is None or location is None:
+        return "unknown", ["london"]
+    classification = "single_break" if aligned else "double_break"
+    plays = ["london"]
+    # The author's classification is a probability, not a switch: even with the
+    # open below both VAL and PDL his own table still gives "both sides" 27.3%.
+    # The Judas play is off only on a decisive trend read -- the open outside
+    # value on the side the overnight already purged AND a range above the 1.2%
+    # bin, the only bin where a single break leads his table.
+    if not decisive_trend:
+        plays.append("double_break")
+    if location in OUTSIDE_VALUE:
+        plays.append("single_break")
+    if pct >= BIG_RANGE_MIN_PCT or location in {"inside_value", "inside_range"}:
+        plays.append("big_range_eq")
+    if pzone:
+        plays.append("pzone")
+    return classification, plays
+
+
 def session_read(market, context: Mapping[str, Any]) -> dict[str, Any]:
-    """The day's read, decided before the open, and the plays it allows.
+    """The day's read, and the plays it allows, on the author's two clocks.
 
     Audit 1.1 "The classifier (decided before the open)": range size in percent
     of price, balanced versus already-purged overnight, the RTH open location
@@ -647,6 +673,13 @@ def session_read(market, context: Mapping[str, Any]) -> dict[str, Any]:
     edges still exist, sister-index relative strength and the news calendar.
     The last two are not on the owned tape and are recorded as unavailable
     rather than approximated.
+
+    The author reads the location twice: once when the 06:00-09:00 box freezes
+    at 09:00 and again at the RTH open, and his own posts quote the second
+    ("open inside prior RTH value: range scalps", 2026-07-10; "RTH open below
+    the prior RTH value low", 2026-07-28). Both reads are kept: the 09:00 read
+    governs an entry taken before 09:30 and the 09:30 read governs the rest, so
+    nothing is admitted on an input the scan could not yet see.
 
     The plays: a double-break / Judas day trades the 0.33/0.66 band, 0.5 and,
     after 10:00, the 1.33/1.66 band; a single-break / trend day trades the range
@@ -656,63 +689,41 @@ def session_read(market, context: Mapping[str, Any]) -> dict[str, Any]:
     """
     size = context.get("range_class") or {}
     pct = size.get("pct")
-    location = context.get("open_location")
     purge = context.get("purge") or {}
-    # "Discard mean reversion and range double breaks when these things align"
-    # (2026-07-28): the open outside prior value AND the overnight already
-    # purged that same side. One of the two alone is not the author's switch --
-    # 2025-01-28 opened above the prior value area with a balanced overnight and
-    # he traded the Judas fade.
-    aligned = (location in {"above_vah", "above_pdh"} and purge.get("purged_high") is True) or (
-        location in {"below_val", "below_pdl"} and purge.get("purged_low") is True
-    )
-    unswept = [row["kind"] for row in context.get("levels") or [] if row["kind"] in {
-        "asia_high", "asia_low", "london_high", "london_low", "onh", "onl"}]
-    decisive_trend = bool(aligned and pct is not None and pct >= DOUBLE_BREAK_MAX_PCT)
-    if pct is None or location is None:
-        classification = "unknown"
-    elif aligned:
-        classification = "single_break"
-    else:
-        classification = "double_break"
-    plays: list[str] = ["london"]
-    # The author's classification is a probability, not a switch: even with the
-    # open below both VAL and PDL his own table still gives "both sides" 27.3%.
-    # The Judas play is therefore off only on a decisive trend read -- the open
-    # outside value on the side the overnight already purged AND a range above
-    # the 1.2% bin, the only bin where a single break leads his table.
-    if not decisive_trend:
-        plays.append("double_break")
-    if location in OUTSIDE_VALUE:
-        plays.append("single_break")
-    if pct is not None and (pct >= BIG_RANGE_MIN_PCT or location in {"inside_value", "inside_range"}):
-        plays.append("big_range_eq")
-    if PZONE_FIXTURES.get(str(market.day)):
-        plays.append("pzone")
-    if classification == "unknown":
-        plays = ["london"]
-    if classification == "single_break" and "single_break" in plays:
+    pzone = bool(PZONE_FIXTURES.get(str(market.day)))
+    pre_location = context.get("open_location")
+    post_location = context.get("rth_open_location") or pre_location
+    pre_class, pre_plays = _plays_for(pre_location, pct, purge, pzone=pzone)
+    post_class, post_plays = _plays_for(post_location, pct, purge, pzone=pzone)
+    plays = sorted(set(pre_plays) | set(post_plays))
+    unswept = [
+        row["kind"]
+        for row in context.get("levels") or []
+        if row["kind"] in {"asia_high", "asia_low", "london_high", "london_low", "onh", "onl"}
+    ]
+    if post_class == "single_break" and "single_break" in post_plays:
         primary = "single_break"
-    elif "double_break" in plays:
+    elif "double_break" in post_plays:
         primary = "double_break"
-    elif "big_range_eq" in plays:
+    elif "big_range_eq" in post_plays:
         primary = "big_range_eq"
     else:
         primary = "london"
     return {
-        "classification": classification,
+        "classification": post_class,
+        "classification_pre_open": pre_class,
         "plays": plays,
+        "plays_pre_open": sorted(set(pre_plays)),
+        "plays_post_open": sorted(set(post_plays)),
         "primary_play": primary,
         "inputs": {
             "range_pct": pct,
             "range_bin": size.get("bin"),
-            "open_location": location,
-            "rth_open_location": context.get("rth_open_location"),
+            "open_location": pre_location,
+            "rth_open_location": post_location,
             "overnight_purged_high": purge.get("purged_high"),
             "overnight_purged_low": purge.get("purged_low"),
             "overnight_balanced": None if not purge.get("available") else not (purge.get("purged_high") or purge.get("purged_low")),
-            "open_outside_value_and_same_side_purged": aligned,
-            "decisive_trend_read": decisive_trend,
             "edges_still_drawn": unswept,
             "prior_value": None if not context.get("prior_value") else {
                 "vah": context["prior_value"].get("vah"),
@@ -721,7 +732,7 @@ def session_read(market, context: Mapping[str, Any]) -> dict[str, Any]:
             },
         },
         "unavailable_inputs": ["sister_index_relative_strength", "news_calendar"],
-        "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock",
+        "rule": "single break when the open is outside prior value on the side the overnight already purged, or the range exceeds 1.2% of price; otherwise the double-break / Judas play; the EQ play in addition on a big 6-9 range or an open inside value; London runs on its own clock; the 09:00 read governs entries before 09:30, the RTH open read the rest",
     }
 
 
@@ -1913,9 +1924,23 @@ def _scan_b02_impl(market, rec, *, overrides=None) -> dict[str, Any]:
         episodes.extend(part)
         omissions.extend(omit)
     episodes = list(enumeration_point("contacts", episodes, market=market, family=FAMILY) or episodes)
+    open_ns = _at(market, "09:30")
+    pre_open_plays = set(read.get("plays_pre_open") or ())
     for episode in episodes:
-        episode["values"]["play"] = PLAY_OF_BRANCH.get(episode.get("branch"))
-        episode["values"]["is_primary_play"] = episode["values"]["play"] == read.get("primary_play")
+        play = PLAY_OF_BRANCH.get(episode.get("branch"))
+        episode["values"]["play"] = play
+        episode["values"]["is_primary_play"] = play == read.get("primary_play")
+        decided = episode.get("decision_at")
+        readable = play in pre_open_plays if (decided is not None and int(decided) < open_ns) else True
+        episode["values"]["read_used"] = "09:00" if (decided is not None and int(decided) < open_ns) else "09:30"
+        if not readable and episode.get("research_verdict") == "pass":
+            episode["research_verdict"] = "fail"
+            episode["failed"] = list(episode.get("failed") or []) + ["context"]
+            episode["strategy_assessment"]["status"] = "no_setup"
+            for stage in episode["stages"]:
+                if stage["stage"] == "context":
+                    stage["verdict"] = "fail"
+                    stage["operands"]["reason"] = "play_not_readable_before_the_open"
     selection = selection_for(market, episodes, primary_play=read.get("primary_play"))
     label = branch if branch and branch in _SCANNERS else "B0.3"
     return finish(_document(market, label, episodes, omissions, selection=selection, day_read=read))

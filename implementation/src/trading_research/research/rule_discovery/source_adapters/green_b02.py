@@ -1112,8 +1112,9 @@ def _level_trade(
                 continue
             operands = dict(current.get("operands") or {})
             operands.update(row.get("operands") or {})
-            verdict = row.get("verdict") if row.get("verdict") in {"fail", "unknown"} else current.get("verdict")
-            by_name[row["stage"]] = {**current, **row, "verdict": verdict, "operands": operands}
+            # a branch that supplies its own stage owns that stage's verdict:
+            # the golden pocket's location is a zone touch, not a sweep depth.
+            by_name[row["stage"]] = {**current, **row, "verdict": row.get("verdict", current.get("verdict")), "operands": operands}
         stages = [by_name[name] for name in STAGE_ORDER if name in by_name]
 
     values = {
@@ -1852,6 +1853,14 @@ def _scan_continuation(market, refs, objectives) -> list[dict[str, Any]]:
                     extra_values={"hold_bars": CONTINUATION_HOLD_BARS},
                     extra_stages=[
                         _stage(
+                            "location",
+                            "pass" if hold is not None else "fail",
+                            None if hold is None else int(hold.get("start") or begin),
+                            level=level,
+                            edge="broken and held",
+                            reason=None if hold is not None else "no_close_beyond_the_edge",
+                        ),
+                        _stage(
                             "trigger",
                             "pass" if hold is not None else "fail",
                             None if hold is None else int(hold.get("known_at") or hold.get("end")),
@@ -1958,6 +1967,14 @@ def _scan_vwap(market, refs, objectives) -> list[dict[str, Any]]:
             stop_override=stop,
             extra_values={"vwap_at_retest": None if vw is None else _d(vw.get("price")), "breakout_level": level},
             extra_stages=[
+                _stage(
+                    "location",
+                    "pass" if breakout is not None else "fail",
+                    None if breakout is None else int(breakout.get("start") or market.at("09:30")),
+                    level=level,
+                    edge="max(Asia high, London high)",
+                    reason=None if breakout is not None else "no_close_above_both_session_highs",
+                ),
                 _stage(
                     "trigger",
                     "pass" if breakout is not None else "fail",
