@@ -1,0 +1,25 @@
+{
+  "schema_version": "research-family-spec-v1",
+  "task_id": "P15-11",
+  "families": ["GB-VWAP", "GB-SCALP"],
+  "source_additions": ["golden_pocket_continuation"],
+  "d1": "retest window does not overwrite breakout context",
+  "clock_zone_unverified": true,
+  "baselines": {
+    "B0.2": {
+      "version": "B0.2-2026-09-15",
+      "GB-VWAP": {
+        "scan": "trading_research.research.rule_discovery.source_adapters.green_vwap_scalp:scan_b02",
+        "replay": "trading_research.research.rule_discovery.source_adapters.green_vwap_scalp:replay_example",
+        "branches": ["source_long"],
+        "clock_zone_unverified": false
+      },
+      "GB-SCALP": {
+        "scan": "trading_research.research.rule_discovery.source_adapters.green_vwap_scalp:scan_b02",
+        "replay": "trading_research.research.rule_discovery.source_adapters.green_vwap_scalp:replay_example",
+        "branches": ["golden_pocket_continuation"],
+        "clock_zone_unverified": false
+      }
+    }
+  }
+}

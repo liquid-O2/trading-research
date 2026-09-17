@@ -1,0 +1,93 @@
+{
+ "attempt": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0002",
+ "headline": [
+  {
+   "artifact": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0002/REFINEMENT_BANK.json",
+   "name": "neighbours attempted",
+   "sha256": "7fe7a9f68321c06e85021646b39de73754721708ecbf8900c919edcbd7b00bd5",
+   "support": 217,
+   "unit": "of 217 proposals, 31 duplicates",
+   "value": 186
+  },
+  {
+   "artifact": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0002/REFINEMENT_BANK.json",
+   "name": "distinct neighbour candidates executed",
+   "sha256": "7fe7a9f68321c06e85021646b39de73754721708ecbf8900c919edcbd7b00bd5",
+   "support": 53,
+   "unit": "candidates over 1,742 declared sessions",
+   "value": 53
+  },
+  {
+   "artifact": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0002/SELECTED_RULES_BY_FOLD.json",
+   "name": "refined mechanisms selected",
+   "sha256": "528f74b4ed0467ec0807a623de807e8147ee6d366374731b84bd7988a80bd64d",
+   "support": 45,
+   "unit": "fold-family roles over 5 outer folds",
+   "value": 45
+  },
+  {
+   "artifact": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0002/COMBINATION_RESULTS.json",
+   "name": "combinations attempted",
+   "sha256": "b33c75c4d09f8d5e49b7aad3cae764a16b2952b5b6348bc24dada363ea2051eb",
+   "support": 20,
+   "unit": "of 20 proposals; the rest pair mechanisms on different branches",
+   "value": 10
+  },
+  {
+   "artifact": "/workspace/implementation/reports/research-work/P15-18/4f4fcccf0ed8d0e9/attempt-0002/TRIALS.jsonl",
+   "name": "trials promoted",
+   "sha256": "6c2ce2a36c0b62dcc4bb1489af34874df691c2392ed084b9f3c6b3ce0aec1117",
+   "support": 237,
+   "unit": "of 237 ledger rows",
+   "value": 20
+  }
+ ],
+ "label": "definitive",
+ "lever": {
+  "change": "give the refinement a larger resolved-entry population per fold, by re-running the same registered neighbourhoods on Phase 3 locations, rather than adding neighbours the contract caps",
+  "evidence": "the selected refined mechanism's 95% lower bound stays above zero when the entry population roughly doubles, instead of moving with the fold"
+ },
+ "limits": [
+  "Refinement moves a parameter inside a mechanism the breadth screen already chose; it cannot rescue a family whose baseline is retained.",
+  "No number here touches the blind hold-out (2026-04-01 to 2026-09-03).",
+  "JJ-TBR:judas_reversal:S4:deadline_minutes=10 is a Sequence-bank candidate and its promotion is implausible pending the entry-timing fix named in P15-17's AUDIT_S1.md.",
+  "The promotion metric is pooled over the five outer blocks by design (EVALUATION.md); the fold-specific evidence is in each ledger row's test_metrics.fold and the selection evidence is SELECTED_RULES_BY_FOLD.json."
+ ],
+ "plausibility": [
+  {
+   "check": "the promoted trials' per-fold outer-block means against their sampling error, under the 20,000-draw evaluation",
+   "expected": "a max-min range of about 2.3 standard errors for five estimates if the folds differ only by sampling error",
+   "observed": "GB-FAIL:previous_hour:T4:shift_minutes=-15 4.42/7.39/3.87/7.06/4.06 (spread 1.10 sems), GB-FAIL:previous_hour:F3:efficiency=0.5 1.81/2.20/1.09/0.29/1.34 (1.48), the GB-FAIL combination 2.82/4.23/3.40/5.18/-2.29 (2.84), JJ-TBR:judas_reversal:S4:deadline_minutes=10 4.60/3.13/4.72/6.31/8.27 (3.76)",
+   "verdict": "plausible"
+  },
+  {
+   "check": "JJ-TBR:judas_reversal:S4:deadline_minutes=10 (Sequence bank) entry timing against its own trigger stage",
+   "expected": "a non-negative delay: the decision cannot precede the bars that made the stage pass",
+   "observed": "every entry of the Sequence bank is filled up to its own deadline before the stage that admitted it (confirmation_delay_s = -60.0 s on 100% of this candidate's entries); see P15-17 attempt-0005 AUDIT_S1.md",
+   "verdict": "implausible_pending_audit"
+  },
+  {
+   "check": "the multiplicity gate is passable at this stage's family size",
+   "expected": "at or under .025 (EVALUATION.md, amended 2026-09-17)",
+   "observed": "18 candidates at the decision stage, attainable Holm floor m/(B+1) = 0.0009 at 20,000 draws",
+   "verdict": "plausible"
+  },
+  {
+   "check": "every promoted trial carries its own paired evidence in the ledger",
+   "expected": "a promoted trial without its own mean, interval and raw p is not a promotion",
+   "observed": "each promoted row, combinations included, carries its own mean, 95% interval, raw p and support counts on both sides, plus that fold's own outer-block metric beside the pooled decision metric",
+   "verdict": "plausible"
+  }
+ ],
+ "question": "Inside the two mechanism banks each family kept, does a neighbouring parameter value, or the one permitted combination of two, beat the value the breadth screen selected?",
+ "schema_version": "research-result-card-v1",
+ "target": {
+  "met": "partial",
+  "text": "SEARCH_CONTRACT refinement stage: at most 12 neighbours per bank and 24 per family from the registered neighbourhoods, one combination per family only when each ingredient beats B0.2 on inner tuning, and the shared promotion gates for anything that replaces a baseline"
+ },
+ "task_id": "P15-18",
+ "verdict": {
+  "reason": "The bounded round ran exactly as specified and a few refined mechanisms clear the gates, but they rest on an entry population whose first attribution is still support or location, so the gain is small and fold-dependent.",
+  "value": "needs_upgrade"
+ }
+}

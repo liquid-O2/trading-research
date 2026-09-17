@@ -620,10 +620,15 @@ class _VerifyState:
     def successor_verifies(self, candidate: Path) -> bool:
         """Does ``candidate`` verify on its own? Memoized per candidate path.
 
-        A candidate that is already being verified higher up the stack cannot
-        be concluded here (the guard returns False); a negative outcome that
-        was reached while the guard fired is not memoized, because it may be
-        an artifact of the recursion rather than of the receipt.
+        A candidate already being verified higher up the stack is assumed to
+        hold here and is decided by that outer frame: it is on the stack, so if
+        it fails there, everything that leaned on it fails with it. Concluding
+        "does not verify" instead would report a cycle against the receipt under
+        verification, which is not a fact about that receipt -- a re-issued
+        successor that pins a predecessor's drifted file at the live digest has
+        to verify its own predecessors, and one of them is that predecessor. A
+        negative outcome reached while the guard fired is not memoized, because
+        it may be an artifact of the recursion rather than of the receipt.
         """
         shared = self._successors
         key = str(candidate)
@@ -631,7 +636,7 @@ class _VerifyState:
             return bool(shared["ok"][key])
         if key in shared["in_progress"]:
             shared["guard_hits"] += 1
-            return False
+            return True
         hits_before = shared["guard_hits"]
         shared["in_progress"].add(key)
         try:
@@ -645,7 +650,10 @@ class _VerifyState:
         finally:
             shared["in_progress"].discard(key)
         ok = bool(result.ok)
-        if ok or shared["guard_hits"] == hits_before:
+        # An outcome reached while the guard fired leaned on an assumption
+        # about a receipt still being verified; it is decided by that outer
+        # frame and must not be memoized as a fact in either direction.
+        if shared["guard_hits"] == hits_before:
             shared["ok"][key] = ok
         return ok
 

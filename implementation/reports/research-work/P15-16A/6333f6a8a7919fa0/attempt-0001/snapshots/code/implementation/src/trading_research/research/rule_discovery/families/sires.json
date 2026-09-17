@@ -1,0 +1,108 @@
+{
+  "schema_version": "research-family-spec-v1",
+  "family": "SIRES",
+  "task_id": "P15-12",
+  "findings": ["P1", "P6", "C5", "three_tick_replenishment", "ofm_1r_3r"],
+  "clock_zone_unverified": true,
+  "baselines": {
+    "B0.2": {
+      "version": "B0.2-2026-09-15",
+      "scan": "scan_b02",
+      "replay": "replay_example"
+    }
+  },
+  "plausibility": {
+    "dom_rejection": {
+      "episode_kind": "contact_at_source_literal_location",
+      "episodes_per_session": [0, 16],
+      "pass_rate": [0.0, 0.20],
+      "source_claim": "A contact at a source-literal location (extreme, shelf, ledge, LVN, minor node), not an A+ trade. Author takes at most one or two A+ trades per session.",
+      "page": "ABS p.6; DOM6-7 pp.3-7"
+    },
+    "absorption_reward_retest": {
+      "episode_kind": "contact_at_source_literal_location",
+      "episodes_per_session": [0, 16],
+      "pass_rate": [0.0, 0.20],
+      "source_claim": "A contact at a real extreme. 27% of absorptions fail without the three-tick reward. Passes are the setups among those contacts.",
+      "page": "ABS pp.3-7"
+    },
+    "stop_four_stage": {
+      "episode_kind": "contact_at_source_literal_location",
+      "episodes_per_session": [0, 16],
+      "pass_rate": [0.0, 0.20],
+      "source_claim": "Three-tick replenishment is a minimum filter at a defended level. One or two ticks is the fake-out zone. Passes are the setups among source-literal contacts.",
+      "page": "STOP pp.10, 14"
+    },
+    "footprint_confirmed_reaction": {
+      "episode_kind": "contact_at_source_literal_location",
+      "episodes_per_session": [0, 16],
+      "pass_rate": [0.0, 0.20],
+      "source_claim": "Footprint flag 3-4x at a valid level. Contacts are source-literal locations, not A+ trades.",
+      "page": "FP8 p.5; FP9 pp.4-7"
+    },
+    "vwap_deviation_fade": {
+      "episode_kind": "contact_at_source_literal_location",
+      "episodes_per_session": [0, 16],
+      "pass_rate": [0.0, 0.20],
+      "source_claim": "Trades beyond the 1 band, ideally at 2, only with absorption. Contacts are VWAP-band touches, not A+ trades.",
+      "page": "VWAP p.4"
+    },
+    "ofm_aggressive": {
+      "episode_kind": "session_unknown",
+      "episodes_per_session": [1, 1],
+      "pass_rate": [0.0, 0.0],
+      "source_claim": "an A++ a handful of times a month. Short-gamma permission is not observable in Phase 1.5. Combined verdict stays unknown when gamma is missing; location and later stages are still evaluated when their operands exist. The source gives no contact-per-session density.",
+      "page": "OFM p.4; BIG p.14",
+      "observed_rate_justification": {
+        "page": "OFM p.4",
+        "text": "OFM p.4 states an A++ a handful of times a month. That is an A++-trade frequency, not a contact-per-session density. The B0.2 scan enumerates contacts at source-literal locations. No source page states a contact density, so the registry keeps the source-grounded one-decision-per-session bound [1, 1] and episode_kind session_unknown. After ruling (a) the scan no longer stops at the unknown gamma context, so it enumerates every source-literal contact and the observed density lands above [1, 1]. That is reported as an out-of-bound finding with this justification; the bound is not widened to make the gate pass."
+      }
+    },
+    "ofm_passive": {
+      "episode_kind": "contact_at_source_literal_location",
+      "episodes_per_session": [0, 16],
+      "pass_rate": [0.0, 0.15],
+      "source_claim": "Squeeze fails with no aggression at the failure. Rarer than the aggressive OFM. Contacts at source-literal locations.",
+      "page": "OFM p.14"
+    },
+    "clean_squeeze": {
+      "episode_kind": "contact_at_source_literal_location",
+      "episodes_per_session": [0, 16],
+      "pass_rate": [0.0, 0.15],
+      "source_claim": "A squeeze with no failure: fast, real aggression, no retest, no false start. At most one or two A+ trades per session among source-literal contacts.",
+      "page": "CONT p.11"
+    },
+    "balance_failure_fade": {
+      "episode_kind": "session_unknown",
+      "episodes_per_session": [1, 1],
+      "pass_rate": [0.0, 0.0],
+      "source_claim": "Balance fade in long gamma about 80% of the time is a regime share, not a pass rate or a contact density. Long-gamma permission is not observable in Phase 1.5. Combined verdict stays unknown when gamma is missing; location and later stages are still evaluated when their operands exist. The source gives no contact-per-session density.",
+      "page": "BIG p.14",
+      "observed_rate_justification": {
+        "page": "BIG p.14",
+        "text": "BIG p.14 states the balance fade in long gamma about 80% of the time. That is a regime-share frequency, not a contact-per-session density. The B0.2 scan enumerates contacts at source-literal locations. No source page states a contact density, so the registry keeps the source-grounded one-decision-per-session bound [1, 1] and episode_kind session_unknown. After ruling (a) the scan no longer stops at the unknown gamma context, so it enumerates every source-literal contact and the observed density lands above [1, 1]. That is reported as an out-of-bound finding with this justification; the bound is not widened to make the gate pass."
+      }
+    },
+    "defended_band_continuation": {
+      "episode_kind": "contact_at_source_literal_location",
+      "episodes_per_session": [0, 16],
+      "pass_rate": [0.0, 0.20],
+      "source_claim": "A retest of an already-defended band. Contacts at source-literal locations, not A+ trades.",
+      "page": "NYAM pp.4-5; CONT pp.4-10"
+    },
+    "kg1_retest": {
+      "episode_kind": "contact_at_source_literal_location",
+      "episodes_per_session": [0, 1],
+      "pass_rate": [0.0, 0.20],
+      "source_claim": "KG1 engine unpublished. Phase 1.5 has no supplied KG1 record, so the branch is empty.",
+      "page": "NYAM pp.8-9"
+    },
+    "microbalance_break": {
+      "episode_kind": "contact_at_source_literal_location",
+      "episodes_per_session": [0, 16],
+      "pass_rate": [0.0, 0.20],
+      "source_claim": "P15-05 F3 microbalances. Qualifying breakouts, not every 1-minute bar.",
+      "page": "K2345 pp.4-7"
+    }
+  }
+}

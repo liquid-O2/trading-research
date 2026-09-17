@@ -1,0 +1,441 @@
+{
+  "assurance_version": "research-assurance-2026-09-14-v3",
+  "checks": [
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/jumbo.py",
+          "symbol": "RULES"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-16A/01d743b34a2ed408/attempt-0002/FIDELITY_MATRIX.json",
+          "selector": "/n_findings_implemented",
+          "sha256": "738b8ccfc04ed6b495bba50dd1bacd6ae499b07ab0cdc2a1ae38eb342c6eeabf"
+        }
+      ],
+      "expected": "implemented or deferred",
+      "id": "A01",
+      "observed": "pass",
+      "oracle": "task card A01",
+      "requirement": "Every F01-F20 and RR-01-RR-23 ruling is implemented or deferred.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_16a.py::test_A01_jumbo_rr01_extension_band_is_1_33_1_66"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/common.py",
+          "symbol": "dual_scan"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-16A/01d743b34a2ed408/attempt-0002/pytest.log",
+          "selector": "test_A02_b0_b01_byte_identity_negative_control",
+          "sha256": "b76364e1ab8e9382e84fac2f45d070937a68e5fb901d8e58a4527d83aedd244f"
+        }
+      ],
+      "expected": "byte-identical B0/B0.1",
+      "id": "A02",
+      "observed": "pass",
+      "oracle": "task card A02",
+      "requirement": "B0/B0.1 stay byte-identical; B0.2 measured beside them.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_16a.py::test_A02_b0_b01_byte_identity_negative_control"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/tools/replay_author_examples.py",
+          "symbol": "replay_one"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-16A/01d743b34a2ed408/attempt-0002/AUTHOR_EXAMPLE_REPLAY.json",
+          "selector": "/n",
+          "sha256": "463642d9d984c6465c207eeae90e4a527e8732f901f65b078f3daf4a0098e035"
+        }
+      ],
+      "expected": "replay table",
+      "id": "A03",
+      "observed": "pass",
+      "oracle": "task card A03",
+      "requirement": "Author examples replayed; no rule changed to pass an example.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_16a.py::test_A03_replay_skips_outside_calendar_without_cache"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/jumbo.py",
+          "symbol": "RULES"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-16A/01d743b34a2ed408/attempt-0002/LEDGER_CORRECTIONS.json",
+          "selector": "/corrections",
+          "sha256": "464360312a015eba9e10fd00b2158bac732fc645f29d53ac52af1ffd3f8be46f"
+        }
+      ],
+      "expected": "OD labelled",
+      "id": "A04",
+      "observed": "pass",
+      "oracle": "task card A04",
+      "requirement": "OD rules labelled; ledger corrections recorded.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_16a.py::test_A04_od_and_literal_rules_are_labelled"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/jumbo.py",
+          "symbol": "compute_published_statistics"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-16A/01d743b34a2ed408/attempt-0002/FAMILY_REPORT.md",
+          "selector": "/",
+          "sha256": "95a00143c7023db5750c5823a829fde34d22159079743322dd80bed006edb1d9"
+        }
+      ],
+      "expected": "funnel or published stats",
+      "id": "A05",
+      "observed": "pass",
+      "oracle": "task card A05",
+      "requirement": "Populations plausible vs published statistics or explained by funnel.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_16a.py::test_A01_jumbo_rr01_extension_band_is_1_33_1_66"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/tools/produce_p15_16a.py",
+          "symbol": "produce"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-16A/01d743b34a2ed408/attempt-0002/pytest.log",
+          "selector": "/",
+          "sha256": "b76364e1ab8e9382e84fac2f45d070937a68e5fb901d8e58a4527d83aedd244f"
+        }
+      ],
+      "expected": "pytest exit 0",
+      "id": "A06",
+      "observed": "pass",
+      "oracle": "ASSURANCE A06",
+      "requirement": "Command exit codes, hashes, coverage, runtime.",
+      "status": "pass",
+      "test_nodeids": []
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/tools/produce_p15_16a.py",
+          "symbol": "write_matrix"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-16A/01d743b34a2ed408/attempt-0002/pytest.log",
+          "selector": "/",
+          "sha256": "b76364e1ab8e9382e84fac2f45d070937a68e5fb901d8e58a4527d83aedd244f"
+        }
+      ],
+      "expected": "matrix complete",
+      "id": "A07",
+      "observed": "pass",
+      "oracle": "ASSURANCE A07",
+      "requirement": "EVIDENCE_MATRIX resolves every key.",
+      "status": "pass",
+      "test_nodeids": []
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/tests/rule_discovery/test_p15_16a.py",
+          "symbol": "test_S07_native_replay"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-16A/01d743b34a2ed408/attempt-0002/pytest.log",
+          "selector": "test_S07_native_replay",
+          "sha256": "b76364e1ab8e9382e84fac2f45d070937a68e5fb901d8e58a4527d83aedd244f"
+        }
+      ],
+      "expected": "probes pass or pending S01/S03",
+      "id": "A08",
+      "observed": "pass",
+      "oracle": "ASSURANCE A08",
+      "requirement": "Assigned silent-failure probes.",
+      "status": "pass",
+      "test_nodeids": []
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/tools/produce_p15_16a.py",
+          "symbol": "run_probes"
+        }
+      ],
+      "command_indices": [],
+      "evidence": [],
+      "expected": "mutations fail",
+      "id": "S01",
+      "observed": "pending",
+      "oracle": "SILENT_FAILURES S01",
+      "requirement": "Missing/substituted/malformed artifacts fail.",
+      "status": "pending",
+      "test_nodeids": []
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/common.py",
+          "symbol": "changed_reference_scan"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-16A/01d743b34a2ed408/attempt-0002/pytest.log",
+          "selector": "test_S02_rr02_eq_contacts_are_two_sided",
+          "sha256": "b76364e1ab8e9382e84fac2f45d070937a68e5fb901d8e58a4527d83aedd244f"
+        }
+      ],
+      "expected": "EQ two-sided",
+      "id": "S02",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES S02",
+      "requirement": "Sensitive fixture for advertised B0.2 behavior.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_16a.py::test_S02_rr02_eq_contacts_are_two_sided"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/tools/produce_p15_16a.py",
+          "symbol": "run_probes"
+        }
+      ],
+      "command_indices": [],
+      "evidence": [],
+      "expected": "mutations fail",
+      "id": "S03",
+      "observed": "pending",
+      "oracle": "SILENT_FAILURES S03",
+      "requirement": "False plan/code/draft identities rejected.",
+      "status": "pending",
+      "test_nodeids": []
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/native.py",
+          "symbol": "replay_native_row"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-16A/01d743b34a2ed408/attempt-0002/pytest.log",
+          "selector": "test_S07_native_replay",
+          "sha256": "b76364e1ab8e9382e84fac2f45d070937a68e5fb901d8e58a4527d83aedd244f"
+        }
+      ],
+      "expected": "kind=native",
+      "id": "S07",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES S07",
+      "requirement": "Native parquet row replay.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_16a.py::test_S07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/common.py",
+          "symbol": "future_perturbation_stable"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-16A/01d743b34a2ed408/attempt-0002/pytest.log",
+          "selector": "test_S08_future_perturbation_stable",
+          "sha256": "b76364e1ab8e9382e84fac2f45d070937a68e5fb901d8e58a4527d83aedd244f"
+        }
+      ],
+      "expected": "stable before cutoff",
+      "id": "S08",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES S08",
+      "requirement": "Future perturbation does not change earlier output.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_16a.py::test_S08_future_perturbation_stable"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/common.py",
+          "symbol": "permute_batch_ambiguity"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-16A/01d743b34a2ed408/attempt-0002/pytest.log",
+          "selector": "test_S09_same_timestamp_target_stop_stays_ambiguous",
+          "sha256": "b76364e1ab8e9382e84fac2f45d070937a68e5fb901d8e58a4527d83aedd244f"
+        }
+      ],
+      "expected": "unknown",
+      "id": "S09",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES S09",
+      "requirement": "Same-timestamp target/stop stays ambiguous.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_16a.py::test_S09_same_timestamp_target_stop_stays_ambiguous"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/jumbo.py",
+          "symbol": "family_document"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-16A/01d743b34a2ed408/attempt-0002/pytest.log",
+          "selector": "test_S21_source_prerequisites_named_on_jumbo",
+          "sha256": "b76364e1ab8e9382e84fac2f45d070937a68e5fb901d8e58a4527d83aedd244f"
+        }
+      ],
+      "expected": "by_construction operands",
+      "id": "S21",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES S21",
+      "requirement": "Source prerequisites remain named.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_16a.py::test_S21_source_prerequisites_named_on_jumbo"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/common.py",
+          "symbol": "enumerate_own_population"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-16A/01d743b34a2ed408/attempt-0002/pytest.log",
+          "selector": "test_S22_new_geometry_is_own_population",
+          "sha256": "b76364e1ab8e9382e84fac2f45d070937a68e5fb901d8e58a4527d83aedd244f"
+        }
+      ],
+      "expected": "own_population true",
+      "id": "S22",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES S22",
+      "requirement": "Changed geometry enumerates its own population.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_16a.py::test_S22_new_geometry_is_own_population"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/common.py",
+          "symbol": "clock_zone_unverified"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-16A/01d743b34a2ed408/attempt-0002/pytest.log",
+          "selector": "test_S31_jj_tbr_clock_zone_verified",
+          "sha256": "b76364e1ab8e9382e84fac2f45d070937a68e5fb901d8e58a4527d83aedd244f"
+        }
+      ],
+      "expected": "JJ-TBR verified",
+      "id": "S31",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES S31",
+      "requirement": "JJ-TBR New York clock; unknown stays unknown.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_16a.py::test_S31_jj_tbr_clock_zone_verified"
+      ]
+    }
+  ],
+  "schema": "research-evidence-matrix-v2",
+  "schema_version": "research-evidence-matrix-v2",
+  "task_id": "P15-16A"
+}

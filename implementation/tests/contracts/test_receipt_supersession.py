@@ -273,3 +273,84 @@ def test_supersession_is_granted_through_the_newest_verified_successor(tmp_path)
     broken_a = rec.verify_task_receipt(a, graph_path=graph, receipts_root=tmp_path)
     assert not broken_a.ok
     assert any(f.code == rec.FailureCode.IDENTITY and rel in f.detail for f in broken_a.failures)
+
+
+# --------------------------------------------------------------------------
+# The successor guard: a candidate already being verified higher up the stack
+# is decided by that frame, not reported as a cycle against the receipt under
+# verification (2026-09-17).
+# --------------------------------------------------------------------------
+
+
+def _state(tmp_path):
+    from trading_research.research.contracts.receipts import _VerifyState
+
+    return _VerifyState(receipts_root=tmp_path, graph=None, amendments_path=tmp_path / "AMENDMENTS.json")
+
+
+def test_a_candidate_on_the_stack_is_assumed_to_hold_and_left_to_its_own_frame(tmp_path, monkeypatch):
+    """A re-issued successor that pins a predecessor's drifted file must verify
+    its own predecessors, and one of them is that predecessor. Concluding "does
+    not verify" for the candidate already on the stack would report a cycle
+    against a receipt that has no defect."""
+    from trading_research.research.contracts import receipts as R
+
+    state = _state(tmp_path)
+    candidate = tmp_path / "SUCCESSOR.json"
+    candidate.write_text("{}")
+
+    calls = []
+
+    def fake_verify(path, **kwargs):
+        calls.append(str(path))
+        # while this candidate is in progress, ask again for the same one
+        assert state.successor_verifies(candidate) is True
+        return R.VerificationResult("task", True, str(path), ())
+
+    monkeypatch.setattr(R, "verify_task_receipt", fake_verify)
+    assert state.successor_verifies(candidate) is True
+    assert calls == [str(candidate)]  # the re-entrant ask did not verify again
+
+    # negative control: a candidate that is NOT on the stack is decided on its
+    # own result, so a failing successor still refuses the supersession
+    state2 = _state(tmp_path)
+    other = tmp_path / "FAILING.json"
+    other.write_text("{}")
+
+    def failing_verify(path, **kwargs):
+        return R.VerificationResult(
+            "task", False, str(path), (R.CheckFailure(R.FailureCode.IDENTITY, str(path), "bad"),)
+        )
+
+    monkeypatch.setattr(R, "verify_task_receipt", failing_verify)
+    assert state2.successor_verifies(other) is False
+    # and the refusal is not memoized as an assumption: asking again re-verifies
+    assert state2.successor_verifies(other) is False
+
+
+def test_the_guard_does_not_memoize_a_result_reached_under_the_assumption(tmp_path, monkeypatch):
+    """A negative outcome reached while the guard fired may be an artefact of the
+    recursion, so it must not be cached as a fact about the receipt."""
+    from trading_research.research.contracts import receipts as R
+
+    state = _state(tmp_path)
+    inner = tmp_path / "INNER.json"
+    outer = tmp_path / "OUTER.json"
+    for path in (inner, outer):
+        path.write_text("{}")
+
+    def verify(path, **kwargs):
+        if str(path) == str(outer):
+            # the outer verification leans on the inner one, which is on the stack
+            state.successor_verifies(outer)
+            return R.VerificationResult(
+                "task", False, str(path), (R.CheckFailure(R.FailureCode.IDENTITY, str(path), "x"),)
+            )
+        return R.VerificationResult("task", True, str(path), ())
+
+    monkeypatch.setattr(R, "verify_task_receipt", verify)
+    assert state.successor_verifies(outer) is False
+    assert str(outer) not in state._successors["ok"]
+    # a clean candidate, verified with no guard hit, is memoized
+    assert state.successor_verifies(inner) is True
+    assert state._successors["ok"][str(inner)] is True

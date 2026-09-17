@@ -1,0 +1,2544 @@
+{
+  "schema": "research-task-graph-v1",
+  "status": "planned",
+  "tasks": [
+    {
+      "id": "P15-00",
+      "phase": "phase-1-5",
+      "subphase": "00-foundation",
+      "title": "Bind the accepted baseline and define typed records",
+      "dependencies": [],
+      "owns": [
+        "implementation/src/trading_research/research/contracts/types.py",
+        "implementation/src/trading_research/research/contracts/identity.py",
+        "implementation/src/trading_research/research/rule_discovery/baseline_manifest.py",
+        "implementation/tests/rule_discovery/test_p15_00.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/PSTACK_EXECUTION.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/research-program/DATA_CONTRACTS.md",
+        "planning/phase-1-5/SPEC.md",
+        "planning/research-program/TYPE_REFERENCE.py",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "BASELINE_BINDING.json",
+        "EXPOSURE_LEDGER.json",
+        "ENGINEERING_DATES.json",
+        "SCHEMA_EXAMPLES.json"
+      ],
+      "native": false,
+      "test": "implementation/tests/rule_discovery/test_p15_00.py",
+      "path": "planning/phase-1-5/tasks/P15-00.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08",
+        "A09",
+        "A10",
+        "A11",
+        "A12",
+        "A13"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified"
+      ],
+      "assurance_cases": [
+        "S01",
+        "S02",
+        "S03",
+        "S05",
+        "S06",
+        "S07",
+        "S10",
+        "S13",
+        "S14",
+        "S31"
+      ]
+    },
+    {
+      "id": "P15-01",
+      "phase": "phase-1-5",
+      "subphase": "00-foundation",
+      "title": "Build receipt and dependency verification",
+      "dependencies": [
+        "P15-00"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/contracts/receipts.py",
+        "implementation/tools/verify_research_release.py",
+        "implementation/tests/rule_discovery/test_p15_01.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/PSTACK_EXECUTION.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/research-program/DATA_CONTRACTS.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "VERIFIER_CASES.json"
+      ],
+      "native": false,
+      "test": "implementation/tests/rule_discovery/test_p15_01.py",
+      "path": "planning/phase-1-5/tasks/P15-01.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08",
+        "A09",
+        "A10",
+        "A11",
+        "A12",
+        "A13"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified"
+      ],
+      "assurance_cases": [
+        "S01",
+        "S02",
+        "S03",
+        "S04",
+        "S05"
+      ]
+    },
+    {
+      "id": "P15-02",
+      "phase": "phase-1-5",
+      "subphase": "01-native-and-outcomes",
+      "title": "Adapt native data and run one complete baseline slice",
+      "dependencies": [
+        "P15-00",
+        "P15-01"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/rule_discovery/native.py",
+        "implementation/src/trading_research/research/rule_discovery/baseline.py",
+        "implementation/src/trading_research/research/rule_discovery/runner.py",
+        "implementation/tools/run_rule_discovery.py",
+        "implementation/tests/rule_discovery/test_p15_02.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/PSTACK_EXECUTION.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/research-program/DATA_CONTRACTS.md",
+        "planning/phase-1-5/SPEC.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "NATIVE_PARITY.json",
+        "CACHE_PROFILE.json",
+        "SLICE_MANIFEST.json",
+        "RESUME_CHECK.json"
+      ],
+      "native": true,
+      "test": "implementation/tests/rule_discovery/test_p15_02.py",
+      "path": "planning/phase-1-5/tasks/P15-02.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified"
+      ],
+      "assurance_cases": [
+        "S01",
+        "S02",
+        "S03",
+        "S05",
+        "S06",
+        "S07",
+        "S08",
+        "S09",
+        "S10",
+        "S11",
+        "S12",
+        "S13",
+        "S15"
+      ]
+    },
+    {
+      "id": "P15-03",
+      "phase": "phase-1-5",
+      "subphase": "01-native-and-outcomes",
+      "title": "Implement ordered labels, costed replay and chronological comparisons",
+      "dependencies": [
+        "P15-02"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/contracts/outcomes.py",
+        "implementation/src/trading_research/research/contracts/execution.py",
+        "implementation/src/trading_research/research/contracts/evaluation.py",
+        "implementation/tests/rule_discovery/test_p15_03.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/PSTACK_EXECUTION.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/research-program/EVALUATION.md",
+        "planning/research-program/OUTCOMES.md",
+        "planning/research-program/DATA_CONTRACTS.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "LABEL_FIXTURES.json",
+        "EXECUTION_FIXTURES.json",
+        "SPLIT_MANIFEST.json",
+        "EVALUATION_PROTOCOL.json"
+      ],
+      "native": true,
+      "test": "implementation/tests/rule_discovery/test_p15_03.py",
+      "path": "planning/phase-1-5/tasks/P15-03.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified"
+      ],
+      "assurance_cases": [
+        "S01",
+        "S02",
+        "S03",
+        "S05",
+        "S06",
+        "S07",
+        "S08",
+        "S09",
+        "S10",
+        "S11",
+        "S14",
+        "S16",
+        "S17",
+        "S30"
+      ]
+    },
+    {
+      "id": "P15-04",
+      "phase": "phase-1-5",
+      "subphase": "02-source-reconstruction",
+      "title": "Close the numerical source-reconstruction ledger",
+      "dependencies": [
+        "P15-00",
+        "P15-02"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/rule_discovery/reconstruction.py",
+        "planning/phase-1-5/SOURCE_RECONSTRUCTION_LEDGER.json",
+        "implementation/tests/rule_discovery/test_p15_04.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/PSTACK_EXECUTION.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-1-5/SPEC.md",
+        "planning/research-program/DATA_CONTRACTS.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "SOURCE_RECONSTRUCTION_LEDGER.json",
+        "SOURCE_CHECKS.json",
+        "DEPENDENCY_LIMITS.json"
+      ],
+      "native": false,
+      "test": "implementation/tests/rule_discovery/test_p15_04.py",
+      "path": "planning/phase-1-5/tasks/P15-04.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified"
+      ],
+      "assurance_cases": [
+        "S01",
+        "S02",
+        "S03",
+        "S21",
+        "S31"
+      ]
+    },
+    {
+      "id": "P15-05",
+      "phase": "phase-1-5",
+      "subphase": "03-primitives",
+      "title": "Implement causal formations and profile primitives",
+      "dependencies": [
+        "P15-02",
+        "P15-04"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/rule_discovery/formations.py",
+        "implementation/src/trading_research/research/rule_discovery/profiles.py",
+        "implementation/tests/rule_discovery/test_p15_05.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/PSTACK_EXECUTION.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-1-5/SPEC.md",
+        "planning/research-program/DATA_CONTRACTS.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "FORMATION_CASES.json",
+        "PROFILE_CASES.json",
+        "PRIMITIVE_SLICE.json"
+      ],
+      "native": true,
+      "test": "implementation/tests/rule_discovery/test_p15_05.py",
+      "path": "planning/phase-1-5/tasks/P15-05.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified"
+      ],
+      "assurance_cases": [
+        "S01",
+        "S02",
+        "S03",
+        "S05",
+        "S07",
+        "S08",
+        "S10",
+        "S13",
+        "S14",
+        "S22"
+      ]
+    },
+    {
+      "id": "P15-06",
+      "phase": "phase-1-5",
+      "subphase": "03-primitives",
+      "title": "Implement CVD variants and resolved cohort memory",
+      "dependencies": [
+        "P15-02",
+        "P15-04"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/rule_discovery/delta.py",
+        "implementation/src/trading_research/research/rule_discovery/cohorts.py",
+        "implementation/tests/rule_discovery/test_p15_06.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/PSTACK_EXECUTION.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-1-5/SPEC.md",
+        "planning/research-program/DATA_CONTRACTS.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "CVD_CASES.json",
+        "COHORT_CASES.json",
+        "DELTA_DICTIONARY.json"
+      ],
+      "native": true,
+      "test": "implementation/tests/rule_discovery/test_p15_06.py",
+      "path": "planning/phase-1-5/tasks/P15-06.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified"
+      ],
+      "assurance_cases": [
+        "S01",
+        "S02",
+        "S03",
+        "S05",
+        "S07",
+        "S08",
+        "S09",
+        "S11",
+        "S14",
+        "S23"
+      ]
+    },
+    {
+      "id": "P15-07",
+      "phase": "phase-1-5",
+      "subphase": "03-primitives",
+      "title": "Implement explicit response state machines",
+      "dependencies": [
+        "P15-05",
+        "P15-06"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/rule_discovery/sequences.py",
+        "implementation/tests/rule_discovery/test_p15_07.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/PSTACK_EXECUTION.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-1-5/SPEC.md",
+        "planning/research-program/DATA_CONTRACTS.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "SEQUENCE_FIXTURES.json",
+        "REARM_CASES.json",
+        "SEQUENCE_SLICE.json"
+      ],
+      "native": true,
+      "test": "implementation/tests/rule_discovery/test_p15_07.py",
+      "path": "planning/phase-1-5/tasks/P15-07.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified"
+      ],
+      "assurance_cases": [
+        "S01",
+        "S02",
+        "S03",
+        "S05",
+        "S07",
+        "S08",
+        "S09",
+        "S22"
+      ]
+    },
+    {
+      "id": "P15-08",
+      "phase": "phase-1-5",
+      "subphase": "03-primitives",
+      "title": "Register reference rules and the finite candidate bank",
+      "dependencies": [
+        "P15-05",
+        "P15-06",
+        "P15-07",
+        "P15-03"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/rule_discovery/references.py",
+        "implementation/src/trading_research/research/rule_discovery/registry.py",
+        "implementation/src/trading_research/research/rule_discovery/candidate_bank_v1.json",
+        "implementation/tests/rule_discovery/test_p15_08.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/PSTACK_EXECUTION.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-1-5/SPEC.md",
+        "planning/phase-1-5/SEARCH_CONTRACT.md",
+        "planning/research-program/DATA_CONTRACTS.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "CANDIDATE_BANK.json",
+        "APPLICABILITY_MATRIX.json",
+        "CONTROL_MANIFEST.json"
+      ],
+      "native": true,
+      "test": "implementation/tests/rule_discovery/test_p15_08.py",
+      "path": "planning/phase-1-5/tasks/P15-08.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified"
+      ],
+      "assurance_cases": [
+        "S01",
+        "S02",
+        "S03",
+        "S07",
+        "S08",
+        "S22",
+        "S24",
+        "S31"
+      ]
+    },
+    {
+      "id": "P15-09",
+      "phase": "phase-1-5",
+      "subphase": "04-family-adapters",
+      "title": "Jumbo range branches",
+      "dependencies": [
+        "P15-08"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/rule_discovery/source_adapters/jumbo.py",
+        "implementation/src/trading_research/research/rule_discovery/families/jumbo.json",
+        "implementation/tests/rule_discovery/test_p15_09.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/PSTACK_EXECUTION.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-1-5/SPEC.md",
+        "planning/phase-1-5/SEARCH_CONTRACT.md",
+        "planning/research-program/DATA_CONTRACTS.md",
+        "wiki/method-jumbo-tbr.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "BASELINE_PARITY.json",
+        "FAMILY_CANDIDATES.json",
+        "NATIVE_CASES.json",
+        "FAMILY_REPORT.md"
+      ],
+      "native": true,
+      "test": "implementation/tests/rule_discovery/test_p15_09.py",
+      "path": "planning/phase-1-5/tasks/P15-09.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified"
+      ],
+      "assurance_cases": [
+        "S01",
+        "S02",
+        "S03",
+        "S07",
+        "S08",
+        "S09",
+        "S21",
+        "S22",
+        "S31"
+      ]
+    },
+    {
+      "id": "P15-10",
+      "phase": "phase-1-5",
+      "subphase": "04-family-adapters",
+      "title": "Green Bird failure branches",
+      "dependencies": [
+        "P15-08"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/rule_discovery/source_adapters/green_failure.py",
+        "implementation/src/trading_research/research/rule_discovery/families/green_failure.json",
+        "implementation/tests/rule_discovery/test_p15_10.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/PSTACK_EXECUTION.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-1-5/SPEC.md",
+        "planning/phase-1-5/SEARCH_CONTRACT.md",
+        "planning/research-program/DATA_CONTRACTS.md",
+        "wiki/method-green-bird-failure.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "BASELINE_PARITY.json",
+        "FAMILY_CANDIDATES.json",
+        "NATIVE_CASES.json",
+        "FAMILY_REPORT.md"
+      ],
+      "native": true,
+      "test": "implementation/tests/rule_discovery/test_p15_10.py",
+      "path": "planning/phase-1-5/tasks/P15-10.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified"
+      ],
+      "assurance_cases": [
+        "S01",
+        "S02",
+        "S03",
+        "S07",
+        "S08",
+        "S09",
+        "S21",
+        "S22",
+        "S31"
+      ]
+    },
+    {
+      "id": "P15-11",
+      "phase": "phase-1-5",
+      "subphase": "04-family-adapters",
+      "title": "Green Bird VWAP and scalp configurations",
+      "dependencies": [
+        "P15-08"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/rule_discovery/source_adapters/green_vwap_scalp.py",
+        "implementation/src/trading_research/research/rule_discovery/families/green_vwap_scalp.json",
+        "implementation/tests/rule_discovery/test_p15_11.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/PSTACK_EXECUTION.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-1-5/SPEC.md",
+        "planning/phase-1-5/SEARCH_CONTRACT.md",
+        "planning/research-program/DATA_CONTRACTS.md",
+        "wiki/method-green-bird-vwap-continuation.md",
+        "wiki/method-green-bird-directional-scalps.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "BASELINE_PARITY.json",
+        "FAMILY_CANDIDATES.json",
+        "NATIVE_CASES.json",
+        "FAMILY_REPORT.md"
+      ],
+      "native": true,
+      "test": "implementation/tests/rule_discovery/test_p15_11.py",
+      "path": "planning/phase-1-5/tasks/P15-11.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified"
+      ],
+      "assurance_cases": [
+        "S01",
+        "S02",
+        "S03",
+        "S07",
+        "S08",
+        "S09",
+        "S21",
+        "S22",
+        "S31"
+      ]
+    },
+    {
+      "id": "P15-12",
+      "phase": "phase-1-5",
+      "subphase": "04-family-adapters",
+      "title": "Sires thesis and flow branches",
+      "dependencies": [
+        "P15-08"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/rule_discovery/source_adapters/sires.py",
+        "implementation/src/trading_research/research/rule_discovery/families/sires.json",
+        "implementation/tests/rule_discovery/test_p15_12.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/PSTACK_EXECUTION.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-1-5/SPEC.md",
+        "planning/phase-1-5/SEARCH_CONTRACT.md",
+        "planning/research-program/DATA_CONTRACTS.md",
+        "wiki/method-sires-thesis-flow.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "BASELINE_PARITY.json",
+        "FAMILY_CANDIDATES.json",
+        "NATIVE_CASES.json",
+        "FAMILY_REPORT.md"
+      ],
+      "native": true,
+      "test": "implementation/tests/rule_discovery/test_p15_12.py",
+      "path": "planning/phase-1-5/tasks/P15-12.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified"
+      ],
+      "assurance_cases": [
+        "S01",
+        "S02",
+        "S03",
+        "S07",
+        "S08",
+        "S09",
+        "S21",
+        "S22",
+        "S23",
+        "S31"
+      ]
+    },
+    {
+      "id": "P15-13",
+      "phase": "phase-1-5",
+      "subphase": "04-family-adapters",
+      "title": "Saint auction alignment branches",
+      "dependencies": [
+        "P15-08"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/rule_discovery/source_adapters/saint.py",
+        "implementation/src/trading_research/research/rule_discovery/families/saint.json",
+        "implementation/tests/rule_discovery/test_p15_13.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/PSTACK_EXECUTION.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-1-5/SPEC.md",
+        "planning/phase-1-5/SEARCH_CONTRACT.md",
+        "planning/research-program/DATA_CONTRACTS.md",
+        "wiki/method-saint-amt.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "BASELINE_PARITY.json",
+        "FAMILY_CANDIDATES.json",
+        "NATIVE_CASES.json",
+        "FAMILY_REPORT.md"
+      ],
+      "native": true,
+      "test": "implementation/tests/rule_discovery/test_p15_13.py",
+      "path": "planning/phase-1-5/tasks/P15-13.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified"
+      ],
+      "assurance_cases": [
+        "S01",
+        "S02",
+        "S03",
+        "S07",
+        "S08",
+        "S09",
+        "S21",
+        "S22",
+        "S31"
+      ]
+    },
+    {
+      "id": "P15-14",
+      "phase": "phase-1-5",
+      "subphase": "04-family-adapters",
+      "title": "Member independent-reasons branches",
+      "dependencies": [
+        "P15-08"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/rule_discovery/source_adapters/member.py",
+        "implementation/src/trading_research/research/rule_discovery/families/member.json",
+        "implementation/tests/rule_discovery/test_p15_14.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/PSTACK_EXECUTION.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-1-5/SPEC.md",
+        "planning/phase-1-5/SEARCH_CONTRACT.md",
+        "planning/research-program/DATA_CONTRACTS.md",
+        "wiki/method-member-two-reasons.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "BASELINE_PARITY.json",
+        "FAMILY_CANDIDATES.json",
+        "NATIVE_CASES.json",
+        "FAMILY_REPORT.md"
+      ],
+      "native": true,
+      "test": "implementation/tests/rule_discovery/test_p15_14.py",
+      "path": "planning/phase-1-5/tasks/P15-14.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified"
+      ],
+      "assurance_cases": [
+        "S01",
+        "S02",
+        "S03",
+        "S07",
+        "S08",
+        "S09",
+        "S21",
+        "S22",
+        "S31"
+      ]
+    },
+    {
+      "id": "P15-15",
+      "phase": "phase-1-5",
+      "subphase": "04-family-adapters",
+      "title": "Keani ordered opening-value branch",
+      "dependencies": [
+        "P15-08"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/rule_discovery/source_adapters/keani.py",
+        "implementation/src/trading_research/research/rule_discovery/families/keani.json",
+        "implementation/tests/rule_discovery/test_p15_15.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/PSTACK_EXECUTION.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-1-5/SPEC.md",
+        "planning/phase-1-5/SEARCH_CONTRACT.md",
+        "planning/research-program/DATA_CONTRACTS.md",
+        "wiki/method-keani-open-above-value.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "BASELINE_PARITY.json",
+        "FAMILY_CANDIDATES.json",
+        "NATIVE_CASES.json",
+        "FAMILY_REPORT.md"
+      ],
+      "native": true,
+      "test": "implementation/tests/rule_discovery/test_p15_15.py",
+      "path": "planning/phase-1-5/tasks/P15-15.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified"
+      ],
+      "assurance_cases": [
+        "S01",
+        "S02",
+        "S03",
+        "S07",
+        "S08",
+        "S09",
+        "S21",
+        "S22",
+        "S31"
+      ]
+    },
+    {
+      "id": "P15-16",
+      "phase": "phase-1-5",
+      "subphase": "04-family-adapters",
+      "title": "Preserve research-process and risk observations",
+      "dependencies": [
+        "P15-08"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/rule_discovery/source_adapters/processes.py",
+        "implementation/src/trading_research/research/rule_discovery/families/processes.json",
+        "implementation/tests/rule_discovery/test_p15_16.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/PSTACK_EXECUTION.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-1-5/SPEC.md",
+        "planning/phase-1-5/SEARCH_CONTRACT.md",
+        "planning/research-program/DATA_CONTRACTS.md",
+        "wiki/method-refill-effect.md",
+        "wiki/method-jetbundle-auction-states.md",
+        "wiki/method-stoic-data-engine.md",
+        "wiki/method-stoic-asymmetric-compounding.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "PROCESS_OBSERVATIONS.json",
+        "PROCESS_LIMITS.json",
+        "FAMILY_REPORT.md"
+      ],
+      "native": true,
+      "test": "implementation/tests/rule_discovery/test_p15_16.py",
+      "path": "planning/phase-1-5/tasks/P15-16.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified"
+      ],
+      "assurance_cases": [
+        "S01",
+        "S02",
+        "S03",
+        "S07",
+        "S08",
+        "S09",
+        "S21",
+        "S22",
+        "S31"
+      ]
+    },
+    {
+      "id": "P15-16A",
+      "phase": "phase-1-5",
+      "subphase": "05-finite-search",
+      "title": "Source-fidelity baseline B0.2 and author-example replay",
+      "dependencies": [
+        "P15-09",
+        "P15-10",
+        "P15-11",
+        "P15-12",
+        "P15-13",
+        "P15-14",
+        "P15-15",
+        "P15-16"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/rule_discovery/source_adapters/",
+        "implementation/src/trading_research/research/rule_discovery/families/",
+        "implementation/src/trading_research/research/rule_discovery/run_adapter_populations.py",
+        "implementation/tools/replay_author_examples.py",
+        "implementation/tests/rule_discovery/test_p15_16a.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/PSTACK_EXECUTION.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-1-5/SPEC.md",
+        "planning/phase-1-5/SOURCE_ADDITIONS_2026-09-14.md",
+        "planning/research-program/PERFORMANCE.md",
+        "planning/research-program/reviews/phase1-code-review-2026-09-14/DISPOSITION.md",
+        "planning/research-program/reviews/astra-fidelity-2026-09-15/REVIEW.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "FIDELITY_MATRIX.json",
+        "B02_SUMMARY.json",
+        "B02_SUMMARY.md",
+        "AUTHOR_EXAMPLE_REPLAY.json",
+        "AUTHOR_EXAMPLE_REPLAY.md",
+        "LEDGER_CORRECTIONS.json",
+        "FAMILY_REPORT.md"
+      ],
+      "native": true,
+      "test": "implementation/tests/rule_discovery/test_p15_16a.py",
+      "path": "planning/phase-1-5/tasks/P15-16A.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified"
+      ],
+      "assurance_cases": [
+        "S01",
+        "S02",
+        "S03",
+        "S07",
+        "S08",
+        "S09",
+        "S21",
+        "S22",
+        "S31"
+      ]
+    },
+    {
+      "id": "P15-17",
+      "phase": "phase-1-5",
+      "subphase": "05-finite-search",
+      "title": "Execute and reconcile the breadth screen",
+      "dependencies": [
+        "P15-09",
+        "P15-10",
+        "P15-11",
+        "P15-12",
+        "P15-13",
+        "P15-14",
+        "P15-15",
+        "P15-16",
+        "P15-16A"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/rule_discovery/search.py",
+        "implementation/tests/rule_discovery/test_p15_17.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/HOW_TO_RUN.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-1-5/SEARCH_CONTRACT.md",
+        "planning/research-program/EVALUATION.md",
+        "planning/research-program/OUTCOMES.md",
+        "planning/phase-1-5/SPEC.md",
+        "planning/research-program/DELIVERABLES.md",
+        "planning/research-program/RETENTION.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "TRIALS.jsonl",
+        "BREADTH_RESULTS.json",
+        "REFINEMENT_ALLOWLIST.json",
+        "FAMILY_REPORTS/"
+      ],
+      "native": true,
+      "test": "implementation/tests/rule_discovery/test_p15_17.py",
+      "path": "planning/phase-1-5/tasks/P15-17.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified",
+        "retained_baseline",
+        "rejected_by_evidence",
+        "inconclusive_support",
+        "unsupported_owned_input"
+      ],
+      "assurance_cases": [
+        "S06",
+        "S07",
+        "S11",
+        "S12",
+        "S13",
+        "S15",
+        "S22",
+        "S24",
+        "S32"
+      ]
+    },
+    {
+      "id": "P15-18",
+      "phase": "phase-1-5",
+      "subphase": "05-finite-search",
+      "title": "Run one bounded refinement and choose honest dispositions",
+      "dependencies": [
+        "P15-17"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/rule_discovery/refinement.py",
+        "implementation/tests/rule_discovery/test_p15_18.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/HOW_TO_RUN.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-1-5/SEARCH_CONTRACT.md",
+        "planning/research-program/EVALUATION.md",
+        "planning/research-program/OUTCOMES.md",
+        "planning/research-program/DELIVERABLES.md",
+        "planning/research-program/RETENTION.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "REFINEMENT_BANK.json",
+        "TRIALS.jsonl",
+        "SELECTED_RULES_BY_FOLD.json",
+        "FAMILY_DISPOSITIONS.json"
+      ],
+      "native": true,
+      "test": "implementation/tests/rule_discovery/test_p15_18.py",
+      "path": "planning/phase-1-5/tasks/P15-18.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified",
+        "retained_baseline",
+        "rejected_by_evidence",
+        "inconclusive_support",
+        "unsupported_owned_input"
+      ],
+      "assurance_cases": [
+        "S07",
+        "S11",
+        "S12",
+        "S13",
+        "S17",
+        "S22",
+        "S24",
+        "S32"
+      ]
+    },
+    {
+      "id": "P15-19",
+      "phase": "phase-1-5",
+      "subphase": "06-exit-controls",
+      "title": "Compare fixed-entry exit policies",
+      "dependencies": [
+        "P15-18"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/rule_discovery/exits.py",
+        "implementation/tests/rule_discovery/test_p15_19.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/HOW_TO_RUN.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/research-program/EVALUATION.md",
+        "planning/research-program/OUTCOMES.md",
+        "planning/phase-1-5/SEARCH_CONTRACT.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "FIXED_ENTRIES.json",
+        "EXIT_TRIALS.jsonl",
+        "EXIT_COMPARISON.json",
+        "FAMILY_REPORTS/"
+      ],
+      "native": true,
+      "test": "implementation/tests/rule_discovery/test_p15_19.py",
+      "path": "planning/phase-1-5/tasks/P15-19.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified",
+        "retained_baseline",
+        "rejected_by_evidence",
+        "inconclusive_support",
+        "unsupported_owned_input"
+      ],
+      "assurance_cases": [
+        "S07",
+        "S11",
+        "S12",
+        "S14",
+        "S24",
+        "S30",
+        "S32"
+      ]
+    },
+    {
+      "id": "P15-20",
+      "phase": "phase-1-5",
+      "subphase": "07-release",
+      "title": "Close the full Phase 1.5 release and Phase 2 handoff",
+      "dependencies": [
+        "P15-19"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/rule_discovery/release.py",
+        "implementation/tests/rule_discovery/test_p15_20.py",
+        "wiki/current-status.md",
+        "wiki/research-architecture.md",
+        "wiki/log.md"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/HOW_TO_RUN.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-1-5/SPEC.md",
+        "planning/phase-1-5/SEARCH_CONTRACT.md",
+        "planning/research-program/EVALUATION.md",
+        "planning/research-program/OUTCOMES.md",
+        "planning/research-program/DELIVERABLES.md",
+        "planning/research-program/RETENTION.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "RELEASE_INPUTS.json",
+        "CENSUS_RECONCILIATION.json",
+        "VISUAL_QA.json",
+        "COMPLETION_REPORT.md",
+        "PHASE2_HANDOFF.md",
+        "STRATEGY_BOOK.md",
+        "STRATEGY_BOOK.json",
+        "STRATEGY_BOOK_CSVS/",
+        "REGIME_DIMENSIONS.json",
+        "RETENTION_SET.json"
+      ],
+      "native": true,
+      "test": "implementation/tests/rule_discovery/test_p15_20.py",
+      "path": "planning/phase-1-5/tasks/P15-20.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08",
+        "A09",
+        "A10",
+        "A11",
+        "A12",
+        "A13",
+        "A15"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified",
+        "retained_baseline",
+        "rejected_by_evidence",
+        "inconclusive_support",
+        "unsupported_owned_input"
+      ],
+      "assurance_cases": [
+        "S01",
+        "S02",
+        "S03",
+        "S04",
+        "S06",
+        "S07",
+        "S11",
+        "S12",
+        "S24",
+        "S31",
+        "S32"
+      ]
+    },
+    {
+      "id": "P2-00",
+      "phase": "phase-2",
+      "subphase": "00-entry-gate",
+      "title": "Verify Phase 1.5 and freeze Phase 2 scope",
+      "dependencies": [
+        "P15-20"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/experts/types.py",
+        "implementation/src/trading_research/research/experts/release_inputs.py",
+        "implementation/src/trading_research/research/experts/runner.py",
+        "implementation/tools/run_context_experts.py",
+        "implementation/tests/context_experts/test_p2_00.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/HOW_TO_RUN.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-2/SPEC.md",
+        "planning/research-program/DATA_CONTRACTS.md",
+        "planning/research-program/TYPE_REFERENCE.py",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "PHASE2_INPUTS.json",
+        "OWNED_AVAILABILITY.json",
+        "EXPOSURE_LEDGER.json",
+        "ENGINEERING_DATES.json"
+      ],
+      "native": false,
+      "test": "implementation/tests/context_experts/test_p2_00.py",
+      "path": "planning/phase-2/tasks/P2-00.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified"
+      ],
+      "assurance_cases": [
+        "S04",
+        "S05",
+        "S06",
+        "S07",
+        "S10",
+        "S20",
+        "S25",
+        "S31"
+      ]
+    },
+    {
+      "id": "P2-01",
+      "phase": "phase-2",
+      "subphase": "01-datasets-and-fitting",
+      "title": "Build snapshots, labels and causal dataset joins",
+      "dependencies": [
+        "P2-00"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/experts/datasets.py",
+        "implementation/src/trading_research/research/experts/features/base.py",
+        "implementation/src/trading_research/research/experts/labels/base.py",
+        "implementation/tests/context_experts/test_p2_01.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/HOW_TO_RUN.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-2/SPEC.md",
+        "planning/research-program/DATA_CONTRACTS.md",
+        "planning/research-program/EVALUATION.md",
+        "planning/research-program/OUTCOMES.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "FEATURE_DICTIONARY.json",
+        "TARGET_DICTIONARY.json",
+        "DATASET_MANIFEST.json",
+        "LINEAGE_CASES.json"
+      ],
+      "native": true,
+      "test": "implementation/tests/context_experts/test_p2_01.py",
+      "path": "planning/phase-2/tasks/P2-01.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified"
+      ],
+      "assurance_cases": [
+        "S05",
+        "S06",
+        "S07",
+        "S08",
+        "S09",
+        "S10",
+        "S11",
+        "S13",
+        "S15",
+        "S16",
+        "S17",
+        "S25"
+      ]
+    },
+    {
+      "id": "P2-02",
+      "phase": "phase-2",
+      "subphase": "01-datasets-and-fitting",
+      "title": "Implement deterministic fitting and chronological stacking",
+      "dependencies": [
+        "P2-01"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/experts/fitting.py",
+        "implementation/src/trading_research/research/experts/calibration.py",
+        "implementation/src/trading_research/research/experts/stacking.py",
+        "implementation/tests/context_experts/test_p2_02.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/HOW_TO_RUN.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/research-program/MODEL_FITTING.md",
+        "planning/research-program/EVALUATION.md",
+        "planning/research-program/OUTCOMES.md",
+        "planning/research-program/DATA_CONTRACTS.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "SOLVER_FIXTURES.json",
+        "STACKING_MANIFEST.json",
+        "SERIALIZATION_CHECK.json",
+        "FIT_PROFILE.json"
+      ],
+      "native": false,
+      "test": "implementation/tests/context_experts/test_p2_02.py",
+      "path": "planning/phase-2/tasks/P2-02.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified"
+      ],
+      "assurance_cases": [
+        "S05",
+        "S12",
+        "S13",
+        "S14",
+        "S15",
+        "S17",
+        "S18",
+        "S19",
+        "S20",
+        "S29",
+        "S32"
+      ]
+    },
+    {
+      "id": "P2-09",
+      "phase": "phase-2",
+      "subphase": "02-native-options-baseline",
+      "title": "Implement native option/spot/OI adapters",
+      "dependencies": [
+        "P15-02"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/experts/options/instruments.py",
+        "implementation/src/trading_research/research/experts/options/native.py",
+        "implementation/tests/context_experts/test_p2_09.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/HOW_TO_RUN.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-2/OPTIONS.md",
+        "planning/research-program/DATA_CONTRACTS.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "INSTRUMENT_LEDGER.json",
+        "OPTIONS_AVAILABILITY.json",
+        "SURFACE_INPUT_SLICE.json",
+        "PUBLICATION_SENSITIVITY.json"
+      ],
+      "native": true,
+      "test": "implementation/tests/context_experts/test_p2_09.py",
+      "path": "planning/phase-2/tasks/P2-09.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified"
+      ],
+      "assurance_cases": [
+        "S06",
+        "S07",
+        "S08",
+        "S09",
+        "S10",
+        "S13",
+        "S15",
+        "S25",
+        "S31"
+      ]
+    },
+    {
+      "id": "P2-10",
+      "phase": "phase-2",
+      "subphase": "02-native-options-baseline",
+      "title": "Implement pricing, Greeks and native exposure boards",
+      "dependencies": [
+        "P2-09"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/experts/options/pricing.py",
+        "implementation/src/trading_research/research/experts/options/surfaces.py",
+        "implementation/src/trading_research/research/experts/options/boards.py",
+        "implementation/tests/context_experts/test_p2_10.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/HOW_TO_RUN.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-2/OPTIONS.md",
+        "planning/research-program/DATA_CONTRACTS.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "PRICING_FIXTURES.json",
+        "GREEK_SENSITIVITY.json",
+        "EXPOSURE_BOARDS.json",
+        "SURFACE_QUALITY.json"
+      ],
+      "native": true,
+      "test": "implementation/tests/context_experts/test_p2_10.py",
+      "path": "planning/phase-2/tasks/P2-10.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified"
+      ],
+      "assurance_cases": [
+        "S07",
+        "S08",
+        "S13",
+        "S14",
+        "S25",
+        "S26"
+      ]
+    },
+    {
+      "id": "P2-11",
+      "phase": "phase-2",
+      "subphase": "04-context-mechanisms",
+      "title": "Implement flow, exposure changes and repricing scenarios",
+      "dependencies": [
+        "P2-10",
+        "P2-02",
+        "P2-04"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/experts/options/flow.py",
+        "implementation/src/trading_research/research/experts/options/scenarios.py",
+        "implementation/src/trading_research/research/experts/options/context.py",
+        "implementation/tests/context_experts/test_p2_11.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/HOW_TO_RUN.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-2/OPTIONS.md",
+        "planning/research-program/MODEL_FITTING.md",
+        "planning/research-program/EVALUATION.md",
+        "planning/research-program/OUTCOMES.md",
+        "planning/phase-2/VOLATILITY.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "OPTION_FLOW.json",
+        "EXPOSURE_CHANGE_CASES.json",
+        "SCENARIO_BOARDS.json",
+        "OPTIONS_CONTEXT_EVALUATION.json"
+      ],
+      "native": true,
+      "test": "implementation/tests/context_experts/test_p2_11.py",
+      "path": "planning/phase-2/tasks/P2-11.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified"
+      ],
+      "assurance_cases": [
+        "S07",
+        "S08",
+        "S09",
+        "S14",
+        "S25",
+        "S26",
+        "S27"
+      ]
+    },
+    {
+      "id": "P2-03",
+      "phase": "phase-2",
+      "subphase": "03-joint-volatility",
+      "title": "Implement volatility arithmetic and multi-horizon targets",
+      "dependencies": [
+        "P15-02",
+        "P2-10"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/experts/features/volatility.py",
+        "implementation/src/trading_research/research/experts/labels/volatility.py",
+        "implementation/tests/context_experts/test_p2_03.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/HOW_TO_RUN.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-2/VOLATILITY.md",
+        "planning/research-program/DATA_CONTRACTS.md",
+        "planning/research-program/MODEL_FITTING.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "VOLATILITY_FEATURES.json",
+        "VOLATILITY_TARGETS.json",
+        "VOLATILITY_FIXTURES.json"
+      ],
+      "native": true,
+      "test": "implementation/tests/context_experts/test_p2_03.py",
+      "path": "planning/phase-2/tasks/P2-03.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified"
+      ],
+      "assurance_cases": [
+        "S07",
+        "S08",
+        "S10",
+        "S14",
+        "S16"
+      ]
+    },
+    {
+      "id": "P2-04",
+      "phase": "phase-2",
+      "subphase": "03-joint-volatility",
+      "title": "Fit one joint volatility expert and its ablations",
+      "dependencies": [
+        "P2-03",
+        "P2-00"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/experts/volatility.py",
+        "implementation/src/trading_research/research/experts/configs/joint_volatility.json",
+        "implementation/tests/context_experts/test_p2_04.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/HOW_TO_RUN.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-2/VOLATILITY.md",
+        "planning/research-program/MODEL_FITTING.md",
+        "planning/research-program/EVALUATION.md",
+        "planning/research-program/OUTCOMES.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "JOINT_VOL_ARTIFACT.json",
+        "VOL_ABLATIONS.json",
+        "VOL_FORECASTS_MANIFEST.json",
+        "VOL_VISUAL_QA.json"
+      ],
+      "native": true,
+      "test": "implementation/tests/context_experts/test_p2_04.py",
+      "path": "planning/phase-2/tasks/P2-04.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified"
+      ],
+      "assurance_cases": [
+        "S07",
+        "S08",
+        "S11",
+        "S17",
+        "S18",
+        "S19",
+        "S20",
+        "S28",
+        "S32"
+      ]
+    },
+    {
+      "id": "P2-05",
+      "phase": "phase-2",
+      "subphase": "04-context-mechanisms",
+      "title": "Fit the range-path and auction-session experts",
+      "dependencies": [
+        "P2-04"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/experts/features/range_path.py",
+        "implementation/src/trading_research/research/experts/labels/range_path.py",
+        "implementation/src/trading_research/research/experts/range_path.py",
+        "implementation/src/trading_research/research/experts/configs/range_path.json",
+        "implementation/tests/context_experts/test_p2_05.py",
+        "implementation/src/trading_research/research/experts/features/auction_session.py",
+        "implementation/src/trading_research/research/experts/labels/auction_session.py",
+        "implementation/src/trading_research/research/experts/auction_session.py",
+        "implementation/src/trading_research/research/experts/configs/auction_session.json"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/HOW_TO_RUN.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-2/CONTEXT.md",
+        "planning/research-program/MODEL_FITTING.md",
+        "planning/research-program/EVALUATION.md",
+        "planning/research-program/OUTCOMES.md",
+        "planning/research-program/DATA_CONTRACTS.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "range_path/FEATURE_TARGET_CASES.json",
+        "range_path/EXPERT_ARTIFACT.json",
+        "range_path/ABLATIONS.json",
+        "range_path/FORECASTS_MANIFEST.json",
+        "range_path/VISUAL_QA.json",
+        "auction_session/FEATURE_TARGET_CASES.json",
+        "auction_session/EXPERT_ARTIFACT.json",
+        "auction_session/ABLATIONS.json",
+        "auction_session/FORECASTS_MANIFEST.json",
+        "auction_session/VISUAL_QA.json"
+      ],
+      "native": true,
+      "test": "implementation/tests/context_experts/test_p2_05.py",
+      "path": "planning/phase-2/tasks/P2-05.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08",
+        "A09",
+        "A10",
+        "A11"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified"
+      ],
+      "assurance_cases": [
+        "S07",
+        "S08",
+        "S11",
+        "S16",
+        "S18",
+        "S19",
+        "S28",
+        "S32"
+      ]
+    },
+    {
+      "id": "P2-07",
+      "phase": "phase-2",
+      "subphase": "04-context-mechanisms",
+      "title": "Fit the flow-memory and cross-market experts",
+      "dependencies": [
+        "P2-04",
+        "P2-11"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/experts/features/flow_memory.py",
+        "implementation/src/trading_research/research/experts/labels/flow_memory.py",
+        "implementation/src/trading_research/research/experts/flow_memory.py",
+        "implementation/src/trading_research/research/experts/configs/flow_memory.json",
+        "implementation/tests/context_experts/test_p2_07.py",
+        "implementation/src/trading_research/research/experts/features/cross_market.py",
+        "implementation/src/trading_research/research/experts/labels/cross_market.py",
+        "implementation/src/trading_research/research/experts/cross_market.py",
+        "implementation/src/trading_research/research/experts/configs/cross_market.json"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/HOW_TO_RUN.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-2/CONTEXT.md",
+        "planning/research-program/MODEL_FITTING.md",
+        "planning/research-program/EVALUATION.md",
+        "planning/research-program/OUTCOMES.md",
+        "planning/research-program/DATA_CONTRACTS.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "flow_memory/FEATURE_TARGET_CASES.json",
+        "flow_memory/EXPERT_ARTIFACT.json",
+        "flow_memory/ABLATIONS.json",
+        "flow_memory/FORECASTS_MANIFEST.json",
+        "flow_memory/VISUAL_QA.json",
+        "cross_market/FEATURE_TARGET_CASES.json",
+        "cross_market/EXPERT_ARTIFACT.json",
+        "cross_market/ABLATIONS.json",
+        "cross_market/FORECASTS_MANIFEST.json",
+        "cross_market/VISUAL_QA.json"
+      ],
+      "native": true,
+      "test": "implementation/tests/context_experts/test_p2_07.py",
+      "path": "planning/phase-2/tasks/P2-07.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08",
+        "A09",
+        "A10",
+        "A11"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified"
+      ],
+      "assurance_cases": [
+        "S07",
+        "S08",
+        "S09",
+        "S11",
+        "S15",
+        "S18",
+        "S19",
+        "S23",
+        "S28",
+        "S31",
+        "S32"
+      ]
+    },
+    {
+      "id": "P2-12",
+      "phase": "phase-2",
+      "subphase": "05-intraday-oi",
+      "title": "Fit and test weakly supervised intraday OI updates",
+      "dependencies": [
+        "P2-11"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/experts/options/oi_labels.py",
+        "implementation/src/trading_research/research/experts/options/oi_model.py",
+        "implementation/src/trading_research/research/experts/configs/intraday_oi.json",
+        "implementation/tests/context_experts/test_p2_12.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/HOW_TO_RUN.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-2/OPTIONS.md",
+        "planning/research-program/MODEL_FITTING.md",
+        "planning/research-program/EVALUATION.md",
+        "planning/research-program/OUTCOMES.md",
+        "planning/research-program/DATA_CONTRACTS.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "OI_GROUP_LEDGER.json",
+        "OI_GRADIENT_CASES.json",
+        "OI_ARTIFACT.json",
+        "OI_ENDPOINT_EVALUATION.json",
+        "OI_OOF_MANIFEST.json"
+      ],
+      "native": true,
+      "test": "implementation/tests/context_experts/test_p2_12.py",
+      "path": "planning/phase-2/tasks/P2-12.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified"
+      ],
+      "assurance_cases": [
+        "S07",
+        "S08",
+        "S11",
+        "S12",
+        "S13",
+        "S14",
+        "S15",
+        "S16",
+        "S17",
+        "S18",
+        "S19",
+        "S25",
+        "S26",
+        "S27",
+        "S28",
+        "S32"
+      ]
+    },
+    {
+      "id": "P2-13",
+      "phase": "phase-2",
+      "subphase": "06-method-experts",
+      "title": "Fit the method context experts (eight source methods)",
+      "dependencies": [
+        "P2-05",
+        "P2-07",
+        "P2-12"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/experts/methods/jumbo.py",
+        "implementation/src/trading_research/research/experts/configs/method_jumbo.json",
+        "implementation/tests/context_experts/test_p2_13.py",
+        "implementation/src/trading_research/research/experts/methods/green_failure.py",
+        "implementation/src/trading_research/research/experts/configs/method_green_failure.json",
+        "implementation/src/trading_research/research/experts/methods/green_vwap.py",
+        "implementation/src/trading_research/research/experts/configs/method_green_vwap.json",
+        "implementation/src/trading_research/research/experts/methods/green_scalp.py",
+        "implementation/src/trading_research/research/experts/configs/method_green_scalp.json",
+        "implementation/src/trading_research/research/experts/methods/sires.py",
+        "implementation/src/trading_research/research/experts/configs/method_sires.json",
+        "implementation/src/trading_research/research/experts/methods/saint.py",
+        "implementation/src/trading_research/research/experts/configs/method_saint.json",
+        "implementation/src/trading_research/research/experts/methods/member.py",
+        "implementation/src/trading_research/research/experts/configs/method_member.json",
+        "implementation/src/trading_research/research/experts/methods/keani.py",
+        "implementation/src/trading_research/research/experts/configs/method_keani.json",
+        "implementation/src/trading_research/research/experts/methods/__init__.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/HOW_TO_RUN.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-2/METHOD_EXPERTS.md",
+        "planning/research-program/MODEL_FITTING.md",
+        "planning/research-program/EVALUATION.md",
+        "planning/research-program/OUTCOMES.md",
+        "planning/research-program/DATA_CONTRACTS.md",
+        "wiki/method-jumbo-tbr.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md",
+        "wiki/method-green-bird-failure.md",
+        "wiki/method-green-bird-vwap-continuation.md",
+        "wiki/method-green-bird-directional-scalps.md",
+        "wiki/method-sires-thesis-flow.md",
+        "wiki/method-saint-amt.md",
+        "wiki/method-member-two-reasons.md",
+        "wiki/method-keani-open-above-value.md"
+      ],
+      "artifacts": [
+        "methods/<method-id>/METHOD_DATASET.json",
+        "methods/<method-id>/METHOD_ARTIFACT.json",
+        "methods/<method-id>/METHOD_ABLATIONS.json",
+        "methods/<method-id>/BRANCH_SUPPORT.json",
+        "methods/<method-id>/FAMILY_REPORT.md"
+      ],
+      "native": true,
+      "test": "implementation/tests/context_experts/test_p2_13.py",
+      "path": "planning/phase-2/tasks/P2-13.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08",
+        "A09",
+        "A10",
+        "A11",
+        "A12",
+        "A13",
+        "A14"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified"
+      ],
+      "assurance_cases": [
+        "S07",
+        "S08",
+        "S11",
+        "S15",
+        "S17",
+        "S18",
+        "S19",
+        "S20",
+        "S21",
+        "S23",
+        "S28",
+        "S32"
+      ]
+    },
+    {
+      "id": "P2-21",
+      "phase": "phase-2",
+      "subphase": "06-method-experts",
+      "title": "Build research-process context and risk overlay interfaces",
+      "dependencies": [
+        "P2-05",
+        "P2-07",
+        "P2-12"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/experts/methods/processes.py",
+        "implementation/src/trading_research/research/experts/configs/processes.json",
+        "implementation/tests/context_experts/test_p2_21.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/HOW_TO_RUN.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-2/METHOD_EXPERTS.md",
+        "planning/phase-2/CONTEXT.md",
+        "planning/research-program/MODEL_FITTING.md",
+        "planning/research-program/DATA_CONTRACTS.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "PROCESS_ARTIFACTS.json",
+        "PROCESS_SUPPORT.json",
+        "RISK_OVERLAY_CASES.json",
+        "FAMILY_REPORT.md"
+      ],
+      "native": true,
+      "test": "implementation/tests/context_experts/test_p2_21.py",
+      "path": "planning/phase-2/tasks/P2-21.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified"
+      ],
+      "assurance_cases": [
+        "S07",
+        "S08",
+        "S11",
+        "S18",
+        "S19",
+        "S28",
+        "S30",
+        "S31",
+        "S32"
+      ]
+    },
+    {
+      "id": "P2-22",
+      "phase": "phase-2",
+      "subphase": "07-plans-and-adaptation",
+      "title": "Implement conditional plans and fixed context contribution replay",
+      "dependencies": [
+        "P2-13",
+        "P2-21"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/experts/plans.py",
+        "implementation/src/trading_research/research/experts/context_replay.py",
+        "implementation/tests/context_experts/test_p2_22.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/HOW_TO_RUN.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-2/METHOD_EXPERTS.md",
+        "planning/research-program/EVALUATION.md",
+        "planning/research-program/OUTCOMES.md",
+        "planning/research-program/DATA_CONTRACTS.md",
+        "planning/research-program/DELIVERABLES.md",
+        "planning/research-program/RETENTION.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "CONDITIONAL_PLANS_MANIFEST.json",
+        "PLAN_REVISION_CASES.json",
+        "CONTEXT_REPLAY.json",
+        "CONTRIBUTION_REPORT.md"
+      ],
+      "native": true,
+      "test": "implementation/tests/context_experts/test_p2_22.py",
+      "path": "planning/phase-2/tasks/P2-22.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified"
+      ],
+      "assurance_cases": [
+        "S05",
+        "S07",
+        "S08",
+        "S10",
+        "S11",
+        "S14",
+        "S28",
+        "S29",
+        "S30"
+      ]
+    },
+    {
+      "id": "P2-23",
+      "phase": "phase-2",
+      "subphase": "07-plans-and-adaptation",
+      "title": "Compare refit cadences and matured-label intraday updates",
+      "dependencies": [
+        "P2-22"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/experts/adaptation.py",
+        "implementation/src/trading_research/research/experts/drift.py",
+        "implementation/tests/context_experts/test_p2_23.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/HOW_TO_RUN.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-2/ADAPTATION.md",
+        "planning/research-program/MODEL_FITTING.md",
+        "planning/research-program/EVALUATION.md",
+        "planning/research-program/OUTCOMES.md",
+        "planning/research-program/DATA_CONTRACTS.md",
+        "planning/research-program/DELIVERABLES.md",
+        "planning/research-program/RETENTION.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "CADENCE_TRIALS.jsonl",
+        "UPDATE_LEDGER.json",
+        "DRIFT_REPORT.json",
+        "CADENCE_COMPARISON.json"
+      ],
+      "native": true,
+      "test": "implementation/tests/context_experts/test_p2_23.py",
+      "path": "planning/phase-2/tasks/P2-23.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified"
+      ],
+      "assurance_cases": [
+        "S07",
+        "S08",
+        "S12",
+        "S13",
+        "S16",
+        "S17",
+        "S24",
+        "S29",
+        "S32"
+      ]
+    },
+    {
+      "id": "P2-24",
+      "phase": "phase-2",
+      "subphase": "08-release",
+      "title": "Verify the complete context release and Phase 3 handoff",
+      "dependencies": [
+        "P2-23"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/experts/release.py",
+        "implementation/tests/context_experts/test_p2_24.py",
+        "wiki/current-status.md",
+        "wiki/research-architecture.md",
+        "wiki/log.md"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/HOW_TO_RUN.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-2/SPEC.md",
+        "planning/phase-2/ADAPTATION.md",
+        "planning/phase-2/METHOD_EXPERTS.md",
+        "planning/research-program/EVALUATION.md",
+        "planning/research-program/OUTCOMES.md",
+        "planning/research-program/DELIVERABLES.md",
+        "planning/research-program/RETENTION.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "RELEASE_INPUTS.json",
+        "CENSUS_RECONCILIATION.json",
+        "INPUT_CONSUMPTION_AUDIT.json",
+        "VISUAL_QA.json",
+        "COMPLETION_REPORT.md",
+        "PHASE3_HANDOFF.md",
+        "STRATEGY_BOOK.md",
+        "STRATEGY_BOOK.json",
+        "STRATEGY_BOOK_CSVS/",
+        "REGIME_DIMENSIONS.json",
+        "RETENTION_SET.json",
+        "EXPERT_SCORECARDS/"
+      ],
+      "native": true,
+      "test": "implementation/tests/context_experts/test_p2_24.py",
+      "path": "planning/phase-2/tasks/P2-24.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08",
+        "A09",
+        "A10",
+        "A11",
+        "A12",
+        "A13",
+        "A14",
+        "A15"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified",
+        "retained_baseline",
+        "rejected_by_evidence",
+        "inconclusive_support",
+        "unsupported_owned_input"
+      ],
+      "assurance_cases": [
+        "S01",
+        "S02",
+        "S03",
+        "S04",
+        "S06",
+        "S07",
+        "S11",
+        "S12",
+        "S18",
+        "S20",
+        "S24",
+        "S25",
+        "S27",
+        "S28",
+        "S29",
+        "S30",
+        "S31",
+        "S32"
+      ]
+    }
+  ],
+  "plan_version": "research-plan-2026-09-14-v3",
+  "assurance_version": "research-assurance-2026-09-14-v3",
+  "required_task_artifacts": [
+    "DRAFT_MANIFEST.json",
+    "PLAN_SNAPSHOT.json",
+    "CODE_SNAPSHOT.json",
+    "EVIDENCE_MATRIX.json",
+    "WORK_LOG.md",
+    "DECISIONS.tsv",
+    "REPORT.md"
+  ],
+  "coordinator_artifacts": {
+    "phase-1-5/00-foundation": [
+      "SUBPHASE_RECEIPT.json",
+      "GATE_REVIEW.json"
+    ],
+    "phase-1-5/01-native-and-outcomes": [
+      "SUBPHASE_RECEIPT.json",
+      "GATE_REVIEW.json"
+    ],
+    "phase-1-5/02-source-reconstruction": [
+      "SUBPHASE_RECEIPT.json",
+      "GATE_REVIEW.json"
+    ],
+    "phase-1-5/03-primitives": [
+      "SUBPHASE_RECEIPT.json",
+      "GATE_REVIEW.json"
+    ],
+    "phase-1-5/04-family-adapters": [
+      "SUBPHASE_RECEIPT.json",
+      "GATE_REVIEW.json"
+    ],
+    "phase-1-5/05-finite-search": [
+      "SUBPHASE_RECEIPT.json",
+      "GATE_REVIEW.json"
+    ],
+    "phase-1-5/06-exit-controls": [
+      "SUBPHASE_RECEIPT.json",
+      "GATE_REVIEW.json"
+    ],
+    "phase-1-5/07-release": [
+      "SUBPHASE_RECEIPT.json",
+      "GATE_REVIEW.json",
+      "PHASE1_5_RELEASE.json",
+      "PHASE_GATE_REVIEW.json"
+    ],
+    "phase-2/00-entry-gate": [
+      "SUBPHASE_RECEIPT.json",
+      "GATE_REVIEW.json"
+    ],
+    "phase-2/01-datasets-and-fitting": [
+      "SUBPHASE_RECEIPT.json",
+      "GATE_REVIEW.json"
+    ],
+    "phase-2/02-native-options-baseline": [
+      "SUBPHASE_RECEIPT.json",
+      "GATE_REVIEW.json"
+    ],
+    "phase-2/03-joint-volatility": [
+      "SUBPHASE_RECEIPT.json",
+      "GATE_REVIEW.json"
+    ],
+    "phase-2/04-context-mechanisms": [
+      "SUBPHASE_RECEIPT.json",
+      "GATE_REVIEW.json"
+    ],
+    "phase-2/05-intraday-oi": [
+      "SUBPHASE_RECEIPT.json",
+      "GATE_REVIEW.json"
+    ],
+    "phase-2/06-method-experts": [
+      "SUBPHASE_RECEIPT.json",
+      "GATE_REVIEW.json"
+    ],
+    "phase-2/07-plans-and-adaptation": [
+      "SUBPHASE_RECEIPT.json",
+      "GATE_REVIEW.json"
+    ],
+    "phase-2/08-release": [
+      "SUBPHASE_RECEIPT.json",
+      "GATE_REVIEW.json",
+      "PHASE2_RELEASE.json",
+      "PHASE_GATE_REVIEW.json"
+    ]
+  }
+}

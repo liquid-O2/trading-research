@@ -1,0 +1,1004 @@
+{
+ "all_history_descriptive_recommendation": {
+  "candidate_id": "GB-FAIL:previous_hour:T4:shift_minutes=-15",
+  "label": "all-history descriptive recommendation; never applied backward to an earlier fold",
+  "mean_diff": 5.588527551942186
+ },
+ "causal": true,
+ "folds": [
+  {
+   "combinations": [
+    "GB-FAIL:COMBINED:GB-FAIL:previous_hour:T4:shift_minutes=-15+GB-FAIL:previous_hour:F3:efficiency=0.5",
+    "JJ-TBR:COMBINED:JJ-TBR:judas_reversal:S4:deadline_minutes=10+JJ-TBR:single_extended:F2:volume_threshold_multiplier=0.75",
+    "SAINT-AMT:COMBINED:SAINT-AMT:continuation_retest:S1:deadline_minutes=15+SAINT-AMT:continuation_retest:F2:volume_threshold_multiplier=0.75",
+    "SIRES:COMBINED:SIRES:defended_band_continuation:R1:dispersion=0.5+SIRES:absorption_reward_retest:M1:max_prior_contacts=0"
+   ],
+   "evidence_cutoff_day": "2021-09-30",
+   "outer_fold": 2022,
+   "roles": [
+    {
+     "bank": "Formation",
+     "candidate_id": "GB-FAIL:previous_hour:F3:efficiency=0.5",
+     "disposition": "promoted",
+     "family": "GB-FAIL",
+     "inner_improvement_vs_b02": 1.7445054945054947,
+     "parameters": {
+      "efficiency": 0.5,
+      "lengths": "15,30,60",
+      "width_S": 0.75,
+      "width_mult": 0.75
+     },
+     "parent_trial_ids": [
+      "GB-FAIL:previous_hour:F3"
+     ],
+     "promoted": true,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Timing",
+     "candidate_id": "GB-FAIL:previous_hour:T4:shift_minutes=-15",
+     "disposition": "promoted",
+     "family": "GB-FAIL",
+     "inner_improvement_vs_b02": 6.306043956043957,
+     "parameters": {
+      "clock_limit": false,
+      "expiry_s_after_qual": 3600,
+      "search": "09:30_to_flatten",
+      "shift_minutes": -15
+     },
+     "parent_trial_ids": [
+      "GB-FAIL:previous_hour:T4"
+     ],
+     "promoted": true,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Formation",
+     "candidate_id": "JJ-TBR:single_extended:F2:volume_threshold_multiplier=0.75",
+     "disposition": "rejected_by_evidence",
+     "family": "JJ-TBR",
+     "inner_improvement_vs_b02": 0.4829670329670329,
+     "parameters": {
+      "max_minutes": 180,
+      "median_sessions": 20,
+      "volume_threshold_multiplier": 0.75
+     },
+     "parent_trial_ids": [
+      "JJ-TBR:single_extended:F2"
+     ],
+     "promoted": false,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Sequence",
+     "candidate_id": "JJ-TBR:judas_reversal:S4:deadline_minutes=10",
+     "disposition": "promoted",
+     "family": "JJ-TBR",
+     "inner_improvement_vs_b02": 4.007142857142857,
+     "parameters": {
+      "deadline_minutes": 10,
+      "deadline_s": 600,
+      "pressure_s": 120
+     },
+     "parent_trial_ids": [
+      "JJ-TBR:judas_reversal:S4"
+     ],
+     "promoted": true,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Sequence",
+     "candidate_id": "KEANI-OPEN-ABOVE-VALUE:source_long:S4:favorable_ticks=1",
+     "disposition": "inconclusive_support",
+     "family": "KEANI-OPEN-ABOVE-VALUE",
+     "inner_improvement_vs_b02": 0.05274725274725275,
+     "parameters": {
+      "favorable_ticks": 1,
+      "pressure_s": 120
+     },
+     "parent_trial_ids": [
+      "KEANI-OPEN-ABOVE-VALUE:source_long:S4"
+     ],
+     "promoted": false,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Profile",
+     "candidate_id": "MEMBER-TWO-REASONS:planned_return_long:P1:bandwidth=0",
+     "disposition": "retained_baseline",
+     "family": "MEMBER-TWO-REASONS",
+     "inner_improvement_vs_b02": 0.0,
+     "parameters": {
+      "bandwidth": 0,
+      "prominence": 0.2
+     },
+     "parent_trial_ids": [
+      "MEMBER-TWO-REASONS:planned_return_long:P1"
+     ],
+     "promoted": false,
+     "role": "retained_parent"
+    },
+    {
+     "bank": "Formation",
+     "candidate_id": "SAINT-AMT:continuation_retest:F2:volume_threshold_multiplier=0.75",
+     "disposition": "inconclusive_support",
+     "family": "SAINT-AMT",
+     "inner_improvement_vs_b02": 0.004395604395604396,
+     "parameters": {
+      "max_minutes": 180,
+      "median_sessions": 20,
+      "volume_threshold_multiplier": 0.75
+     },
+     "parent_trial_ids": [
+      "SAINT-AMT:continuation_retest:F2"
+     ],
+     "promoted": false,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Sequence",
+     "candidate_id": "SAINT-AMT:continuation_retest:S1:deadline_minutes=15",
+     "disposition": "inconclusive_support",
+     "family": "SAINT-AMT",
+     "inner_improvement_vs_b02": 0.28296703296703296,
+     "parameters": {
+      "deadline_minutes": 15,
+      "deadline_s": 900
+     },
+     "parent_trial_ids": [
+      "SAINT-AMT:continuation_retest:S1"
+     ],
+     "promoted": false,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Memory",
+     "candidate_id": "SIRES:absorption_reward_retest:M1:max_prior_contacts=0",
+     "disposition": "inconclusive_support",
+     "family": "SIRES",
+     "inner_improvement_vs_b02": 184.1031042128603,
+     "parameters": {
+      "max_prior_contacts": 0
+     },
+     "parent_trial_ids": [
+      "SIRES:absorption_reward_retest:M1"
+     ],
+     "promoted": false,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Reference",
+     "candidate_id": "SIRES:defended_band_continuation:R1:dispersion=0.5",
+     "disposition": "retained_baseline",
+     "family": "SIRES",
+     "inner_improvement_vs_b02": 523.069290465632,
+     "parameters": {
+      "band": "vwap_pm_1_dispersion",
+      "dispersion": 0.5,
+      "frozen": true
+     },
+     "parent_trial_ids": [
+      "SIRES:defended_band_continuation:R1"
+     ],
+     "promoted": false,
+     "role": "refined_selected"
+    }
+   ],
+   "selection_manifest_id": "P15-18:2022"
+  },
+  {
+   "combinations": [
+    "GB-FAIL:COMBINED:GB-FAIL:previous_hour:T4:shift_minutes=-15+GB-FAIL:previous_hour:F3:efficiency=0.5",
+    "JJ-TBR:COMBINED:JJ-TBR:judas_reversal:S4:deadline_minutes=10+JJ-TBR:internal_rotation:F2:volume_threshold_multiplier=0.75",
+    "SAINT-AMT:COMBINED:SAINT-AMT:continuation_retest:S1:deadline_minutes=15+SAINT-AMT:continuation_retest:F2:volume_threshold_multiplier=0.75",
+    "SIRES:COMBINED:SIRES:defended_band_continuation:R1:dispersion=0.5+SIRES:absorption_reward_retest:M1:max_prior_contacts=0"
+   ],
+   "evidence_cutoff_day": "2021-09-30",
+   "outer_fold": 2023,
+   "roles": [
+    {
+     "bank": "Formation",
+     "candidate_id": "GB-FAIL:previous_hour:F3:efficiency=0.5",
+     "disposition": "promoted",
+     "family": "GB-FAIL",
+     "inner_improvement_vs_b02": 1.8990921787709496,
+     "parameters": {
+      "efficiency": 0.5,
+      "lengths": "15,30,60",
+      "width_S": 0.75,
+      "width_mult": 0.75
+     },
+     "parent_trial_ids": [
+      "GB-FAIL:previous_hour:F3"
+     ],
+     "promoted": true,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Timing",
+     "candidate_id": "GB-FAIL:previous_hour:T4:shift_minutes=-15",
+     "disposition": "promoted",
+     "family": "GB-FAIL",
+     "inner_improvement_vs_b02": 5.335195530726256,
+     "parameters": {
+      "clock_limit": false,
+      "expiry_s_after_qual": 3600,
+      "search": "09:30_to_flatten",
+      "shift_minutes": -15
+     },
+     "parent_trial_ids": [
+      "GB-FAIL:previous_hour:T4"
+     ],
+     "promoted": true,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Formation",
+     "candidate_id": "JJ-TBR:internal_rotation:F2:volume_threshold_multiplier=0.75",
+     "disposition": "rejected_by_evidence",
+     "family": "JJ-TBR",
+     "inner_improvement_vs_b02": 0.6525837988826816,
+     "parameters": {
+      "max_minutes": 180,
+      "median_sessions": 20,
+      "volume_threshold_multiplier": 0.75
+     },
+     "parent_trial_ids": [
+      "JJ-TBR:internal_rotation:F2"
+     ],
+     "promoted": false,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Sequence",
+     "candidate_id": "JJ-TBR:judas_reversal:S4:deadline_minutes=10",
+     "disposition": "promoted",
+     "family": "JJ-TBR",
+     "inner_improvement_vs_b02": 3.996857541899441,
+     "parameters": {
+      "deadline_minutes": 10,
+      "deadline_s": 600,
+      "pressure_s": 120
+     },
+     "parent_trial_ids": [
+      "JJ-TBR:judas_reversal:S4"
+     ],
+     "promoted": true,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Sequence",
+     "candidate_id": "KEANI-OPEN-ABOVE-VALUE:source_long:S4:favorable_ticks=1",
+     "disposition": "inconclusive_support",
+     "family": "KEANI-OPEN-ABOVE-VALUE",
+     "inner_improvement_vs_b02": 0.007681564245810056,
+     "parameters": {
+      "favorable_ticks": 1,
+      "pressure_s": 120
+     },
+     "parent_trial_ids": [
+      "KEANI-OPEN-ABOVE-VALUE:source_long:S4"
+     ],
+     "promoted": false,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Profile",
+     "candidate_id": "MEMBER-TWO-REASONS:planned_return_long:P1:bandwidth=0",
+     "disposition": "retained_baseline",
+     "family": "MEMBER-TWO-REASONS",
+     "inner_improvement_vs_b02": 0.0,
+     "parameters": {
+      "bandwidth": 0,
+      "prominence": 0.2
+     },
+     "parent_trial_ids": [
+      "MEMBER-TWO-REASONS:planned_return_long:P1"
+     ],
+     "promoted": false,
+     "role": "retained_parent"
+    },
+    {
+     "bank": "Formation",
+     "candidate_id": "SAINT-AMT:continuation_retest:F2:volume_threshold_multiplier=0.75",
+     "disposition": "inconclusive_support",
+     "family": "SAINT-AMT",
+     "inner_improvement_vs_b02": 0.002793296089385475,
+     "parameters": {
+      "max_minutes": 180,
+      "median_sessions": 20,
+      "volume_threshold_multiplier": 0.75
+     },
+     "parent_trial_ids": [
+      "SAINT-AMT:continuation_retest:F2"
+     ],
+     "promoted": false,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Sequence",
+     "candidate_id": "SAINT-AMT:continuation_retest:S1:deadline_minutes=15",
+     "disposition": "inconclusive_support",
+     "family": "SAINT-AMT",
+     "inner_improvement_vs_b02": 0.26256983240223464,
+     "parameters": {
+      "deadline_minutes": 15,
+      "deadline_s": 900
+     },
+     "parent_trial_ids": [
+      "SAINT-AMT:continuation_retest:S1"
+     ],
+     "promoted": false,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Memory",
+     "candidate_id": "SIRES:absorption_reward_retest:M1:max_prior_contacts=0",
+     "disposition": "inconclusive_support",
+     "family": "SIRES",
+     "inner_improvement_vs_b02": 116.39295774647887,
+     "parameters": {
+      "max_prior_contacts": 0
+     },
+     "parent_trial_ids": [
+      "SIRES:absorption_reward_retest:M1"
+     ],
+     "promoted": false,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Reference",
+     "candidate_id": "SIRES:defended_band_continuation:R1:dispersion=0.5",
+     "disposition": "retained_baseline",
+     "family": "SIRES",
+     "inner_improvement_vs_b02": 329.20352112676056,
+     "parameters": {
+      "band": "vwap_pm_1_dispersion",
+      "dispersion": 0.5,
+      "frozen": true
+     },
+     "parent_trial_ids": [
+      "SIRES:defended_band_continuation:R1"
+     ],
+     "promoted": false,
+     "role": "refined_selected"
+    }
+   ],
+   "selection_manifest_id": "P15-18:2023"
+  },
+  {
+   "combinations": [
+    "GB-FAIL:COMBINED:GB-FAIL:previous_hour:T4:shift_minutes=-15+GB-FAIL:previous_hour:F3:efficiency=0.5",
+    "JJ-TBR:COMBINED:JJ-TBR:judas_reversal:S4:deadline_minutes=10+JJ-TBR:internal_rotation:F2:volume_threshold_multiplier=0.75",
+    "SAINT-AMT:COMBINED:SAINT-AMT:continuation_retest:S1:deadline_minutes=15+SAINT-AMT:continuation_retest:F2:volume_threshold_multiplier=0.75",
+    "SIRES:COMBINED:SIRES:defended_band_continuation:R1:dispersion=0.5+SIRES:absorption_reward_retest:M1:max_prior_contacts=0"
+   ],
+   "evidence_cutoff_day": "2021-09-30",
+   "outer_fold": 2024,
+   "roles": [
+    {
+     "bank": "Formation",
+     "candidate_id": "GB-FAIL:previous_hour:F3:efficiency=0.5",
+     "disposition": "promoted",
+     "family": "GB-FAIL",
+     "inner_improvement_vs_b02": 1.890112704918033,
+     "parameters": {
+      "efficiency": 0.5,
+      "lengths": "15,30,60",
+      "width_S": 0.75,
+      "width_mult": 0.75
+     },
+     "parent_trial_ids": [
+      "GB-FAIL:previous_hour:F3"
+     ],
+     "promoted": true,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Timing",
+     "candidate_id": "GB-FAIL:previous_hour:T4:shift_minutes=-15",
+     "disposition": "promoted",
+     "family": "GB-FAIL",
+     "inner_improvement_vs_b02": 5.440829918032787,
+     "parameters": {
+      "clock_limit": false,
+      "expiry_s_after_qual": 3600,
+      "search": "09:30_to_flatten",
+      "shift_minutes": -15
+     },
+     "parent_trial_ids": [
+      "GB-FAIL:previous_hour:T4"
+     ],
+     "promoted": true,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Formation",
+     "candidate_id": "JJ-TBR:internal_rotation:F2:volume_threshold_multiplier=0.75",
+     "disposition": "rejected_by_evidence",
+     "family": "JJ-TBR",
+     "inner_improvement_vs_b02": 0.6426741803278688,
+     "parameters": {
+      "max_minutes": 180,
+      "median_sessions": 20,
+      "volume_threshold_multiplier": 0.75
+     },
+     "parent_trial_ids": [
+      "JJ-TBR:internal_rotation:F2"
+     ],
+     "promoted": false,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Sequence",
+     "candidate_id": "JJ-TBR:judas_reversal:S4:deadline_minutes=10",
+     "disposition": "promoted",
+     "family": "JJ-TBR",
+     "inner_improvement_vs_b02": 4.056352459016393,
+     "parameters": {
+      "deadline_minutes": 10,
+      "deadline_s": 600,
+      "pressure_s": 120
+     },
+     "parent_trial_ids": [
+      "JJ-TBR:judas_reversal:S4"
+     ],
+     "promoted": true,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Profile",
+     "candidate_id": "KEANI-OPEN-ABOVE-VALUE:source_long:P4:bandwidth=0",
+     "disposition": "inconclusive_support",
+     "family": "KEANI-OPEN-ABOVE-VALUE",
+     "inner_improvement_vs_b02": 0.06454918032786885,
+     "parameters": {
+      "bandwidth": 0,
+      "fraction": "0.40",
+      "prominence": 0.2
+     },
+     "parent_trial_ids": [
+      "KEANI-OPEN-ABOVE-VALUE:source_long:P4"
+     ],
+     "promoted": false,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Profile",
+     "candidate_id": "MEMBER-TWO-REASONS:planned_return_long:P1:bandwidth=0",
+     "disposition": "retained_baseline",
+     "family": "MEMBER-TWO-REASONS",
+     "inner_improvement_vs_b02": 0.0,
+     "parameters": {
+      "bandwidth": 0,
+      "prominence": 0.2
+     },
+     "parent_trial_ids": [
+      "MEMBER-TWO-REASONS:planned_return_long:P1"
+     ],
+     "promoted": false,
+     "role": "retained_parent"
+    },
+    {
+     "bank": "Formation",
+     "candidate_id": "SAINT-AMT:continuation_retest:F2:volume_threshold_multiplier=0.75",
+     "disposition": "inconclusive_support",
+     "family": "SAINT-AMT",
+     "inner_improvement_vs_b02": 0.0020491803278688526,
+     "parameters": {
+      "max_minutes": 180,
+      "median_sessions": 20,
+      "volume_threshold_multiplier": 0.75
+     },
+     "parent_trial_ids": [
+      "SAINT-AMT:continuation_retest:F2"
+     ],
+     "promoted": false,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Sequence",
+     "candidate_id": "SAINT-AMT:continuation_retest:S1:deadline_minutes=15",
+     "disposition": "inconclusive_support",
+     "family": "SAINT-AMT",
+     "inner_improvement_vs_b02": 0.27740778688524587,
+     "parameters": {
+      "deadline_minutes": 15,
+      "deadline_s": 900
+     },
+     "parent_trial_ids": [
+      "SAINT-AMT:continuation_retest:S1"
+     ],
+     "promoted": false,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Memory",
+     "candidate_id": "SIRES:absorption_reward_retest:M1:max_prior_contacts=0",
+     "disposition": "inconclusive_support",
+     "family": "SIRES",
+     "inner_improvement_vs_b02": 85.10082730093072,
+     "parameters": {
+      "max_prior_contacts": 0
+     },
+     "parent_trial_ids": [
+      "SIRES:absorption_reward_retest:M1"
+     ],
+     "promoted": false,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Reference",
+     "candidate_id": "SIRES:defended_band_continuation:R1:dispersion=0.5",
+     "disposition": "retained_baseline",
+     "family": "SIRES",
+     "inner_improvement_vs_b02": 239.6008273009307,
+     "parameters": {
+      "band": "vwap_pm_1_dispersion",
+      "dispersion": 0.5,
+      "frozen": true
+     },
+     "parent_trial_ids": [
+      "SIRES:defended_band_continuation:R1"
+     ],
+     "promoted": false,
+     "role": "refined_selected"
+    }
+   ],
+   "selection_manifest_id": "P15-18:2024"
+  },
+  {
+   "combinations": [
+    "GB-FAIL:COMBINED:GB-FAIL:previous_hour:T4:shift_minutes=-15+GB-FAIL:previous_hour:F3:efficiency=0.5",
+    "JJ-TBR:COMBINED:JJ-TBR:judas_reversal:S4:deadline_minutes=10+JJ-TBR:internal_rotation:F1:minutes=90",
+    "SAINT-AMT:COMBINED:SAINT-AMT:continuation_retest:S1:deadline_minutes=5+SAINT-AMT:continuation_retest:F2:volume_threshold_multiplier=0.75",
+    "SIRES:COMBINED:SIRES:defended_band_continuation:R1:dispersion=0.5+SIRES:clean_squeeze:M1:max_prior_contacts=0"
+   ],
+   "evidence_cutoff_day": "2021-09-30",
+   "outer_fold": 2025,
+   "roles": [
+    {
+     "bank": "Formation",
+     "candidate_id": "GB-FAIL:previous_hour:F3:efficiency=0.5",
+     "disposition": "promoted",
+     "family": "GB-FAIL",
+     "inner_improvement_vs_b02": 1.8613581244947457,
+     "parameters": {
+      "efficiency": 0.5,
+      "lengths": "15,30,60",
+      "width_S": 0.75,
+      "width_mult": 0.75
+     },
+     "parent_trial_ids": [
+      "GB-FAIL:previous_hour:F3"
+     ],
+     "promoted": true,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Timing",
+     "candidate_id": "GB-FAIL:previous_hour:T4:shift_minutes=-15",
+     "disposition": "promoted",
+     "family": "GB-FAIL",
+     "inner_improvement_vs_b02": 5.403193209377527,
+     "parameters": {
+      "clock_limit": false,
+      "expiry_s_after_qual": 3600,
+      "search": "09:30_to_flatten",
+      "shift_minutes": -15
+     },
+     "parent_trial_ids": [
+      "GB-FAIL:previous_hour:T4"
+     ],
+     "promoted": true,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Formation",
+     "candidate_id": "JJ-TBR:internal_rotation:F1:minutes=90",
+     "disposition": "inconclusive_multiplicity",
+     "family": "JJ-TBR",
+     "inner_improvement_vs_b02": 0.6560226354082457,
+     "parameters": {
+      "minutes": 90
+     },
+     "parent_trial_ids": [
+      "JJ-TBR:internal_rotation:F1"
+     ],
+     "promoted": false,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Sequence",
+     "candidate_id": "JJ-TBR:judas_reversal:S4:deadline_minutes=10",
+     "disposition": "promoted",
+     "family": "JJ-TBR",
+     "inner_improvement_vs_b02": 4.021018593371059,
+     "parameters": {
+      "deadline_minutes": 10,
+      "deadline_s": 600,
+      "pressure_s": 120
+     },
+     "parent_trial_ids": [
+      "JJ-TBR:judas_reversal:S4"
+     ],
+     "promoted": true,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Profile",
+     "candidate_id": "KEANI-OPEN-ABOVE-VALUE:source_long:P4:bandwidth=0",
+     "disposition": "inconclusive_support",
+     "family": "KEANI-OPEN-ABOVE-VALUE",
+     "inner_improvement_vs_b02": 0.032134195634599835,
+     "parameters": {
+      "bandwidth": 0,
+      "fraction": "0.40",
+      "prominence": 0.2
+     },
+     "parent_trial_ids": [
+      "KEANI-OPEN-ABOVE-VALUE:source_long:P4"
+     ],
+     "promoted": false,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Formation",
+     "candidate_id": "SAINT-AMT:continuation_retest:F2:volume_threshold_multiplier=0.75",
+     "disposition": "inconclusive_support",
+     "family": "SAINT-AMT",
+     "inner_improvement_vs_b02": 0.0016168148746968471,
+     "parameters": {
+      "max_minutes": 180,
+      "median_sessions": 20,
+      "volume_threshold_multiplier": 0.75
+     },
+     "parent_trial_ids": [
+      "SAINT-AMT:continuation_retest:F2"
+     ],
+     "promoted": false,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Sequence",
+     "candidate_id": "SAINT-AMT:continuation_retest:S1:deadline_minutes=5",
+     "disposition": "inconclusive_support",
+     "family": "SAINT-AMT",
+     "inner_improvement_vs_b02": 0.22493936944219886,
+     "parameters": {
+      "deadline_minutes": 5,
+      "deadline_s": 300
+     },
+     "parent_trial_ids": [
+      "SAINT-AMT:continuation_retest:S1"
+     ],
+     "promoted": false,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Memory",
+     "candidate_id": "SIRES:clean_squeeze:M1:max_prior_contacts=0",
+     "disposition": "retained_baseline",
+     "family": "SIRES",
+     "inner_improvement_vs_b02": 67.62020408163265,
+     "parameters": {
+      "max_prior_contacts": 0
+     },
+     "parent_trial_ids": [
+      "SIRES:clean_squeeze:M1"
+     ],
+     "promoted": false,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Reference",
+     "candidate_id": "SIRES:defended_band_continuation:R1:dispersion=0.5",
+     "disposition": "retained_baseline",
+     "family": "SIRES",
+     "inner_improvement_vs_b02": 187.84204081632654,
+     "parameters": {
+      "band": "vwap_pm_1_dispersion",
+      "dispersion": 0.5,
+      "frozen": true
+     },
+     "parent_trial_ids": [
+      "SIRES:defended_band_continuation:R1"
+     ],
+     "promoted": false,
+     "role": "refined_selected"
+    }
+   ],
+   "selection_manifest_id": "P15-18:2025"
+  },
+  {
+   "combinations": [
+    "GB-FAIL:COMBINED:GB-FAIL:previous_hour:T4:shift_minutes=-15+GB-FAIL:previous_hour:F3:efficiency=0.5",
+    "JJ-TBR:COMBINED:JJ-TBR:judas_reversal:S4:deadline_minutes=10+JJ-TBR:internal_rotation:F1:minutes=90",
+    "SAINT-AMT:COMBINED:SAINT-AMT:continuation_retest:S1:deadline_minutes=5+SAINT-AMT:continuation_retest:F2:volume_threshold_multiplier=0.75",
+    "SIRES:COMBINED:SIRES:defended_band_continuation:R1:dispersion=0.5+SIRES:clean_squeeze:M1:max_prior_contacts=0"
+   ],
+   "evidence_cutoff_day": "2021-09-30",
+   "outer_fold": 2026,
+   "roles": [
+    {
+     "bank": "Formation",
+     "candidate_id": "GB-FAIL:previous_hour:F3:efficiency=0.5",
+     "disposition": "promoted",
+     "family": "GB-FAIL",
+     "inner_improvement_vs_b02": 1.6553738317757012,
+     "parameters": {
+      "efficiency": 0.5,
+      "lengths": "15,30,60",
+      "width_S": 0.75,
+      "width_mult": 0.75
+     },
+     "parent_trial_ids": [
+      "GB-FAIL:previous_hour:F3"
+     ],
+     "promoted": true,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Timing",
+     "candidate_id": "GB-FAIL:previous_hour:T4:shift_minutes=-15",
+     "disposition": "promoted",
+     "family": "GB-FAIL",
+     "inner_improvement_vs_b02": 5.603638184245661,
+     "parameters": {
+      "clock_limit": false,
+      "expiry_s_after_qual": 3600,
+      "search": "09:30_to_flatten",
+      "shift_minutes": -15
+     },
+     "parent_trial_ids": [
+      "GB-FAIL:previous_hour:T4"
+     ],
+     "promoted": true,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Formation",
+     "candidate_id": "JJ-TBR:internal_rotation:F1:minutes=90",
+     "disposition": "inconclusive_multiplicity",
+     "family": "JJ-TBR",
+     "inner_improvement_vs_b02": 0.7017690253671562,
+     "parameters": {
+      "minutes": 90
+     },
+     "parent_trial_ids": [
+      "JJ-TBR:internal_rotation:F1"
+     ],
+     "promoted": false,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Sequence",
+     "candidate_id": "JJ-TBR:judas_reversal:S4:deadline_minutes=10",
+     "disposition": "promoted",
+     "family": "JJ-TBR",
+     "inner_improvement_vs_b02": 4.293224299065421,
+     "parameters": {
+      "deadline_minutes": 10,
+      "deadline_s": 600,
+      "pressure_s": 120
+     },
+     "parent_trial_ids": [
+      "JJ-TBR:judas_reversal:S4"
+     ],
+     "promoted": true,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Profile",
+     "candidate_id": "KEANI-OPEN-ABOVE-VALUE:source_long:P4:bandwidth=0",
+     "disposition": "inconclusive_support",
+     "family": "KEANI-OPEN-ABOVE-VALUE",
+     "inner_improvement_vs_b02": 0.026535380507343123,
+     "parameters": {
+      "bandwidth": 0,
+      "fraction": "0.40",
+      "prominence": 0.2
+     },
+     "parent_trial_ids": [
+      "KEANI-OPEN-ABOVE-VALUE:source_long:P4"
+     ],
+     "promoted": false,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Formation",
+     "candidate_id": "SAINT-AMT:continuation_retest:F2:volume_threshold_multiplier=0.75",
+     "disposition": "inconclusive_support",
+     "family": "SAINT-AMT",
+     "inner_improvement_vs_b02": 0.0013351134846461949,
+     "parameters": {
+      "max_minutes": 180,
+      "median_sessions": 20,
+      "volume_threshold_multiplier": 0.75
+     },
+     "parent_trial_ids": [
+      "SAINT-AMT:continuation_retest:F2"
+     ],
+     "promoted": false,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Sequence",
+     "candidate_id": "SAINT-AMT:continuation_retest:S1:deadline_minutes=5",
+     "disposition": "inconclusive_support",
+     "family": "SAINT-AMT",
+     "inner_improvement_vs_b02": 0.17807076101468627,
+     "parameters": {
+      "deadline_minutes": 5,
+      "deadline_s": 300
+     },
+     "parent_trial_ids": [
+      "SAINT-AMT:continuation_retest:S1"
+     ],
+     "promoted": false,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Memory",
+     "candidate_id": "SIRES:clean_squeeze:M1:max_prior_contacts=0",
+     "disposition": "retained_baseline",
+     "family": "SIRES",
+     "inner_improvement_vs_b02": 55.77412280701754,
+     "parameters": {
+      "max_prior_contacts": 0
+     },
+     "parent_trial_ids": [
+      "SIRES:clean_squeeze:M1"
+     ],
+     "promoted": false,
+     "role": "refined_selected"
+    },
+    {
+     "bank": "Reference",
+     "candidate_id": "SIRES:defended_band_continuation:R1:dispersion=0.5",
+     "disposition": "retained_baseline",
+     "family": "SIRES",
+     "inner_improvement_vs_b02": 154.01130229419704,
+     "parameters": {
+      "band": "vwap_pm_1_dispersion",
+      "dispersion": 0.5,
+      "frozen": true
+     },
+     "parent_trial_ids": [
+      "SIRES:defended_band_continuation:R1"
+     ],
+     "promoted": false,
+     "role": "refined_selected"
+    }
+   ],
+   "selection_manifest_id": "P15-18:2026"
+  }
+ ],
+ "holdout_excluded": {
+  "contract": "EVALUATION.md, blind hold-out and walk-forward (2026-09-16)",
+  "dates": [
+   "2026-04-01",
+   "2026-04-02",
+   "2026-04-03",
+   "2026-04-06",
+   "2026-04-07",
+   "2026-04-08",
+   "2026-04-09",
+   "2026-04-10",
+   "2026-04-13",
+   "2026-04-14",
+   "2026-04-15",
+   "2026-04-16",
+   "2026-04-17",
+   "2026-04-20",
+   "2026-04-21",
+   "2026-04-22",
+   "2026-04-23",
+   "2026-04-24",
+   "2026-04-27",
+   "2026-04-28",
+   "2026-04-29",
+   "2026-04-30",
+   "2026-05-01",
+   "2026-05-04",
+   "2026-05-05",
+   "2026-05-06",
+   "2026-05-07",
+   "2026-05-08",
+   "2026-05-11",
+   "2026-05-12",
+   "2026-05-13",
+   "2026-05-14",
+   "2026-05-15",
+   "2026-05-18",
+   "2026-05-19",
+   "2026-05-20",
+   "2026-05-21",
+   "2026-05-22",
+   "2026-05-25",
+   "2026-05-26",
+   "2026-05-27",
+   "2026-05-28",
+   "2026-05-29",
+   "2026-06-01",
+   "2026-06-02",
+   "2026-06-03",
+   "2026-06-04",
+   "2026-06-05",
+   "2026-06-08",
+   "2026-06-09",
+   "2026-06-10",
+   "2026-06-11",
+   "2026-06-12",
+   "2026-06-15",
+   "2026-06-16",
+   "2026-06-17",
+   "2026-06-18",
+   "2026-06-19",
+   "2026-06-22",
+   "2026-06-23",
+   "2026-06-24",
+   "2026-06-25",
+   "2026-06-26",
+   "2026-06-29",
+   "2026-06-30",
+   "2026-07-01",
+   "2026-07-02",
+   "2026-07-03",
+   "2026-07-06",
+   "2026-07-07",
+   "2026-07-08",
+   "2026-07-09",
+   "2026-07-10",
+   "2026-07-13",
+   "2026-07-14",
+   "2026-07-15",
+   "2026-07-16",
+   "2026-07-17",
+   "2026-07-20",
+   "2026-07-21",
+   "2026-07-22",
+   "2026-07-23",
+   "2026-07-24",
+   "2026-07-27",
+   "2026-07-28",
+   "2026-07-29",
+   "2026-07-30",
+   "2026-07-31",
+   "2026-08-03",
+   "2026-08-04",
+   "2026-08-05",
+   "2026-08-06",
+   "2026-08-07",
+   "2026-08-10",
+   "2026-08-11",
+   "2026-08-12",
+   "2026-08-13",
+   "2026-08-14",
+   "2026-08-17",
+   "2026-08-18",
+   "2026-08-19",
+   "2026-08-20",
+   "2026-08-21",
+   "2026-08-24",
+   "2026-08-25",
+   "2026-08-26",
+   "2026-08-27",
+   "2026-08-28",
+   "2026-08-31",
+   "2026-09-01",
+   "2026-09-02",
+   "2026-09-03"
+  ],
+  "days_excluded": 112,
+  "end": "2026-09-03",
+  "removed_from_window": {
+   "calibrate": 0,
+   "fit": 0,
+   "test": 112,
+   "tune": 0
+  },
+  "start": "2026-04-01"
+ },
+ "schema_version": "research-selected-rules-by-fold-v1"
+}

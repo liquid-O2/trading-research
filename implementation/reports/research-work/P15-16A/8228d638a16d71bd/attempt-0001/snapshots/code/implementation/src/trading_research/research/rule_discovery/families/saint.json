@@ -1,0 +1,45 @@
+{
+  "schema_version": "research-family-spec-v1",
+  "family": "SAINT-AMT",
+  "task_id": "P15-13",
+  "operational_rules": ["arrival_read_recorded", "alignment_ok", "profile_allows_trade"],
+  "clock_zone_unverified": true,
+  "baselines": {
+    "B0.2": {
+      "version": "B0.2-2026-09-15",
+      "scan": "scan_b02",
+      "replay": "replay_example"
+    }
+  },
+  "plausibility": {
+    "continuation_retest": {
+      "episodes_per_session": [0, 3],
+      "pass_rate": [0.0, 0.35],
+      "source_claim": "unstated",
+      "reasoning": "RTVP p.6 prefers continuation (break, held retest, continue) and rarely trades reversals. No per-session count is printed. Bound by qualifying HTF-edge true breaks with a held retest, not every close beyond the box.",
+      "pages": "RTVP p.6; WIC pp.5,8"
+    },
+    "trapped_buyers_retest": {
+      "episodes_per_session": [0, 2],
+      "pass_rate": [0.0, 0.25],
+      "source_claim": "unstated",
+      "reasoning": "TRAP is one worked Asia short with two prior NY failures and a single retest. Dossier S5 says those two sessions are this example, not a universal count. Bound by qualifying trap reads, not every fast arrival.",
+      "pages": "TRAP pp.3-9"
+    },
+    "failed_auction_return": {
+      "episodes_per_session": [0, 2],
+      "pass_rate": [0.0, 0.35],
+      "source_claim": "unstated",
+      "reasoning": "AMTL p.8 is a drive into a previous area of fair value, rejection, return into the original range. Frequency unstated. Prior VA must be distinct from the current balance so overlap cannot pass every session.",
+      "pages": "AMTL pp.8-10"
+    },
+    "poc_traversal": {
+      "episodes_per_session": [0, 2],
+      "pass_rate": [0.0, 0.40],
+      "source_claim": "80 percent that price runs all the way to the far extreme, 20 percent that it simply ranges inside instead",
+      "reasoning": "AMTL p.9 odds are conditional on already being back inside the range after a failed auction, then reading POC behavior (aggressive push with a held retest vs repeated failure to hold). The 80% figure is that conditional traverse rate, not a session pass rate and not a target to hit.",
+      "pages": "AMTL p.9; RTVP p.5",
+      "denominator": "aggressive POC push with a held retest, after return into the original range"
+    }
+  }
+}

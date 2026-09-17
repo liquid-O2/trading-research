@@ -1,0 +1,487 @@
+{
+ "assurance_version": "research-assurance-2026-09-14-v3",
+ "checks": [
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/exits.py",
+     "symbol": "_manage"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-19/definitive-0002/pytest.log",
+     "selector": "/",
+     "sha256": "1f48f2a2fcbfae7ed8fede965002fd51ec5d0aa1887aa23bc72ad64cb163d50f"
+    },
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-19/definitive-0002/EXIT_COMPARISON.json",
+     "selector": "/",
+     "sha256": "db4f10d053534500bf5af03d8370e1c02e160227495f4c8f0e1d7294ed1ae279"
+    }
+   ],
+   "expected": "a stop update is effective only after the triggering batch and never moves away from price",
+   "id": "A01",
+   "observed": "every recorded update is monotone and effective after its trigger",
+   "oracle": "OUTCOMES.md's E3 and E4 definitions on a constructed path",
+   "requirement": "E3 and E4 update their stop only from batches already known and never loosen it: every stop update names the trigger batch and the batch it becomes effective after, and each new stop is at least as tight as the last.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_19.py::test_a01_break_even_does_not_loosen",
+    "implementation/tests/rule_discovery/test_p15_19.py::test_the_five_policies_differ_where_the_contract_says_they_do"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/exits.py",
+     "symbol": "evaluate_policy_compact"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-19/definitive-0002/pytest.log",
+     "selector": "/",
+     "sha256": "1f48f2a2fcbfae7ed8fede965002fd51ec5d0aa1887aa23bc72ad64cb163d50f"
+    }
+   ],
+   "expected": "adding a later, higher bid after the exit does not change the exit",
+   "id": "A02",
+   "observed": "the exit is unchanged",
+   "oracle": "a constructed path with a later maximum",
+   "requirement": "A future maximum cannot determine a trailing exit: E4 walks the tape forward and cannot see a later high.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_19.py::test_a02_e4_does_not_peek_later_high"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/exits.py",
+     "symbol": "attempt_partial_exit"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-19/definitive-0002/pytest.log",
+     "selector": "/",
+     "sha256": "1f48f2a2fcbfae7ed8fede965002fd51ec5d0aa1887aa23bc72ad64cb163d50f"
+    }
+   ],
+   "expected": "a fractional quantity raises",
+   "id": "A03",
+   "observed": "ContractError",
+   "oracle": "OUTCOMES.md's one-contract benchmark",
+   "requirement": "The one-mini policy has no fractional partials: a partial exit request is rejected.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_19.py::test_a03_fractional_partial_rejected"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/exits.py",
+     "symbol": "evaluate_policy_compact"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-19/definitive-0002/pytest.log",
+     "selector": "/",
+     "sha256": "1f48f2a2fcbfae7ed8fede965002fd51ec5d0aa1887aa23bc72ad64cb163d50f"
+    },
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-19/definitive-0002/EXIT_COMPARISON.json",
+     "selector": "/",
+     "sha256": "db4f10d053534500bf5af03d8370e1c02e160227495f4c8f0e1d7294ed1ae279"
+    }
+   ],
+   "expected": "E3 and E4 return an unsupported record, E0 to E2 still complete",
+   "id": "A04",
+   "observed": "unsupported counts are reported per policy and the entry remains counted",
+   "oracle": "OUTCOMES.md's unavailable-initial-R rule",
+   "requirement": "An undefined initial R is an explicit unsupported E3/E4 record; the entry stays in the denominator ledger and only those policies lose the day.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_19.py::test_a04_undefined_r_unsupported_e3_e4",
+    "implementation/tests/rule_discovery/test_p15_19.py::test_an_unsupported_e3_keeps_its_entry_and_drops_only_that_policys_day"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/exits.py",
+     "symbol": "_flag_occupancy"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-19/definitive-0002/EXIT_COMPARISON.json",
+     "selector": "/",
+     "sha256": "db4f10d053534500bf5af03d8370e1c02e160227495f4c8f0e1d7294ed1ae279"
+    },
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-19/definitive-0002/FIXED_ENTRIES.json",
+     "selector": "/",
+     "sha256": "9409ff57faed379fdc1d5d0922f069aadf6cbd6a8e9ebbdfe1700e0b9f21365d"
+    }
+   ],
+   "expected": "every policy is evaluated on the same entry ids and occupancy flags are counted separately",
+   "id": "A05",
+   "observed": "the same frozen entries feed all five policies; occupancy_flagged counts are reported per policy, and both sides of every pair resolve the same count by construction",
+   "oracle": "the entry run's own recorded entries",
+   "requirement": "Entry ids match across the primary unchanged-entry comparison, and entries whose admission would change under another policy's occupancy are separately identified.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_19.py::test_a05_occupancy_flagged_not_merged",
+    "implementation/tests/rule_discovery/test_p15_19.py::test_frozen_entries_come_from_the_entry_stage_records"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/exits.py",
+     "symbol": "run_exit_study"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-19/definitive-0002/pytest.log",
+     "selector": "/",
+     "sha256": "1f48f2a2fcbfae7ed8fede965002fd51ec5d0aa1887aa23bc72ad64cb163d50f"
+    },
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-19/definitive-0002/SELF_CHECK.txt",
+     "selector": "/",
+     "sha256": "91c7025038fd6b0632371ebd6786790c4c7ebbf28e46d4b163478dc419d7fce1"
+    },
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-19/definitive-0002/RUN_COMPLETE.json",
+     "selector": "/",
+     "sha256": "d9ade2d7582ee9954258b697349c19b81acc10522df61e00d7e8806b626233b8"
+    }
+   ],
+   "expected": "a pytest log with exit 0, hashed artifacts and a recomputed central number",
+   "id": "A06",
+   "observed": "79 passed, exit 0; the self-check recomputes a paired improvement exactly and traces one exit to the native bytes",
+   "oracle": "the executed command log and the attempt's own artifacts",
+   "requirement": "Evidence includes the command exit code, artifact hashes, coverage counts, runtime and inspected output.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_19.py::test_frozen_entries_come_from_the_entry_stage_records"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/exits.py",
+     "symbol": "evaluate_exit_study"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-19/definitive-0002/EXIT_COMPARISON.json",
+     "selector": "/",
+     "sha256": "db4f10d053534500bf5af03d8370e1c02e160227495f4c8f0e1d7294ed1ae279"
+    }
+   ],
+   "expected": "each row names a real test node and a hashed artifact",
+   "id": "A07",
+   "observed": "every row resolves",
+   "oracle": "the verifier's own matrix check",
+   "requirement": "Every acceptance key resolves to code, an executed command and hashed evidence.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_19.py::test_an_unusable_e0_day_leaves_the_paired_comparison"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/exits.py",
+     "symbol": "_entry_dispositions"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-19/definitive-0002/pytest.log",
+     "selector": "/",
+     "sha256": "1f48f2a2fcbfae7ed8fede965002fd51ec5d0aa1887aa23bc72ad64cb163d50f"
+    },
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-19/definitive-0002/EXIT_TRIALS.jsonl",
+     "selector": "/",
+     "sha256": "66b4436025056d5ad0695d7c023fcfa109cc2327b673882e3a72cfd05b1e548e"
+    }
+   ],
+   "expected": "a rejected entry rule with a hugely better exit policy keeps its entry disposition",
+   "id": "A08",
+   "observed": "the entry disposition is unchanged and entry_rescued is false on every comparison",
+   "oracle": "the entry stage's own SELECTED_RULES_BY_FOLD dispositions",
+   "requirement": "The assigned probes pass with sensitive positive and negative controls, including the negative control that this family cannot rescue an entry candidate.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_19.py::test_the_exit_study_cannot_rescue_an_entry_candidate"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/exits.py",
+     "symbol": "evaluate_exit_study"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-19/definitive-0002/EXIT_COMPARISON.json",
+     "selector": "/",
+     "sha256": "db4f10d053534500bf5af03d8370e1c02e160227495f4c8f0e1d7294ed1ae279"
+    },
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-19/definitive-0002/EXIT_TRIALS.jsonl",
+     "selector": "/",
+     "sha256": "66b4436025056d5ad0695d7c023fcfa109cc2327b673882e3a72cfd05b1e548e"
+    }
+   ],
+   "expected": "hold-out days are skipped in every paired comparison and counted",
+   "id": "A09",
+   "observed": "holdout_excluded is recorded and each comparison reports its own holdout_days_excluded",
+   "oracle": "the split manifest's 2026 test list against the trimmed fold",
+   "requirement": "Exit policies are compared without any hold-out date; the exit study records the exclusion.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_19.py::test_a_holdout_date_cannot_choose_an_exit_policy"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/search_run.py",
+     "symbol": "_load_b02_document"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-19/definitive-0002/SELF_CHECK.txt",
+     "selector": "/",
+     "sha256": "91c7025038fd6b0632371ebd6786790c4c7ebbf28e46d4b163478dc419d7fce1"
+    }
+   ],
+   "expected": "the recorded pairing sha256 recomputes from the P15-16A bytes and the entry id is present in that job's episodes",
+   "id": "S07",
+   "observed": "recomputed sha256 matches; entry id present; net points recompute exactly",
+   "oracle": "SELF_CHECK.txt, recomputed independently with plain json/gzip/Decimal",
+   "requirement": "Native evidence is traced to its source: every paired baseline is a P15-16A job document pinned by path and sha256 in the job record, and the self-check recomputes that digest from the bytes and finds the entry id in the source episodes.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_19.py::test_frozen_entries_come_from_the_entry_stage_records"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/search_run.py",
+     "symbol": "paired_row"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-19/definitive-0002/pytest.log",
+     "selector": "/",
+     "sha256": "1f48f2a2fcbfae7ed8fede965002fd51ec5d0aa1887aa23bc72ad64cb163d50f"
+    }
+   ],
+   "expected": "a complete zero-opportunity day enters the mean with 0; an incomplete or unpaired day is excluded with its reason",
+   "id": "S11",
+   "observed": "the mean over a zero day and a 2-point day is 1.0, not 2.0",
+   "oracle": "the contract's denominator rule in EVALUATION.md, exercised by an independent fixture",
+   "requirement": "A complete day with no opportunity keeps its zero in the denominator and a missing window is never imputed: paired_row admits only common complete days and every exclusion keeps its reason.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_19.py::test_an_unsupported_e3_keeps_its_entry_and_drops_only_that_policys_day"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/search_run.py",
+     "symbol": "pending_dates"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-19/definitive-0002/pytest.log",
+     "selector": "/",
+     "sha256": "1f48f2a2fcbfae7ed8fede965002fd51ec5d0aa1887aa23bc72ad64cb163d50f"
+    }
+   ],
+   "expected": "the validated shard is reused and only the truncated date is recomputed",
+   "id": "S12",
+   "observed": "one date recomputed; both shards byte-identical to the first run",
+   "oracle": "a fixture run twice with an interruption between",
+   "requirement": "A resumed run neither drops nor duplicates a job: checkpoints are validated against the daily shard digest, a truncated shard is redone and the resumed outputs are identical to the uninterrupted ones.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_19.py::test_a_missing_daily_shard_falls_back_to_the_job_documents"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/exits.py",
+     "symbol": "_make_exit_compact"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-19/definitive-0002/pytest.log",
+     "selector": "/",
+     "sha256": "1f48f2a2fcbfae7ed8fede965002fd51ec5d0aa1887aa23bc72ad64cb163d50f"
+    },
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-19/definitive-0002/SELF_CHECK.txt",
+     "selector": "/",
+     "sha256": "91c7025038fd6b0632371ebd6786790c4c7ebbf28e46d4b163478dc419d7fce1"
+    }
+   ],
+   "expected": "the worked example of OUTCOMES.md reproduces exactly",
+   "id": "S14",
+   "observed": "net points recompute exactly on the worked fixture and on a native entry",
+   "oracle": "OUTCOMES.md's worked net-P&L example",
+   "requirement": "Units, signs and precision hold: net points are computed from the exit and entry prices and the round-trip commission in Decimal, for both sides.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_19.py::test_s14_worked_net_points_on_e0_exit"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/search_run.py",
+     "symbol": "trial_records"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-19/definitive-0002/SELF_CHECK.txt",
+     "selector": "/",
+     "sha256": "91c7025038fd6b0632371ebd6786790c4c7ebbf28e46d4b163478dc419d7fce1"
+    }
+   ],
+   "expected": "ledger rows equal candidates x folds, each with a disposition",
+   "id": "S24",
+   "observed": "counts reconcile exactly; every non-attempted row carries an attribution",
+   "oracle": "set reconciliation of the frozen bank against the ledger",
+   "requirement": "Every registered trial is in the ledger with a disposition and, where not promoted, a failure attribution; selection uses only inner evidence.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_19.py::test_the_exit_study_cannot_rescue_an_entry_candidate"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/exits.py",
+     "symbol": "evaluate_exit_day"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-19/definitive-0002/SELF_CHECK.txt",
+     "selector": "/",
+     "sha256": "91c7025038fd6b0632371ebd6786790c4c7ebbf28e46d4b163478dc419d7fce1"
+    },
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-19/definitive-0002/EXIT_COMPARISON.json",
+     "selector": "/",
+     "sha256": "db4f10d053534500bf5af03d8370e1c02e160227495f4c8f0e1d7294ed1ae279"
+    }
+   ],
+   "expected": "zero E0 mismatches, and an unusable day is excluded rather than averaged",
+   "id": "S30",
+   "observed": "zero mismatches across the study",
+   "oracle": "the entry run's own recorded E0 exit and net points",
+   "requirement": "The costed replay does not change entries or misstate daily risk: E0 recomputed from the frozen entries reproduces the entry run's own E0 on every entry, and a day that does not reproduce leaves the paired comparison with its reason.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_19.py::test_an_unusable_e0_day_leaves_the_paired_comparison"
+   ]
+  },
+  {
+   "code_refs": [
+    {
+     "path": "implementation/src/trading_research/research/rule_discovery/search_run.py",
+     "symbol": "stream_run"
+    }
+   ],
+   "command_indices": [
+    0
+   ],
+   "evidence": [
+    {
+     "path": "/workspace/implementation/reports/research-work/P15-19/definitive-0002/SELF_CHECK.txt",
+     "selector": "/",
+     "sha256": "91c7025038fd6b0632371ebd6786790c4c7ebbf28e46d4b163478dc419d7fce1"
+    }
+   ],
+   "expected": "a declared date with no shard is named in the coverage report",
+   "id": "S32",
+   "observed": "coverage names 2020-06-30 as the only date without a shard",
+   "oracle": "the run's own MANIFEST date list against the shards on disk",
+   "requirement": "The declared full population is reported honestly: the coverage block states the declared dates, the dates with documents, the retained failure and the hold-out exclusion, and a partial run cannot read as a full one.",
+   "status": "pass",
+   "test_nodeids": [
+    "implementation/tests/rule_discovery/test_p15_19.py::test_a_holdout_date_cannot_choose_an_exit_policy"
+   ]
+  }
+ ],
+ "schema_version": "research-evidence-matrix-v2",
+ "task_id": "P15-19"
+}
