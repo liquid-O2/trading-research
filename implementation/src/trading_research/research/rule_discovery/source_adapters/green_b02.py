@@ -2926,6 +2926,10 @@ SEGMENTS = {
 # enough"); the round-trip cap is loose because the list is bounded by the
 # opportunities themselves, not by a count.
 ROUND_TRIPS_PER_SEGMENT = 6
+# the executed list's policy (Phase 1.5 selection axis: varied by the population runner)
+EXECUTED_ALLOW_ADDS: bool | str = "same_line"
+EXECUTED_ALLOW_FLIPS = True
+REENTER_SAME_LINE = True
 # a level is re-entered on a later cycle while the first entry is still open
 # (2026-07-13: the PDL's first retest at 20:01, the third cycle's reclaim at
 # 20:40 is his fill; "add" on 2026-07-29 23:30); three trades on one line
@@ -2978,8 +2982,8 @@ def selection_for(market, episodes: Sequence[Mapping[str, Any]], *, primary_play
         # the CANDIDATE list: every opportunity the segment's plays admit, once
         # (user instruction 2026-09-17); the EXECUTED list beside it is one
         # position at a time with the same-line re-entry and the flip
-        result = select_session_trades(pool, bars=bars, clock=(start, end), max_entries=ROUND_TRIPS_PER_SEGMENT, stop_after_target=False, reenter_same_line=True, max_per_line=MAX_PER_LINE, one_position=False)
-        result["executed"] = select_session_trades(pool, bars=bars, clock=(start, end), max_entries=ROUND_TRIPS_PER_SEGMENT, stop_after_target=False, reenter_same_line=True, allow_adds="same_line", max_per_line=MAX_PER_LINE, allow_flips=True)
+        result = select_session_trades(pool, bars=bars, clock=(start, end), max_entries=ROUND_TRIPS_PER_SEGMENT, stop_after_target=False, reenter_same_line=REENTER_SAME_LINE, max_per_line=MAX_PER_LINE, one_position=False)
+        result["executed"] = select_session_trades(pool, bars=bars, clock=(start, end), max_entries=ROUND_TRIPS_PER_SEGMENT, stop_after_target=False, reenter_same_line=REENTER_SAME_LINE, allow_adds=EXECUTED_ALLOW_ADDS, max_per_line=MAX_PER_LINE, allow_flips=EXECUTED_ALLOW_FLIPS)
         segments[name] = result
         entries.extend(result.get("entries") or [])
         executed.extend(result["executed"].get("entries") or [])

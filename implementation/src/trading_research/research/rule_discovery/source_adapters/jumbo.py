@@ -2378,6 +2378,10 @@ SELECTION_CLOCK = ("02:00", "16:00")
 NY_ROUND_TRIPS = 8
 LONDON_ROUND_TRIPS = 4
 MAX_PER_LINE = 2
+# the executed list's policy (Phase 1.5 selection axis: varied by the population runner)
+EDGE_FIRST = True
+EXECUTED_ALLOW_ADDS: bool | str = True
+EXECUTED_ALLOW_FLIPS = True
 # The 0.33/0.66 mean-reversal band is drawn on the author's charts from
 # December 2025 (audit §1.1: "the 'mean reversal' band, drawn from December
 # 2025"); before that his projections are the 0.5 and the 1.33/1.66 band.
@@ -2459,8 +2463,8 @@ def selection_for(market, episodes, *, primary_play: str | None = None) -> dict[
     # play and small, not a cap on a crowd). The EXECUTED list beside it is
     # one position at a time with his adds and flips.
     def segment(pool, clock, cap):
-        candidates = select_session_trades(pool, bars=bars, clock=clock, max_entries=cap, stop_after_target=False, edge_first=True, max_per_line=MAX_PER_LINE, one_position=False)
-        candidates["executed"] = select_session_trades(pool, bars=bars, clock=clock, max_entries=cap, stop_after_target=False, edge_first=True, allow_adds=True, max_per_line=MAX_PER_LINE, allow_flips=True)
+        candidates = select_session_trades(pool, bars=bars, clock=clock, max_entries=cap, stop_after_target=False, edge_first=EDGE_FIRST, max_per_line=MAX_PER_LINE, one_position=False)
+        candidates["executed"] = select_session_trades(pool, bars=bars, clock=clock, max_entries=cap, stop_after_target=False, edge_first=EDGE_FIRST, allow_adds=EXECUTED_ALLOW_ADDS, max_per_line=MAX_PER_LINE, allow_flips=EXECUTED_ALLOW_FLIPS)
         return candidates
     london = segment([ep for ep in passing if ep.get("branch") == "other_session"], (_at(market, SEGMENTS["london"][0]), _at(market, SEGMENTS["london"][1])), LONDON_ROUND_TRIPS)
     ny = segment([ep for ep in passing if ep.get("branch") in branches], (_at(market, SEGMENTS["ny"][0]), _at(market, SEGMENTS["ny"][1])), NY_ROUND_TRIPS)

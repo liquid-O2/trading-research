@@ -42,9 +42,11 @@ def collect(out: Path) -> dict[str, dict]:
     flags: dict[str, dict] = {}
     jjgb = json.loads((out / "jjgb/REPLAY_JJ_GB.json").read_text())
     for example in jjgb["examples"]:
+        if example.get("inside_tape") is False:
+            continue  # no tape, no ticket to pin
         for entry in example.get("entries") or []:
-            key = f"{example['example_id']} {entry.get('time_et')}"
-            flags[key] = {"family": example["family"], "detected": bool(entry.get("detected_strict_10")), "selected": bool(entry.get("selected_strict_10")), "executed": bool(entry.get("executed_strict_10"))}
+            key = f"{example['example_id']} {entry.get('printed_time_et')} @{entry.get('printed_price')}"
+            flags[key] = {"family": example["family"], "marked_by": entry.get("marked_by"), "detected": bool(entry.get("detected_strict_10")), "selected": bool(entry.get("selected_strict_10")), "executed": bool(entry.get("executed_strict_10"))}
     sires = json.loads((out / "sires/REPLAY_SIRES.json").read_text())
     for row in sires.get("rows") or sires.get("table") or []:
         key = f"{row['example_id']} {row['time_et']}"

@@ -103,7 +103,7 @@ def main(argv=None) -> int:
     args = parser.parse_args(argv)
     examples = json.loads(rs.EXAMPLES.read_text())["examples"]
     record = next(e for e in examples if e["id"] == args.example)
-    day = record["date"]
+    day = record.get("session_date") or record["date"]
     rows = es_bars(day, ns_at(day, "00:00"), ns_at(day, "16:00"))
     levels = levels_from(record)
     table = []
