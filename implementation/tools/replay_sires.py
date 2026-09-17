@@ -395,7 +395,7 @@ def generated_levels(example: dict, action: dict, window: tuple[int, int], param
         return []
     orders = cached[cached["t"] < window[1] + 60 * fit.NS]
     adaptive = {"quantile": params["quantile"], "lookback_s": params["lookback"], "floor": params["floor"]} if params.get("adaptive") else None
-    boxes = fit.cluster_orders(orders, min_size=params["min_size"], band=params["band"], window_s=params["window"], min_orders=params["min_orders"], adaptive=adaptive)
+    boxes = fit.cluster_orders(orders, min_size=params["min_size"], band=params["band"], window_s=params["window"], min_orders=params["min_orders"], adaptive=adaptive, anchor="center" if params.get("center") else "edge")
     if params.get("absorbed"):
         boxes = fit.absorbed(orders, boxes, follow_s=params["follow"], give=params["give"], give_in_ranges=bool(params.get("adaptive")))
     out = []
@@ -509,9 +509,10 @@ def main(argv=None) -> int:
     parser.add_argument("--floor", type=int, default=20)
     parser.add_argument("--lookback-days", type=int, default=1, help="calendar days before the session's open the boxes are generated from")
     parser.add_argument("--drop-consumed", action="store_true", help="drop boxes price has traded through on both sides since they formed")
+    parser.add_argument("--center", action="store_true", help="chain orders to a box's volume-weighted centre, not its edges (a drive does not become one tall box)")
     args = parser.parse_args(argv)
     LEVEL_SOURCE["mode"] = args.levels
-    LEVEL_SOURCE["params"] = {k: getattr(args, k) for k in ("min_size", "band", "window", "min_orders", "absorbed", "follow", "give", "adaptive", "quantile", "lookback", "floor", "lookback_days", "drop_consumed")}
+    LEVEL_SOURCE["params"] = {k: getattr(args, k) for k in ("min_size", "band", "window", "min_orders", "absorbed", "follow", "give", "adaptive", "quantile", "lookback", "floor", "lookback_days", "drop_consumed", "center")}
     examples = json.loads(EXAMPLES.read_text())["examples"]
     wanted = set(args.only.split(",")) if args.only else None
     markets: dict = {}

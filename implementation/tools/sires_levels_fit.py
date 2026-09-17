@@ -99,7 +99,18 @@ def minute_range_median(orders, at_ns: int, lookback_s: int = 1800) -> float:
     return float(np.median(r)) if len(r) else 5.0
 
 
-def cluster_orders(orders, *, min_size: int, band: float, window_s: int, min_orders: int, adaptive: dict | None = None) -> list[dict]:
+def cluster_orders(orders, *, min_size: int, band: float, window_s: int, min_orders: int, adaptive: dict | None = None, anchor: str = "edge") -> list[dict]:
+    """Large orders chained into boxes.
+
+    ``anchor="edge"``: an order joins a box when it lies within ``band`` of the
+    box's current edges (the earlier rule; a drive of climbing prints chains
+    into one tall box, e.g. 2026-08-04 09:20:44-09:30:23, 29,236.75-29,279).
+    ``anchor="center"``: an order joins only when it lies within ``band`` of
+    the box's volume-weighted centre, so a burst that walks away starts a
+    new box and a box stays the height of the prices that were actually
+    absorbed (his 2026-08-06 band 29,200-29,255 ends where the 09:20:50 drive
+    began).
+    """
     if adaptive:
         big = adaptive_big(orders, quantile=adaptive["quantile"], lookback_s=adaptive["lookback_s"], floor=adaptive["floor"]).sort_values("t")
     else:
@@ -107,18 +118,24 @@ def cluster_orders(orders, *, min_size: int, band: float, window_s: int, min_ord
     boxes: list[dict] = []
     for _, row in big.iterrows():
         placed = False
+        mid = (float(row["lo"]) + float(row["hi"])) / 2
         for box in boxes:
-            near_price = row["lo"] <= box["hi"] + band and row["hi"] >= box["lo"] - band
+            if anchor == "center":
+                center = box["_w_mid"] / box["_w"]
+                near_price = abs(mid - center) <= band
+            else:
+                near_price = row["lo"] <= box["hi"] + band and row["hi"] >= box["lo"] - band
             near_time = row["t"] - box["last_t"] <= window_s * NS
             if near_price and near_time:
                 box["lo"] = min(box["lo"], float(row["lo"]))
                 box["hi"] = max(box["hi"], float(row["hi"]))
                 box["last_t"] = int(row["t"])
+                box["_w"] += int(row["size"]); box["_w_mid"] += int(row["size"]) * mid
                 box["orders"].append({"t": int(row["t"]), "size": int(row["size"]), "side": row["side"], "lo": float(row["lo"]), "hi": float(row["hi"])})
                 placed = True
                 break
         if not placed:
-            boxes.append({"lo": float(row["lo"]), "hi": float(row["hi"]), "first_t": int(row["t"]), "last_t": int(row["t"]), "orders": [{"t": int(row["t"]), "size": int(row["size"]), "side": row["side"], "lo": float(row["lo"]), "hi": float(row["hi"])}]})
+            boxes.append({"lo": float(row["lo"]), "hi": float(row["hi"]), "first_t": int(row["t"]), "last_t": int(row["t"]), "_w": int(row["size"]), "_w_mid": int(row["size"]) * mid, "orders": [{"t": int(row["t"]), "size": int(row["size"]), "side": row["side"], "lo": float(row["lo"]), "hi": float(row["hi"])}]})
     out = []
     for box in boxes:
         if len(box["orders"]) < min_orders:
