@@ -5,13 +5,13 @@
       2
     ],
     "diagnosis": null,
-    "in_bound": true,
+    "in_bound": false,
     "page": "GB p.30, p.31",
-    "passes": 28,
-    "passes_per_session": 1.8667,
+    "passes": 1574,
+    "passes_per_session": 104.9333,
     "sessions": 15
   },
-  "baseline": "B0.2-2026-09-15",
+  "baseline": "B0.3-2026-09-17",
   "branches": {
     "asia_box": {
       "asia_passes": 0,
@@ -29,128 +29,157 @@
       },
       "branch": "asia_box",
       "diagnosis": null,
-      "episodes": 15,
-      "episodes_per_session": 1.0,
-      "fail": 7,
+      "episodes": 390,
+      "episodes_per_session": 26.0,
+      "fail": 27,
       "family": "GB-FAIL",
-      "in_bound": true,
-      "london_passes": 3,
-      "monday_passes": 5,
-      "pass": 8,
-      "pass_rate": 0.5333,
+      "in_bound": false,
+      "london_passes": 113,
+      "monday_passes": 213,
+      "pass": 363,
+      "pass_rate": 0.9308,
       "sessions": 15,
-      "sessions_with_pass": 8,
+      "sessions_with_pass": 15,
       "stage_counts": {
         "confirmation": {
-          "fail": 5,
-          "pass": 9
+          "fail": 27,
+          "pass": 363
         },
         "context": {
-          "fail": 5,
-          "pass": 10
+          "pass": 390
         },
         "location": {
-          "fail": 6,
-          "pass": 9
+          "pass": 390
         },
         "management": {
-          "fail": 6,
-          "pass": 8
+          "fail": 27,
+          "pass": 363
         },
         "objective": {
-          "fail": 6,
-          "pass": 8
+          "fail": 27,
+          "pass": 363
         },
         "reference": {
-          "fail": 5,
-          "pass": 10
+          "pass": 390
         },
         "risk": {
-          "fail": 5,
-          "pass": 9
+          "fail": 27,
+          "pass": 363
         },
         "trigger": {
-          "fail": 5,
-          "pass": 9
+          "fail": 17,
+          "pass": 373
         }
       },
-      "stage_never_fails_while_varies": [],
+      "stage_never_fails_while_varies": [
+        {
+          "stage": "context",
+          "varying_operands": [
+            "session",
+            "bias_direction",
+            "reference_live_from"
+          ]
+        },
+        {
+          "stage": "reference",
+          "varying_operands": [
+            "box_low",
+            "box_high",
+            "level",
+            "live_from"
+          ]
+        },
+        {
+          "stage": "location",
+          "varying_operands": [
+            "level",
+            "sweep_extreme",
+            "sweep_depth",
+            "cycle"
+          ]
+        }
+      ],
       "stage_value_nunique": {
         "confirmation": {
-          "blocked_by": 1,
-          "confirm_at_ns": 14,
-          "confirm_close": 14,
-          "fail_to_continue": 1,
-          "fail_window_end_ns": 1,
-          "inside_box": 1,
-          "sweep_depth": 14,
-          "through_level": 1
+          "entry": 211
         },
         "context": {
-          "bias_box_side": 3,
-          "bias_compatible": 3,
           "bias_direction": 3,
-          "bias_prior_side": 3,
-          "box": 1,
-          "decision_ns": 14,
-          "session": 4,
-          "source_session_allowed": 2
+          "bias_rule": 1,
+          "no_entry_window_filter": 1,
+          "reference_live_from": 15,
+          "session": 4
         },
         "location": {
-          "blocked_by": 1,
-          "box_high": 14,
-          "box_low": 14,
-          "distance_beyond_edge": 14,
-          "level": 14,
-          "sweep_extreme": 14
+          "cycle": 6,
+          "level": 27,
+          "sweep_depth": 80,
+          "sweep_extreme": 124
         },
         "management": {
-          "blocked_by": 1,
-          "derived_quantity": 14,
-          "ladder_rungs": 7,
-          "ladder_spacing": 1,
-          "risk_dollars": 1,
-          "stop_points": 14
+          "derived_quantity": 131,
+          "ladder_rungs": 11,
+          "ladder_spacing": 1
         },
         "objective": {
-          "blocked_by": 1,
-          "entry": 14,
-          "first_rung": 14,
-          "opposite_edge": 14,
-          "target": 14
+          "far_objective": 41,
+          "first_objective": 27,
+          "next_drawn_level": 28
         },
         "reference": {
-          "blocked_by": 1,
-          "box": 1,
-          "box_high": 14,
-          "box_low": 14,
-          "high": 1,
-          "known_at": 14,
-          "level": 14
+          "box_high": 15,
+          "box_low": 15,
+          "kind": 1,
+          "level": 27,
+          "live_from": 15,
+          "scope": 1
         },
         "risk": {
-          "blocked_by": 1,
-          "entry": 14,
+          "buffer_points": 1,
+          "entry": 211,
           "risk_dollars": 1,
-          "stop": 14,
-          "stop_points": 14
+          "stop": 124,
+          "stop_points": 157
         },
         "trigger": {
-          "blocked_by": 1,
-          "level": 14,
-          "side": 1,
-          "sweep_at_ns": 14,
-          "sweep_depth": 14,
-          "sweep_extreme": 14
+          "bars_sweep_to_fail": 12,
+          "fail_close": 194,
+          "fail_window_bars": 1,
+          "status": 2
         }
       },
       "time_of_entry_histogram_et_30m": {
-        "00:00": 1,
-        "01:00": 1,
-        "01:30": 2,
-        "03:30": 1,
-        "05:00": 2,
-        "10:00": 1
+        "00:00": 7,
+        "00:30": 17,
+        "01:00": 16,
+        "01:30": 38,
+        "02:00": 44,
+        "02:30": 10,
+        "03:00": 14,
+        "03:30": 13,
+        "04:00": 11,
+        "04:30": 13,
+        "05:00": 13,
+        "05:30": 15,
+        "06:00": 6,
+        "06:30": 6,
+        "07:00": 8,
+        "08:30": 11,
+        "09:00": 3,
+        "09:30": 12,
+        "10:00": 19,
+        "10:30": 22,
+        "11:00": 7,
+        "11:30": 2,
+        "12:00": 1,
+        "12:30": 3,
+        "13:00": 3,
+        "13:30": 19,
+        "14:00": 7,
+        "14:30": 13,
+        "15:00": 3,
+        "15:30": 6,
+        "16:00": 1
       },
       "unknown": 0
     },
@@ -170,128 +199,152 @@
       },
       "branch": "asia_tdo_case",
       "diagnosis": null,
-      "episodes": 15,
-      "episodes_per_session": 1.0,
-      "fail": 11,
+      "episodes": 583,
+      "episodes_per_session": 38.8667,
+      "fail": 222,
       "family": "GB-FAIL",
-      "in_bound": true,
-      "london_passes": 0,
-      "monday_passes": 1,
-      "pass": 4,
-      "pass_rate": 0.2667,
+      "in_bound": false,
+      "london_passes": 68,
+      "monday_passes": 202,
+      "pass": 361,
+      "pass_rate": 0.6192,
       "sessions": 15,
-      "sessions_with_pass": 4,
+      "sessions_with_pass": 14,
       "stage_counts": {
         "confirmation": {
-          "fail": 8,
-          "pass": 6
+          "fail": 144,
+          "pass": 439
         },
         "context": {
-          "fail": 6,
-          "pass": 9
+          "pass": 583
         },
         "location": {
-          "fail": 7,
-          "pass": 8
+          "pass": 583
         },
         "management": {
-          "fail": 8,
-          "pass": 4
+          "fail": 222,
+          "pass": 361
         },
         "objective": {
-          "fail": 8,
-          "pass": 4
+          "fail": 222,
+          "pass": 361
         },
         "reference": {
-          "fail": 6,
-          "pass": 9
+          "pass": 583
         },
         "risk": {
-          "fail": 6,
-          "pass": 6
+          "fail": 144,
+          "pass": 439
         },
         "trigger": {
-          "fail": 7,
-          "pass": 8
+          "fail": 41,
+          "pass": 542
         }
       },
-      "stage_never_fails_while_varies": [],
+      "stage_never_fails_while_varies": [
+        {
+          "stage": "context",
+          "varying_operands": [
+            "session",
+            "bias_direction",
+            "reference_live_from"
+          ]
+        },
+        {
+          "stage": "reference",
+          "varying_operands": [
+            "kind",
+            "box_low",
+            "box_high",
+            "level",
+            "live_from"
+          ]
+        },
+        {
+          "stage": "location",
+          "varying_operands": [
+            "level",
+            "sweep_extreme",
+            "sweep_depth",
+            "cycle"
+          ]
+        }
+      ],
       "stage_value_nunique": {
         "confirmation": {
-          "blocked_by": 1,
-          "confirm_at_ns": 12,
-          "confirm_close": 12,
-          "fail_to_continue": 1,
-          "fail_window_end_ns": 1,
-          "inside_box": 1,
-          "sweep_depth": 12,
-          "through_level": 1
+          "entry": 211,
+          "tdo": 15
         },
         "context": {
-          "bias_box_side": 3,
-          "bias_compatible": 3,
           "bias_direction": 3,
-          "bias_prior_side": 3,
-          "decision_ns": 12,
-          "session": 5,
-          "source_session_allowed": 2
+          "bias_rule": 1,
+          "no_entry_window_filter": 1,
+          "reference_live_from": 30,
+          "session": 4
         },
         "location": {
-          "blocked_by": 1,
-          "box_high": 12,
-          "box_low": 12,
-          "distance_beyond_edge": 12,
-          "level": 15,
-          "sweep": 1,
-          "sweep_extreme": 12,
-          "tdo": 1
+          "cycle": 6,
+          "level": 42,
+          "sweep_depth": 129,
+          "sweep_extreme": 250
         },
         "management": {
-          "blocked_by": 1,
-          "derived_quantity": 12,
+          "derived_quantity": 146,
           "ladder_rungs": 5,
-          "ladder_spacing": 1,
-          "risk_dollars": 1,
-          "stop_points": 12
+          "ladder_spacing": 1
         },
         "objective": {
-          "blocked_by": 1,
-          "entry": 12,
-          "first_rung": 12,
-          "opposite_edge": 12,
-          "target": 12
+          "far_objective": 71,
+          "first_objective": 28,
+          "next_drawn_level": 53
         },
         "reference": {
-          "asia_high": 3,
-          "blocked_by": 1,
-          "box_high": 12,
-          "box_low": 12,
-          "known_at": 12,
-          "level": 12,
-          "tdo": 3
+          "box_high": 30,
+          "box_low": 30,
+          "kind": 2,
+          "level": 42,
+          "live_from": 30,
+          "scope": 1
         },
         "risk": {
-          "blocked_by": 1,
-          "entry": 12,
+          "buffer_points": 1,
+          "entry": 211,
           "risk_dollars": 1,
-          "stop": 12,
-          "stop_points": 12
+          "stop": 250,
+          "stop_points": 170
         },
         "trigger": {
-          "blocked_by": 1,
-          "level": 15,
-          "side": 1,
-          "sweep": 1,
-          "sweep_at_ns": 12,
-          "sweep_depth": 13,
-          "sweep_extreme": 12,
-          "tdo": 2
+          "bars_sweep_to_fail": 13,
+          "fail_close": 301,
+          "fail_window_bars": 1,
+          "status": 2
         }
       },
       "time_of_entry_histogram_et_30m": {
-        "09:30": 1,
-        "10:00": 2,
-        "13:00": 1
+        "00:00": 39,
+        "00:30": 57,
+        "01:00": 51,
+        "01:30": 23,
+        "02:00": 23,
+        "02:30": 36,
+        "03:00": 16,
+        "03:30": 4,
+        "04:00": 9,
+        "04:30": 1,
+        "05:00": 8,
+        "07:00": 10,
+        "07:30": 8,
+        "08:00": 7,
+        "08:30": 3,
+        "09:00": 2,
+        "09:30": 10,
+        "10:00": 13,
+        "11:30": 13,
+        "12:00": 1,
+        "13:00": 11,
+        "13:30": 1,
+        "14:30": 13,
+        "16:00": 2
       },
       "unknown": 0
     },
@@ -311,54 +364,54 @@
       },
       "branch": "cash_open_reclaim_case",
       "diagnosis": null,
-      "episodes": 15,
-      "episodes_per_session": 1.0,
-      "fail": 12,
+      "episodes": 83,
+      "episodes_per_session": 5.5333,
+      "fail": 37,
       "family": "GB-FAIL",
-      "in_bound": true,
+      "in_bound": false,
       "london_passes": 0,
-      "monday_passes": 0,
-      "pass": 3,
-      "pass_rate": 0.2,
+      "monday_passes": 20,
+      "pass": 46,
+      "pass_rate": 0.5542,
       "sessions": 15,
-      "sessions_with_pass": 3,
+      "sessions_with_pass": 15,
       "stage_counts": {
         "confirmation": {
-          "fail": 2,
-          "pass": 13
+          "fail": 14,
+          "pass": 69
         },
         "context": {
-          "pass": 15
+          "pass": 83
         },
         "location": {
-          "pass": 15
+          "pass": 83
         },
         "management": {
-          "fail": 10,
-          "pass": 3
+          "fail": 37,
+          "pass": 46
         },
         "objective": {
-          "fail": 10,
-          "pass": 3
+          "fail": 37,
+          "pass": 46
         },
         "reference": {
-          "pass": 15
+          "pass": 83
         },
         "risk": {
-          "pass": 13
+          "fail": 14,
+          "pass": 69
         },
         "trigger": {
-          "pass": 15
+          "fail": 14,
+          "pass": 69
         }
       },
       "stage_never_fails_while_varies": [
         {
           "stage": "context",
           "varying_operands": [
-            "decision_ns",
             "bias_direction",
-            "bias_prior_side",
-            "bias_compatible"
+            "reference_live_from"
           ]
         },
         {
@@ -367,109 +420,77 @@
             "box_low",
             "box_high",
             "level",
-            "known_at",
-            "cash_open"
+            "live_from"
           ]
         },
         {
           "stage": "location",
           "varying_operands": [
             "level",
-            "box_low",
-            "box_high",
             "sweep_extreme",
-            "distance_beyond_edge",
-            "cash_open"
-          ]
-        },
-        {
-          "stage": "trigger",
-          "varying_operands": [
-            "sweep_at_ns",
-            "sweep_depth",
-            "sweep_extreme",
-            "level"
-          ]
-        },
-        {
-          "stage": "risk",
-          "varying_operands": [
-            "stop",
-            "entry",
-            "stop_points"
+            "sweep_depth"
           ]
         }
       ],
       "stage_value_nunique": {
         "confirmation": {
-          "cash_open": 15,
-          "confirm_at_ns": 13,
-          "confirm_close": 14,
-          "duration_unspecified": 1,
-          "fail_to_continue": 1,
-          "fail_window_end_ns": 1,
-          "inside_box": 1,
-          "sweep_depth": 13,
-          "through_level": 1
+          "entry": 59
         },
         "context": {
-          "bias_box_side": 1,
-          "bias_compatible": 3,
           "bias_direction": 3,
-          "bias_prior_side": 3,
-          "decision_ns": 13,
-          "session": 1,
-          "source_session_allowed": 1
+          "bias_rule": 1,
+          "no_entry_window_filter": 1,
+          "reference_live_from": 15,
+          "session": 1
         },
         "location": {
-          "box_high": 13,
-          "box_low": 13,
-          "cash_open": 2,
-          "distance_beyond_edge": 13,
-          "level": 15,
-          "sweep_extreme": 15
+          "cycle": 1,
+          "level": 45,
+          "sweep_depth": 82,
+          "sweep_extreme": 46
         },
         "management": {
-          "derived_quantity": 12,
-          "ladder_rungs": 3,
-          "ladder_spacing": 1,
-          "risk_dollars": 1,
-          "stop_points": 12
+          "derived_quantity": 60,
+          "ladder_rungs": 7,
+          "ladder_spacing": 1
         },
         "objective": {
-          "entry": 13,
-          "first_rung": 13,
-          "opposite_edge": 13,
-          "target": 13
+          "far_objective": 30,
+          "first_objective": 30,
+          "next_drawn_level": 31,
+          "rule": 1
         },
         "reference": {
-          "box_high": 13,
-          "box_low": 13,
-          "cash_open": 2,
-          "known_at": 13,
-          "level": 15
+          "box_high": 15,
+          "box_low": 15,
+          "kind": 1,
+          "level": 45,
+          "live_from": 15,
+          "scope": 1
         },
         "risk": {
-          "entry": 13,
+          "buffer_points": 1,
+          "entry": 59,
           "risk_dollars": 1,
-          "stop": 13,
-          "stop_points": 12
+          "stop": 46,
+          "stop_points": 61
         },
         "trigger": {
-          "level": 15,
-          "side": 1,
-          "sweep_at_ns": 15,
-          "sweep_depth": 15,
-          "sweep_extreme": 15
+          "bars_sweep_to_fail": 12,
+          "fail_close": 59,
+          "fail_window_bars": 1,
+          "status": 2
         }
       },
       "time_of_entry_histogram_et_30m": {
-        "09:30": 3
+        "09:30": 36,
+        "10:00": 9,
+        "10:30": 1
       },
       "unknown": 0
     },
     "golden_pocket": {
-      "asia_passes": 2,
+      "asia_passes": 3,
       "bound": {
         "episodes_per_session": [
           0,
@@ -484,44 +505,47 @@
       },
       "branch": "golden_pocket",
       "diagnosis": null,
-      "episodes": 15,
-      "episodes_per_session": 1.0,
-      "fail": 11,
+      "episodes": 30,
+      "episodes_per_session": 2.0,
+      "fail": 13,
       "family": "GB-FAIL",
-      "in_bound": true,
-      "london_passes": 1,
-      "monday_passes": 2,
-      "pass": 4,
-      "pass_rate": 0.2667,
+      "in_bound": false,
+      "london_passes": 6,
+      "monday_passes": 10,
+      "pass": 17,
+      "pass_rate": 0.5667,
       "sessions": 15,
-      "sessions_with_pass": 4,
+      "sessions_with_pass": 13,
       "stage_counts": {
         "confirmation": {
-          "pass": 4
+          "fail": 7,
+          "pass": 23
         },
         "context": {
-          "pass": 15
+          "pass": 30
         },
         "location": {
-          "fail": 11,
-          "pass": 4
+          "fail": 6,
+          "pass": 24
         },
         "management": {
-          "pass": 4
+          "fail": 13,
+          "pass": 17
         },
         "objective": {
-          "pass": 4
+          "fail": 7,
+          "pass": 23
         },
         "reference": {
-          "fail": 10,
-          "pass": 5
+          "pass": 30
         },
         "risk": {
-          "pass": 4
+          "fail": 7,
+          "pass": 23
         },
         "trigger": {
-          "fail": 1,
-          "pass": 4
+          "fail": 6,
+          "pass": 24
         }
       },
       "stage_never_fails_while_varies": [
@@ -529,134 +553,85 @@
           "stage": "context",
           "varying_operands": [
             "session",
-            "decision_ns",
             "bias_direction",
-            "bias_prior_side",
-            "bias_compatible"
+            "reference_live_from"
           ]
         },
         {
-          "stage": "confirmation",
+          "stage": "reference",
           "varying_operands": [
-            "confirm_close",
-            "confirm_at_ns",
-            "sweep_depth",
-            "near",
-            "far",
-            "pocket_low",
-            "pocket_high"
-          ]
-        },
-        {
-          "stage": "risk",
-          "varying_operands": [
-            "stop",
-            "entry",
-            "stop_points"
-          ]
-        },
-        {
-          "stage": "objective",
-          "varying_operands": [
-            "target",
-            "entry",
-            "first_rung",
-            "opposite_edge"
-          ]
-        },
-        {
-          "stage": "management",
-          "varying_operands": [
-            "derived_quantity",
-            "stop_points",
-            "ladder_rungs"
+            "box_low",
+            "box_high",
+            "level",
+            "live_from"
           ]
         }
       ],
       "stage_value_nunique": {
         "confirmation": {
-          "close_out_of_pocket": 1,
-          "confirm_at_ns": 4,
-          "confirm_close": 4,
-          "continuation_hold": 1,
-          "fail_to_continue": 1,
-          "fail_window_end_ns": 1,
-          "far": 4,
-          "inside_box": 1,
-          "mode_od": 1,
-          "near": 4,
-          "ny_pullback": 1,
-          "pocket_high": 4,
-          "pocket_low": 4,
-          "sweep_depth": 4,
-          "through_level": 1
+          "entry": 24
         },
         "context": {
-          "bias_box_side": 1,
-          "bias_compatible": 2,
-          "bias_direction": 2,
-          "bias_prior_side": 2,
-          "decision_ns": 4,
-          "session": 3,
-          "source_session_allowed": 1
+          "bias_direction": 3,
+          "bias_rule": 1,
+          "no_entry_window_filter": 1,
+          "reference_live_from": 30,
+          "session": 5
         },
         "location": {
-          "box_high": 4,
-          "box_low": 4,
-          "distance_beyond_edge": 4,
-          "kind": 1,
-          "level": 4,
-          "ny_pullback": 1,
-          "pocket_high": 1,
-          "pocket_low": 1,
-          "sweep_extreme": 4
+          "cycle": 1,
+          "level": 30,
+          "pocket_high": 30,
+          "pocket_low": 30,
+          "sweep_depth": 2,
+          "sweep_extreme": 25
         },
         "management": {
-          "derived_quantity": 4,
+          "derived_quantity": 24,
           "ladder_rungs": 4,
-          "ladder_spacing": 1,
-          "risk_dollars": 1,
-          "stop_points": 4
+          "ladder_spacing": 1
         },
         "objective": {
-          "entry": 4,
-          "first_rung": 4,
-          "opposite_edge": 4,
-          "target": 4
+          "far_objective": 30,
+          "first_objective": 30,
+          "next_drawn_level": 21,
+          "rule": 1
         },
         "reference": {
-          "box_high": 4,
-          "box_low": 4,
-          "impulse": 1,
-          "impulse_width": 1,
+          "box_high": 30,
+          "box_low": 30,
           "kind": 1,
-          "known_at": 4,
-          "level": 4,
-          "not_9_10_box": 1,
-          "pocket_high": 1,
-          "pocket_low": 1
+          "level": 30,
+          "live_from": 30,
+          "scope": 1
         },
         "risk": {
-          "entry": 4,
+          "buffer_points": 1,
+          "entry": 24,
           "risk_dollars": 1,
-          "stop": 4,
-          "stop_points": 4
+          "stop": 30,
+          "stop_points": 24
         },
         "trigger": {
-          "level": 4,
-          "pocket_high": 1,
-          "pocket_low": 1,
-          "side": 1,
-          "sweep_at_ns": 4,
-          "sweep_depth": 4,
-          "sweep_extreme": 4
+          "bars_sweep_to_fail": 7,
+          "fail_close": 24,
+          "fail_window_bars": 1,
+          "status": 2
         }
       },
       "time_of_entry_histogram_et_30m": {
         "00:30": 1,
-        "07:30": 1,
+        "03:00": 2,
+        "04:00": 2,
+        "04:30": 1,
+        "07:00": 1,
+        "09:30": 3,
+        "10:00": 1,
+        "10:30": 1,
+        "12:30": 1,
+        "15:00": 1,
         "21:00": 1,
-        "22:30": 1
+        "21:30": 2
       },
       "unknown": 0
     },
@@ -676,43 +651,46 @@
       },
       "branch": "london_box",
       "diagnosis": null,
-      "episodes": 15,
-      "episodes_per_session": 1.0,
-      "fail": 13,
+      "episodes": 358,
+      "episodes_per_session": 23.8667,
+      "fail": 42,
       "family": "GB-FAIL",
-      "in_bound": true,
-      "london_passes": 0,
-      "monday_passes": 2,
-      "pass": 2,
-      "pass_rate": 0.1333,
+      "in_bound": false,
+      "london_passes": 178,
+      "monday_passes": 178,
+      "pass": 316,
+      "pass_rate": 0.8827,
       "sessions": 15,
-      "sessions_with_pass": 2,
+      "sessions_with_pass": 15,
       "stage_counts": {
         "confirmation": {
-          "fail": 7,
-          "pass": 2
+          "fail": 39,
+          "pass": 319
         },
         "context": {
-          "pass": 15
+          "pass": 358
         },
         "location": {
-          "fail": 6,
-          "pass": 9
+          "pass": 358
         },
         "management": {
-          "pass": 2
+          "fail": 42,
+          "pass": 316
         },
         "objective": {
-          "pass": 2
+          "fail": 42,
+          "pass": 316
         },
         "reference": {
-          "pass": 15
+          "pass": 358
         },
         "risk": {
-          "pass": 2
+          "fail": 39,
+          "pass": 319
         },
         "trigger": {
-          "pass": 9
+          "fail": 28,
+          "pass": 330
         }
       },
       "stage_never_fails_while_varies": [
@@ -720,137 +698,108 @@
           "stage": "context",
           "varying_operands": [
             "session",
-            "decision_ns",
             "bias_direction",
-            "bias_prior_side",
-            "bias_compatible"
+            "reference_live_from"
           ]
         },
         {
           "stage": "reference",
           "varying_operands": [
-            "low",
-            "level",
             "box_low",
             "box_high",
-            "known_at"
+            "level",
+            "live_from"
           ]
         },
         {
-          "stage": "trigger",
+          "stage": "location",
           "varying_operands": [
             "level",
-            "sweep_at_ns",
+            "sweep_extreme",
             "sweep_depth",
-            "sweep_extreme"
-          ]
-        },
-        {
-          "stage": "risk",
-          "varying_operands": [
-            "stop",
-            "entry",
-            "stop_points"
-          ]
-        },
-        {
-          "stage": "objective",
-          "varying_operands": [
-            "target",
-            "entry",
-            "first_rung",
-            "opposite_edge"
-          ]
-        },
-        {
-          "stage": "management",
-          "varying_operands": [
-            "derived_quantity",
-            "stop_points",
-            "ladder_rungs"
+            "cycle"
           ]
         }
       ],
       "stage_value_nunique": {
         "confirmation": {
-          "confirm_at_ns": 2,
-          "confirm_close": 2,
-          "fail_to_continue": 1,
-          "fail_window_end_ns": 1,
-          "higher_low_ok": 1,
-          "inside_box": 1,
-          "post_open_at_ns": 2,
-          "post_open_close": 2,
-          "reclaim_at_ns": 2,
-          "reclaim_px": 2,
-          "retest_at_ns": 2,
-          "retest_low": 2,
-          "sweep_depth": 2,
-          "sweep_low": 2,
-          "through_level": 1
+          "entry": 187,
+          "higher_low": 2
         },
         "context": {
-          "bias_box_side": 1,
-          "bias_compatible": 2,
-          "bias_direction": 2,
-          "bias_prior_side": 2,
-          "box": 1,
-          "decision_ns": 2,
-          "session": 2,
-          "source_session_allowed": 1
+          "bias_direction": 3,
+          "bias_rule": 1,
+          "no_entry_window_filter": 1,
+          "reference_live_from": 15,
+          "session": 3
         },
         "location": {
-          "box_high": 2,
-          "box_low": 2,
-          "distance_beyond_edge": 2,
-          "level": 6,
-          "sweep": 1,
-          "sweep_extreme": 2
+          "cycle": 6,
+          "level": 25,
+          "sweep_depth": 73,
+          "sweep_extreme": 108
         },
         "management": {
-          "derived_quantity": 2,
-          "ladder_rungs": 2,
-          "ladder_spacing": 1,
-          "risk_dollars": 1,
-          "stop_points": 2
+          "derived_quantity": 143,
+          "ladder_rungs": 10,
+          "ladder_spacing": 1
         },
         "objective": {
-          "entry": 2,
-          "first_rung": 2,
-          "opposite_edge": 2,
-          "target": 2
+          "far_objective": 44,
+          "first_objective": 25,
+          "next_drawn_level": 27
         },
         "reference": {
-          "box": 1,
-          "box_high": 2,
-          "box_low": 2,
-          "known_at": 2,
-          "level": 6,
-          "low": 9
+          "box_high": 15,
+          "box_low": 15,
+          "kind": 1,
+          "level": 25,
+          "live_from": 15,
+          "scope": 1
         },
         "risk": {
-          "entry": 2,
+          "buffer_points": 1,
+          "entry": 187,
           "risk_dollars": 1,
-          "stop": 2,
-          "stop_points": 2
+          "stop": 108,
+          "stop_points": 158
         },
         "trigger": {
-          "level": 9,
-          "side": 1,
-          "sweep": 1,
-          "sweep_at_ns": 2,
-          "sweep_depth": 2,
-          "sweep_extreme": 2
+          "bars_sweep_to_fail": 12,
+          "fail_close": 163,
+          "fail_window_bars": 1,
+          "status": 2
         }
       },
       "time_of_entry_histogram_et_30m": {
-        "09:30": 1,
-        "11:00": 1
+        "05:00": 41,
+        "05:30": 21,
+        "06:00": 15,
+        "06:30": 21,
+        "07:00": 2,
+        "07:30": 8,
+        "08:00": 19,
+        "08:30": 22,
+        "09:00": 29,
+        "09:30": 26,
+        "10:00": 26,
+        "10:30": 7,
+        "11:00": 4,
+        "11:30": 4,
+        "12:00": 14,
+        "12:30": 12,
+        "13:00": 4,
+        "13:30": 3,
+        "14:00": 7,
+        "14:30": 9,
+        "15:00": 10,
+        "15:30": 11,
+        "16:00": 1
       },
       "unknown": 0
     },
     "nwog": {
-      "asia_passes": 1,
+      "asia_passes": 0,
       "bound": {
         "episodes_per_session": [
           0,
@@ -865,160 +814,31 @@
       },
       "branch": "nwog",
       "diagnosis": null,
-      "episodes": 21,
-      "episodes_per_session": 1.4,
-      "fail": 16,
+      "episodes": 0,
+      "episodes_per_session": 0.0,
+      "fail": 0,
       "family": "GB-FAIL",
       "in_bound": true,
       "london_passes": 0,
-      "monday_passes": 4,
-      "pass": 4,
-      "pass_rate": 0.1905,
+      "monday_passes": 0,
+      "pass": 0,
+      "pass_rate": 0.0,
       "sessions": 15,
-      "sessions_with_pass": 4,
+      "sessions_with_pass": 0,
       "stage_counts": {
-        "confirmation": {
-          "fail": 8,
-          "pass": 4
-        },
-        "context": {
-          "fail": 8,
-          "pass": 13
-        },
-        "location": {
-          "pass": 12
-        },
-        "management": {
-          "pass": 4
-        },
-        "objective": {
-          "pass": 4
-        },
-        "reference": {
-          "fail": 8,
-          "pass": 12,
-          "unknown": 1
-        },
-        "risk": {
-          "pass": 4
-        },
-        "trigger": {
-          "pass": 12
-        }
+        "confirmation": {},
+        "context": {},
+        "location": {},
+        "management": {},
+        "objective": {},
+        "reference": {},
+        "risk": {},
+        "trigger": {}
       },
-      "stage_never_fails_while_varies": [
-        {
-          "stage": "location",
-          "varying_operands": [
-            "level",
-            "box_low",
-            "box_high",
-            "sweep_extreme",
-            "distance_beyond_edge"
-          ]
-        },
-        {
-          "stage": "trigger",
-          "varying_operands": [
-            "sweep_at_ns",
-            "sweep_depth",
-            "sweep_extreme",
-            "level",
-            "side"
-          ]
-        },
-        {
-          "stage": "risk",
-          "varying_operands": [
-            "stop",
-            "entry",
-            "stop_points"
-          ]
-        },
-        {
-          "stage": "objective",
-          "varying_operands": [
-            "target",
-            "entry",
-            "first_rung",
-            "opposite_edge"
-          ]
-        },
-        {
-          "stage": "management",
-          "varying_operands": [
-            "derived_quantity",
-            "stop_points",
-            "ladder_rungs"
-          ]
-        }
-      ],
-      "stage_value_nunique": {
-        "confirmation": {
-          "confirm_at_ns": 4,
-          "confirm_close": 5,
-          "fail_to_continue": 2,
-          "fail_window_end_ns": 11,
-          "inside_box": 2,
-          "sweep_depth": 12,
-          "through_level": 1
-        },
-        "context": {
-          "bias_box_side": 1,
-          "bias_compatible": 2,
-          "bias_direction": 1,
-          "bias_prior_side": 1,
-          "decision_ns": 4,
-          "session": 3,
-          "source_session_allowed": 1,
-          "weekday": 4
-        },
-        "location": {
-          "box_high": 6,
-          "box_low": 6,
-          "distance_beyond_edge": 12,
-          "level": 12,
-          "sweep_extreme": 12
-        },
-        "management": {
-          "derived_quantity": 4,
-          "ladder_rungs": 4,
-          "ladder_spacing": 1,
-          "risk_dollars": 1,
-          "stop_points": 4
-        },
-        "objective": {
-          "entry": 4,
-          "first_rung": 4,
-          "opposite_edge": 4,
-          "target": 4
-        },
-        "reference": {
-          "box_high": 6,
-          "box_low": 6,
-          "known_at": 4,
-          "level": 12
-        },
-        "risk": {
-          "entry": 4,
-          "risk_dollars": 1,
-          "stop": 4,
-          "stop_points": 4
-        },
-        "trigger": {
-          "level": 12,
-          "side": 2,
-          "sweep_at_ns": 12,
-          "sweep_depth": 12,
-          "sweep_extreme": 12
-        }
-      },
-      "time_of_entry_histogram_et_30m": {
-        "18:00": 2,
-        "18:30": 1,
-        "20:30": 1
-      },
-      "unknown": 1
+      "stage_never_fails_while_varies": [],
+      "stage_value_nunique": {},
+      "time_of_entry_histogram_et_30m": {},
+      "unknown": 0
     },
     "ny_session_extreme": {
       "asia_passes": 0,
@@ -1036,159 +856,30 @@
       },
       "branch": "ny_session_extreme",
       "diagnosis": null,
-      "episodes": 30,
-      "episodes_per_session": 2.0,
-      "fail": 25,
+      "episodes": 0,
+      "episodes_per_session": 0.0,
+      "fail": 0,
       "family": "GB-FAIL",
       "in_bound": true,
       "london_passes": 0,
-      "monday_passes": 2,
-      "pass": 5,
-      "pass_rate": 0.1667,
+      "monday_passes": 0,
+      "pass": 0,
+      "pass_rate": 0.0,
       "sessions": 15,
-      "sessions_with_pass": 5,
+      "sessions_with_pass": 0,
       "stage_counts": {
-        "confirmation": {
-          "fail": 9,
-          "pass": 5
-        },
-        "context": {
-          "pass": 30
-        },
-        "location": {
-          "fail": 16,
-          "pass": 14
-        },
-        "management": {
-          "pass": 5
-        },
-        "objective": {
-          "pass": 5
-        },
-        "reference": {
-          "pass": 30
-        },
-        "risk": {
-          "pass": 5
-        },
-        "trigger": {
-          "fail": 16,
-          "pass": 14
-        }
+        "confirmation": {},
+        "context": {},
+        "location": {},
+        "management": {},
+        "objective": {},
+        "reference": {},
+        "risk": {},
+        "trigger": {}
       },
-      "stage_never_fails_while_varies": [
-        {
-          "stage": "context",
-          "varying_operands": [
-            "session",
-            "decision_ns",
-            "bias_direction",
-            "bias_prior_side",
-            "bias_box_side",
-            "bias_compatible"
-          ]
-        },
-        {
-          "stage": "reference",
-          "varying_operands": [
-            "box_low",
-            "box_high",
-            "level",
-            "known_at"
-          ]
-        },
-        {
-          "stage": "risk",
-          "varying_operands": [
-            "stop",
-            "entry",
-            "stop_points"
-          ]
-        },
-        {
-          "stage": "objective",
-          "varying_operands": [
-            "target",
-            "entry",
-            "first_rung",
-            "opposite_edge"
-          ]
-        },
-        {
-          "stage": "management",
-          "varying_operands": [
-            "derived_quantity",
-            "stop_points",
-            "ladder_rungs"
-          ]
-        }
-      ],
-      "stage_value_nunique": {
-        "confirmation": {
-          "confirm_at_ns": 5,
-          "confirm_close": 6,
-          "fail_to_continue": 2,
-          "fail_window_end_ns": 14,
-          "inside_box": 2,
-          "sweep_depth": 12,
-          "through_level": 1
-        },
-        "context": {
-          "bias_box_side": 2,
-          "bias_compatible": 2,
-          "bias_direction": 3,
-          "bias_prior_side": 2,
-          "decision_ns": 5,
-          "session": 2,
-          "source_session_allowed": 1
-        },
-        "location": {
-          "box_high": 15,
-          "box_low": 15,
-          "distance_beyond_edge": 12,
-          "level": 30,
-          "search_begin": 15,
-          "search_end": 15,
-          "sweep_extreme": 14
-        },
-        "management": {
-          "derived_quantity": 5,
-          "ladder_rungs": 3,
-          "ladder_spacing": 1,
-          "risk_dollars": 1,
-          "stop_points": 5
-        },
-        "objective": {
-          "entry": 5,
-          "first_rung": 5,
-          "opposite_edge": 5,
-          "target": 5
-        },
-        "reference": {
-          "box_high": 15,
-          "box_low": 15,
-          "known_at": 5,
-          "level": 30
-        },
-        "risk": {
-          "entry": 5,
-          "risk_dollars": 1,
-          "stop": 5,
-          "stop_points": 5
-        },
-        "trigger": {
-          "level": 30,
-          "side": 2,
-          "sweep_at_ns": 14,
-          "sweep_depth": 13,
-          "sweep_extreme": 14
-        }
-      },
-      "time_of_entry_histogram_et_30m": {
-        "11:00": 3,
-        "11:30": 1,
-        "13:00": 1
-      },
+      "stage_never_fails_while_varies": [],
+      "stage_value_nunique": {},
+      "time_of_entry_histogram_et_30m": {},
       "unknown": 0
     },
     "nyam_box": {
@@ -1207,44 +898,46 @@
       },
       "branch": "nyam_box",
       "diagnosis": null,
-      "episodes": 39,
-      "episodes_per_session": 2.6,
-      "fail": 29,
+      "episodes": 339,
+      "episodes_per_session": 22.6,
+      "fail": 32,
       "family": "GB-FAIL",
-      "in_bound": true,
+      "in_bound": false,
       "london_passes": 0,
-      "monday_passes": 5,
-      "pass": 10,
-      "pass_rate": 0.2564,
+      "monday_passes": 176,
+      "pass": 307,
+      "pass_rate": 0.9056,
       "sessions": 15,
-      "sessions_with_pass": 8,
+      "sessions_with_pass": 15,
       "stage_counts": {
         "confirmation": {
-          "fail": 21,
-          "pass": 10
+          "fail": 32,
+          "pass": 307
         },
         "context": {
-          "pass": 39
+          "pass": 339
         },
         "location": {
-          "fail": 8,
-          "pass": 31
+          "pass": 339
         },
         "management": {
-          "pass": 10
+          "fail": 32,
+          "pass": 307
         },
         "objective": {
-          "pass": 10
+          "fail": 32,
+          "pass": 307
         },
         "reference": {
-          "pass": 39
+          "pass": 339
         },
         "risk": {
-          "pass": 10
+          "fail": 32,
+          "pass": 307
         },
         "trigger": {
-          "fail": 8,
-          "pass": 31
+          "fail": 25,
+          "pass": 314
         }
       },
       "stage_never_fails_while_varies": [
@@ -1252,113 +945,93 @@
           "stage": "context",
           "varying_operands": [
             "session",
-            "decision_ns",
             "bias_direction",
-            "bias_prior_side",
-            "bias_box_side",
-            "bias_compatible"
+            "reference_live_from"
           ]
         },
         {
           "stage": "reference",
           "varying_operands": [
+            "kind",
             "box_low",
             "box_high",
             "level",
-            "known_at"
+            "live_from"
           ]
         },
         {
-          "stage": "risk",
+          "stage": "location",
           "varying_operands": [
-            "stop",
-            "entry",
-            "stop_points"
-          ]
-        },
-        {
-          "stage": "objective",
-          "varying_operands": [
-            "target",
-            "entry",
-            "first_rung",
-            "opposite_edge"
-          ]
-        },
-        {
-          "stage": "management",
-          "varying_operands": [
-            "derived_quantity",
-            "stop_points",
-            "ladder_rungs"
+            "level",
+            "sweep_extreme",
+            "sweep_depth",
+            "cycle"
           ]
         }
       ],
       "stage_value_nunique": {
         "confirmation": {
-          "confirm_at_ns": 10,
-          "confirm_close": 11,
-          "fail_to_continue": 2,
-          "fail_window_end_ns": 25,
-          "inside_box": 2,
-          "sweep_depth": 26,
-          "through_level": 1
+          "entry": 191
         },
         "context": {
-          "bias_box_side": 3,
-          "bias_compatible": 2,
           "bias_direction": 3,
-          "bias_prior_side": 2,
-          "decision_ns": 10,
-          "session": 2,
-          "source_session_allowed": 1
+          "bias_rule": 1,
+          "no_entry_window_filter": 1,
+          "reference_live_from": 29,
+          "session": 2
         },
         "location": {
-          "box_high": 22,
-          "box_low": 22,
-          "distance_beyond_edge": 26,
-          "level": 38,
-          "search_begin": 8,
-          "search_end": 8,
-          "sweep_extreme": 31
+          "cycle": 6,
+          "level": 35,
+          "sweep_depth": 82,
+          "sweep_extreme": 108
         },
         "management": {
-          "derived_quantity": 9,
-          "ladder_rungs": 6,
-          "ladder_spacing": 1,
-          "risk_dollars": 1,
-          "stop_points": 9
+          "derived_quantity": 131,
+          "ladder_rungs": 15,
+          "ladder_spacing": 1
         },
         "objective": {
-          "entry": 10,
-          "first_rung": 10,
-          "opposite_edge": 10,
-          "target": 10
+          "far_objective": 44,
+          "first_objective": 35,
+          "next_drawn_level": 29
         },
         "reference": {
-          "box_high": 22,
-          "box_low": 22,
-          "known_at": 10,
-          "level": 38
+          "box_high": 29,
+          "box_low": 29,
+          "kind": 2,
+          "level": 35,
+          "live_from": 29,
+          "scope": 1
         },
         "risk": {
-          "entry": 10,
+          "buffer_points": 1,
+          "entry": 191,
           "risk_dollars": 1,
-          "stop": 10,
-          "stop_points": 9
+          "stop": 108,
+          "stop_points": 157
         },
         "trigger": {
-          "level": 38,
-          "side": 2,
-          "sweep_at_ns": 29,
-          "sweep_depth": 27,
-          "sweep_extreme": 31
+          "bars_sweep_to_fail": 8,
+          "fail_close": 166,
+          "fail_window_bars": 1,
+          "status": 2
         }
       },
       "time_of_entry_histogram_et_30m": {
-        "09:30": 5,
-        "10:00": 4,
-        "13:00": 1
+        "10:00": 51,
+        "10:30": 29,
+        "11:00": 57,
+        "11:30": 19,
+        "12:00": 9,
+        "12:30": 14,
+        "13:00": 23,
+        "13:30": 12,
+        "14:00": 42,
+        "14:30": 10,
+        "15:00": 13,
+        "15:30": 26,
+        "16:00": 2
       },
       "unknown": 0
     },
@@ -1378,161 +1051,140 @@
       },
       "branch": "previous_hour",
       "diagnosis": null,
-      "episodes": 60,
-      "episodes_per_session": 4.0,
-      "fail": 52,
+      "episodes": 654,
+      "episodes_per_session": 43.6,
+      "fail": 66,
       "family": "GB-FAIL",
-      "in_bound": true,
+      "in_bound": false,
       "london_passes": 0,
-      "monday_passes": 4,
-      "pass": 8,
-      "pass_rate": 0.1333,
+      "monday_passes": 293,
+      "pass": 588,
+      "pass_rate": 0.8991,
       "sessions": 15,
-      "sessions_with_pass": 8,
+      "sessions_with_pass": 15,
       "stage_counts": {
         "confirmation": {
-          "fail": 11,
-          "pass": 8
+          "fail": 66,
+          "pass": 588
         },
         "context": {
-          "pass": 60
+          "pass": 654
         },
         "location": {
-          "fail": 41,
-          "pass": 19
+          "pass": 654
         },
         "management": {
-          "pass": 8
+          "fail": 66,
+          "pass": 588
         },
         "objective": {
-          "pass": 8
+          "fail": 66,
+          "pass": 588
         },
         "reference": {
-          "pass": 60
+          "pass": 654
         },
         "risk": {
-          "pass": 8
+          "fail": 66,
+          "pass": 588
         },
         "trigger": {
-          "fail": 41,
-          "pass": 19
+          "fail": 47,
+          "pass": 607
         }
       },
       "stage_never_fails_while_varies": [
         {
           "stage": "context",
           "varying_operands": [
-            "decision_ns",
             "bias_direction",
-            "bias_prior_side",
-            "bias_box_side",
-            "bias_compatible"
+            "reference_live_from"
           ]
         },
         {
           "stage": "reference",
           "varying_operands": [
+            "kind",
             "box_low",
             "box_high",
             "level",
-            "known_at"
+            "live_from"
           ]
         },
         {
-          "stage": "risk",
+          "stage": "location",
           "varying_operands": [
-            "stop",
-            "entry",
-            "stop_points"
-          ]
-        },
-        {
-          "stage": "objective",
-          "varying_operands": [
-            "target",
-            "entry",
-            "first_rung",
-            "opposite_edge"
-          ]
-        },
-        {
-          "stage": "management",
-          "varying_operands": [
-            "derived_quantity",
-            "stop_points",
-            "ladder_rungs"
+            "level",
+            "sweep_extreme",
+            "sweep_depth",
+            "cycle"
           ]
         }
       ],
       "stage_value_nunique": {
         "confirmation": {
-          "confirm_at_ns": 8,
-          "confirm_close": 9,
-          "fail_to_continue": 2,
-          "fail_window_end_ns": 19,
-          "inside_box": 2,
-          "sweep_depth": 12,
-          "through_level": 1
+          "entry": 353
         },
         "context": {
-          "bias_box_side": 3,
-          "bias_compatible": 3,
           "bias_direction": 3,
-          "bias_prior_side": 3,
-          "decision_ns": 8,
-          "session": 1,
-          "source_session_allowed": 1
+          "bias_rule": 1,
+          "no_entry_window_filter": 1,
+          "reference_live_from": 56,
+          "session": 1
         },
         "location": {
-          "box_high": 30,
-          "box_low": 30,
-          "distance_beyond_edge": 12,
-          "level": 60,
-          "search_begin": 30,
-          "search_end": 30,
-          "sweep_extreme": 19
+          "cycle": 6,
+          "level": 69,
+          "sweep_depth": 110,
+          "sweep_extreme": 185
         },
         "management": {
-          "derived_quantity": 5,
-          "ladder_rungs": 4,
-          "ladder_spacing": 1,
-          "risk_dollars": 1,
-          "stop_points": 5
+          "derived_quantity": 154,
+          "ladder_rungs": 10,
+          "ladder_spacing": 1
         },
         "objective": {
-          "entry": 8,
-          "first_rung": 8,
-          "opposite_edge": 8,
-          "target": 8
+          "far_objective": 84,
+          "first_objective": 69,
+          "next_drawn_level": 61
         },
         "reference": {
-          "box_high": 30,
-          "box_low": 30,
-          "known_at": 8,
-          "level": 60
+          "box_high": 56,
+          "box_low": 56,
+          "kind": 4,
+          "level": 69,
+          "live_from": 56,
+          "scope": 1
         },
         "risk": {
-          "entry": 8,
+          "buffer_points": 1,
+          "entry": 353,
           "risk_dollars": 1,
-          "stop": 8,
-          "stop_points": 5
+          "stop": 185,
+          "stop_points": 197
         },
         "trigger": {
-          "level": 60,
-          "side": 2,
-          "sweep_at_ns": 19,
-          "sweep_depth": 13,
-          "sweep_extreme": 19
+          "bars_sweep_to_fail": 11,
+          "fail_close": 311,
+          "fail_window_bars": 1,
+          "status": 2
         }
       },
       "time_of_entry_histogram_et_30m": {
-        "14:00": 4,
-        "15:00": 4
+        "12:00": 29,
+        "12:30": 39,
+        "13:00": 100,
+        "13:30": 49,
+        "14:00": 71,
+        "14:30": 60,
+        "15:00": 108,
+        "15:30": 128,
+        "16:00": 4
       },
       "unknown": 0
     },
     "prior_day_level": {
-      "asia_passes": 2,
+      "asia_passes": 38,
       "bound": {
         "episodes_per_session": [
           0,
@@ -1547,135 +1199,165 @@
       },
       "branch": "prior_day_level",
       "diagnosis": null,
-      "episodes": 30,
-      "episodes_per_session": 2.0,
-      "fail": 18,
+      "episodes": 462,
+      "episodes_per_session": 30.8,
+      "fail": 178,
       "family": "GB-FAIL",
-      "in_bound": true,
-      "london_passes": 1,
-      "monday_passes": 8,
-      "pass": 12,
-      "pass_rate": 0.4,
+      "in_bound": false,
+      "london_passes": 39,
+      "monday_passes": 142,
+      "pass": 284,
+      "pass_rate": 0.6147,
       "sessions": 15,
-      "sessions_with_pass": 10,
+      "sessions_with_pass": 12,
       "stage_counts": {
         "confirmation": {
-          "fail": 8,
-          "pass": 12
+          "fail": 157,
+          "pass": 305
         },
         "context": {
-          "fail": 6,
-          "pass": 24
+          "pass": 462
         },
         "location": {
-          "fail": 16,
-          "pass": 14
+          "pass": 462
         },
         "management": {
-          "fail": 6,
-          "pass": 12
+          "fail": 178,
+          "pass": 284
         },
         "objective": {
-          "fail": 6,
-          "pass": 12
+          "fail": 178,
+          "pass": 284
         },
         "reference": {
-          "fail": 6,
-          "pass": 24
+          "pass": 462
         },
         "risk": {
-          "fail": 6,
-          "pass": 12
+          "fail": 157,
+          "pass": 305
         },
         "trigger": {
-          "fail": 16,
-          "pass": 14
+          "fail": 143,
+          "pass": 319
         }
       },
-      "stage_never_fails_while_varies": [],
+      "stage_never_fails_while_varies": [
+        {
+          "stage": "context",
+          "varying_operands": [
+            "session",
+            "bias_direction",
+            "reference_live_from"
+          ]
+        },
+        {
+          "stage": "reference",
+          "varying_operands": [
+            "box_low",
+            "box_high",
+            "level",
+            "live_from",
+            "scope"
+          ]
+        },
+        {
+          "stage": "location",
+          "varying_operands": [
+            "level",
+            "sweep_extreme",
+            "sweep_depth",
+            "cycle"
+          ]
+        }
+      ],
       "stage_value_nunique": {
         "confirmation": {
-          "blocked_by": 1,
-          "confirm_at_ns": 18,
-          "confirm_close": 18,
-          "fail_to_continue": 1,
-          "fail_window_end_ns": 1,
-          "inside_box": 1,
-          "sweep_depth": 16,
-          "through_level": 1
+          "entry": 182
         },
         "context": {
-          "bias_box_side": 3,
-          "bias_compatible": 3,
           "bias_direction": 3,
-          "bias_prior_side": 3,
-          "decision_ns": 18,
-          "session": 5,
-          "source_session_allowed": 2
+          "bias_rule": 1,
+          "no_entry_window_filter": 1,
+          "reference_live_from": 15,
+          "session": 6
         },
         "location": {
-          "blocked_by": 1,
-          "box_high": 12,
-          "box_low": 12,
-          "distance_beyond_edge": 16,
+          "cycle": 6,
           "level": 30,
-          "side": 2,
-          "sweep": 1,
-          "sweep_extreme": 18
+          "sweep_depth": 115,
+          "sweep_extreme": 146
         },
         "management": {
-          "blocked_by": 1,
-          "derived_quantity": 16,
-          "ladder_rungs": 9,
-          "ladder_spacing": 1,
-          "risk_dollars": 1,
-          "stop_points": 16
+          "derived_quantity": 152,
+          "ladder_rungs": 20,
+          "ladder_spacing": 1
         },
         "objective": {
-          "blocked_by": 1,
-          "entry": 18,
-          "first_rung": 18,
-          "opposite_edge": 18,
-          "target": 18
+          "far_objective": 47,
+          "first_objective": 19,
+          "next_drawn_level": 34
         },
         "reference": {
-          "blocked_by": 1,
-          "box_high": 12,
-          "box_low": 12,
-          "known_at": 12,
+          "box_high": 15,
+          "box_low": 15,
+          "kind": 1,
           "level": 30,
-          "side": 2
+          "live_from": 15,
+          "scope": 2
         },
         "risk": {
-          "blocked_by": 1,
-          "entry": 18,
+          "buffer_points": 1,
+          "entry": 182,
           "risk_dollars": 1,
-          "stop": 18,
-          "stop_points": 16
+          "stop": 146,
+          "stop_points": 170
         },
         "trigger": {
-          "blocked_by": 1,
-          "level": 30,
-          "side": 2,
-          "sweep": 1,
-          "sweep_at_ns": 18,
-          "sweep_depth": 17,
-          "sweep_extreme": 18
+          "bars_sweep_to_fail": 9,
+          "fail_close": 171,
+          "fail_window_bars": 1,
+          "status": 2
         }
       },
       "time_of_entry_histogram_et_30m": {
+        "00:00": 8,
+        "00:30": 1,
+        "01:30": 2,
+        "02:00": 2,
         "03:00": 1,
-        "09:30": 5,
-        "10:00": 2,
-        "10:30": 1,
-        "14:00": 1,
-        "20:30": 1,
-        "21:30": 1
+        "03:30": 5,
+        "04:00": 15,
+        "04:30": 6,
+        "05:00": 5,
+        "05:30": 3,
+        "06:30": 2,
+        "07:00": 2,
+        "09:30": 35,
+        "10:00": 14,
+        "10:30": 16,
+        "11:00": 7,
+        "11:30": 21,
+        "12:00": 23,
+        "12:30": 27,
+        "13:00": 12,
+        "13:30": 4,
+        "14:00": 20,
+        "14:30": 2,
+        "15:30": 4,
+        "16:00": 2,
+        "19:00": 2,
+        "19:30": 5,
+        "20:30": 3,
+        "21:00": 14,
+        "21:30": 10,
+        "22:00": 2,
+        "22:30": 4,
+        "23:00": 5
       },
       "unknown": 0
     },
     "prior_week_level": {
-      "asia_passes": 2,
+      "asia_passes": 65,
       "bound": {
         "episodes_per_session": [
           0,
@@ -1689,131 +1371,161 @@
         "source_claim": "Previous weekly candle's extremes (PWH/PWL) as sweep-and-reclaim references, both sides, one reference lifecycle per level per week. The page names the level set and dates three uses; it states no frequency, so the bound is the structural one: at most one episode per side per session."
       },
       "branch": "prior_week_level",
-      "diagnosis": null,
-      "episodes": 30,
-      "episodes_per_session": 2.0,
-      "fail": 21,
+      "diagnosis": "GB p.31 (SD03 addendum): The source gives no weekly-level frequency. The episodes-per-session bound [0, 2] is structural (one reference per side per session) and the pass-rate bound reuses the prior_day_level sweep-and-reclaim template on the same confirmation mode. An observed rate outside it is reported, not tuned.",
+      "episodes": 405,
+      "episodes_per_session": 27.0,
+      "fail": 169,
       "family": "GB-FAIL",
-      "in_bound": true,
-      "london_passes": 0,
-      "monday_passes": 6,
-      "pass": 9,
-      "pass_rate": 0.3,
+      "in_bound": false,
+      "london_passes": 36,
+      "monday_passes": 95,
+      "pass": 236,
+      "pass_rate": 0.5827,
       "sessions": 15,
-      "sessions_with_pass": 9,
+      "sessions_with_pass": 14,
       "stage_counts": {
         "confirmation": {
-          "fail": 5,
-          "pass": 9
+          "fail": 148,
+          "pass": 257
         },
         "context": {
-          "fail": 5,
-          "pass": 25
+          "pass": 405
         },
         "location": {
-          "fail": 21,
-          "pass": 9
+          "pass": 405
         },
         "management": {
-          "fail": 5,
-          "pass": 9
+          "fail": 169,
+          "pass": 236
         },
         "objective": {
-          "fail": 5,
-          "pass": 9
+          "fail": 169,
+          "pass": 236
         },
         "reference": {
-          "fail": 5,
-          "pass": 25
+          "pass": 405
         },
         "risk": {
-          "fail": 5,
-          "pass": 9
+          "fail": 148,
+          "pass": 257
         },
         "trigger": {
-          "fail": 21,
-          "pass": 9
+          "fail": 136,
+          "pass": 269
         }
       },
-      "stage_never_fails_while_varies": [],
+      "stage_never_fails_while_varies": [
+        {
+          "stage": "context",
+          "varying_operands": [
+            "session",
+            "bias_direction",
+            "reference_live_from"
+          ]
+        },
+        {
+          "stage": "reference",
+          "varying_operands": [
+            "box_low",
+            "box_high",
+            "level",
+            "live_from"
+          ]
+        },
+        {
+          "stage": "location",
+          "varying_operands": [
+            "level",
+            "sweep_extreme",
+            "sweep_depth",
+            "cycle"
+          ]
+        }
+      ],
       "stage_value_nunique": {
         "confirmation": {
-          "blocked_by": 1,
-          "confirm_at_ns": 14,
-          "confirm_close": 14,
-          "fail_to_continue": 1,
-          "fail_window_end_ns": 1,
-          "inside_box": 1,
-          "sweep_depth": 14,
-          "through_level": 1
+          "entry": 151
         },
         "context": {
-          "bias_box_side": 3,
-          "bias_compatible": 3,
           "bias_direction": 3,
-          "bias_prior_side": 3,
-          "decision_ns": 14,
-          "session": 5,
-          "source_session_allowed": 2
+          "bias_rule": 1,
+          "no_entry_window_filter": 1,
+          "reference_live_from": 15,
+          "session": 6
         },
         "location": {
-          "blocked_by": 1,
-          "box_high": 14,
-          "box_low": 14,
-          "distance_beyond_edge": 14,
+          "cycle": 6,
           "level": 30,
-          "side": 2,
-          "sweep_extreme": 14
+          "sweep_depth": 109,
+          "sweep_extreme": 130
         },
         "management": {
-          "blocked_by": 1,
-          "derived_quantity": 13,
-          "ladder_rungs": 2,
-          "ladder_spacing": 1,
-          "risk_dollars": 1,
-          "stop_points": 13
+          "derived_quantity": 128,
+          "ladder_rungs": 16,
+          "ladder_spacing": 1
         },
         "objective": {
-          "blocked_by": 1,
-          "entry": 14,
-          "first_rung": 14,
-          "opposite_edge": 14,
-          "target": 14
+          "far_objective": 32,
+          "first_objective": 15,
+          "next_drawn_level": 19
         },
         "reference": {
-          "blocked_by": 1,
-          "box_high": 14,
-          "box_low": 14,
-          "known_at": 14,
+          "box_high": 15,
+          "box_low": 15,
+          "kind": 1,
           "level": 30,
-          "period_kind": 1,
-          "scope": 1,
-          "side": 2,
-          "week_convention": 1
+          "live_from": 15,
+          "scope": 1
         },
         "risk": {
-          "blocked_by": 1,
-          "entry": 14,
+          "buffer_points": 1,
+          "entry": 151,
           "risk_dollars": 1,
-          "stop": 14,
-          "stop_points": 13
+          "stop": 130,
+          "stop_points": 146
         },
         "trigger": {
-          "blocked_by": 1,
-          "level": 30,
-          "side": 2,
-          "sweep_at_ns": 14,
-          "sweep_depth": 15,
-          "sweep_extreme": 14
+          "bars_sweep_to_fail": 8,
+          "fail_close": 142,
+          "fail_window_bars": 1,
+          "status": 2
         }
       },
       "time_of_entry_histogram_et_30m": {
-        "09:30": 3,
-        "10:00": 2,
-        "13:30": 1,
-        "14:00": 1,
-        "20:30": 1,
-        "21:30": 1
+        "00:00": 8,
+        "00:30": 2,
+        "01:00": 2,
+        "02:00": 4,
+        "02:30": 3,
+        "03:00": 4,
+        "03:30": 1,
+        "06:30": 5,
+        "07:00": 18,
+        "07:30": 5,
+        "08:00": 3,
+        "09:30": 22,
+        "10:00": 9,
+        "10:30": 9,
+        "11:00": 13,
+        "11:30": 11,
+        "12:00": 4,
+        "13:00": 3,
+        "13:30": 2,
+        "14:00": 5,
+        "14:30": 5,
+        "15:30": 3,
+        "16:00": 1,
+        "18:00": 12,
+        "18:30": 8,
+        "19:00": 7,
+        "19:30": 2,
+        "20:30": 5,
+        "21:00": 15,
+        "21:30": 10,
+        "22:00": 2,
+        "22:30": 9,
+        "23:00": 14,
+        "23:30": 10
       },
       "unknown": 0
     }
