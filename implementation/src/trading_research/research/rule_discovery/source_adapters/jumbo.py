@@ -1781,6 +1781,46 @@ def _stop_through(market, *, level: Decimal, side: str, begin: int, end: int) ->
     return None
 
 
+def _session_orders(market):
+    """Aggressor orders of the account day (fills grouped by event timestamp
+    and side), from the trade parquet; cached per session in the process."""
+    key = str(getattr(market, "day", None))
+    if key in _ORDERS_CACHE:
+        return _ORDERS_CACHE[key]
+    orders = None
+    try:
+        import importlib.util as _ilu
+
+        spec = _ilu.spec_from_file_location("sires_levels_fit", Path(__file__).resolve().parents[6] / "implementation/tools/sires_levels_fit.py")
+        fit = _ilu.module_from_spec(spec)
+        spec.loader.exec_module(fit)
+        orders = fit.orders_between(key, int(market.start), int(market.end))
+    except Exception:
+        orders = None
+    if len(_ORDERS_CACHE) > 4:
+        _ORDERS_CACHE.pop(next(iter(_ORDERS_CACHE)))
+    _ORDERS_CACHE[key] = orders
+    return orders
+
+
+def _big_print_fill(market, *, level: Decimal, side: str, begin: int, end: int) -> dict[str, Any] | None:
+    """The first executed order at or above the BigTrades threshold within
+    BIG_PRINT_POINTS of the level between ``begin`` and ``end``: the fill is
+    the print's price, decided when its minute closes."""
+    orders = _session_orders(market)
+    if orders is None or len(orders) == 0:
+        return None
+    london_end = _at(market, "09:30")
+    lo, hi = float(level - BIG_PRINT_POINTS), float(level + BIG_PRINT_POINTS)
+    sub = orders[(orders["t"] >= int(begin)) & (orders["t"] < int(end)) & (orders["hi"] >= lo) & (orders["lo"] <= hi)]
+    for row in sub.itertuples(index=False):
+        threshold = BIGTRADES_LONDON if int(row.t) < london_end else BIGTRADES_NY
+        if int(row.size) >= threshold:
+            at = (int(row.t) // NS_MINUTE + 1) * NS_MINUTE
+            return {"mode": "big_print", "entry": Decimal(str((float(row.lo) + float(row.hi)) / 2)).quantize(TICK), "at": at, "evidence_at": at, "print_size": int(row.size), "print_side": str(row.side)}
+    return None
+
+
 def _line_failure_fills(market, *, level: Decimal, side: str, cycle: Mapping[str, Any], end: int, evidence_at: int, internal: Decimal | None = None) -> list[dict[str, Any]]:
     """The fills of one failure of a line (the sweep bar, its extreme and the
     bar that closes back through are in ``cycle``). ``internal`` is the next
@@ -1819,6 +1859,10 @@ def _line_failure_fills(market, *, level: Decimal, side: str, cycle: Mapping[str
         turn = _spike_turn(market, level=level, side=side, bar=sweep, end=end)
         if turn is not None:
             fills.append({"mode": "next_bar_open", "entry": turn["entry"], "at": int(turn["at"]), "stop": turn["stop"], "evidence_at": int(turn["at"]), "fitted": True})
+        if BIG_PRINT_CONFIRMATION:
+            big = _big_print_fill(market, level=level, side=side, begin=int(sweep.get("start") or evidence_at), end=min(end, int(sweep["end"]) + CONFIRM_HORIZON_MIN * NS_MINUTE))
+            if big is not None:
+                fills.append({**big, "stop": stop})
     return fills
 
 
@@ -1850,6 +1894,12 @@ def _contact_fills(market, *, level: Decimal, side: str, contact: Mapping[str, A
     turn = _spike_turn(market, level=level, side=side, bar=contact, end=end)
     if turn is not None:
         fills.append({"mode": "next_bar_open", "entry": turn["entry"], "at": int(turn["at"]), "stop": turn["stop"], "evidence_at": int(turn["at"]), "fitted": True})
+    if BIG_PRINT_CONFIRMATION:
+        big = _big_print_fill(market, level=level, side=side, begin=int(contact.get("start") or touch_at), end=min(end, int(contact["end"]) + CONFIRM_HORIZON_MIN * NS_MINUTE))
+        if big is not None:
+            lo_c, hi_c = _d(contact.get("L")), _d(contact.get("H"))
+            extreme = lo_c if side == "long" else hi_c
+            fills.append({**big, "stop": None if extreme is None else ((extreme - LEVEL_COINCIDENCE) if side == "long" else (extreme + LEVEL_COINCIDENCE)), "evidence_at": max(int(placed_at), int(big["at"]))})
     return fills
 
 
@@ -2388,6 +2438,15 @@ SELECTION_CLOCK = ("02:00", "16:00")
 # different layers" -- 2026-05-15's +0.33 projection retests at 12:46 and 12:55
 # sit past the 12:00 end of the purged case)
 PURGED_PROJECTION_LINES: tuple = ()
+# Phase 1.5 confirmation candidate: a large executed order at the level
+# (BigTrades: "I use a 100 threshold on NQ during NY and 75 during London",
+# FIND p.9; "confirmation: ... large prints >= threshold", FIND p.12).
+# B0.3 does not use it; 2026-05-19's -1.33 long sits on a 282-lot print.
+BIG_PRINT_CONFIRMATION = False
+BIGTRADES_NY = 100
+BIGTRADES_LONDON = 75
+BIG_PRINT_POINTS = Decimal("2")
+_ORDERS_CACHE: dict = {}
 SINGLE_EXTENDED_END = "10:30"
 SINGLE_PURGED_END = "12:00"
 NY_ROUND_TRIPS = 8
