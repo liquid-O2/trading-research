@@ -455,7 +455,7 @@ def test_rules_table_is_keyed_by_rule_id_with_a_source_and_a_line():
 def test_author_examples_2026_09_17_is_a_superset_of_the_pinned_file():
     pinned = json.loads((REPO / "planning/phase-1-5/AUTHOR_EXAMPLES_2026-09-15.json").read_text())
     current = json.loads(EXAMPLES.read_text())
-    assert {row["id"] for row in pinned["examples"]} == {row["id"] for row in current["examples"]}
+    assert {row["id"] for row in pinned["examples"]} <= {row["id"] for row in current["examples"]}, "every pinned example survives; new dated examples may be added"
     by_id = {row["id"]: row for row in current["examples"]}
     for row in pinned["examples"]:
         after = by_id[row["id"]]
@@ -479,7 +479,10 @@ def test_author_examples_2026_09_17_is_a_superset_of_the_pinned_file():
         if action.get("proper_entry")
     ]
     assert marked
-    assert all(action.get("marked_by") in {"rr_tool", "narration", "ticket"} for action in marked)
+    # rr_tool: the TradingView risk-reward box; narration: the post names the fill;
+    # ticket: an order ticket; chart_orders: order labels printed on the chart
+    # (exact); chart: a fill read off the chart at its resolution (about 5 points)
+    assert all(action.get("marked_by") in {"rr_tool", "narration", "ticket", "chart_orders", "chart"} for action in marked)
 
 
 # --------------------------------------------------------------------------- round 3
