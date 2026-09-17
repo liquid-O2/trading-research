@@ -132,3 +132,14 @@ Records: the twenty ticketed fills (ten Sires sessions, one Saint session) are n
 | Saint: the intraday level breaks, price leaves, comes back once ("two waits, not one") | TRAP pp.6–7 | the retest bar's extreme, its close, the next open | 08-10 19:47 (his panel says 19:51; the price he prints is the 19:47 retest high on NQ) |
 
 What this does not yet do, and is the next step for these two families: draw the levels from data. Sires' boxes are aggression clusters (prints of thirty contracts and more absorbed at one area, BIG p.3) and profile shelves, ledges and nodes; Saint's are the higher-timeframe balance and the intraday levels off the open and balance. The trade data on disk covers the sessions (weekly NQ trade files through 2026-08-31). Generating the aggression boxes from the trades and comparing them with the twenty drawn boxes is the Sires equivalent of the P-zone fit, and the profile objects are Phase 3.
+
+### 10.1 The trade data is fill-level; the author's bubbles are order-level
+
+Probe on the two clearest Sires charts (`cme__nq-continuous-futures__trades`, weekly files):
+
+| window | fills | prints ≥ 30 contracts as recorded | aggressor orders (fills sharing one event timestamp and side) ≥ 30 | ≥ 60 | ≥ 100 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 2026-07-08 10:30–10:52 | 20,626 | 1 | 19 | 3 | 1 |
+| 2026-07-14 09:30–09:40 | 16,285 | 1 | 12 | 2 | 0 |
+
+Read as orders, the prints land where he drew: on 07-08 a 106-contract sell at 10:43:20 spans 29,222–29,228 (his "absorbed aggression" box 29,224–29,231), and 40-contract buys at 10:39:47 and 10:41:17 sit at 29,251–29,256 (his failure box 29,246–29,251.5, the circled buyers "getting exhausted into the catalyst"); on 07-14 a 39-contract buy at 09:37:33 spans 29,741–29,746 (his 29,745 support, "sellers absorbed at the bottom") and a 38-contract buy at 09:33:03 sits in the refill box 29,750–29,757. Deepchart draws an aggressor order as one bubble; our feed records each fill against the book. The earlier Sires adapter (`AGGRESSION_MIN = 30` on fills) and the Refill study's cluster rule therefore almost never saw the prints the authors describe ("sixty, eighty, a hundred contracts hitting in seconds"), which is a large part of the plausibility failures the audit recorded (S3, R1–R2). Level generation for Sires and the Refill re-measurement must start from order-level aggregation.
