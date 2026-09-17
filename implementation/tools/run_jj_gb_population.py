@@ -55,7 +55,14 @@ def apply_overrides(overrides: dict | None) -> dict:
         module = modules[module_name]
         if not hasattr(module, name):
             raise KeyError(f"unknown override {key}")
-        previous[key] = getattr(module, name)
+        current = getattr(module, name)
+        previous[key] = current
+        # coerce to the constant's own type: Decimals arrive as strings in
+        # JSON, windows as lists
+        if isinstance(current, Decimal) and not isinstance(value, Decimal):
+            value = Decimal(str(value))
+        elif isinstance(current, tuple) and isinstance(value, list):
+            value = tuple(value)
         setattr(module, name, value)
     return previous
 

@@ -1908,7 +1908,10 @@ def _line_episodes(
     rows = list(fills) if (fills and location_ok) else [None]
     for fill in rows:
         entry = None if fill is None else _d(fill.get("entry"))
-        at_ns = None if fill is None else int(fill["at"])
+        # the decision is made when the fill AND its evidence are both on the
+        # tape (a stop at the line can fill inside the sweep bar whose close is
+        # the evidence; London flagged five such stamps in 218 sessions)
+        at_ns = None if fill is None else max(int(fill["at"]), int(fill.get("evidence_at") or fill["at"]))
         stop = None if fill is None else _d(fill.get("stop"))
         mode = None if fill is None else fill["mode"]
         target = None
