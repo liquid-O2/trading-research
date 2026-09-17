@@ -363,30 +363,57 @@ def generated_levels(example: dict, action: dict, window: tuple[int, int], param
     fit = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(fit)
     day = session_day(example, action)
-    hh = int(str(action["time_et"])[:2])
-    # the boxes he carries into a session include the prior day's aggression
-    # bands ("prior_day_aggression_band", BIG p.11): generate from the prior
-    # session's cash open
-    if hh >= 18 or hh < 8:
-        start = fit.ns_at(day, "09:30", -1)
-    else:
-        start = fit.ns_at(day, "09:30", -1)
-    orders = fit.orders_between(day, start, window[1] + 60 * fit.NS)
-    if orders is None or orders.empty:
+    # the boxes he carries into a session include earlier days' aggression
+    # bands ("prior_day_aggression_band", BIG p.11; on 2026-08-06 the band is
+    # the morning of 2026-08-04, two sessions back): generate from
+    # ``lookback_days`` calendar days before the session's cash open and, with
+    # ``drop_consumed``, keep only boxes price has not traded through (both
+    # edges by CONSUMED_POINTS) since they formed -- a memory rule, not a clock
+    start = fit.ns_at(day, "09:30", -int(params.get("lookback_days") or 1))
+    key = (day, start)
+    cached = _ORDER_CACHE.get(key)
+    if cached is None:
+        import pandas as pd
+        frames = []
+        from datetime import date as _date, timedelta as _td
+        d0 = _date.fromisoformat(day) - _td(days=int(params.get("lookback_days") or 1))
+        d1 = _date.fromisoformat(day)
+        seen = set()
+        d = d0
+        while d <= d1:
+            wf = fit.week_file(d.isoformat())
+            if wf not in seen:
+                seen.add(wf)
+                o = fit.orders_between(d.isoformat(), start, fit.ns_at(day, "16:00"))
+                if o is not None and not o.empty:
+                    frames.append(o)
+            d += _td(days=1)
+        cached = pd.concat(frames).drop_duplicates(subset=["t", "side"]).sort_values("t").reset_index(drop=True) if frames else None
+        _ORDER_CACHE.clear()
+        _ORDER_CACHE[key] = cached
+    if cached is None or cached.empty:
         return []
+    orders = cached[cached["t"] < window[1] + 60 * fit.NS]
     adaptive = {"quantile": params["quantile"], "lookback_s": params["lookback"], "floor": params["floor"]} if params.get("adaptive") else None
     boxes = fit.cluster_orders(orders, min_size=params["min_size"], band=params["band"], window_s=params["window"], min_orders=params["min_orders"], adaptive=adaptive)
     if params.get("absorbed"):
         boxes = fit.absorbed(orders, boxes, follow_s=params["follow"], give=params["give"], give_in_ranges=bool(params.get("adaptive")))
     out = []
+    lo_px = orders["lo"].to_numpy(); hi_px = orders["hi"].to_numpy(); t_ns = orders["t"].to_numpy()
     for i, b in enumerate(boxes):
         if int(b["known_at"]) >= window[0]:
             continue  # not drawn yet when he traded
+        if params.get("drop_consumed"):
+            after = (t_ns > int(b["known_at"])) & (t_ns < window[0])
+            if (hi_px[after] >= b["hi"] + CONSUMED_POINTS).any() and (lo_px[after] <= b["lo"] - CONSUMED_POINTS).any():
+                continue  # traded through both edges since: no longer drawn
         out.append({"name": f"gen[{i}] {b['first']}-{b['last']} {b['sides']}{b['largest']}", "low": _d(b["lo"]), "high": _d(b["hi"])})
     return out
 
 
 LEVEL_SOURCE = {"mode": "drawn", "params": {}}
+_ORDER_CACHE: dict = {}
+CONSUMED_POINTS = 5.0  # a box price has traded through on both sides by this much is no longer drawn
 
 
 def candidates_for(example: dict, market, rows: list[dict], action: dict, window: tuple[int, int] | None = None) -> list[dict]:
@@ -476,9 +503,11 @@ def main(argv=None) -> int:
     parser.add_argument("--quantile", type=float, default=0.995)
     parser.add_argument("--lookback", type=int, default=3600)
     parser.add_argument("--floor", type=int, default=20)
+    parser.add_argument("--lookback-days", type=int, default=1, help="calendar days before the session's open the boxes are generated from")
+    parser.add_argument("--drop-consumed", action="store_true", help="drop boxes price has traded through on both sides since they formed")
     args = parser.parse_args(argv)
     LEVEL_SOURCE["mode"] = args.levels
-    LEVEL_SOURCE["params"] = {k: getattr(args, k) for k in ("min_size", "band", "window", "min_orders", "absorbed", "follow", "give", "adaptive", "quantile", "lookback", "floor")}
+    LEVEL_SOURCE["params"] = {k: getattr(args, k) for k in ("min_size", "band", "window", "min_orders", "absorbed", "follow", "give", "adaptive", "quantile", "lookback", "floor", "lookback_days", "drop_consumed")}
     examples = json.loads(EXAMPLES.read_text())["examples"]
     wanted = set(args.only.split(",")) if args.only else None
     markets: dict = {}
