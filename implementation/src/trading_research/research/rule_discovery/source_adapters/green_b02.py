@@ -1997,6 +1997,13 @@ def _scan_asia_tdo(market, refs, objectives) -> list[dict[str, Any]]:  # noqa: C
                     t += FIVE
             entry = None if confirm is None else _d(confirm.get("C"))
             at_ns = None if confirm is None else int(confirm.get("known_at") or confirm.get("end"))
+            # this mode's trigger is the five-minute close through the TDO
+            # itself: when the TDO sits inside the failure margin of the level
+            # the level's own failure close can arrive later, and stamping the
+            # trigger with it dated the entry before its evidence
+            use_cycle = cycle
+            if confirm is not None and (cycle.get("fail") is None or int(cycle.get("fail_at") or 0) > at_ns):
+                use_cycle = {**cycle, "fail": confirm, "fail_at": at_ns, "status": "failed"}
             out.append(
                 _level_trade(
                     market,
@@ -2005,7 +2012,7 @@ def _scan_asia_tdo(market, refs, objectives) -> list[dict[str, Any]]:  # noqa: C
                     side=side,
                     ref=asia,
                     level=level,
-                    cycle=cycle,
+                    cycle=use_cycle,
                     mode="tdo_close",
                     entry=entry,
                     decision_at=at_ns,
