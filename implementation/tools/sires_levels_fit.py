@@ -217,6 +217,7 @@ def main(argv=None) -> int:
     parser.add_argument("--floor", type=int, default=20)
     parser.add_argument("--follow", type=int, default=180, help="seconds after the last order to test for follow-through")
     parser.add_argument("--give", type=float, default=4.0, help="points beyond the box the aggressor may get and still count as absorbed")
+    parser.add_argument("--center", action="store_true", help="chain orders to a box's volume-weighted centre, not its edges")
     args = parser.parse_args(argv)
     examples = [e for e in json.loads(EXAMPLES.read_text())["examples"] if e["id"].startswith("SI") and e.get("inside_tape")]
     report = []
@@ -239,7 +240,7 @@ def main(argv=None) -> int:
             print(json.dumps(report[-1]))
             continue
         adaptive = {"quantile": args.quantile, "lookback_s": args.lookback, "floor": args.floor} if args.adaptive else None
-        boxes = cluster_orders(orders, min_size=args.min_size, band=args.band, window_s=args.window, min_orders=args.min_orders, adaptive=adaptive)
+        boxes = cluster_orders(orders, min_size=args.min_size, band=args.band, window_s=args.window, min_orders=args.min_orders, adaptive=adaptive, anchor="center" if args.center else "edge")
         n_raw = len(boxes)
         if args.absorbed:
             boxes = absorbed(orders, boxes, follow_s=args.follow, give=args.give, give_in_ranges=args.adaptive)
