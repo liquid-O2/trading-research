@@ -1645,6 +1645,40 @@ def _scan_extension_reaction(market) -> tuple[list[dict[str, Any]], list[dict[st
                 geometry={"band": [band[0], band[1]], "first_objective": target},
             )
         )
+        if EXTENSION_BAND_LIMIT and touch is not None and extreme is not None:
+            # the limit rests at the band's near line and, if the touching bar
+            # reaches it, at the far line; filled at the touch, decided when
+            # the touching bar closes, stop beyond the bar's extreme
+            far = band[0] if side == "long" else band[1]
+            near_line = band[1] if side == "long" else band[0]
+            reached_far = (extreme <= far) if side == "long" else (extreme >= far)
+            for label, line in (("band_near_limit", near_line), ("band_far_limit", far)):
+                if label == "band_far_limit" and not reached_far:
+                    continue
+                touch_end = int(touch.get("known_at") or touch["end"])
+                limit_stop = (extreme - LEVEL_COINCIDENCE) if side == "long" else (extreme + LEVEL_COINCIDENCE)
+                limit_stages = [dict(s) for s in stages]
+                for s in limit_stages:
+                    if s["stage"] == "confirmation":
+                        s.update(verdict="pass", at_ns=touch_end, operands={**(s.get("operands") or {}), "kind": label})
+                    if s["stage"] in ("risk", "objective", "management"):
+                        s.update(verdict="pass" if s["stage"] != "objective" or sign(side) * (target - line) > 0 else "fail", at_ns=touch_end)
+                episodes.append(
+                    _episode(
+                        market,
+                        branch="extension_reaction",
+                        side=side,
+                        stages=limit_stages,
+                        decision_at=touch_end,
+                        entry=line,
+                        stop=limit_stop,
+                        target=target,
+                        reference=box,
+                        trigger=touch,
+                        values={"reference_px": line, "reference_kind": "extension_band", "cycle": 0, "confirmation_mode": label, "sessionstat_coincident": stat_hit},
+                        geometry={"band": [band[0], band[1]], "first_objective": target},
+                    )
+                )
     return episodes, []
 
 
@@ -2443,6 +2477,10 @@ PURGED_PROJECTION_LINES: tuple = ()
 # FIND p.9; "confirmation: ... large prints >= threshold", FIND p.12).
 # B0.3 does not use it; 2026-05-19's -1.33 long sits on a 282-lot print.
 BIG_PRINT_CONFIRMATION = False
+# Phase 1.5 candidate: a resting limit at the extension band's own lines (the
+# -1.66 long of 2025-09-09 at 10:35; the 2026-05-19 chart's long at the band
+# on the 282-lot print), beside the signature confirmation B0.3 uses
+EXTENSION_BAND_LIMIT = False
 BIGTRADES_NY = 100
 BIGTRADES_LONDON = 75
 BIG_PRINT_POINTS = Decimal("2")
