@@ -1,0 +1,101 @@
+{
+  "headline": [
+    {
+      "artifact": "/workspace/implementation/reports/research-work/P2-10/70e8bf34fd30c2e9/attempt-0001/PRICING_FIXTURES.json",
+      "interval": [
+        7.965567455405804,
+        7.965567455405804
+      ],
+      "name": "ATM European call, S=K=100, sigma=.2, T=1",
+      "note": "deterministic identity against the OPTIONS.md reference 7.96556746; parity C-P-(S-K) is 0",
+      "selector": "/atm/call",
+      "sha256": "5196f391cbff3f928142a6af5778dcbe4ebf8a998f57049b93697afac3c09ba3",
+      "unit": "index points",
+      "value": 7.965567455405804
+    },
+    {
+      "artifact": "/workspace/implementation/reports/research-work/P2-10/70e8bf34fd30c2e9/attempt-0001/PRICING_FIXTURES.json",
+      "name": "worst analytic-versus-finite-difference relative error",
+      "note": "delta, gamma, vega and vanna at h=.01 and v=.0001; the contract tolerance is 1e-4",
+      "selector": "/finite_difference",
+      "sha256": "5196f391cbff3f928142a6af5778dcbe4ebf8a998f57049b93697afac3c09ba3",
+      "support": 4,
+      "unit": "relative",
+      "value": 1.158454902178182e-07
+    },
+    {
+      "artifact": "/workspace/implementation/reports/research-work/P2-10/70e8bf34fd30c2e9/attempt-0001/GREEK_SENSITIVITY.json",
+      "name": "American 400 versus 800 step delta relative difference",
+      "note": "one engineering ATM contract, not the contract's 16-per-root-date sample; the exclusion gate is 10%",
+      "selector": "/delta_rel",
+      "sha256": "5ffd8f2886a1ce96566b811e2c3aab9f61b50790078e21f3d2a55867f294c09f",
+      "support": 1,
+      "unit": "relative",
+      "value": 2.3045399153515474e-05
+    },
+    {
+      "artifact": "/workspace/implementation/reports/research-work/P2-10/70e8bf34fd30c2e9/attempt-0001/EXPOSURE_BOARDS.json",
+      "name": "native boards built",
+      "note": "12 of 80 root-days are refused with a named reason",
+      "selector": "/boards",
+      "sha256": "e942245ea2bbcc49d32bcc8bdeaaaf31f839c8c77505cada2f43af14fb9cf1bc",
+      "support": 80,
+      "unit": "boards",
+      "value": 68
+    },
+    {
+      "artifact": "/workspace/implementation/reports/research-work/P2-10/70e8bf34fd30c2e9/attempt-0001/EXPOSURE_BOARDS.json",
+      "name": "median live contracts per NQ board",
+      "note": "medians by root: {'ES': 6.0, 'NQ': 1.0, 'QQQ': 883.0, 'SPY': 1125.0}; QQQ and SPY are deep, NQ and ES are degenerate",
+      "selector": "/depth_by_root",
+      "sha256": "e942245ea2bbcc49d32bcc8bdeaaaf31f839c8c77505cada2f43af14fb9cf1bc",
+      "support": 12,
+      "unit": "contracts",
+      "value": 1.0
+    }
+  ],
+  "lever": {
+    "change": "Own an option BBO or MBP schema for NQ and ES, then run the American sensitivity on the contract's 16 contracts per supported root and engineering date with the 10% exclusion recorded per cohort.",
+    "evidence": "EXPOSURE_BOARDS.depth_by_root would show NQ and ES medians in the tens, and GREEK_SENSITIVITY would carry a per-cohort excluded-Greek record instead of one ATM case."
+  },
+  "limits": [
+    "Boards are built on 20 engineering dates at 10:00 ET, not on the full history.",
+    "The full-chain reference model is the labelled equivalent-European approximation; the American tree is a bounded sensitivity model, not an exact American price.",
+    "The American 400/800 sensitivity runs on one engineering ATM contract, not on OPTIONS.md's sample of 16 contracts per supported American root and engineering date, and no per-cohort 10% Greek-exclusion record is written: the CRR gamma at 400 versus 800 steps differs far more than 10% at these step counts, and no American Greek is consumed by any board or feature.",
+    "Exposure scenarios are assumptions about sign, never known dealer inventory.",
+    "The 1,742-session Level Atlas produced on 2026-09-15 stays under reports/research-work/phase2-early/P2-10 as a descriptive by-product; it is not an artifact of this receipt because it ranks levels over a window that includes the blind hold-out 2026-04-01..2026-09-03, and location work is Phase 3.",
+    "Headline rows whose interval is [value, value] are deterministic identity checks against the contract's literal worked example: the inputs are fixed, so the interval is the value itself and not a sampling interval.",
+    "Nothing here is fitted, tuned, ranked or selected, so the blind hold-out 2026-04-01..2026-09-03 is not consumed; 2026-09-03 appears only as a slice date."
+  ],
+  "plausibility": [
+    {
+      "check": "the ATM European call against an independent erf implementation of the BSM formula",
+      "expected": 7.96556746,
+      "observed": 7.965567455405804,
+      "verdict": "plausible"
+    },
+    {
+      "check": "board depth matches the quote plane each root actually owns",
+      "expected": "hundreds for the QQQ and SPY OPRA chains, single digits for NQ and ES whose only owned quote is a one-minute last-trade mid",
+      "observed": "median live contracts {'ES': 6.0, 'NQ': 1.0, 'QQQ': 883.0, 'SPY': 1125.0}",
+      "verdict": "plausible"
+    },
+    {
+      "check": "the board spot is the last completed minute close before the asof, not the bar that closes after it",
+      "expected": "215.07, the close of the 09:59 bar; the 10:00 bar closes 214.92 at 10:01 and must not be used",
+      "observed": "QQQ 2020-01-02 board spot 215.07",
+      "verdict": "plausible"
+    }
+  ],
+  "question": "Do the pricing, Greek and exposure-board primitives reproduce the contract's reference vectors, and do the native boards they build carry their model and scenario labels?",
+  "schema_version": "research-result-card-v1",
+  "target": {
+    "met": "partial",
+    "text": "Card P2-10 A01-A08: fixture and parity to declared tolerance, finite-difference and American 400/800 sensitivity, .01 vega scaling with explicit units, unavailable rather than invented IV and term brackets, and scenario labels that are assumptions."
+  },
+  "task_id": "P2-10",
+  "verdict": {
+    "reason": "The primitives match the independent reference vectors to 1e-12 and every board row carries its model, scenario and coverage labels, but the NQ and ES boards built from owned data are degenerate (median live contracts 1.0 and 6.0), and the American 400/800 sensitivity is one engineering contract rather than the contract's per-root-date sample, so the exposure board is only informative for QQQ and SPY today.",
+    "value": "needs_upgrade"
+  }
+}

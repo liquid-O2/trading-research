@@ -1,0 +1,474 @@
+{
+  "assurance_version": "research-assurance-2026-09-14-v3",
+  "checks": [
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/experts/features/volatility.py",
+          "symbol": "garman_klass"
+        }
+      ],
+      "command_indices": [
+        0,
+        1
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P2-03/f5f65def42beaf4e/attempt-0001/VOLATILITY_FIXTURES.json",
+          "selector": "/gk/variance",
+          "sha256": "8c6c4d2a6529a234b6deb56e3cd816720c9a3c0d9c5563716030a29724e4af50"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P2-03/f5f65def42beaf4e/attempt-0001/VOLATILITY_FIXTURES.json",
+          "selector": "/yz/variance",
+          "sha256": "8c6c4d2a6529a234b6deb56e3cd816720c9a3c0d9c5563716030a29724e4af50"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P2-03/f5f65def42beaf4e/attempt-0001/VOLATILITY_FIXTURES.json",
+          "selector": "/rv/variance",
+          "sha256": "8c6c4d2a6529a234b6deb56e3cd816720c9a3c0d9c5563716030a29724e4af50"
+        }
+      ],
+      "expected": "GK, YZ and RV reproduce the contract's worked examples",
+      "id": "A01",
+      "observed": "VOLATILITY_FIXTURES.json/gk/variance=0.020134364008631726; VOLATILITY_FIXTURES.json/yz/variance=0.0005389221556886226; VOLATILITY_FIXTURES.json/rv/variance=0.00019801816817500913",
+      "oracle": "the contract's literal worked example and the native slice artifact",
+      "requirement": "GK, YZ and RV reproduce the contract's worked examples",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_03.py::test_a01_gk_yz_rv_worked_examples"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/experts/features/volatility.py",
+          "symbol": "iv_variance_one_calendar_day"
+        }
+      ],
+      "command_indices": [
+        0,
+        1
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P2-03/f5f65def42beaf4e/attempt-0001/VOLATILITY_FIXTURES.json",
+          "selector": "/iv_scaling/kind",
+          "sha256": "8c6c4d2a6529a234b6deb56e3cd816720c9a3c0d9c5563716030a29724e4af50"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P2-03/f5f65def42beaf4e/attempt-0001/VOLATILITY_FIXTURES.json",
+          "selector": "/rv/unit",
+          "sha256": "8c6c4d2a6529a234b6deb56e3cd816720c9a3c0d9c5563716030a29724e4af50"
+        }
+      ],
+      "expected": "Annualized IV variance, interval realized variance and the point conversion stay separate units",
+      "id": "A02",
+      "observed": "VOLATILITY_FIXTURES.json/iv_scaling/kind=iv_scaling_feature; VOLATILITY_FIXTURES.json/rv/unit=interval_log_return_variance",
+      "oracle": "the contract's literal worked example and the native slice artifact",
+      "requirement": "Annualized IV variance, interval realized variance and the point conversion stay separate units",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_03.py::test_a02_iv_variance_is_not_a_realized_target"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/experts/labels/volatility.py",
+          "symbol": "build_heads"
+        }
+      ],
+      "command_indices": [
+        0,
+        1
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P2-03/f5f65def42beaf4e/attempt-0001/VOLATILITY_TARGETS.json",
+          "selector": "/rows/0/unsupported_close_cross",
+          "sha256": "cfbdcf2d24fcbd00d33414217e1237b2a9e9672a88fb86361bdbc1b40fed9474"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P2-03/f5f65def42beaf4e/attempt-0001/VOLATILITY_TARGETS.json",
+          "selector": "/rows/0/head_names",
+          "sha256": "cfbdcf2d24fcbd00d33414217e1237b2a9e9672a88fb86361bdbc1b40fed9474"
+        }
+      ],
+      "expected": "A fixed horizon crossing the close or a roll is unsupported, not truncated",
+      "id": "A03",
+      "observed": "VOLATILITY_TARGETS.json/rows/0/unsupported_close_cross=[]; VOLATILITY_TARGETS.json/rows/0/head_names=[\"rv_15m\", \"rv_30m\", \"rv_60m\", \"rv_120m\", \"remaining_current_bucket\", \"next_analysis_bucket\", \"remaining_rth\", \"remaining_account_day\"]",
+      "oracle": "the contract's literal worked example and the native slice artifact",
+      "requirement": "A fixed horizon crossing the close or a roll is unsupported, not truncated",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_03.py::test_a03_horizon_crossing_close_is_unsupported"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/experts/features/volatility.py",
+          "symbol": "har_inputs"
+        }
+      ],
+      "command_indices": [
+        0,
+        1
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P2-03/f5f65def42beaf4e/attempt-0001/VOLATILITY_FEATURES.json",
+          "selector": "/rows/0/iv_groups",
+          "sha256": "4620f4771eba1c953e47061269ab8011860dd08b7d3f8357afb0b844de395e35"
+        }
+      ],
+      "expected": "Every requested IV group is consumed or carries an explicit missing-group record",
+      "id": "A04",
+      "observed": "VOLATILITY_FEATURES.json/rows/0/iv_groups={\"NDX_IV\": \"missing_intraday_spot_blocks_native_index_iv\", \"NQ_ATM\": \"consumed_if_board_present\", \"VIX\": \"owned_daily_series\"}",
+      "oracle": "the contract's literal worked example and the native slice artifact",
+      "requirement": "Every requested IV group is consumed or carries an explicit missing-group record",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_03.py::test_a04_missing_iv_group_is_recorded"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/experts/features/volatility.py",
+          "symbol": "future_prices_do_not_enter"
+        }
+      ],
+      "command_indices": [
+        0,
+        1
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P2-03/f5f65def42beaf4e/attempt-0001/VOLATILITY_FEATURES.json",
+          "selector": "/rows/0/gk/variance",
+          "sha256": "4620f4771eba1c953e47061269ab8011860dd08b7d3f8357afb0b844de395e35"
+        }
+      ],
+      "expected": "Future target prices cannot affect the current GK/YZ/HAR features",
+      "id": "A05",
+      "observed": "VOLATILITY_FEATURES.json/rows/0/gk/variance=2.6031000302398147e-05",
+      "oracle": "the contract's literal worked example and the native slice artifact",
+      "requirement": "Future target prices cannot affect the current GK/YZ/HAR features",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_03.py::test_a05_future_prices_cannot_affect_current_gk_yz_har"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/receipts.py",
+          "symbol": "verify_task_receipt"
+        }
+      ],
+      "command_indices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P2-03/f5f65def42beaf4e/attempt-0001/predecessor_verify.log",
+          "selector": "/ok",
+          "sha256": "4f42e0f61b772913df0b8d9ecccfa5a429edbd64e17ccc7d041582533a02dc9c"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P2-03/f5f65def42beaf4e/attempt-0001/THROUGHPUT.json",
+          "selector": "/median_seconds",
+          "sha256": "525af718e3862d3d1d06580fe1b7cbcebf8f9900e2073b004479b8100891b82b"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P2-03/f5f65def42beaf4e/attempt-0001/slice.log",
+          "selector": "/ok",
+          "sha256": "6ea00f975ef406028e2d1a2dd12ec8198c8ecfadba60ad1339a8d4a5948c1773"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P2-03/f5f65def42beaf4e/attempt-0001/REPORT.md",
+          "selector": "Inspected output",
+          "sha256": "e77406feb3c71d564da5371f2d612d5bff66e574867eb0ce8dc9255aea1bf9c5"
+        }
+      ],
+      "expected": "every predecessor receipt verifies; runtime and coverage counts are recorded",
+      "id": "A06",
+      "observed": "predecessor verification exit 0; 2 predecessor receipts",
+      "oracle": "verify_research_release.py task on each predecessor receipt",
+      "requirement": "Command exit codes, artifact hashes, coverage counts, runtime and inspected output are recorded, and every predecessor receipt verifies",
+      "status": "pass",
+      "test_nodeids": []
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/receipts.py",
+          "symbol": "verify_task_receipt"
+        }
+      ],
+      "command_indices": [
+        2,
+        3
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P2-03/f5f65def42beaf4e/attempt-0001/FORGERY_PROBES.json",
+          "selector": "/control/ok",
+          "sha256": "523e00c6ad09609cd318a9ea5023e628f24547a1a5c81f873917525a3332bcf1"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P2-03/f5f65def42beaf4e/attempt-0001/FORGERY_PROBES.json",
+          "selector": "/mutations/remove_artifact/rejected",
+          "sha256": "523e00c6ad09609cd318a9ea5023e628f24547a1a5c81f873917525a3332bcf1"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P2-03/f5f65def42beaf4e/attempt-0001/FORGERY_PROBES.json",
+          "selector": "/mutations/substitute_file/rejected",
+          "sha256": "523e00c6ad09609cd318a9ea5023e628f24547a1a5c81f873917525a3332bcf1"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P2-03/f5f65def42beaf4e/attempt-0001/FORGERY_PROBES.json",
+          "selector": "/mutations/row_count/rejected",
+          "sha256": "523e00c6ad09609cd318a9ea5023e628f24547a1a5c81f873917525a3332bcf1"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P2-03/f5f65def42beaf4e/attempt-0001/FORGERY_PROBES.json",
+          "selector": "/mutations/invalid_json/rejected",
+          "sha256": "523e00c6ad09609cd318a9ea5023e628f24547a1a5c81f873917525a3332bcf1"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P2-03/f5f65def42beaf4e/attempt-0001/FORGERY_PROBES.json",
+          "selector": "/mutations/plan_digest/rejected",
+          "sha256": "523e00c6ad09609cd318a9ea5023e628f24547a1a5c81f873917525a3332bcf1"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P2-03/f5f65def42beaf4e/attempt-0001/FORGERY_PROBES.json",
+          "selector": "/mutations/code_digest/rejected",
+          "sha256": "523e00c6ad09609cd318a9ea5023e628f24547a1a5c81f873917525a3332bcf1"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P2-03/f5f65def42beaf4e/attempt-0001/FORGERY_PROBES.json",
+          "selector": "/mutations/run_id/rejected",
+          "sha256": "523e00c6ad09609cd318a9ea5023e628f24547a1a5c81f873917525a3332bcf1"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P2-03/f5f65def42beaf4e/attempt-0001/FORGERY_PROBES.json",
+          "selector": "/mutations/omit_owned_file/rejected",
+          "sha256": "523e00c6ad09609cd318a9ea5023e628f24547a1a5c81f873917525a3332bcf1"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P2-03/f5f65def42beaf4e/attempt-0001/FORGERY_PROBES.json",
+          "selector": "/mutations/command_log/rejected",
+          "sha256": "523e00c6ad09609cd318a9ea5023e628f24547a1a5c81f873917525a3332bcf1"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P2-03/f5f65def42beaf4e/attempt-0001/FORGERY_PROBES.json",
+          "selector": "/mutations/predecessor_digest/rejected",
+          "sha256": "523e00c6ad09609cd318a9ea5023e628f24547a1a5c81f873917525a3332bcf1"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P2-03/f5f65def42beaf4e/attempt-0001/FORGERY_PROBES.json",
+          "selector": "/mutations/matrix_evidence/rejected",
+          "sha256": "523e00c6ad09609cd318a9ea5023e628f24547a1a5c81f873917525a3332bcf1"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P2-03/f5f65def42beaf4e/attempt-0001/FORGERY_PROBES.json",
+          "selector": "/mutations/matrix_status/rejected",
+          "sha256": "523e00c6ad09609cd318a9ea5023e628f24547a1a5c81f873917525a3332bcf1"
+        }
+      ],
+      "expected": "control verifies and all 12 forgeries are rejected with their intended code",
+      "id": "A07",
+      "observed": "control ok=True; rejected 12 of 12",
+      "oracle": "verify_research_release.py on mutated copies of this receipt",
+      "requirement": "Every acceptance key and assigned case resolves to code, executed commands and hashed evidence; artifact, identity and command forgeries fail",
+      "status": "pass",
+      "test_nodeids": []
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/receipts.py",
+          "symbol": "verify_task_receipt"
+        }
+      ],
+      "command_indices": [
+        0,
+        2,
+        3
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P2-03/f5f65def42beaf4e/attempt-0001/pytest.log",
+          "selector": "15 passed in",
+          "sha256": "719dc5877ba69294d32ef44dce162c0f762c1b022365d0f453de6bc15d6caee0"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P2-03/f5f65def42beaf4e/attempt-0001/FORGERY_PROBES.json",
+          "selector": "/ok",
+          "sha256": "523e00c6ad09609cd318a9ea5023e628f24547a1a5c81f873917525a3332bcf1"
+        }
+      ],
+      "expected": "the assigned case tests pass and the forgery controls behave as declared",
+      "id": "A08",
+      "observed": "pytest 15 passed in; 5 assigned case tests",
+      "oracle": "pytest on the owned test file plus the receipt forgery probes",
+      "requirement": "The assigned silent-failure probes pass with sensitive positive and negative controls and honest native, unknown and job counts",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_03.py::test_s07_native_minute_close_is_tagged_not_bbo",
+        "implementation/tests/context_experts/test_p2_03.py::test_s08_future_mutation_leaves_snapshot_rv",
+        "implementation/tests/context_experts/test_p2_03.py::test_s10_dst_issue_uses_timezone_clocks",
+        "implementation/tests/context_experts/test_p2_03.py::test_s14_nonfinite_and_wrong_unit_targets_rejected",
+        "implementation/tests/context_experts/test_p2_03.py::test_s16_label_known_at_is_target_end"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/experts/options/native.py",
+          "symbol": "spot_at"
+        }
+      ],
+      "command_indices": [
+        0,
+        1
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P2-03/f5f65def42beaf4e/attempt-0001/pytest.log",
+          "selector": "15 passed in",
+          "sha256": "719dc5877ba69294d32ef44dce162c0f762c1b022365d0f453de6bc15d6caee0"
+        }
+      ],
+      "expected": "the case probe passes with its sensitive positive case and negative control",
+      "id": "S07",
+      "observed": "pytest 15 passed in",
+      "oracle": "the owned case test and the native slice artifacts",
+      "requirement": "Assigned silent-failure case S07",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_03.py::test_s07_native_minute_close_is_tagged_not_bbo"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/experts/features/volatility.py",
+          "symbol": "python_realized_variance"
+        }
+      ],
+      "command_indices": [
+        0,
+        1
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P2-03/f5f65def42beaf4e/attempt-0001/pytest.log",
+          "selector": "15 passed in",
+          "sha256": "719dc5877ba69294d32ef44dce162c0f762c1b022365d0f453de6bc15d6caee0"
+        }
+      ],
+      "expected": "the case probe passes with its sensitive positive case and negative control",
+      "id": "S08",
+      "observed": "pytest 15 passed in",
+      "oracle": "the owned case test and the native slice artifacts",
+      "requirement": "Assigned silent-failure case S08",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_03.py::test_s08_future_mutation_leaves_snapshot_rv"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/method_pack/clocks.py",
+          "symbol": "et_ns"
+        }
+      ],
+      "command_indices": [
+        0,
+        1
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P2-03/f5f65def42beaf4e/attempt-0001/pytest.log",
+          "selector": "15 passed in",
+          "sha256": "719dc5877ba69294d32ef44dce162c0f762c1b022365d0f453de6bc15d6caee0"
+        }
+      ],
+      "expected": "the case probe passes with its sensitive positive case and negative control",
+      "id": "S10",
+      "observed": "pytest 15 passed in",
+      "oracle": "the owned case test and the native slice artifacts",
+      "requirement": "Assigned silent-failure case S10",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_03.py::test_s10_dst_issue_uses_timezone_clocks"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/errors.py",
+          "symbol": "ContractError"
+        }
+      ],
+      "command_indices": [
+        0,
+        1
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P2-03/f5f65def42beaf4e/attempt-0001/pytest.log",
+          "selector": "15 passed in",
+          "sha256": "719dc5877ba69294d32ef44dce162c0f762c1b022365d0f453de6bc15d6caee0"
+        }
+      ],
+      "expected": "the case probe passes with its sensitive positive case and negative control",
+      "id": "S14",
+      "observed": "pytest 15 passed in",
+      "oracle": "the owned case test and the native slice artifacts",
+      "requirement": "Assigned silent-failure case S14",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_03.py::test_s14_nonfinite_and_wrong_unit_targets_rejected"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/method_pack/clocks.py",
+          "symbol": "et_ns"
+        }
+      ],
+      "command_indices": [
+        0,
+        1
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P2-03/f5f65def42beaf4e/attempt-0001/pytest.log",
+          "selector": "15 passed in",
+          "sha256": "719dc5877ba69294d32ef44dce162c0f762c1b022365d0f453de6bc15d6caee0"
+        }
+      ],
+      "expected": "the case probe passes with its sensitive positive case and negative control",
+      "id": "S16",
+      "observed": "pytest 15 passed in",
+      "oracle": "the owned case test and the native slice artifacts",
+      "requirement": "Assigned silent-failure case S16",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_03.py::test_s16_label_known_at_is_target_end"
+      ]
+    }
+  ],
+  "schema_version": "research-evidence-matrix-v2",
+  "task_id": "P2-03"
+}
