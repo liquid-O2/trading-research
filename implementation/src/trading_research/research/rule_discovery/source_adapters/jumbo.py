@@ -1686,8 +1686,13 @@ def _eq_locations(market, box: Mapping[str, Any], branch: str) -> list[dict[str,
 
 
 def _context_sides(branch: str, context: Mapping[str, Any]) -> tuple[str, ...]:
-    """Which way the day's read points. J10: the purge admits both directions."""
-    label = context.get("open_location")
+    """Which way the day's read points. J10: the purge admits both directions.
+
+    The single-break branches read the location of the RTH open, which is what
+    the author quotes ("RTH open below the prior RTH value low", 2026-07-28);
+    the rotation branch reads the same location.
+    """
+    label = context.get("rth_open_location") or context.get("open_location")
     purge = context.get("purge") or {}
     if branch == "internal_rotation":
         return ("long", "short") if label in {"inside_value", "inside_range"} else ()
@@ -1719,9 +1724,11 @@ def _scan_eq_branch(market, branch: str) -> tuple[list[dict[str, Any]], list[dic
     if branch in {"single_extended", "single_purged"} and size.get("single_break_favoured") is not True:
         return [], []
     if branch == "single_extended":
-        begin, end = _at(market, "09:00"), _at(market, "10:30")
+        # the open location is the branch's own input, so the window starts at
+        # the open; "out by 10:00" is carried on the management stage
+        begin, end = _at(market, "09:30"), _at(market, "10:30")
     elif branch == "single_purged":
-        begin, end = _at(market, "09:00"), _at(market, "12:00")
+        begin, end = _at(market, "09:30"), _at(market, "12:00")
     else:
         begin, end = _at(market, "09:00"), _at(market, "16:00")
     episodes: list[dict[str, Any]] = []
@@ -1754,7 +1761,7 @@ def _scan_eq_branch(market, branch: str) -> tuple[list[dict[str, Any]], list[dic
                     range_gate=">=0.3% for the single-break cases" if branch.startswith("single") else "inside prior value",
                     evrange=context.get("evrange"),
                 ),
-                _stage("reference", "pass", box["known_at"], id=box["id"], level=row["price"], kind=row["kind"], box_low=box["low"], box_high=box["high"], width=box["width"]),
+                _stage("reference", "pass", max(int(box["known_at"]), int(row["known_at"])), id=box["id"], level=row["price"], kind=row["kind"], box_low=box["low"], box_high=box["high"], width=box["width"]),
                 _stage("location", "pass" if touch is not None else "fail", None if touch is None else int(touch["start"]), level=row["price"], reason=None if touch is not None else "level_not_contacted_in_window"),
                 _stage("trigger", "pass" if touch is not None else "fail", None if touch is None else int(touch["start"]), add_window=list(MODAL_WINDOW), in_add_window=in_add_window),
                 _stage("confirmation", pack["verdict"], at_ns, ob_2m=pack["ob_2m"], ob_3m=pack["ob_3m"], ob_5m=pack["ob_5m"], rejection_block=pack["rejection_block"], absorption=pack["absorption"], kind=None if confirmed is None else confirmed["kind"]),
