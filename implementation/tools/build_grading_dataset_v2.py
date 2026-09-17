@@ -63,6 +63,7 @@ def augment(family: str, market, rows: list[dict]) -> list[dict]:
         features.update(gf.aggression_features(level, at, session_open))
         features.update(gf.memory_location_features(market, level, str(row.get("side")), at, session_open, majors))
         features.update(gf.author_profile_features(market, level, str(row.get("side")), at, prior))
+        features.update(gf.context_profile_features(market, level, str(row.get("side")), at))
         out.append({**row, **features})
     return out
 

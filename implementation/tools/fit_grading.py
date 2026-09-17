@@ -29,8 +29,32 @@ import numpy as np
 META = {"family", "example_id", "session", "label", "outcome", "coincident_levels", "box", "decision_at", "reference_px", "entry_px"}
 
 
+NEAR_POINTS = 5.0
+CONFLUENCE_DISTANCES = ("rth_hvn_distance", "rth_lvn_distance", "rth_ledge_distance", "overnight_hvn_distance", "overnight_lvn_distance", "overnight_ledge_distance", "prior_day_hvn_distance", "prior_day_lvn_distance", "prior_day_ledge_distance", "composite_hvn_distance", "composite_lvn_distance", "composite_ledge_distance", "naked_poc_distance", "aggression_nearest_distance", "rth_delta_print_distance", "overnight_delta_print_distance")
+
+
+def derive(row: dict) -> dict:
+    """Derived columns: the number of object families sitting within
+    NEAR_POINTS of the level (the authors' "two independent reasons at one
+    price"), so a handful of positives can learn one confluence weight
+    instead of sixteen distances."""
+    families = {"node": ("rth_hvn_distance", "overnight_hvn_distance", "prior_day_hvn_distance", "composite_hvn_distance"), "lvn": ("rth_lvn_distance", "overnight_lvn_distance", "prior_day_lvn_distance", "composite_lvn_distance"), "ledge": ("rth_ledge_distance", "overnight_ledge_distance", "prior_day_ledge_distance", "composite_ledge_distance"), "naked_poc": ("naked_poc_distance",), "aggression": ("aggression_nearest_distance",), "delta_print": ("rth_delta_print_distance", "overnight_delta_print_distance")}
+    count = 0
+    present = False
+    for name, cols in families.items():
+        vals = [row.get(c) for c in cols if row.get(c) is not None]
+        if vals:
+            present = True
+            if min(vals) <= NEAR_POINTS:
+                count += 1
+    out = dict(row)
+    if present:
+        out["confluence_count"] = count
+    return out
+
+
 def load(path: Path) -> list[dict]:
-    return [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
+    return [derive(json.loads(line)) for line in path.read_text().splitlines() if line.strip()]
 
 
 def feature_types(rows: list[dict]) -> tuple[list[str], list[str], list[str]]:

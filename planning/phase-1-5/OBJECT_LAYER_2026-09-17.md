@@ -4,6 +4,8 @@ Addition to the pack (2026-09-17). These are the objects the grading study (Phas
 
 ## Jumbo (JJumboFX)
 
+- **Single-break days on the profile**: "retrace to midpoint stays at 60.4%; on the VP and OF side easy spot absorption at midpoint of the range and taper at lows; footprint only highlighting top 35% of transactions" (JR 2064008375751311653, 2026-06-08): the quadrant and midpoint entries are read with the same profile and absorption objects as the fades.
+
 - **Profiles on the chart**: "Just RTH session VP and delta profile" (reply 2077828415923581206, 2026-07-16); the profile is scoped to the session under study, RTH for NY execution, not an ETH composite (FIND p.8).
 - **Levels drawn every day** (FIDELITY_AUDIT §Jumbo, from the charts): the box with quadrants, open and close, the projections; London and Asia highs and lows (deleted when purged); D-1, D-2, D-3 highs and lows; prior RTH high, low and value (pRTHVAH, pRTHVAL, POC); P-zones; the SessionStat envelope; the 15-minute opening range mid on single-break days.
 - **Profile nodes and ledges**: P-zones are kept only where the band "sits on an HVN or on the shelf next to an LVN" (FIND p.8); the S1 level ledger names "the prior RTH and overnight profiles' shelves, ledges, LVNs and minor nodes, prior-day and weekly delta-print bands". A ledge is the edge of a high-volume shelf next to a low-volume node.
@@ -16,6 +18,9 @@ Addition to the pack (2026-09-17). These are the objects the grading study (Phas
 - **Delta print at a VP extreme**: a large delta print at a low-volume node or minor node of the dealing range's own profile gives repeatable intra-wick reactions (DELTA p.9).
 - **Aggression boxes**: clusters of large aggressor orders, the bubble scale adjusted with the session's volume (BIG p.3); the order-level table `sires_box_table.py` with formation and consumption times.
 - **Structure**: dealing range, balance, microbalance, OFM line, wick box, refill boxes (K18, BIG, OFM).
+
+- **Shelves, ledges, naked POCs, the composite (VP2, AMT1)**: an HVN is "a price where volume built up ... price gets drawn back to these shelves and slows down inside them"; an LVN "a price where volume fell away ... price tends to react at these and traverse them quickly" (VP2 p.3). A naked POC is "a prior session's POC that price has not traded back to yet ... a ready made target list"; a composite profile merges several days or weeks and "the HVNs and LVNs that survive across all that data are the levels the whole market respects" (VP2 p.6). "Out of balance the ledges carry the move: when price leaves a balance, the ledges of the prior balance are what hold for the move to continue" (AMT1 p.9).
+- **Overnight inventory (MAMT pp.14, 16)**: the overnight profile from 18:00 to 09:30 nets long or short and that carries into the open; in a double distribution the LVN between the humps is the level respected or disrespected at the open; an RTH open inside the previous ETH balance reaches that profile's mid 73% of the time.
 
 ## Saint (Ethos)
 

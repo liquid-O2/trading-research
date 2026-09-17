@@ -339,3 +339,125 @@ def author_profile_features(market, level: Decimal, side: str, at_ns: int, prior
         out[f"{name}_delta_at_level"] = delta_at(dp, level)
     out["prior_day_ledge_distance"] = nearest_distance(level, ledges(prior)) if prior else None
     return out
+
+
+# --------------------------------------------------------------------------- naked POCs, the composite, the overnight inventory
+#
+# Sires VP2 p.6: a naked POC is a prior session's POC price has not traded
+# back to, a ready-made target list; a composite profile merges several days
+# and the HVNs and LVNs that survive across it are the heavyweight levels.
+# AMT1 p.9: out of balance the ledges of the prior balance carry the move.
+# MAMT p.14: the overnight profile (18:00-09:30) nets long or short and that
+# carries into the open; the LVN between its two distributions is the level
+# respected or disrespected at the open. MAMT p.16: an RTH open inside the
+# previous ETH balance reaches that profile's mid 73% of the time.
+
+_PRIOR_CACHE: dict = {}
+
+
+def prior_session_profiles(market, n: int = 5) -> list[dict]:
+    """The prior ``n`` sessions' RTH profiles (09:30-16:00), oldest last,
+    from their own session markets; cached per session date."""
+    from datetime import date as _date, timedelta as _td
+
+    from trading_research.research.method_pack.empirical_market import clock
+    from trading_research.research.rule_discovery.source_adapters.common import load_source_market, require_native_session
+
+    out = []
+    day = _date.fromisoformat(str(market.day)) if not isinstance(market.day, _date) else market.day
+    probe = day
+    tries = 0
+    while len(out) < n and tries < 14:
+        probe -= _td(days=1)
+        tries += 1
+        key = probe.isoformat()
+        if key in _PRIOR_CACHE:
+            if _PRIOR_CACHE[key] is not None:
+                out.append(_PRIOR_CACHE[key])
+            continue
+        try:
+            require_native_session(key)
+            prior = load_source_market(key)
+            payload = prior.profile(int(clock(probe, "09:30")), int(clock(probe, "16:00")))
+            payload = dict(payload, day=key) if payload and payload.get("poc") is not None else None
+        except Exception:
+            payload = None
+        _PRIOR_CACHE[key] = payload
+        if len(_PRIOR_CACHE) > 40:
+            _PRIOR_CACHE.pop(next(iter(_PRIOR_CACHE)))
+        if payload is not None:
+            out.append(payload)
+    return out
+
+
+def naked_pocs(profiles: list[dict], market, at_ns: int) -> list[Decimal]:
+    """Prior sessions' POCs price has not traded back to before ``at_ns``:
+    a POC is naked when no bar between its session's end and the decision
+    spans it (the session's own bars from the account-day window)."""
+    rows = bars_before(market, int(market.start), at_ns)
+    out = []
+    for prof in profiles:
+        poc = _d(prof.get("poc"))
+        if poc is None:
+            continue
+        touched = any(Decimal(str(r["L"])) <= poc <= Decimal(str(r["H"])) for r in rows)
+        if not touched:
+            out.append(poc)
+    return out
+
+
+def composite_payload(profiles: list[dict]) -> dict | None:
+    """Several sessions' profiles merged by price (Sires' composite)."""
+    if not profiles:
+        return None
+    merged: dict[Decimal, float] = {}
+    for prof in profiles:
+        for r in prof.get("rows") or []:
+            px = Decimal(str(r.get("price")))
+            merged[px] = merged.get(px, 0.0) + float(r.get("total_volume") or 0)
+    rows = [{"price": px, "total_volume": v} for px, v in sorted(merged.items())]
+    if not rows:
+        return None
+    return {"rows": rows, "poc": max(rows, key=lambda r: r["total_volume"])["price"]}
+
+
+def context_profile_features(market, level: Decimal, side: str, at_ns: int) -> dict:
+    out: dict = {}
+    profiles = prior_session_profiles(market, 5)
+    naked = naked_pocs(profiles, market, at_ns)
+    out["naked_poc_distance"] = nearest_distance(level, naked)
+    out["naked_poc_ahead"] = None
+    if level is not None and naked:
+        ahead = [p for p in naked if (p > level if side == "long" else p < level)]
+        out["naked_poc_ahead"] = float(min(abs(p - level) for p in ahead)) if ahead else None
+    comp = composite_payload(profiles)
+    if comp:
+        hvn, lvn = profile_nodes(comp)
+        out["composite_hvn_distance"] = nearest_distance(level, hvn)
+        out["composite_lvn_distance"] = nearest_distance(level, lvn)
+        out["composite_ledge_distance"] = nearest_distance(level, ledges(comp))
+        out["composite_poc_distance"] = None if level is None else float(level - Decimal(str(comp["poc"])))
+    else:
+        out.update({"composite_hvn_distance": None, "composite_lvn_distance": None, "composite_ledge_distance": None, "composite_poc_distance": None})
+    # the overnight inventory: net delta 18:00-09:30 and the ETH profile's mid
+    session_open = int(market.start)
+    rth_open = int(market.at("09:30"))
+    end = min(at_ns, rth_open)
+    net = delta_between(market, session_open, end) if end - session_open >= 30 * MINUTE else None
+    out["overnight_net_delta"] = net
+    out["overnight_net_with_side"] = None if net is None else bool((net > 0) == (side == "long"))
+    try:
+        eth = market.profile(session_open, end) if end - session_open >= 30 * MINUTE else None
+    except Exception:
+        eth = None
+    if eth and eth.get("H") is not None and eth.get("L") is not None:
+        mid = (_d(eth["H"]) + _d(eth["L"])) / 2
+        out["eth_mid_distance"] = None if level is None else float(level - mid)
+        rth = [r for r in bars_before(market, rth_open, rth_open + 2 * MINUTE)]
+        open_px = _d(rth[0]["O"]) if rth else None
+        val, vah = _d(eth.get("val")), _d(eth.get("vah"))
+        out["rth_open_inside_eth_value"] = None if (open_px is None or val is None or vah is None) else bool(val <= open_px <= vah)
+    else:
+        out["eth_mid_distance"] = None
+        out["rth_open_inside_eth_value"] = None
+    return out
