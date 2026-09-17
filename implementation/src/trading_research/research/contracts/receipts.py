@@ -116,6 +116,13 @@ OUTCOME_EDGE_KEYS = frozenset({"outcomes", "outcome", "targets", "outcome_edges"
 #: appended to by every amendment and is the document that excuses other plan
 #: drift, so a snapshot of it can never match the live file it is checked against.
 AMENDMENTS_REL = "planning/research-program/AMENDMENTS.json"
+#: The verifier's own files are validated by their test suites and recorded, never
+#: pinned: a receipt that pinned them would fail after every hardening of the checker
+#: and drag every receipt that binds it down with it.
+VERIFIER_FILES = frozenset({
+    "implementation/src/trading_research/research/contracts/receipts.py",
+    "implementation/tools/verify_research_release.py",
+})
 CANONICAL_GRAPH_REL = "planning/research-program/TASK_GRAPH.json"
 CANONICAL_REGISTRY_REL = "planning/research-program/ASSURANCE_CASES.json"
 SCHEMA_CONTENT_MARKERS = {
@@ -1462,6 +1469,9 @@ def _check_declared_source_files(
             _append(failures, FailureCode.IDENTITY, snapshot_path, f"{kind} declared hash for {rel} is not a digest")
             continue
         if actual == declared:
+            continue
+        if kind == "code" and str(rel) in VERIFIER_FILES:
+            # The checker checking its own bytes proves nothing; its tests do.
             continue
         superseded = False
         if kind == "plan" and state is not None:

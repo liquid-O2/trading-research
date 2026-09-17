@@ -163,3 +163,20 @@ def test_supersession_never_invents_a_file_that_is_not_there(tmp_path):
     assert _unpinned_owned_paths(["gone/"], {}, tmp_path, superseded=always) == ["gone/"]
     # negative control: without the rule the existing file is still unpinned
     assert _unpinned_owned_paths(["kept.py"], {}, tmp_path) == ["kept.py"]
+
+
+def test_the_verifier_files_are_recorded_not_pinned():
+    """A receipt that pinned contracts/receipts.py or the verify tool at an older digest
+    must not fail identity when the checker is hardened later (its tests validate it);
+    any other code file at a stale digest with no successor still fails."""
+    from trading_research.research.contracts import receipts as r
+    stale = "0" * 64
+    failures: list[CheckFailure] = []
+    _check_declared_source_files(
+        {path: stale for path in sorted(r.VERIFIER_FILES)}, failures, "CODE_SNAPSHOT.json", kind="code"
+    )
+    assert failures == []
+    native = "implementation/src/trading_research/research/rule_discovery/native.py"
+    failures = []
+    _check_declared_source_files({native: stale, next(iter(r.VERIFIER_FILES)): stale}, failures, "CODE_SNAPSHOT.json", kind="code")
+    assert [(f.code, native in f.detail) for f in failures] == [("IDENTITY", True)]
