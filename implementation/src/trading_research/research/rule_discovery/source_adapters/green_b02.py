@@ -2448,7 +2448,10 @@ def match_entry(
                 "reference_kind": (ep.get("values") or {}).get("reference_kind"),
             }
         )
-    in_time = [row for row in rows if row["bars_from_printed"] is not None and row["bars_from_printed"] <= 1.0]
+    # R2 (coordinator round 2): a ticket time is a stamp and keeps one
+    # five-minute bar; a time read off a chart is a chart read and gets three.
+    bars_allowed = 1.0 if entry.get("marked_by") == "rr_tool" else 3.0
+    in_time = [row for row in rows if row["bars_from_printed"] is not None and row["bars_from_printed"] <= bars_allowed]
     want_branch = entry.get("branch")
     if in_time:
         scored = sorted(
@@ -2473,14 +2476,14 @@ def match_entry(
         and best["delta_points"] is not None
         and best["delta_points"] <= strict_points
         and best["bars_from_printed"] is not None
-        and best["bars_from_printed"] <= 1.0
+        and best["bars_from_printed"] <= bars_allowed
     )
     play_ok = None if best is None else PLAY_OF_BRANCH.get(best["branch"]) == want_play
     detected_risk = bool(
         best
         and (no_price or (best["delta_points"] is not None and best["delta_points"] <= tolerance))
         and best["bars_from_printed"] is not None
-        and best["bars_from_printed"] <= 1.0
+        and best["bars_from_printed"] <= bars_allowed
     )
     detected_3 = bool(
         best
@@ -2512,6 +2515,9 @@ def match_entry(
         "delta_points": None if best is None or best["delta_points"] is None else float(best["delta_points"]),
         "bars_from_printed": None if best is None or best["bars_from_printed"] is None else float(best["bars_from_printed"]),
         "n_pass_episodes": len(rows),
+        "bars_allowed": bars_allowed,
+        "fills_tested": sorted({str(row["mode"]) for row in rows}),
+        "matched_fill": None if best is None else best["mode"],
     }
 
 

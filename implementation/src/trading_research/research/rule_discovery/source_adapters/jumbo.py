@@ -2503,7 +2503,10 @@ def match_entry(market, episodes, entry, *, strict_points: Decimal = REPLAY_LEVE
                 "mode": (ep.get("values") or {}).get("confirmation_mode"),
             }
         )
-    in_time = [row for row in rows if row["bars_from_printed"] is not None and row["bars_from_printed"] <= 1.0]
+    # R2 (coordinator round 2): a ticket time is a stamp and keeps one
+    # five-minute bar; a time read off a chart is a chart read and gets three.
+    bars_allowed = 1.0 if entry.get("marked_by") == "rr_tool" else 3.0
+    in_time = [row for row in rows if row["bars_from_printed"] is not None and row["bars_from_printed"] <= bars_allowed]
     want_branch = entry.get("branch")
     if in_time:
         scored = sorted(
@@ -2522,7 +2525,7 @@ def match_entry(market, episodes, entry, *, strict_points: Decimal = REPLAY_LEVE
             ),
         )
     best = scored[0] if scored else None
-    ok_time = best is not None and best["bars_from_printed"] is not None and best["bars_from_printed"] <= 1.0
+    ok_time = best is not None and best["bars_from_printed"] is not None and best["bars_from_printed"] <= bars_allowed
     no_price = compare_to is None
     return {
         "printed_time_et": entry.get("time_et"),
@@ -2567,6 +2570,9 @@ def match_entry(market, episodes, entry, *, strict_points: Decimal = REPLAY_LEVE
         "delta_points": None if best is None or best["delta_points"] is None else float(best["delta_points"]),
         "bars_from_printed": None if best is None or best["bars_from_printed"] is None else float(best["bars_from_printed"]),
         "n_pass_episodes": len(rows),
+        "bars_allowed": bars_allowed,
+        "fills_tested": sorted({str(row["mode"]) for row in rows}),
+        "matched_fill": None if best is None else best["mode"],
     }
 
 
