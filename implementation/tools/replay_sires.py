@@ -399,11 +399,15 @@ def generated_levels(example: dict, action: dict, window: tuple[int, int], param
     if params.get("absorbed"):
         boxes = fit.absorbed(orders, boxes, follow_s=params["follow"], give=params["give"], give_in_ranges=bool(params.get("adaptive")))
     out = []
+    session_open = fit.ns_at(day, "18:00", -1)
     lo_px = orders["lo"].to_numpy(); hi_px = orders["hi"].to_numpy(); t_ns = orders["t"].to_numpy()
     for i, b in enumerate(boxes):
         if int(b["known_at"]) >= window[0]:
             continue  # not drawn yet when he traded
-        if params.get("drop_consumed"):
+        if params.get("drop_consumed") and int(b["known_at"]) < session_open:
+            # a box carried in from an earlier session is dropped once price
+            # has traded through both its edges; the session's own boxes stay
+            # (his failure entries need the raid through the box itself)
             after = (t_ns > int(b["known_at"])) & (t_ns < window[0])
             if (hi_px[after] >= b["hi"] + CONSUMED_POINTS).any() and (lo_px[after] <= b["lo"] - CONSUMED_POINTS).any():
                 continue  # traded through both edges since: no longer drawn

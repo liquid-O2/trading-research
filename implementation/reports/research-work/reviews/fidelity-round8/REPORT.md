@@ -117,6 +117,10 @@ What his words do not give: which of the drawn levels' failures he takes when se
 
 Day reads over the population: Jumbo 1,178 double-break, 511 single-break, 53 unknown (range bins 0–0.3: 347, 0.3–0.5: 531, 0.5–0.8: 455, 0.8–1.2: 230, 1.2+: 153); Green Bird model sweep-and-fail 989, pullback-continuation 753; an overnight PDL/PDH reclaim sets a bias on 696 sessions. The lists are cap-bound on most days (Jumbo round trips cluster at 6–9, Green Bird at 13–14), which is the honest population reading of §5: the framework admits far more than the author takes, and the grading study is what closes that gap.
 
+
+### 9.1 Re-run after the repairs (2026-09-17 night, `population-round8c/`)
+
+The same 1,742 sessions through the repaired scanners and selector (10 workers, 23 minutes, 3.9 GB peak a worker): no scan errors; candidates a session Jumbo 9.61 and Green Bird 15.51 (unchanged, cap-bound); executed entries 11.46 and 17.22; round trips 9.01 and 14.05 (before the open-position repair 9.06 and 14.52); executed outcomes Jumbo 6,988 targets against 9,547 stops, Green Bird 6,771 against 19,040 (the executed list is the capped candidate list traded one position at a time, not his one to three; section 11). Causality flags fell from 85 to 66 with the TDO-close re-stamp; the runner now records each remaining flag with its branch, stage and mode so the next run names them.
 ## 10. Sires and Saint: the ticketed fills on the drawn levels (20 of 20)
 
 Records: the twenty ticketed fills (ten Sires sessions, one Saint session) are now marked as proper entries; two examples have no ticket (07-23's nine attempts, the WIC week). Every ticketed price prints on our NQ tape within three minutes of the ticket time.

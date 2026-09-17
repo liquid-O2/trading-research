@@ -70,6 +70,7 @@ def scan_one(day: str, sessionstat: bool) -> dict:
     selection = {}
     reads = {}
     causality_violations = 0
+    causality_rows: list[dict] = []
     for family, document in documents.items():
         reads[family] = document.get("day_read")
         selection[family] = {
@@ -101,6 +102,8 @@ def scan_one(day: str, sessionstat: bool) -> dict:
             stamps = [int(row["at_ns"]) for row in episode.get("stages") or [] if row.get("at_ns") is not None]
             if stamps and episode.get("decision_at") is not None and int(episode["decision_at"]) < max(stamps):
                 causality_violations += 1
+                latest = max((row for row in episode.get("stages") or [] if row.get("at_ns") is not None), key=lambda row: int(row["at_ns"]))
+                causality_rows.append({"family": family, "branch": branch, "candidate_id": episode.get("candidate_id"), "verdict": episode["research_verdict"], "decision_at": int(episode["decision_at"]), "latest_stage": latest.get("stage"), "latest_at": int(latest["at_ns"]), "mode": (episode.get("values") or {}).get("confirmation_mode")})
             if episode["research_verdict"] != "pass":
                 continue
             values_now = episode.get("values") or {}
@@ -148,6 +151,7 @@ def scan_one(day: str, sessionstat: bool) -> dict:
         },
         "omissions": {family: list(document.get("omissions") or []) for family, document in documents.items()},
         "causality_violations": causality_violations,
+        "causality_rows": causality_rows,
         "load_seconds": loaded - started,
         "scan_seconds": time.monotonic() - loaded,
         "peak_rss_bytes": peak_rss_bytes(),
@@ -209,6 +213,7 @@ def main(argv=None) -> int:
     range_bins = Counter()
     open_locations = Counter()
     causality = 0
+    causality_detail: list[dict] = []
     omission_totals: Counter = Counter()
     scan_errors: list[dict] = []
     opportunity_totals = Counter()
@@ -235,6 +240,9 @@ def main(argv=None) -> int:
                 per_date_seconds.append(result["load_seconds"] + result["scan_seconds"])
                 peak = max(peak, result["peak_rss_bytes"])
                 causality += result["causality_violations"]
+                for row in result.get("causality_rows") or []:
+                    if len(causality_detail) < 200:
+                        causality_detail.append({"session": result.get("day") or result.get("session") or day, **row})
                 for family, rows in (result.get("omissions") or {}).items():
                     for row in rows:
                         reason = row.get("reason")
@@ -294,6 +302,7 @@ def main(argv=None) -> int:
         "seconds_per_session_mean": (sum(per_date_seconds) / len(per_date_seconds)) if per_date_seconds else None,
         "peak_rss_bytes_worker": peak,
         "causality_violations": causality,
+        "causality_detail": causality_detail,
         # Every omission a scan recorded, summed across the population: a branch
         # that never ran, a reference that could not be measured and a scan that
         # raised are all visible here rather than only inside the per-session row.
