@@ -3351,6 +3351,323 @@
     "entry_window_et": "10:00-10:15, 11:00-11:15 and 15:30-15:45"
    },
    "n_proper_entries": 3
+  },
+  {
+   "id": "GB-2026-04-16",
+   "family": "GB-FAIL",
+   "source": "GB p.44 (MNQM26 chart, P&L +$2,262.66 at 11:04:47)",
+   "date": "2026-04-16",
+   "session": "NY",
+   "instrument": "MNQM26",
+   "chart_clock": "tradingview UTC-4",
+   "inside_tape": true,
+   "dated_by": "the wiki carried it as '2026-04 (MNQM26)'; the NQ tape dates it 2026-04-16: RTH low 26,275.50 at 09:55 (his '10:00 low 26,280'), high 26,564 (his nine sell limits 26,457-26,584.75), 26,457 first reached at 11:09",
+   "levels": {
+    "ny_low_1000": 26280,
+    "sell_limits": [
+     26457,
+     26584.75
+    ]
+   },
+   "actions": [
+    {
+     "time_et": "10:00-10:20",
+     "action": "buy",
+     "qty": 11,
+     "price": 26336.75,
+     "note": "long 11 at 26,336.75 after the 10:00 low sweep (26,280) and reclaim; nine sell limits 26,457-26,584.75; +$2,262.66 at 11:04 (GB p.44)",
+     "proper_entry": true,
+     "side": "long",
+     "branch": "nyam_box / cash_open_reclaim_case",
+     "marked_by": "chart",
+     "added": "added 2026-09-17 night from the X archive v2 (images new in v2) or dated on the tape; chart-marked prices carry the chart's resolution (about 5 points), printed orders are exact"
+    }
+   ],
+   "n_proper_entries": 1,
+   "expected_detection": {
+    "branch": "nyam_box",
+    "side": "long",
+    "reference": "the 9-10 box low swept at 09:55-10:00 and reclaimed",
+    "entry_window_et": "10:00-10:20"
+   }
+  },
+  {
+   "id": "JJ-2026-05-15",
+   "family": "JJ-TBR",
+   "source": "JR p.11 (HIYK1bCXMAAFDeb.png, HIYMy7NWgAAqZCP.png): 'testing the new NT studies, same ranges, different layers, quick 80 points afternoon'",
+   "date": "2026-05-15",
+   "session": "NY PM",
+   "instrument": "NQ",
+   "chart_clock": "ninjatrader UK",
+   "inside_tape": true,
+   "levels": {
+    "R_hi": 29283,
+    "R_lo": 29152,
+    "EQ": 29217.5,
+    "plus_0_33": 29326,
+    "plus_0_66": 29369,
+    "plus_1_33": 29457,
+    "range_pct": "0.45"
+   },
+   "actions": [
+    {
+     "time_et": "12:46",
+     "action": "buy",
+     "qty": 5,
+     "price": 29334.25,
+     "note": "Buy 5 @ 29334.25 printed on the chart at 17:46 UK; the pullback to the +0.33 projection after the break above the range; stopped: Sell 5 @ 29310.75 at 17:53 UK",
+     "proper_entry": true,
+     "side": "long",
+     "branch": "single_purged",
+     "marked_by": "chart_orders",
+     "stop": 29310.75,
+     "added": "added 2026-09-17 night from the X archive v2 (images new in v2) or dated on the tape; chart-marked prices carry the chart's resolution (about 5 points), printed orders are exact"
+    },
+    {
+     "time_et": "12:55",
+     "action": "buy",
+     "qty": 5,
+     "price": 29315.0,
+     "note": "Buy 5 @ 29315.00 printed at 17:55 UK, the second entry at the same retest; exit Sell 5 near 29,398 at 18:24 UK (the +0.66 projection area), 'quick 80 points'",
+     "proper_entry": true,
+     "side": "long",
+     "branch": "single_purged",
+     "marked_by": "chart_orders",
+     "target": 29369,
+     "added": "added 2026-09-17 night from the X archive v2 (images new in v2) or dated on the tape; chart-marked prices carry the chart's resolution (about 5 points), printed orders are exact"
+    }
+   ],
+   "n_proper_entries": 2,
+   "expected_detection": {
+    "branch": "single_purged",
+    "side": "long",
+    "reference": "the +0.33 projection retest on an expansion day",
+    "entry_window_et": "12:40-13:00"
+   }
+  },
+  {
+   "id": "JJ-2026-05-19",
+   "family": "JJ-TBR",
+   "source": "JR p.10 (HIswHpTXwAAJVXt.png): 'Absolute cinema'; reply: 'executed orders above 100 contracts only'",
+   "date": "2026-05-19",
+   "session": "NY AM",
+   "instrument": "NQ",
+   "chart_clock": "ninjatrader UK",
+   "inside_tape": true,
+   "levels": {
+    "line_upper": 28915.75,
+    "EQ": 28865,
+    "line_lower": 28834.25,
+    "minus_1_33": 28705,
+    "minus_1_66": 28690,
+    "plus_1_33": 29040,
+    "plus_1_66": 29070
+   },
+   "actions": [
+    {
+     "time_et": "10:20-10:52",
+     "action": "buy",
+     "qty": 1,
+     "price": 28695.0,
+     "note": "long at the -1.33/-1.66 extension band after the 282-lot buy absorption at 15:18-15:22 UK and the 174-lot retest at 15:51 UK (red arrows); the day ran to the +1.33/+1.66 band by 18:20 UK; chart-marked, no printed ticket",
+     "proper_entry": true,
+     "side": "long",
+     "branch": "extension_reaction",
+     "marked_by": "chart",
+     "added": "added 2026-09-17 night from the X archive v2 (images new in v2) or dated on the tape; chart-marked prices carry the chart's resolution (about 5 points), printed orders are exact"
+    }
+   ],
+   "n_proper_entries": 1,
+   "expected_detection": {
+    "branch": "extension_reaction",
+    "side": "long",
+    "reference": "the -1.33/-1.66 band with absorption prints",
+    "entry_window_et": "10:15-10:55"
+   }
+  },
+  {
+   "id": "JJ-2026-05-20",
+   "family": "JJ-TBR",
+   "source": "JR p.9 (HIxM_wNW0AAtyXJ.png, HIxNeoPWwAAbBgV.png): 'few indications of mean reverting morning session today > scalp the range; ate two stops but two nice longs and a short'",
+   "date": "2026-05-20",
+   "session": "NY AM",
+   "instrument": "MNQ",
+   "chart_clock": "ninjatrader UK",
+   "inside_tape": true,
+   "levels": {
+    "line_upper": 29146.75,
+    "EQ": 29106.25,
+    "line_lower": 29097.0,
+    "minus_1_33": 29030,
+    "minus_1_66": 29018,
+    "pzone_upper": [
+     29168,
+     29178
+    ],
+    "pzone_lower": [
+     29048,
+     29058
+    ]
+   },
+   "actions": [
+    {
+     "time_et": "09:39",
+     "action": "buy",
+     "qty": 1,
+     "price": 29028.0,
+     "note": "long at the -1.33 extension (red circle, the 163-lot print at 14:39 UK), ran to the range top by 14:46 UK; chart-marked; the -1.33 raid at 09:39 is inside the Judas window (JR p.20: any raid of the 6-9 edge), so the fade is the Judas play",
+     "proper_entry": true,
+     "side": "long",
+     "branch": "judas_reversal",
+     "marked_by": "chart",
+     "added": "added 2026-09-17 night from the X archive v2 (images new in v2) or dated on the tape; chart-marked prices carry the chart's resolution (about 5 points), printed orders are exact"
+    },
+    {
+     "time_et": "09:46",
+     "action": "sell",
+     "qty": 1,
+     "price": 29170.0,
+     "note": "short at the upper P-zone box 29,168-29,178 at 14:46 UK (the 09:50 P-zone), back to the EQ by 14:52 UK; chart-marked",
+     "proper_entry": true,
+     "side": "short",
+     "branch": "timed_pzone_reversal",
+     "marked_by": "chart",
+     "added": "added 2026-09-17 night from the X archive v2 (images new in v2) or dated on the tape; chart-marked prices carry the chart's resolution (about 5 points), printed orders are exact"
+    }
+   ],
+   "n_proper_entries": 2,
+   "expected_detection": {
+    "branch": "judas_reversal",
+    "side": "long",
+    "reference": "the -1.33 extension, then the P-zone short",
+    "entry_window_et": "09:35-09:50"
+   }
+  },
+  {
+   "id": "JJ-2025-10-14",
+   "family": "JJ-TBR",
+   "source": "JR p.19 (G3QCaBIWsAAHcaw.jpg): 'Beautiful' (TradingView SDRange+ 5-minute, 14/10/2025)",
+   "date": "2025-10-14",
+   "session": "NY AM",
+   "instrument": "NQZ2025",
+   "chart_clock": "tradingview UTC-4",
+   "inside_tape": true,
+   "levels": {
+    "H": 24665,
+    "EQ": 24580,
+    "L": 24495,
+    "minus_0_5": 24410,
+    "plus_1": 24830,
+    "plus_1_33": 24880,
+    "plus_1_66": 24920
+   },
+   "actions": [
+    {
+     "time_et": "09:45-09:55",
+     "action": "buy",
+     "qty": 1,
+     "price": 24420.0,
+     "note": "the 09:45 sweep of the range low to the -0.5 (low about 24,420), then the reversal through the range to +1 and the 1.33-1.66 band by 12:30; a Judas fade at the -0.5, chart-marked",
+     "proper_entry": true,
+     "side": "long",
+     "branch": "judas_reversal",
+     "marked_by": "chart",
+     "target": 24580,
+     "added": "added 2026-09-17 night from the X archive v2 (images new in v2) or dated on the tape; chart-marked prices carry the chart's resolution (about 5 points), printed orders are exact"
+    }
+   ],
+   "n_proper_entries": 1,
+   "expected_detection": {
+    "branch": "judas_reversal",
+    "side": "long",
+    "reference": "R-Lo swept to the -0.5 at 09:45",
+    "entry_window_et": "09:45-10:00"
+   }
+  },
+  {
+   "id": "GB-2026-05-01",
+   "family": "GB-FAIL",
+   "source": "GB p.46 (HHP3lUrWoAA4oPA.png; Tradovate MNQ Jun 2026, 'Fri 01 May 26 11:16 AM' on the axis; Total Day PnL +$9,607.48)",
+   "date": "2026-05-01",
+   "session": "NY",
+   "instrument": "MNQM26",
+   "chart_clock": "tradovate UTC-4",
+   "inside_tape": true,
+   "dated_by": "the axis prints 'Fri 01 May 26'; the NQ tape: 09:00-10:00 box 27,575.75-27,875.75, RTH 27,617.75-27,917, the 10:00-11:20 high 27,909.25 (his box-high sweep), consistent with the chart",
+   "levels": {
+    "ny_box_09_10": [
+     27575.75,
+     27875.75
+    ],
+    "buy_limits": [
+     27805.5,
+     27786.25,
+     27767.0,
+     27685.0,
+     27581.0
+    ]
+   },
+   "actions": [
+    {
+     "time_et": "10:40-11:16",
+     "action": "sell",
+     "qty": 5,
+     "price": 27901.5,
+     "note": "short 5 at about 27,901.50 (position tag) after the sweep of the 09:00-10:00 box high 27,875.75 to 27,909 and the failure back inside; buy limits 27,805.50 down to 27,581; chart-marked",
+     "proper_entry": true,
+     "side": "short",
+     "branch": "nyam_box",
+     "marked_by": "chart",
+     "added": "added 2026-09-17 night: GB p.46 charts dated on the tape; chart-marked fills carry the chart's resolution (about 5 points)"
+    }
+   ],
+   "n_proper_entries": 1,
+   "expected_detection": {
+    "branch": "nyam_box",
+    "side": "short",
+    "reference": "the 9-10 box high swept after 10:00 and failed",
+    "entry_window_et": "10:40-11:16"
+   }
+  },
+  {
+   "id": "GB-2026-05-04",
+   "family": "GB-FAIL",
+   "source": "GB p.46 (HHhCuL3WAAAFcPK.jpg; Tradovate MNQ Jun 2026, '11:19:29 AM (UTC-4)'; Total Day PnL +$11,647.82; London Low, True Day Open and PDH drawn)",
+   "date": "2026-05-04",
+   "session": "NY",
+   "instrument": "MNQM26",
+   "chart_clock": "tradovate UTC-4",
+   "inside_tape": true,
+   "dated_by": "the wiki carried the page as '2026-06 (two sessions)'; the NQ tape dates the chart 2026-05-04: London low 27,864.25 (his 'London Low' line about 27,858), the 09:00-10:00 box 27,787.50-27,898.75 (his shaded box top about 27,900), the 10:50-11:20 drop from 27,940.75 to 27,761 (his short riding to 27,820 by 11:19)",
+   "levels": {
+    "ny_box_09_10": [
+     27787.5,
+     27898.75
+    ],
+    "london_low": 27858,
+    "true_day_open": 27930
+   },
+   "actions": [
+    {
+     "time_et": "10:55-11:12",
+     "action": "sell",
+     "qty": 1,
+     "price": 27900.75,
+     "note": "short at about 27,900.75 (position tag) after the box high 27,898.75 was swept to 27,940 at 10:50-11:00 and price failed back under it; the True Day Open and PDH sit just above; chart-marked",
+     "proper_entry": true,
+     "side": "short",
+     "branch": "nyam_box",
+     "marked_by": "chart",
+     "added": "added 2026-09-17 night: GB p.46 charts dated on the tape; chart-marked fills carry the chart's resolution (about 5 points)"
+    }
+   ],
+   "n_proper_entries": 1,
+   "expected_detection": {
+    "branch": "nyam_box",
+    "side": "short",
+    "reference": "the 9-10 box high swept to the TDO/PDH area and failed",
+    "entry_window_et": "10:55-11:12"
+   }
   }
  ],
  "supersedes": "AUTHOR_EXAMPLES_2026-09-15.json"

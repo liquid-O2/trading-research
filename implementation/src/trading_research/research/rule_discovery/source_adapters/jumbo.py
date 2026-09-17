@@ -1645,6 +1645,40 @@ def _scan_extension_reaction(market) -> tuple[list[dict[str, Any]], list[dict[st
                 geometry={"band": [band[0], band[1]], "first_objective": target},
             )
         )
+        if EXTENSION_BAND_LIMIT and touch is not None and extreme is not None:
+            # the limit rests at the band's near line and, if the touching bar
+            # reaches it, at the far line; filled at the touch, decided when
+            # the touching bar closes, stop beyond the bar's extreme
+            far = band[0] if side == "long" else band[1]
+            near_line = band[1] if side == "long" else band[0]
+            reached_far = (extreme <= far) if side == "long" else (extreme >= far)
+            for label, line in (("band_near_limit", near_line), ("band_far_limit", far)):
+                if label == "band_far_limit" and not reached_far:
+                    continue
+                touch_end = int(touch.get("known_at") or touch["end"])
+                limit_stop = (extreme - LEVEL_COINCIDENCE) if side == "long" else (extreme + LEVEL_COINCIDENCE)
+                limit_stages = [dict(s) for s in stages]
+                for s in limit_stages:
+                    if s["stage"] == "confirmation":
+                        s.update(verdict="pass", at_ns=touch_end, operands={**(s.get("operands") or {}), "kind": label})
+                    if s["stage"] in ("risk", "objective", "management"):
+                        s.update(verdict="pass" if s["stage"] != "objective" or sign(side) * (target - line) > 0 else "fail", at_ns=touch_end)
+                episodes.append(
+                    _episode(
+                        market,
+                        branch="extension_reaction",
+                        side=side,
+                        stages=limit_stages,
+                        decision_at=touch_end,
+                        entry=line,
+                        stop=limit_stop,
+                        target=target,
+                        reference=box,
+                        trigger=touch,
+                        values={"reference_px": line, "reference_kind": "extension_band", "cycle": 0, "confirmation_mode": label, "sessionstat_coincident": stat_hit},
+                        geometry={"band": [band[0], band[1]], "first_objective": target},
+                    )
+                )
     return episodes, []
 
 
@@ -1781,6 +1815,46 @@ def _stop_through(market, *, level: Decimal, side: str, begin: int, end: int) ->
     return None
 
 
+def _session_orders(market):
+    """Aggressor orders of the account day (fills grouped by event timestamp
+    and side), from the trade parquet; cached per session in the process."""
+    key = str(getattr(market, "day", None))
+    if key in _ORDERS_CACHE:
+        return _ORDERS_CACHE[key]
+    orders = None
+    try:
+        import importlib.util as _ilu
+
+        spec = _ilu.spec_from_file_location("sires_levels_fit", Path(__file__).resolve().parents[6] / "implementation/tools/sires_levels_fit.py")
+        fit = _ilu.module_from_spec(spec)
+        spec.loader.exec_module(fit)
+        orders = fit.orders_between(key, int(market.start), int(market.end))
+    except Exception:
+        orders = None
+    if len(_ORDERS_CACHE) > 4:
+        _ORDERS_CACHE.pop(next(iter(_ORDERS_CACHE)))
+    _ORDERS_CACHE[key] = orders
+    return orders
+
+
+def _big_print_fill(market, *, level: Decimal, side: str, begin: int, end: int) -> dict[str, Any] | None:
+    """The first executed order at or above the BigTrades threshold within
+    BIG_PRINT_POINTS of the level between ``begin`` and ``end``: the fill is
+    the print's price, decided when its minute closes."""
+    orders = _session_orders(market)
+    if orders is None or len(orders) == 0:
+        return None
+    london_end = _at(market, "09:30")
+    lo, hi = float(level - BIG_PRINT_POINTS), float(level + BIG_PRINT_POINTS)
+    sub = orders[(orders["t"] >= int(begin)) & (orders["t"] < int(end)) & (orders["hi"] >= lo) & (orders["lo"] <= hi)]
+    for row in sub.itertuples(index=False):
+        threshold = BIGTRADES_LONDON if int(row.t) < london_end else BIGTRADES_NY
+        if int(row.size) >= threshold:
+            at = (int(row.t) // NS_MINUTE + 1) * NS_MINUTE
+            return {"mode": "big_print", "entry": Decimal(str((float(row.lo) + float(row.hi)) / 2)).quantize(TICK), "at": at, "evidence_at": at, "print_size": int(row.size), "print_side": str(row.side)}
+    return None
+
+
 def _line_failure_fills(market, *, level: Decimal, side: str, cycle: Mapping[str, Any], end: int, evidence_at: int, internal: Decimal | None = None) -> list[dict[str, Any]]:
     """The fills of one failure of a line (the sweep bar, its extreme and the
     bar that closes back through are in ``cycle``). ``internal`` is the next
@@ -1819,6 +1893,10 @@ def _line_failure_fills(market, *, level: Decimal, side: str, cycle: Mapping[str
         turn = _spike_turn(market, level=level, side=side, bar=sweep, end=end)
         if turn is not None:
             fills.append({"mode": "next_bar_open", "entry": turn["entry"], "at": int(turn["at"]), "stop": turn["stop"], "evidence_at": int(turn["at"]), "fitted": True})
+        if BIG_PRINT_CONFIRMATION:
+            big = _big_print_fill(market, level=level, side=side, begin=int(sweep.get("start") or evidence_at), end=min(end, int(sweep["end"]) + CONFIRM_HORIZON_MIN * NS_MINUTE))
+            if big is not None:
+                fills.append({**big, "stop": stop})
     return fills
 
 
@@ -1850,6 +1928,12 @@ def _contact_fills(market, *, level: Decimal, side: str, contact: Mapping[str, A
     turn = _spike_turn(market, level=level, side=side, bar=contact, end=end)
     if turn is not None:
         fills.append({"mode": "next_bar_open", "entry": turn["entry"], "at": int(turn["at"]), "stop": turn["stop"], "evidence_at": int(turn["at"]), "fitted": True})
+    if BIG_PRINT_CONFIRMATION:
+        big = _big_print_fill(market, level=level, side=side, begin=int(contact.get("start") or touch_at), end=min(end, int(contact["end"]) + CONFIRM_HORIZON_MIN * NS_MINUTE))
+        if big is not None:
+            lo_c, hi_c = _d(contact.get("L")), _d(contact.get("H"))
+            extreme = lo_c if side == "long" else hi_c
+            fills.append({**big, "stop": None if extreme is None else ((extreme - LEVEL_COINCIDENCE) if side == "long" else (extreme + LEVEL_COINCIDENCE)), "evidence_at": max(int(placed_at), int(big["at"]))})
     return fills
 
 
@@ -2181,13 +2265,19 @@ def _eq_lines(market, branch: str) -> tuple[dict[str, Any] | None, list[dict[str
     if branch in {"single_extended", "single_purged"}:
         sides = ("long", "short") if branch == "single_extended" or direction is None else (direction,)
         begin = _at(market, "09:00" if branch == "single_extended" else "09:30")
-        end = min(_at(market, "10:30" if branch == "single_extended" else "12:00"), int(market.end))
+        end = min(_at(market, SINGLE_EXTENDED_END if branch == "single_extended" else SINGLE_PURGED_END), int(market.end))
         lines = [("eq", box["eq"])] if branch == "single_extended" else [("eq", box["eq"]), ("q25", box["q25"]), ("q75", box["q75"]), ("range_open", box["range_open"])]
         if branch == "single_purged":
             span = _span(_bars(market, _at(market, "09:30"), _at(market, "09:45"), 60), known_at=_at(market, "09:45"))
             if span is not None:
                 width = span["high"] - span["low"]
                 lines += [("or15_mid", (span["low"] + span["high"]) / 2), ("or15_q25", span["low"] + width / 4), ("or15_q75", span["low"] + width * 3 / 4)]
+            # Phase 1.5 candidate: the projections as retest lines on the
+            # expansion day (2026-05-15: longs at the +0.33 projection at 12:46
+            # and 12:55 after the break above the range); B0.3 draws none
+            for name in PURGED_PROJECTION_LINES:
+                if box["ladder"].get(name) is not None:
+                    lines.append((name, box["ladder"][name]))
         objective = {side: _trend_objective(box, side) for side in ("long", "short")}
     else:
         sides = ("long", "short")
@@ -2378,6 +2468,25 @@ SELECTION_CLOCK = ("02:00", "16:00")
 # The list is bounded by the opportunities (two per line and side, one
 # position at a time), not by a count: 2026-07-10 "had a couple diabolical Ls
 # and roundtrips" before the 11:05 rotation long (JR p.42).
+# the single-break plays' action windows (Phase 1.5 timing axis: "same ranges,
+# different layers" -- 2026-05-15's +0.33 projection retests at 12:46 and 12:55
+# sit past the 12:00 end of the purged case)
+PURGED_PROJECTION_LINES: tuple = ()
+# Phase 1.5 confirmation candidate: a large executed order at the level
+# (BigTrades: "I use a 100 threshold on NQ during NY and 75 during London",
+# FIND p.9; "confirmation: ... large prints >= threshold", FIND p.12).
+# B0.3 does not use it; 2026-05-19's -1.33 long sits on a 282-lot print.
+BIG_PRINT_CONFIRMATION = False
+# Phase 1.5 candidate: a resting limit at the extension band's own lines (the
+# -1.66 long of 2025-09-09 at 10:35; the 2026-05-19 chart's long at the band
+# on the 282-lot print), beside the signature confirmation B0.3 uses
+EXTENSION_BAND_LIMIT = False
+BIGTRADES_NY = 100
+BIGTRADES_LONDON = 75
+BIG_PRINT_POINTS = Decimal("2")
+_ORDERS_CACHE: dict = {}
+SINGLE_EXTENDED_END = "10:30"
+SINGLE_PURGED_END = "12:00"
 NY_ROUND_TRIPS = 8
 LONDON_ROUND_TRIPS = 4
 MAX_PER_LINE = 2

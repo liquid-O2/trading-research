@@ -26,11 +26,52 @@ import numpy as np
 
 # Not features: identities, the label, anything decided after the fill, and
 # free-text lists (their count is a feature).
-META = {"family", "example_id", "session", "label", "outcome", "coincident_levels", "box"}
+META = {"family", "example_id", "session", "label", "outcome", "coincident_levels", "box", "decision_at", "reference_px", "entry_px"}
+
+
+NEAR_POINTS = 5.0
+CONFLUENCE_DISTANCES = ("rth_hvn_distance", "rth_lvn_distance", "rth_ledge_distance", "overnight_hvn_distance", "overnight_lvn_distance", "overnight_ledge_distance", "prior_day_hvn_distance", "prior_day_lvn_distance", "prior_day_ledge_distance", "composite_hvn_distance", "composite_lvn_distance", "composite_ledge_distance", "naked_poc_distance", "aggression_nearest_distance", "rth_delta_print_distance", "overnight_delta_print_distance")
+
+
+def derive(row: dict) -> dict:
+    """Derived columns: the number of object families sitting within
+    NEAR_POINTS of the level (the authors' "two independent reasons at one
+    price"), so a handful of positives can learn one confluence weight
+    instead of sixteen distances."""
+    families = {"node": ("rth_hvn_distance", "overnight_hvn_distance", "prior_day_hvn_distance", "composite_hvn_distance"), "lvn": ("rth_lvn_distance", "overnight_lvn_distance", "prior_day_lvn_distance", "composite_lvn_distance"), "ledge": ("rth_ledge_distance", "overnight_ledge_distance", "prior_day_ledge_distance", "composite_ledge_distance"), "naked_poc": ("naked_poc_distance",), "aggression": ("aggression_nearest_distance",), "delta_print": ("rth_delta_print_distance", "overnight_delta_print_distance")}
+    count = 0
+    present = False
+    for name, cols in families.items():
+        vals = [row.get(c) for c in cols if row.get(c) is not None]
+        if vals:
+            present = True
+            if min(vals) <= NEAR_POINTS:
+                count += 1
+    out = dict(row)
+    if present:
+        out["confluence_count"] = count
+    # side-relative reads: a fade long below value and a fade short above value
+    # are the same read; "toward" is positive when the level sits on the
+    # discount side for the trade, "delta_against" positive when the flow of
+    # the last minutes ran against the trade (into the level he fades)
+    sign = 1.0 if row.get("side") == "long" else (-1.0 if row.get("side") == "short" else None)
+    if sign is not None:
+        for col in ("developing_poc_distance", "developing_vah_distance", "developing_val_distance", "prior_day_poc_distance", "prior_day_vah_distance", "prior_day_val_distance", "overnight_poc_distance", "rth_poc_distance", "composite_poc_distance", "eth_mid_distance", "level_vs_rth_open"):
+            v = row.get(col)
+            if v is not None:
+                out[col.replace("_distance", "_toward").replace("level_vs_rth_open", "rth_open_toward")] = -float(v) * sign
+        for col in ("delta_5m", "delta_30m", "overnight_net_delta", "rth_delta_at_level", "overnight_delta_at_level"):
+            v = row.get(col)
+            if v is not None:
+                out[col + "_against"] = -float(v) * sign
+        rp = row.get("range_position")
+        if rp is not None:
+            out["range_position_toward"] = (1.0 - float(rp)) if sign > 0 else float(rp)
+    return out
 
 
 def load(path: Path) -> list[dict]:
-    return [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
+    return [derive(json.loads(line)) for line in path.read_text().splitlines() if line.strip()]
 
 
 def feature_types(rows: list[dict]) -> tuple[list[str], list[str], list[str]]:

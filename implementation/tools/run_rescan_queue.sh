@@ -3,7 +3,7 @@
 # usage: run_rescan_queue.sh <candidates.json> <root-dir> [workers]
 set -u
 CANDS="$1"; ROOT="$2"; WORKERS="${3:-10}"
-W=/workspace/.worktrees/fidelity-jj-gb/implementation
+W="${WORKTREE_IMPL:-/workspace/.worktrees/fidelity-jj-gb/implementation}"
 PY=/workspace/implementation/.venv/bin/python
 mkdir -p "$ROOT"
 N=$($PY -c "import json,sys; print(len(json.load(open(sys.argv[1]))))" "$CANDS")

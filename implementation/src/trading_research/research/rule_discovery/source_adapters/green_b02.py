@@ -712,6 +712,14 @@ def session_references(market) -> tuple[list[dict[str, Any]], list[dict[str, Any
     return refs, omissions
 
 
+# Phase 1.5 objective candidate (planning/phase-1-5/PHASE_1_5_REBUILT_2026-09-17.md):
+# None = every drawn level is a rung (B0.3); a set restricts the rungs to those
+# kinds. His printed targets sit on the prior day's and week's extremes, the
+# session extremes and the Asia low on 6 of 10 tickets, past nearer box edges
+# (fidelity-round8 REPORT section 12).
+OBJECTIVE_KINDS: frozenset | None = None
+
+
 def objective_levels(market, refs: Sequence[Mapping[str, Any]]) -> list[dict[str, Any]]:
     """Every drawn level available as an objective rung, plus TDO and the NWOG."""
     out: list[dict[str, Any]] = []
@@ -721,6 +729,8 @@ def objective_levels(market, refs: Sequence[Mapping[str, Any]]) -> list[dict[str
         # hour's edge is not one, and treating them as rungs produced
         # one-minute "targets" a few points from the entry
         if ref.get("running") or str(ref["kind"]).startswith("hour_box_") or str(ref["kind"]) == "trailing_hour":
+            continue
+        if OBJECTIVE_KINDS is not None and str(ref["kind"]) not in OBJECTIVE_KINDS:
             continue
         out.append({"price": _dec(ref["high"]), "label": f"{ref['kind']}_high", "known_at": ref["known_at"]})
         out.append({"price": _dec(ref["low"]), "label": f"{ref['kind']}_low", "known_at": ref["known_at"]})
