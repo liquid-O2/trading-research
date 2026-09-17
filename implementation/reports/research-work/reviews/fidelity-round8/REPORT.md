@@ -154,6 +154,14 @@ Boxes are clusters of aggressor orders (fills grouped by event timestamp and sid
 | fixed 60 contracts, single orders | none | 16 | — | — | — | 13.4 |
 | fixed 30 | no follow-through beyond 4 points in 3 minutes | 10 | — | — | — | 6.1 |
 | adaptive: top 0.5% of the trailing hour's orders (floor 20) | none | 29 | 13 | 6 | 10 | 34.0 |
+| adaptive 0.5% | no follow-through beyond 1.0 × the trailing median minute range in 2 minutes | 26 | 12 | 4 | 10 | 21.6 |
+| adaptive 0.2%, at least 3 orders | same, 1.0 × range | 19 | 11 | 3 | 5 | 13.7 |
+| adaptive 0.1% | same, 1.0 × range | 21 | 11 | 3 | 7 | 15.4 |
+| adaptive 0.1%, at least 3 orders | none | 18 | 9 | 6 | 3 | 13.3 |
+| adaptive 0.5%, at least 3 orders | 1.5 × range in 3 minutes | 23 | 11 | 3 | 9 | 16.7 |
+| adaptive 0.2% | 2.0 × range in 5 minutes | 25 | 12 | 3 | 10 | 23.1 |
+
+The sweep settles the shape of the trade-off: the aggression boxes he drew are recovered 11 to 13 of 15 across every adaptive setting, and the count a session moves between 13 and 34 with the size cut and the absorption tolerance. No setting reaches his 2 to 6 while keeping his boxes, so the cluster rule is the admission layer for order-flow levels and the grading model (section 11) is what prunes them, as with the other families.
 
 A fixed contract number is the wrong object, as the user noted and as the author says ("bubble scale adjusted with the session's volume", BIG p.3): the adaptive cut finds the boxes he drew on every session including the quiet overnight one, at the cost of more boxes; the absorption test ("aggression that gets nothing") is what should prune them, and a fixed 4-point tolerance pruned the wrong ones. The tolerance now follows the trailing minute range; those results are appended below when the run completes. He draws 2 to 6 boxes a session; the count after absorption is the number to judge.
 
