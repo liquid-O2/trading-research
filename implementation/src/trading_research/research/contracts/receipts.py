@@ -925,6 +925,7 @@ RESULT_CARD_NAME = "RESULT_CARD.json"
 RESULT_CARD_SCHEMA = "research-result-card-v1"
 RESULT_CARD_VERDICTS = ("done_well", "needs_upgrade", "not_reaching_target", "not_applicable")
 RESULT_CARD_MET = ("yes", "no", "partial", "not_applicable")
+RESULT_CARD_PLAUSIBILITY = ("plausible", "implausible_pending_audit")
 
 
 def result_card_failures(path: Path) -> list[str]:
@@ -933,7 +934,9 @@ def result_card_failures(path: Path) -> list[str]:
     Shape: schema_version; question (text); headline (1 to 5 rows, each with value, unit, an
     interval or a support count, and an artifact pointer with sha256); target (text and met in
     yes/no/partial/not_applicable); verdict (done_well, needs_upgrade, not_reaching_target,
-    not_applicable) with a reason; lever (required unless the verdict is done_well); limits."""
+    not_applicable) with a reason; lever (required unless the verdict is done_well); limits;
+    plausibility (at least one check with check, observed, expected and a verdict in
+    plausible/implausible_pending_audit; an implausible check forbids done_well)."""
     problems: list[str] = []
     try:
         card = json.loads(path.read_text())
@@ -973,6 +976,24 @@ def result_card_failures(path: Path) -> list[str]:
             problems.append("result card lever (change and evidence) is required unless the verdict is done_well")
     if not isinstance(card.get("limits"), list):
         problems.append("result card limits must be a list")
+    plausibility = card.get("plausibility")
+    if not isinstance(plausibility, list) or not plausibility:
+        problems.append("result card plausibility must list at least one check (check, observed, expected, verdict)")
+    else:
+        implausible = False
+        for index, row in enumerate(plausibility):
+            if not isinstance(row, dict) or not isinstance(row.get("check"), str) or not row["check"].strip():
+                problems.append(f"plausibility[{index}] must be an object naming its check")
+                continue
+            for key in ("observed", "expected"):
+                if not isinstance(row.get(key), (str, int, float)) or isinstance(row.get(key), bool) or row.get(key) == "":
+                    problems.append(f"plausibility[{index}].{key} must be a value or a text")
+            if row.get("verdict") not in RESULT_CARD_PLAUSIBILITY:
+                problems.append(f"plausibility[{index}].verdict must be plausible or implausible_pending_audit")
+            elif row["verdict"] == "implausible_pending_audit":
+                implausible = True
+        if implausible and isinstance(verdict, dict) and verdict.get("value") == "done_well":
+            problems.append("a result card with an implausible_pending_audit check cannot carry the verdict done_well")
     return problems
 
 

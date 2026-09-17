@@ -18,6 +18,10 @@ def valid_card() -> dict:
         "verdict": {"value": "needs_upgrade", "reason": "no candidate clears support and the lower bound"},
         "lever": {"change": "location-first revisit of the 48 location_miss candidates in Phase 3", "evidence": "a positive lower bound on the same folds"},
         "limits": ["rehearsal pairing root; hold-out excluded"],
+        "plausibility": [{"check": "per-fold values of the best candidate against their sampling error",
+                          "observed": "fold means 4.4, 7.4, 3.9, 7.1, 4.1 points/day, spread 3.5",
+                          "expected": "spread of at least 2 standard errors (4.8) for independent market years",
+                          "verdict": "plausible"}],
     }
 
 
@@ -42,6 +46,10 @@ def test_a_valid_card_passes(tmp_path):
     (lambda c: c.update(verdict={"value": "great", "reason": "x"}), "verdict"),
     (lambda c: c.pop("lever"), "lever"),
     (lambda c: c.update(limits="none"), "limits"),
+    (lambda c: c.pop("plausibility"), "plausibility must list at least one check"),
+    (lambda c: c.update(plausibility=[]), "plausibility must list at least one check"),
+    (lambda c: c.update(plausibility=[{"check": "stability", "observed": 1.0, "verdict": "plausible"}]), "expected"),
+    (lambda c: c.update(plausibility=[dict(valid_card()["plausibility"][0], verdict="fine")]), "plausible or implausible_pending_audit"),
 ])
 def test_each_defect_is_named(tmp_path, mutate, expect):
     card = valid_card(); mutate(card)
@@ -60,3 +68,13 @@ def test_the_artifact_check_reports_card_defects_as_inventory_failures(tmp_path)
     failures: list = []
     receipts._check_artifacts([{"path": str(path), "sha256": receipts.file_digest(path), "bytes": path.stat().st_size}], tmp_path / "TASK_RECEIPT.json", failures)
     assert failures and all(f.code == receipts.FailureCode.INVENTORY for f in failures)
+
+
+def test_an_implausible_check_blocks_done_well_but_not_needs_upgrade(tmp_path):
+    card = valid_card()
+    card["plausibility"][0].update(observed="fold means 26.3, 25.4, 26.4, 25.0, 25.6, spread 1.4", verdict="implausible_pending_audit")
+    assert receipts.result_card_failures(write(tmp_path, card)) == []
+    card["verdict"] = {"value": "done_well", "reason": "all gates pass"}
+    card.pop("lever")
+    problems = receipts.result_card_failures(write(tmp_path, card))
+    assert problems == ["a result card with an implausible_pending_audit check cannot carry the verdict done_well"], problems

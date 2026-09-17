@@ -17,7 +17,7 @@ from typing import Literal, TypedDict
 
 Disposition = Literal[
     "implemented_verified", "retained_baseline", "rejected_by_evidence",
-    "inconclusive_support", "unsupported_owned_input", "blocked_implementation"
+    "inconclusive_support", "inconclusive_multiplicity", "unsupported_owned_input", "blocked_implementation"
 ]
 
 class TaskReceipt(TypedDict):
