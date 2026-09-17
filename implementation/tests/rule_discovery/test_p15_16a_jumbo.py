@@ -184,6 +184,9 @@ def test_j3_opening_range_retracement_is_a_sibling_of_the_single_break_case():
     assert {"eq", "q25", "q75", "range_open"} <= kinds
     rotation = {row["kind"] for row in jj._eq_locations(market, box, "internal_rotation")}
     assert "or15_mid" not in rotation
+    # "open inside prior RTH value: range scalps" (2026-07-10): the in-value day
+    # is scalped at the range edges too.
+    assert {"box_low", "box_high"} <= rotation
 
 
 # --------------------------------------------------------------------------- J4
@@ -310,11 +313,14 @@ def test_j9_single_break_branches_read_the_range_size():
 # --------------------------------------------------------------------------- J10 / J11 / J12
 
 
-def test_j10_single_purged_admits_both_directions():
-    """Audit 1.3 J10: the old branch admitted only opens below value."""
-    assert jj._context_sides("single_purged", {"open_location": "above_vah", "purge": {"available": True, "purged_high": True}}) == ("short",)
-    assert jj._context_sides("single_purged", {"open_location": "below_val", "purge": {"available": True, "purged_low": True}}) == ("long",)
+def test_j10_single_purged_admits_both_directions_in_the_purge_direction():
+    """Audit 1.3 J10: the old branch admitted only opens below value. The purge
+    continues -- 2026-07-28 opened below the prior RTH value low with the
+    overnight low already taken and the author's day was "continuation down"."""
+    assert jj._context_sides("single_purged", {"open_location": "below_val", "purge": {"available": True, "purged_low": True}}) == ("short",)
+    assert jj._context_sides("single_purged", {"open_location": "above_vah", "purge": {"available": True, "purged_high": True}}) == ("long",)
     assert jj._context_sides("single_purged", {"open_location": "below_val", "purge": {"available": True, "purged_low": True, "purged_high": True}}) == ("long", "short")
+    assert jj._context_sides("single_purged", {"open_location": "below_val", "purge": {"available": False}}) == ()
 
 
 def test_j11_single_purged_window_is_the_am_with_0940_0950_as_the_add_window():

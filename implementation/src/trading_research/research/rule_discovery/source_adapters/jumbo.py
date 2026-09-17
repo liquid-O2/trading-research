@@ -609,6 +609,7 @@ def session_context(market) -> dict[str, Any]:
         "case": "double_break_favoured" if size["single_break_favoured"] is False else "single_break_favoured",
         "levels": drawn_levels(market, box),
         "evrange": EVRANGE_FIXTURES.get(str(market.day)),
+        "pzones": PZONE_FIXTURES.get(str(market.day)) or [],
         "sessionstat": sessionstat_envelope(market),
     }
     context["read"] = session_read(market, context)
@@ -1071,6 +1072,10 @@ def exhaustion_hit(context: Mapping[str, Any], price: Decimal | None, side: str,
         value = ev.get(key)
         if value is not None and abs(value - price) <= LEVEL_COINCIDENCE:
             hits.append(f"evrange_{key}")
+    for zone in context.get("pzones") or []:
+        low, high = zone["low"], zone["high"]
+        if low - LEVEL_COINCIDENCE <= price <= high + LEVEL_COINCIDENCE:
+            hits.append(f"pzone_{zone.get('anchor', '09:00')}")
     box_edge = exclude_kind in {"box_low", "box_high"}
     reached = bool(at_or_beyond or at_half or hits) if box_edge else True
     return {
@@ -1675,6 +1680,9 @@ def _eq_locations(market, box: Mapping[str, Any], branch: str) -> list[dict[str,
         {"kind": "q75", "price": box["q75"], "known_at": box["known_at"]},
         {"kind": "range_open", "price": box["range_open"], "known_at": box["known_at"]},
     ]
+    if branch == "internal_rotation":
+        rows.append({"kind": "box_low", "price": box["low"], "known_at": box["known_at"]})
+        rows.append({"kind": "box_high", "price": box["high"], "known_at": box["known_at"]})
     if branch in {"single_extended", "single_purged"}:
         span = _span(_bars(market, _at(market, "09:30"), _at(market, "09:45"), 60), known_at=_at(market, "09:45"))
         if span is not None:
@@ -1706,9 +1714,9 @@ def _context_sides(branch: str, context: Mapping[str, Any]) -> tuple[str, ...]:
         if not purge.get("available"):
             return ()
         sides: list[str] = []
-        if purge.get("purged_low") is True:
-            sides.append("long")
         if purge.get("purged_high") is True:
+            sides.append("long")
+        if purge.get("purged_low") is True:
             sides.append("short")
         return tuple(sides)
     return ("long", "short")
