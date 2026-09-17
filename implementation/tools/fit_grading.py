@@ -50,6 +50,23 @@ def derive(row: dict) -> dict:
     out = dict(row)
     if present:
         out["confluence_count"] = count
+    # side-relative reads: a fade long below value and a fade short above value
+    # are the same read; "toward" is positive when the level sits on the
+    # discount side for the trade, "delta_against" positive when the flow of
+    # the last minutes ran against the trade (into the level he fades)
+    sign = 1.0 if row.get("side") == "long" else (-1.0 if row.get("side") == "short" else None)
+    if sign is not None:
+        for col in ("developing_poc_distance", "developing_vah_distance", "developing_val_distance", "prior_day_poc_distance", "prior_day_vah_distance", "prior_day_val_distance", "overnight_poc_distance", "rth_poc_distance", "composite_poc_distance", "eth_mid_distance", "level_vs_rth_open"):
+            v = row.get(col)
+            if v is not None:
+                out[col.replace("_distance", "_toward").replace("level_vs_rth_open", "rth_open_toward")] = -float(v) * sign
+        for col in ("delta_5m", "delta_30m", "overnight_net_delta", "rth_delta_at_level", "overnight_delta_at_level"):
+            v = row.get(col)
+            if v is not None:
+                out[col + "_against"] = -float(v) * sign
+        rp = row.get("range_position")
+        if rp is not None:
+            out["range_position_toward"] = (1.0 - float(rp)) if sign > 0 else float(rp)
     return out
 
 
