@@ -232,3 +232,36 @@ PYTHONPATH=implementation/src /workspace/implementation/.venv/bin/python \
 PYTHONPATH=src /workspace/implementation/.venv/bin/python -m pytest \
   tests/rule_discovery/ tests/contracts/ -q      # from implementation/
 ```
+
+## 8. The coordinator's guidance of 2026-09-17, rule by rule
+
+The misses after the first rebuild were read as six rules per family. Each was
+fixed for every day and the replay re-run.
+
+| rule | what changed in the code | replay after it |
+| --- | --- | --- |
+| baseline | the rebuild before the guidance | strict 4 / ticket-risk 14 / 3-bar 17, of 40 |
+| J-A | the exhaustion projections +/-0.33, +/-0.5 and +/-0.66 are entry locations in their own right (`_scan_judas_reversal`, jumbo.py), and every signature emits both fills -- the limit at the level and the market fill at the signature's close (`_fill_modes`) | (with J-B..J-G) |
+| J-B | the two-minute signature is searched first and the slower clocks are alternative fills of the same opportunity (`confirm_pack`) | (with J-A..J-G) |
+| J-C | the plays are observed, not switched: every play runs every day, the classification chooses the primary, and the single-break side follows the break the session shows (`session_read`, `break_state`, `_context_sides`) | (with J-A..J-G) |
+| J-D | the box edge is an entry location on the first rejection printed there, without waiting for a sweep and reclaim | (with J-A..J-G) |
+| J-E | the outbound trade enters on the first pullback to a box internal after the opening break (`_scan_judas_outbound`) | (with J-A..J-G) |
+| J-F | London reads the Asia, midnight, overnight and prior-RTH levels from 02:00, and the 02:00-03:00 box once frozen (`drawn_levels`, `_scan_other_session`) | (with J-A..J-G) |
+| J-G | the P-zone fill is the limit inside the printed zone (`_scan_pzone`) | (with J-A..J-G) |
+| **J-A..J-G together** | | **strict 7 / ticket-risk 17 / 3-bar 21** |
+| G-A | after the confirming close the fill is the retest of the level, searched for four hours; the close is the fallback fill (`at_level_fill`) | (with G-B..G-G) |
+| G-B | a cycle ends with the five-minute failure, not a one-minute poke while price is still making new extremes (`failure_close`) | (with G-A..G-G) |
+| G-C | the open reaction is traded at the swept pre-open reference -- the 09:00-09:30, 06:00-09:30 and overnight extremes -- not at the open print (`_scan_cash_open`) | (with G-A..G-G) |
+| G-D | a session's running extreme is a reference an hour after it opens, superseded by the frozen box at its close (`session_references`) | (with G-A..G-G) |
+| G-E | the previous hour is the trailing sixty-minute swing, re-cut every fifteen minutes, beside the completed clock boxes (`_scan_previous_hour`) | (with G-A..G-G) |
+| G-F | the previous session's NY boxes stay live overnight (`_prior_session_box`) | (with G-A..G-G) |
+| G-G | an overnight sweep is re-entered at the same level after the open, as a second fill of the same opportunity (`post_open_retest`) | (with G-A..G-G) |
+
+Two further defects surfaced while fixing these and are fixed with them: a level
+is contacted every time it is tested, not only the first time (`level_contacts`,
+up to three distinct tests, which is what admits the 2025-10-07 London quadrant
+at 04:30); and "fail back inside the range" is the test only when the level is
+the reference's own edge on that side -- the close the author waits for at the
+far edge, "the 5 min close back below the PDL after sweeping above it", is
+*outside* the prior day's range, and testing for containment there suppressed
+the whole prior-day short family.
