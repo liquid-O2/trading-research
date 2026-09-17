@@ -88,7 +88,7 @@ def executed_points(executed: dict) -> dict:
     return out
 
 
-def scan_one(day: str, sessionstat: bool, scanner_overrides: dict | None = None, selection_variants: list | None = None) -> dict:
+def scan_one(day: str, sessionstat: bool, scanner_overrides: dict | None = None, selection_variants: list | None = None, export_executed: bool = False) -> dict:
     from trading_research.research.method_pack import historical_runner as hr
     from trading_research.research.method_pack.historical_features import HistoricalFeatures
     from trading_research.research.rule_discovery.baseline import PHASE1_RUN
@@ -129,6 +129,14 @@ def scan_one(day: str, sessionstat: bool, scanner_overrides: dict | None = None,
                 per_family[family] = executed_points(selection.get("executed") or {})
                 per_family[family]["n_candidates"] = int(selection.get("n_entries") or 0)
             variants[variant["name"]] = per_family
+            if variant["name"] == "B0.3" and export_executed:
+                executed_rows = []
+                for family, document in documents.items():
+                    passing = [ep for ep in document.get("episodes") or [] if ep.get("research_verdict") == "pass"]
+                    selection = jj.selection_for(market, passing, primary_play=(document.get("day_read") or {}).get("primary_play")) if family == "JJ-TBR" else gb.selection_for(market, passing)
+                    for item in (selection.get("executed") or {}).get("entries") or []:
+                        executed_rows.append({"family": family, "branch": item.get("branch"), "side": item.get("side"), "decision_at": int(item["decision_at"]), "entry": _f(item.get("entry")), "stop": _f(item.get("stop")), "target": _f(item.get("target")), "candidate_id": item.get("candidate_id"), "mode": item.get("confirmation_mode"), "outcome_e0": item.get("outcome")})
+                variants["__executed__"] = executed_rows
         finally:
             apply_overrides(previous)
 
@@ -258,6 +266,7 @@ def main(argv=None) -> int:
     parser.add_argument("--sessionstat", action="store_true", help="compute the SessionStat envelope (60 prior windows per session)")
     parser.add_argument("--scanner-overrides", default=None, help='JSON: {"jumbo.JUDAS_RAID_WINDOW": ["09:00","10:30"], ...} (a rescan candidate)')
     parser.add_argument("--selection-variants", type=Path, default=None, help="JSON list of {name, overrides} evaluated on the same scan (selection candidates); B0.3 is always added")
+    parser.add_argument("--export-executed", action="store_true", help="write the B0.3 executed entries of each session into the session line (for the exit-policy study)")
     args = parser.parse_args(argv)
     scanner_overrides = json.loads(args.scanner_overrides) if args.scanner_overrides else None
     selection_variants = [{"name": "B0.3", "overrides": {}}]
@@ -313,7 +322,7 @@ def main(argv=None) -> int:
 
     with rows_path.open("w") as sink:
         with ProcessPoolExecutor(max_workers=max(1, args.workers)) as pool:
-            futures = {pool.submit(scan_one, day, args.sessionstat, scanner_overrides, selection_variants): day for day in dates}
+            futures = {pool.submit(scan_one, day, args.sessionstat, scanner_overrides, selection_variants, args.export_executed): day for day in dates}
             done = 0
             for future in as_completed(futures):
                 day = futures[future]
@@ -373,7 +382,8 @@ def main(argv=None) -> int:
                     sink.write(json.dumps(row) + "\n")
                 # one session line: the day reads and every variant's executed result,
                 # for the fold evaluation (Phase 1.5 rebuilt plan)
-                sink.write(json.dumps({"kind": "session", "date": result["date"], "reads": result["reads"], "variants": result.get("variants") or {}}, default=str) + "\n")
+                executed_rows = (result.get("variants") or {}).pop("__executed__", None)
+                sink.write(json.dumps({"kind": "session", "date": result["date"], "reads": result["reads"], "variants": result.get("variants") or {}, "executed": executed_rows}, default=str) + "\n")
                 for name, per_family in (result.get("variants") or {}).items():
                     for family, stats in per_family.items():
                         agg = variant_totals[(name, family)]

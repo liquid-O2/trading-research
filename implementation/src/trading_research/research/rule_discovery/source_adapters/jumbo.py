@@ -1246,7 +1246,11 @@ def sweep_cycles(market, *, level: Decimal, side: str, begin: int, end: int, max
     return cycles
 
 
-MAX_CONTACTS_PER_LEVEL = 3
+# two tests of a line per session (2026-06-05 buys R-Lo at 05:03 after two
+# earlier round trips); the scan's only cap: both call sites read it at call
+# time so a rescan override reaches them (the literal 2 they carried made the
+# 2026-09-17 contacts candidates inert)
+MAX_CONTACTS_PER_LEVEL = 2
 
 
 def first_touch(market, *, level: Decimal, begin: int, end: int) -> dict[str, Any] | None:
@@ -1264,7 +1268,7 @@ def level_contacts(
     begin: int,
     end: int,
     departure: Decimal,
-    max_contacts: int = MAX_CONTACTS_PER_LEVEL,
+    max_contacts: int | None = None,
 ) -> list[dict[str, Any]]:
     """Each distinct test of a level, not only the first.
 
@@ -1273,6 +1277,8 @@ def level_contacts(
     2026-06-05 buys R-Lo at 05:03 after two earlier round trips. A re-touch
     counts once price has left the level by ``departure``.
     """
+    if max_contacts is None:
+        max_contacts = MAX_CONTACTS_PER_LEVEL  # read at call time so a rescan override reaches it
     out: list[dict[str, Any]] = []
     ready = True
     for row in _bars(market, begin, end, 60):
@@ -2185,7 +2191,7 @@ def _scan_judas_reversal(market) -> tuple[list[dict[str, Any]], list[dict[str, A
         first_break = _first_break(market, begin=begin, end=end, edge=edge, side=side)
         if first_break is None:
             continue
-        contacts = level_contacts(market, level=line, begin=int(first_break["start"]), end=end, departure=box["width"] / 10, max_contacts=2)
+        contacts = level_contacts(market, level=line, begin=int(first_break["start"]), end=end, departure=box["width"] / 10)
         for index, contact in enumerate(contacts):
             fills = _contact_fills(market, level=line, side=side, contact=contact, end=end, placed_at=int(first_break["start"]))
             episodes.extend(
@@ -2382,7 +2388,7 @@ def _scan_other_session(market) -> tuple[list[dict[str, Any]], list[dict[str, An
             first_break = _first_break(market, begin=begin, end=end, edge=edge, side=side)
             if first_break is None:
                 continue
-            for index, contact in enumerate(level_contacts(market, level=line, begin=int(first_break["start"]), end=end, departure=london["width"] / 10, max_contacts=2)):
+            for index, contact in enumerate(level_contacts(market, level=line, begin=int(first_break["start"]), end=end, departure=london["width"] / 10)):
                 fills = _contact_fills(market, level=line, side=side, contact=contact, end=end, placed_at=int(first_break["start"]))
                 episodes.extend(_line_episodes(market, context, branch="other_session", side=side, level=line, kind=name, location_kind="exhaustion_projection", reference=london, trigger=contact, fills=fills, objective=objective_ladder(london, side), begin=begin, cycle=index))
     # the drawn liquidity levels, live from 02:00
@@ -2419,6 +2425,12 @@ def _scan_pzone(market) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     zones = context.get("pzones") or []
     if not zones:
         return [], [{"reason": "pzone_generator_unavailable", "branch": "timed_pzone_reversal", "operand": "pzone_generator"}]
+    omissions: list[dict[str, Any]] = []
+    if PZONE_NODE_SNAP:
+        zones, dropped = _pzones_on_nodes(market, zones)
+        omissions.extend({"reason": "pzone_not_on_node_or_ledge", "branch": "timed_pzone_reversal", "operand": "pzone", "pzone": [str(z["low"]), str(z["high"])]} for z in dropped)
+        if not zones:
+            return [], omissions
     episodes: list[dict[str, Any]] = []
     price_at_nine = context.get("price_at_0900")
     for index, zone in enumerate(zones):
@@ -2446,7 +2458,28 @@ def _scan_pzone(market) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
                 extra_values={"pzone": [low, high], "pzone_anchor": anchor, "pzone_source": zone.get("source") or context.get("pzone_source")},
             )
         )
-    return episodes, []
+    return episodes, omissions
+
+
+def _pzones_on_nodes(market, zones: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """FIND p.8: a P-zone is kept where it "sits on an HVN or on the shelf next
+    to an LVN" of the profile built so far (18:00 to the zone's anchor); either
+    edge of the band within PZONE_NODE_TOLERANCE of a node or ledge keeps it."""
+    from trading_research.research.method_pack.profile_nodes import on_node_or_ledge
+
+    kept, dropped = [], []
+    payloads: dict[str, dict] = {}
+    for zone in zones:
+        anchor = zone.get("anchor", "09:00")
+        if anchor not in payloads:
+            payloads[anchor] = market.profile(_at(market, "18:00", -1), _at(market, anchor))
+        payload = payloads[anchor]
+        low, high = _d(zone["low"]), _d(zone["high"])
+        if on_node_or_ledge(low, payload, PZONE_NODE_TOLERANCE) or on_node_or_ledge(high, payload, PZONE_NODE_TOLERANCE):
+            kept.append(zone)
+        else:
+            dropped.append(zone)
+    return kept, dropped
 
 
 _SCANNERS = {
@@ -2481,6 +2514,11 @@ BIG_PRINT_CONFIRMATION = False
 # -1.66 long of 2025-09-09 at 10:35; the 2026-05-19 chart's long at the band
 # on the 282-lot print), beside the signature confirmation B0.3 uses
 EXTENSION_BAND_LIMIT = False
+# Phase 1.5 candidate (FIND p.8): keep a P-zone band only where it "sits on an
+# HVN or on the shelf next to an LVN" of the overnight profile (18:00 to the
+# zone's anchor); a lone P-zone in air is not his trade
+PZONE_NODE_SNAP = False
+PZONE_NODE_TOLERANCE = Decimal("5")
 BIGTRADES_NY = 100
 BIGTRADES_LONDON = 75
 BIG_PRINT_POINTS = Decimal("2")
@@ -3011,13 +3049,15 @@ def _expected_plays(entry: Mapping[str, Any]) -> set[str]:
     return {PLAY_OF_BRANCH[branch] for branch in branch_alternatives(entry.get("branch")) if branch in PLAY_OF_BRANCH}
 
 
-def match_entry(market, episodes, entry, *, strict_points: Decimal = REPLAY_LEVEL_TOLERANCE) -> dict[str, Any]:
+def match_entry(market, episodes, entry, *, strict_points: Decimal | None = None) -> dict[str, Any]:
     """Does any episode produce this narrated entry, on this side, at this time?
 
     Where the post prints a fill the comparison is entry price to fill price.
     Where the post narrates the trade without printing a fill, the comparison is
     our reference level to the level the post names.
     """
+    if strict_points is None:
+        strict_points = REPLAY_LEVEL_TOLERANCE  # read at call time so a rescan override reaches it
     window = _printed_window_for(market, entry)
     want_ns = None if window is None else window[0]
     price = entry.get("price")

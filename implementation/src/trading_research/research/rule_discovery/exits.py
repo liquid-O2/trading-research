@@ -36,8 +36,12 @@ from trading_research.research.contracts.types import (
     QuoteBatch,
 )
 
-POLICIES = ("E0", "E1", "E2", "E3", "E4")
-POLICY_EXPIRY_MINUTES = {"E0": 60, "E1": 30, "E2": 120, "E3": None, "E4": None}
+# E5 (2026-09-17): the authors' own management, the entry's stop and objective
+# held to the source deadline or the account day's close with no expiry and no
+# stop movement (Jumbo holds to the objective or the session; Green Bird to the
+# opposing liquidity); the 30/60/120-minute expiries are study conventions
+POLICIES = ("E0", "E1", "E2", "E3", "E4", "E5")
+POLICY_EXPIRY_MINUTES = {"E0": 60, "E1": 30, "E2": 120, "E3": None, "E4": None, "E5": None}
 MINUTE_NS = 60_000_000_000
 DEFAULT_ROUND_TRIP = COMMISSION_SIDE * 2
 TICK_MAGNITUDE = Decimal("30000")

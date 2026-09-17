@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 from collections import Counter
 from datetime import datetime, timezone
+import tempfile
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -25,7 +26,7 @@ from trading_research.research.rule_discovery.source_adapters.member import scan
 from trading_research.research.rule_discovery.source_adapters.saint import replay_example as saint_replay
 from trading_research.research.rule_discovery.source_adapters.saint import scan_b02 as saint_scan
 
-WORK_DIR = Path("/workspace/implementation/reports/research-work/P15-16A/_work_r3")
+WORK_DIR = Path(tempfile.gettempdir()) / "p15_16a_gate_out"  # test output, kept out of the evidence tree
 ET = ZoneInfo("America/New_York")
 FAMILIES = {
     "SAINT-AMT": {

@@ -179,7 +179,9 @@ def derived_quantity(stop_points: Decimal | None) -> Decimal | None:
     return RISK_DOLLARS / (stop_points * MNQ_POINT_VALUE)
 
 
-def limit_ladder(entry: Decimal, target: Decimal, side: str, spacing: Decimal = LADDER_SPACING) -> list[Decimal]:
+def limit_ladder(entry: Decimal, target: Decimal, side: str, spacing: Decimal | None = None) -> list[Decimal]:
+    if spacing is None:
+        spacing = LADDER_SPACING  # read at call time so a rescan override reaches it
     if entry is None or target is None or spacing <= 0:
         return []
     step = spacing if sign(side) * (target - entry) > 0 else -spacing
@@ -770,7 +772,7 @@ def sweep_cycles(
     end: int,
     box_low: Decimal | None = None,
     box_high: Decimal | None = None,
-    max_cycles: int = MAX_CYCLES_PER_LEVEL,
+    max_cycles: int | None = None,
 ) -> list[dict[str, Any]]:
     """Every sweep of ``level`` and the five-minute close that failed it.
 
@@ -783,6 +785,8 @@ def sweep_cycles(
     failure does not arrive inside ``FAIL_WINDOW_BARS`` is recorded as ``held``
     -- the breakout the author calls continuation.
     """
+    if max_cycles is None:
+        max_cycles = MAX_CYCLES_PER_LEVEL  # read at call time so a rescan override reaches it
     grid = five_minute_grid(market)
     stamps = sorted(t for t in grid if begin <= t < end)
     cycles: list[dict[str, Any]] = []
@@ -3252,9 +3256,11 @@ def match_entry(
     episodes: Sequence[Mapping[str, Any]],
     entry: Mapping[str, Any],
     *,
-    strict_points: Decimal = LEVEL_TOLERANCE,
+    strict_points: Decimal | None = None,
 ) -> dict[str, Any]:
     """Does any episode produce this printed entry, on this side, at this time?"""
+    if strict_points is None:
+        strict_points = LEVEL_TOLERANCE  # read at call time so a rescan override reaches it
     window = _printed_window_for(market, entry)
     want_ns = None if window is None else window[0]
     price = entry.get("price")

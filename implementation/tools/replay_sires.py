@@ -265,55 +265,22 @@ def break_stop_fills(rows: list[dict], level: Decimal, side: str, *, max_breaks:
     """The stop entry through a level from the inside (K2345 p.7, the
     microbalance; NYAM p.9, the third retest of the support band failing), one
     tick beyond, on every break after price has re-entered; and the single
-    retest of the broken level from the other side (TRAP pp.6-7: "wait for a
-    breakout of the intraday range, then wait again for price to come back and
-    retest it"): the retest bar's extreme, its close and the next open."""
+    retest of the broken level from the other side (TRAP pp.6-7): the retest
+    bar's extreme, its close and the next open. The cycle rule is the shared
+    ``source_adapters.break_retest.break_retest_cycles``."""
+    from trading_research.research.rule_discovery.source_adapters.break_retest import break_retest_cycles
+
     out = []
-    n = 0
-    i = 0
-    while i < len(rows) and n < max_breaks:
-        bar = rows[i]
-        inside_before = i == 0 or ((rows[i - 1]["C"] <= level) if side == "long" else (rows[i - 1]["C"] >= level))
-        through = (bar["H"] > level) if side == "long" else (bar["L"] < level)
-        if not (inside_before and through):
-            i += 1
-            continue
+    for n, cycle in enumerate(break_retest_cycles(rows, level, side, max_breaks=max_breaks, retest_window=retest_window)):
         trig = level + STOP_BEYOND if side == "long" else level - STOP_BEYOND
-        out.append({"mode": "break_stop", "entry": trig, "at": bar["end"], "cycle": n})
-        # the retest: after the break, price first leaves the level (fifteen
-        # points or more away: "wait again for price to come back", TRAP p.6),
-        # then the first bar that comes back within fifteen points of it from
-        # the broken side without closing back through it
-        # (a retest needs a real departure -- twenty-five points, half the
-        # spacing of his intraday levels -- and each new departure allows one
-        # more retest; 2026-08-10 retests the broken 29,740 at 19:0x and again
-        # at 19:47 after the 19:23 low, and the second is the ticket)
-        departed = False
-        retests = 0
-        for j in range(i + 1, min(len(rows), i + 1 + retest_window)):
-            b = rows[j]
-            back_through = (b["C"] < level - FAIL_MARGIN) if side == "long" else (b["C"] > level + FAIL_MARGIN)
-            if back_through:
-                break
-            away = (b["H"] >= level + RETEST_INSIDE * 12) if side == "long" else (b["L"] <= level - RETEST_INSIDE * 12)
-            if away:
-                departed = True
-            near = departed and ((b["L"] <= level + RETEST_INSIDE * 7) if side == "long" else (b["H"] >= level - RETEST_INSIDE * 7))
-            if near:
-                extreme = b["L"] if side == "long" else b["H"]
-                out.append({"mode": "break_retest_extreme", "entry": extreme, "at": b["end"], "cycle": n, "retest": retests})
-                out.append({"mode": "break_retest_close", "entry": b["C"], "at": b["end"], "cycle": n, "retest": retests})
-                if j + 1 < len(rows):
-                    out.append({"mode": "break_retest_next_open", "entry": rows[j + 1]["O"], "at": rows[j + 1]["start"] + MINUTE, "cycle": n, "retest": retests})
-                retests += 1
-                departed = False
-                if retests >= 3:
-                    break
-        n += 1
-        # the next break needs a re-entry: a close back on the inside
-        i += 1
-        while i < len(rows) and not ((rows[i]["C"] <= level) if side == "long" else (rows[i]["C"] >= level)):
-            i += 1
+        out.append({"mode": "break_stop", "entry": trig, "at": cycle["break"]["end"], "cycle": n})
+        for r in cycle["retests"]:
+            b = r["bar"]
+            out.append({"mode": "break_retest_extreme", "entry": r["extreme"], "at": b["end"], "cycle": n, "retest": r["retest"]})
+            out.append({"mode": "break_retest_close", "entry": b["C"], "at": b["end"], "cycle": n, "retest": r["retest"]})
+            nxt = r.get("next_bar")
+            if nxt is not None:
+                out.append({"mode": "break_retest_next_open", "entry": nxt["O"], "at": nxt["start"] + MINUTE, "cycle": n, "retest": r["retest"]})
     return out
 
 

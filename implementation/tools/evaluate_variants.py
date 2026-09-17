@@ -179,12 +179,15 @@ def merge_rescans(sessions: list[dict], rescans: dict[str, Path]) -> list[dict]:
 
 
 def main(argv=None) -> int:
+    global BASELINE
     parser = argparse.ArgumentParser()
     parser.add_argument("--rows", type=Path, required=True, help="the baseline run's rows.jsonl (B0.3 plus its selection variants)")
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--families", default="JJ-TBR,GB-FAIL")
     parser.add_argument("--rescan", action="append", default=[], help="name=path/to/rows.jsonl of a rescan candidate's run (repeatable)")
+    parser.add_argument("--baseline", default=BASELINE, help="the variant every other variant is judged against (B0.3 for selection and rescan runs, E0 for the exit runs)")
     args = parser.parse_args(argv)
+    BASELINE = args.baseline
     sessions = load_sessions(args.rows)
     if not sessions:
         raise SystemExit("no session lines in the rows file")
@@ -193,7 +196,11 @@ def main(argv=None) -> int:
     names = sorted({v for s in sessions for v in s["variants"]} - {BASELINE})
     report = {}
     for family in args.families.split(","):
-        applicable = [v for v in names if v.startswith(family.split("-")[0])]
+        # a family's candidates carry its prefix (JJ-..., GB-...); a policy that
+        # applies to every family (the exit policies E1..E4) carries the
+        # family's stats in its session lines instead
+        prefix = family.split("-")[0]
+        applicable = [v for v in names if v.startswith(prefix) or any(family in (s["variants"].get(v) or {}) for s in sessions[:200])]
         report[family] = evaluate(sessions, family, applicable)
         print(json.dumps({"family": family, "variants": len(applicable), "sessions": report[family]["baseline_sessions"]}))
     args.out.mkdir(parents=True, exist_ok=True)

@@ -171,7 +171,7 @@ def select_session_trades(
     *,
     bars: Sequence[Mapping[str, Any]],
     clock: tuple[int, int] | None = None,
-    max_entries: int = MAX_ENTRIES_PER_SESSION,
+    max_entries: int | None = None,
     stop_after_target: bool = True,
     reenter_same_line: bool = False,
     edge_first: bool = False,
@@ -204,6 +204,8 @@ def select_session_trades(
     Two modes of the same failure at the same reference are one opportunity: the
     earlier decision wins and the other is recorded as ``duplicate_of``.
     """
+    if max_entries is None:
+        max_entries = MAX_ENTRIES_PER_SESSION  # read at call time so a rescan override reaches it
     rows = []
     for episode in episodes:
         if episode.get("research_verdict") != "pass":

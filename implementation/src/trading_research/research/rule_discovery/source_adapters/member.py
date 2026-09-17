@@ -260,6 +260,11 @@ from trading_research.research.rule_discovery.source_adapters.b02_saint_track im
 REACTION_TICKS = 4
 CONFLUENCE_TICKS = 2
 HVN_RADIUS = 2
+# K10 pp.6-7: the minor HVN belongs to the "higher-timeframe profile". On the
+# ES tape of his K10 session (2026-08-03) the prior single day traded below
+# both of his pairs; the composite of the prior ten sessions carries minor
+# nodes at 7,558-7,561 and 7,543-7,547, where his pairs sit.
+HTF_SESSIONS = 10
 TARGET_R = _D("1.5")
 
 RULES = {
@@ -327,18 +332,27 @@ def _look_left_hvns(market):
     if fx.get("hvns") is not None:
         return [dict(r) for r in fx["hvns"]]
     try:
-        prior = market.prior("day")
-        if not prior.get("sessions"):
+        from trading_research.research.method_pack.profile_nodes import composite
+        from trading_research.research.rule_discovery.source_adapters.session_levels import prior_sessions
+
+        spans = prior_sessions(market, HTF_SESSIONS)
+        payloads = []
+        for span in spans:
+            win = span.get("window")
+            if win is not None:
+                payloads.append(win.profile(win.start, win.end))
+        profile = composite(payloads)
+        if profile is None:
             return []
-        win = prior["sessions"][-1]["window"]
-        profile = win.profile(win.start, win.end)
-        levels = {r["price"]: r["total_volume"] for r in profile["rows"]}
+        levels = {dec(r["price"]): dec(r["total_volume"]) for r in profile["rows"]}
+        known_at = max(int(s.get("known_at") or 0) for s in spans) or int(getattr(market, "start", 0))
+        parent = f"composite:{len(payloads)}"
         nodes = []
         for price, volume in levels.items():
             if volume <= 0:
                 continue
             if all(volume > levels.get(price + B02_Q * i, _D(0)) for i in range(-HVN_RADIUS, HVN_RADIUS + 1) if i):
-                nodes.append({"price": price, "id": f"hvn:{price}", "known_at": profile.get("known_at"), "parent": profile.get("profile_id") or profile.get("id")})
+                nodes.append({"price": price, "id": f"hvn:{price}", "known_at": known_at, "parent": parent})
         return nodes
     except Exception:
         return []

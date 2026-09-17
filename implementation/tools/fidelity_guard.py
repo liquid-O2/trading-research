@@ -34,7 +34,7 @@ def run(cmd: list[str], env_src: str) -> None:
     proc = subprocess.run(cmd, cwd=str(WORKTREE / "implementation"), env={**dict(__import__("os").environ), "PYTHONPATH": env_src}, capture_output=True, text=True)
     if proc.returncode != 0:
         sys.stderr.write(proc.stdout[-3000:] + proc.stderr[-3000:])
-        raise SystemExit(f"replay failed: {' '.join(cmd)}")
+        raise SystemExit(f"replay failed (exit {proc.returncode}): {' '.join(cmd)}\n--- stderr tail ---\n{(proc.stderr or '')[-3000:]}")
 
 
 def collect(out: Path) -> dict[str, dict]:
