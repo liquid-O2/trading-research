@@ -94,8 +94,15 @@ def prior_day_profile(market) -> dict | None:
         sessions = prior.get("sessions") if isinstance(prior, dict) else None
         if not sessions:
             return None
-        win = sessions[-1]["window"]
-        payload = win.profile(win.at("09:30"), win.at("16:00"), ".70")
+        from datetime import date as _date
+
+        from trading_research.research.method_pack.empirical_market import clock
+
+        last = sessions[-1]
+        win = last["window"]
+        day = last.get("day")
+        day = _date.fromisoformat(str(day)) if not isinstance(day, _date) else day
+        payload = win.profile(int(clock(day, "09:30")), int(clock(day, "16:00")))
         return payload if payload and payload.get("poc") is not None else None
     except Exception:
         return None

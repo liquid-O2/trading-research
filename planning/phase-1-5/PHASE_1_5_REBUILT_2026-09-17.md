@@ -45,6 +45,15 @@ The breadth stays inside the contract: at most 24 rescan candidates a family and
 4. Rescan candidates (expensive, few): one queue on the machine, sequential jobs, each writing its own run root; worktrees separate the code of each family so a change to one scanner cannot touch another.
 5. Refinement and the single combination per family; the trial ledger; P15-20 release with the fidelity pin as part of the release evidence.
 
+## Order across phases (2026-09-17, 20:30)
+
+The first grading fit and the population baselines settle the order: the executed lists of all three families are the admitted pool traded blindly (Jumbo +68, Green Bird +3.5, Sires +4.7 points a session before costs, at 6 to 17 trades a session), and no cap or ordering of the pool recovers the authors' one to three trades. What separates their trades from the pool is what they read beside the level: the volume profile and its nodes, the delta at the level, the aggression at the level, the memory of the level, the room to the next major level. Those are the Phase 3 objects. So Phase 3 is built alongside the Phase 1.5 queue, not after Phase 2, and Phase 2 is fitted on it:
+
+1. Phase 1.5 rescan and selection candidates run as an unattended queue and are judged by the fold tool; results land in the report as they finish.
+2. The shared object layer (`implementation/tools/grading_features.py`): profiles and nodes (from the framework's own profile payloads), delta (footprints), aggression boxes (the box table, done), memory, location, room. It serves every family the same way, so an object one author uses is tested as a confluence filter or a grading feature for another (the user's request of 2026-09-17: Jumbo and Green Bird read profiles and delta for their levels too).
+3. Grading (Phase 2) is re-fitted on the object layer per family, at the authors' density, leave-one-day-out; the ticket recall at density is the number that says whether the object layer holds what they grade on.
+4. Cross-strategy candidates are one declared axis ("confluence"): a family's entry gated by another family's object (an aggression box at the Judas sweep, a prior-day node at the Green Bird box), evaluated exactly like any other candidate, with recall reported beside the score.
+
 ## Phase 2, re-aimed
 
 Phase 2 is the grading layer: what makes the author take one of the ten to forty admitted opportunities. The first fit (fidelity-round8 REPORT section 11) shows the levels-and-time features carry part of Jumbo's choice and none of Green Bird's; the next feature families are the Refill decomposition (memory, construction, location, flow) computed at order level, and the Phase 3 level objects (profiles, delta bands, aggression clusters). Phase 2 experts are fitted per fold and compared against the same executed-list baseline, at the author's density.
