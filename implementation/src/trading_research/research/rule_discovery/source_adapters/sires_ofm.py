@@ -32,6 +32,7 @@ and named as such; everything else is his sequence.
 """
 from __future__ import annotations
 
+from bisect import bisect_left
 from decimal import Decimal
 from typing import Any, Iterable, Mapping
 
@@ -59,11 +60,20 @@ def _d(value) -> Decimal:
     return value if isinstance(value, Decimal) else Decimal(str(value))
 
 
+def _known(bar: Mapping[str, Any]) -> int:
+    """When a bar is known complete: its ``known_at`` where the bar type has one (range bars), else its end."""
+    return int(bar.get("known_at") or bar["end"])
+
+
 def ofm_sequences(bars: list[Mapping[str, Any]], boxes: Iterable[Mapping[str, Any]], *, session_open: int, session_end: int) -> list[dict[str, Any]]:
     """Every catalyst that completes release, failure and retest inside the
     session, with each stage's time, in the order the stages complete. Bars are
     one-minute rows (start, end, O, H, L, C); boxes are rows of the box table
     (lo, hi, aggressor, known_at, n_orders, contracts, id)."""
+    # a bar counts once it is known complete: a one-minute bar at its end, a
+    # range bar when the next bar opens (``known_at``); an incomplete last
+    # range bar is not read
+    bars = [b for b in bars if b.get("complete", True)]
     starts = [int(b["start"]) for b in bars]
     out = []
     for box in boxes:
@@ -77,8 +87,8 @@ def ofm_sequences(bars: list[Mapping[str, Any]], boxes: Iterable[Mapping[str, An
         up = aggressor == BUY  # buyers squeeze up; their failure is traded short
         side = "short" if up else "long"
         begin = max(known, session_open)
-        i = next((k for k, s in enumerate(starts) if s >= begin), None)
-        if i is None:
+        i = bisect_left(starts, begin)
+        if i >= len(bars):
             continue
         # release: price beyond the box by RELEASE_POINTS in the aggressors' direction
         release_i = None
@@ -112,7 +122,7 @@ def ofm_sequences(bars: list[Mapping[str, Any]], boxes: Iterable[Mapping[str, An
         if failure_i is None:
             continue
         # retest: price returns to the box from the failure side and does not close back through it
-        failure_end = int(bars[failure_i]["end"])
+        failure_end = _known(bars[failure_i])
         retest_i = None
         for k in range(failure_i + 1, len(bars)):
             bar = bars[k]
@@ -137,11 +147,13 @@ def ofm_sequences(bars: list[Mapping[str, Any]], boxes: Iterable[Mapping[str, An
                 "contracts": int(box.get("contracts") or 0),
                 "side": side,
                 "catalyst_at": known,
-                "release_at": int(bars[release_i]["end"]),
+                "release_at": _known(bars[release_i]),
                 "squeeze_extreme": extreme,
                 "failure_at": failure_end,
                 "retest_index": retest_i,
-                "retest_at": int(bars[retest_i]["end"]),
+                "retest_at": _known(bars[retest_i]),
+                "retest_bar": bars[retest_i],
+                "bars_after_retest": bars[retest_i + 1 : retest_i + 4],
             }
         )
     out.sort(key=lambda s: s["retest_at"])
@@ -152,23 +164,20 @@ def ofm_fills(bars: list[Mapping[str, Any]], sequence: Mapping[str, Any]) -> lis
     """The two entries the source gives for one completed sequence, each with
     his stop. ``passive`` rests at the box's failure-side edge and is filled by
     the retest itself (p.14); ``aggressive`` rests one tick beyond the retest
-    bar's wick and is filled only if the next bars trade through it (p.12)."""
+    bar's wick once that bar is complete and is filled only if one of the next
+    bars trades through it (p.12). ``bars`` is kept for callers of the first
+    version; the sequence carries its own retest bar and the bars after it."""
     side = sequence["side"]
     lo, hi = sequence["box_lo"], sequence["box_hi"]
-    k = int(sequence["retest_index"])
-    retest = bars[k]
+    retest = sequence["retest_bar"]
     fills = []
     if side == "short":
-        edge, beyond_box = lo, hi + TICK
-        fills.append({"mode": "ofm_passive", "entry": edge, "at": int(retest["end"]), "stop": beyond_box})
-        trigger = retest["L"] - TICK
-        wick_stop = retest["H"] + TICK
+        fills.append({"mode": "ofm_passive", "entry": lo, "at": int(retest["end"]), "stop": hi + TICK})
+        trigger, wick_stop = retest["L"] - TICK, retest["H"] + TICK
     else:
-        edge, beyond_box = hi, lo - TICK
-        fills.append({"mode": "ofm_passive", "entry": edge, "at": int(retest["end"]), "stop": beyond_box})
-        trigger = retest["H"] + TICK
-        wick_stop = retest["L"] - TICK
-    for nxt in bars[k + 1 : k + 4]:
+        fills.append({"mode": "ofm_passive", "entry": hi, "at": int(retest["end"]), "stop": lo - TICK})
+        trigger, wick_stop = retest["H"] + TICK, retest["L"] - TICK
+    for nxt in sequence["bars_after_retest"]:
         hit = (nxt["L"] <= trigger) if side == "short" else (nxt["H"] >= trigger)
         if hit:
             fills.append({"mode": "ofm_aggressive", "entry": trigger, "at": int(nxt["end"]), "stop": wick_stop})

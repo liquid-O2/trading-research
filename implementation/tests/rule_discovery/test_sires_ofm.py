@@ -52,3 +52,22 @@ def test_no_release_no_failure_or_a_reclaim_before_the_retest_is_no_sequence():
 def test_a_box_both_sides_built_is_not_a_squeeze():
     bars = _bars(FAILED_SQUEEZE)
     assert ofm.ofm_sequences(bars, [{**BOX, "aggressor": "AB"}], session_open=0, session_end=10 * MIN) == []
+
+
+def test_range_bars_hold_forty_ticks_and_invent_no_price():
+    import numpy as np
+
+    from trading_research.research.method_pack.trade_tape import range_bars
+
+    # 100 -> 110 in quarter-point steps (exactly forty ticks), then one more tick, then down twelve points
+    up = [100 + 0.25 * i for i in range(41)]
+    px = np.array(up + [110.25] + [110.25 - 0.25 * i for i in range(1, 49)])
+    t = np.arange(len(px), dtype=np.int64) * 1_000
+    size = np.ones(len(px), dtype=np.int64)
+    sign = np.where(np.arange(len(px)) % 2 == 0, 1, -1).astype(np.int8)
+    bars = range_bars(t, px, size, sign, ticks=40)
+    assert [(float(b["O"]), float(b["H"]), float(b["L"]), float(b["C"])) for b in bars[:2]] == [(100.0, 110.0, 100.0, 110.0), (110.25, 110.25, 100.25, 100.25)]
+    assert all(b["H"] - b["L"] <= 10 for b in bars)
+    assert sum(b["V"] for b in bars) == len(px) and all(b["V"] == b["buy_volume"] + b["sell_volume"] for b in bars)
+    # a bar is known complete when the next one opens; the last bar of a tape is not complete
+    assert bars[0]["known_at"] == bars[1]["start"] and bars[-1]["complete"] is False and bars[-1]["known_at"] is None
