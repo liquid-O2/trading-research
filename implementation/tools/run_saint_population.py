@@ -118,7 +118,16 @@ def main(argv=None) -> int:
     args = parser.parse_args(argv)
     pop = _module("run_jj_gb_population")
     overrides = None if not args.scanner_overrides else json.loads(args.scanner_overrides)
-    dates = args.dates.split(",") if args.dates else pop.population_dates()
+    if args.dates:
+        dates = [item.strip() for item in args.dates.split(",") if item.strip()]
+    else:
+        # the same calendar the Jumbo/Green Bird and Sires populations run on
+        from trading_research.research.method_pack import historical_runner as hr
+        from trading_research.research.rule_discovery.baseline import PHASE1_RUN
+        from trading_research.research.rule_discovery.run_baseline_repair import evaluation_dates
+
+        registry, _manifest = hr.load_registry(PHASE1_RUN, check_software=False)
+        dates = [str(d) for d in evaluation_dates(registry)]
     if args.limit:
         dates = dates[: args.limit]
     args.out.mkdir(parents=True, exist_ok=True)
