@@ -863,11 +863,17 @@ def _scan_continuation_or_trapped(market, branch, balance, bars):
                 "alignment_ok": align_ok,
                 "retest_aggression": retest_aggression,
             }
+            # He sells AT the retest ("we got that retest right here ... and we
+            # shorted", TRAP p.7), so whether the level then holds for fifteen
+            # minutes is the trade's outcome, not a condition of taking it: as a
+            # gate it admitted only trades that were not stopped in their first
+            # fifteen minutes (68% wins on the first population, 2026-09-18).
+            # ``held_retest`` stays on the episode as that outcome. The tape's
+            # aggression at the retest decides normal against half size (p.9),
+            # so it is recorded (``retest_aggression``), not required.
             if branch == "trapped_buyers_retest":
                 conf_operands["trap_delta_at_extreme"] = trap_delta
-                require = ("confirm_at", "held_retest", "arrival_ok", "alignment_ok")
-            else:
-                require = ("confirm_at", "held_retest", "arrival_ok", "alignment_ok")
+            require = ("confirm_at", "arrival_ok", "alignment_ok")
             conf = stage_from("confirmation", confirm_at, conf_operands, require=require)
             # The fill is the retest bar's CLOSE, the first price known once the
             # retest exists. Until 2026-09-18 it was the retest's extreme, a
@@ -1043,6 +1049,7 @@ def _scan_failed_auction(market, balance, bars):
                 ret = row
                 break
         return_held = False
+        held_known_at = None
         if ret is not None:
             held_n = 0
             deadline = int(ret.get("end") or 0) + 15 * 60_000_000_000
@@ -1056,11 +1063,16 @@ def _scan_failed_auction(market, balance, bars):
                     continue
                 if dec(balance["low"]) < dec(row["C"]) < dec(balance["high"]):
                     held_n += 1
+                    if held_n == 5:
+                        # the hold is five closes back inside the balance AFTER the return
+                        # bar: the trade is decided when the fifth is known, not at the
+                        # return (until 2026-09-18 the decision was dated at the return bar)
+                        held_known_at = known
                 else:
                     held_n = 0
                     break
             return_held = held_n >= 5
-        confirm_at = int(ret.get("known_at") or ret["end"]) if ret and return_held else None
+        confirm_at = int(held_known_at) if ret and return_held else None
         trig = stage_from(
             "trigger",
             int(drive.get("known_at") or drive["end"]),
