@@ -155,3 +155,34 @@ def range_bars(t, px, size, sign, *, ticks: int = 40, tick: float = 0.25) -> lis
             }
         )
     return out
+
+
+def aggressive_orders(t, px, size, sign):
+    """The aggressor ORDERS of a tape: fills that share an event timestamp and
+    an aggressor side are one order (the trade file is per fill; the authors'
+    30-100 lot bubbles exist only after this grouping). Returns arrays
+    (t, sign, lots, low, high) in time order; unsided fills are dropped."""
+    keep = sign != 0
+    t, px, size, sign = t[keep], px[keep], size[keep], sign[keep]
+    if len(t) == 0:
+        return t, sign, size, px, px
+    key_change = np.r_[True, (t[1:] != t[:-1]) | (sign[1:] != sign[:-1])]
+    idx = np.flatnonzero(key_change)
+    lots = np.add.reduceat(size, idx)
+    low = np.minimum.reduceat(px, idx)
+    high = np.maximum.reduceat(px, idx)
+    return t[idx], sign[idx], lots, low, high
+
+
+def big_order_mask(order_t, lots, *, quantile: float = 0.995, lookback_s: int = 3600, floor: int = 20):
+    """True where an order's size is in the top ``1 - quantile`` of the
+    aggressor orders of the trailing ``lookback_s`` seconds (the order itself
+    excluded, at least fifty orders in the window) and at least ``floor``: the
+    author sizes his bubbles "with the session's volume" (BIG p.3). The same
+    rule the box table is built with (tools/sires_levels_fit.adaptive_big)."""
+    import pandas as pd
+
+    series = pd.Series(np.asarray(lots, dtype=float), index=pd.to_datetime(np.asarray(order_t), unit="ns"))
+    roll = series.rolling(f"{int(lookback_s)}s", closed="left", min_periods=50).quantile(quantile)
+    threshold = np.maximum(roll.fillna(float(floor)).to_numpy(), float(floor))
+    return np.asarray(lots) >= threshold
