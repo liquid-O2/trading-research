@@ -322,6 +322,12 @@ RANGE_BINS = (
 )
 SINGLE_BREAK_MIN_BIN = Decimal("0.3")
 LEVEL_COINCIDENCE = Decimal("5")
+# the resting stop beyond the swept extreme (the extension band's limit fills)
+# and beyond a band's far edge (the give-back fill); a separate constant so a
+# rescan on the coincidence tolerance does not move the stops (2026-09-18:
+# the first "coincide8" candidate moved both and its +7.0 a session could not
+# be attributed)
+STOP_BEYOND_EXTREME = Decimal("5")
 #: FITTED, shared with the Green Bird spike turn: the share of a tagging bar's
 #: own range it must close back from the extreme it made for the turn to be
 #: tradeable. See green_b02.SPIKE_GIVE_BACK for the tickets it was fitted on.
@@ -1662,7 +1668,7 @@ def _scan_extension_reaction(market) -> tuple[list[dict[str, Any]], list[dict[st
                 if label == "band_far_limit" and not reached_far:
                     continue
                 touch_end = int(touch.get("known_at") or touch["end"])
-                limit_stop = (extreme - LEVEL_COINCIDENCE) if side == "long" else (extreme + LEVEL_COINCIDENCE)
+                limit_stop = (extreme - STOP_BEYOND_EXTREME) if side == "long" else (extreme + STOP_BEYOND_EXTREME)
                 limit_stages = [dict(s) for s in stages]
                 for s in limit_stages:
                     if s["stage"] == "confirmation":
@@ -1715,7 +1721,7 @@ def _spike_turn(market, *, level: Decimal, side: str, bar: Mapping[str, Any], en
     entry = _d(following[0].get("O"))
     if entry is None:
         return None
-    stop = (hi + LEVEL_COINCIDENCE) if side == "short" else (lo - LEVEL_COINCIDENCE)
+    stop = (hi + STOP_BEYOND_EXTREME) if side == "short" else (lo - STOP_BEYOND_EXTREME)
     return {"entry": entry, "at": int(following[0].get("known_at") or following[0].get("end")), "stop": stop, "give_back": give_back / span}
 
 
