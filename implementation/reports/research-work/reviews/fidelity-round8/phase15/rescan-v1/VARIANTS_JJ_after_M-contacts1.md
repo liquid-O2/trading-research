@@ -6,10 +6,18 @@ baseline sessions 1742; years 2020-2026; test folds 2022, 2023, 2024, 2025, 2026
 
 | variant | sessions | baseline mean | variant mean | mean diff | 2022 diff (p Holm) | 2023 diff (p Holm) | 2024 diff (p Holm) | 2025 diff (p Holm) | 2026 diff (p Holm) |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| JJ-M-contacts1 | 1742 | 67.654 | 67.654 | 0.0 | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted |
+| GB-anyadds | 1742 | 67.654 | 67.654 | 0.0 | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted |
+| GB-line1 | 1742 | 67.654 | 67.654 | 0.0 | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted |
+| GB-noadds | 1742 | 67.654 | 67.654 | 0.0 | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted |
+| GB-noflips | 1742 | 67.654 | 67.654 | 0.0 | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted |
+| GB-noreenter | 1742 | 67.654 | 67.654 | 0.0 | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted |
+| GB-rt1 | 1742 | 67.654 | 67.654 | 0.0 | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted |
+| GB-rt2 | 1742 | 67.654 | 67.654 | 0.0 | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted |
+| GB-rt3 | 1742 | 67.654 | 67.654 | 0.0 | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted | 0.0 (1.0) not_promoted |
+| JJ-M-contacts1 | 1742 | 67.654 | 64.981 | -2.672 | -1.912 (1.0) worse | -1.614 (1.0) worse | -1.424 (1.0) worse | -2.261 (1.0) worse | -8.105 (1.0) worse |
 | JJ-line1 | 1742 | 67.654 | 23.72 | -43.934 | -46.35 (1.0) worse | -37.118 (1.0) worse | -42.056 (1.0) worse | -50.459 (1.0) worse | -66.296 (1.0) worse |
 | JJ-noadds | 1742 | 67.654 | 26.584 | -41.069 | -39.262 (1.0) worse | -32.251 (1.0) worse | -39.352 (1.0) worse | -43.031 (1.0) worse | -77.326 (1.0) worse |
-| JJ-noflips | 1742 | 67.654 | 68.767 | 1.113 | 4.994 (1.0) not_promoted | -0.24 (1.0) worse | 1.976 (1.0) not_promoted | 10.771 (0.2686) not_promoted | -13.106 (1.0) worse |
+| JJ-noflips | 1742 | 67.654 | 68.767 | 1.113 | 4.994 (1.0) not_promoted | -0.24 (1.0) worse | 1.976 (1.0) not_promoted | 10.771 (0.5074) not_promoted | -13.106 (1.0) worse |
 | JJ-rt1 | 1742 | 67.654 | 18.36 | -49.293 | -52.715 (1.0) worse | -41.5 (1.0) worse | -42.173 (1.0) worse | -55.015 (1.0) worse | -94.128 (1.0) worse |
 | JJ-rt2 | 1742 | 67.654 | 31.034 | -36.619 | -36.988 (1.0) worse | -30.141 (1.0) worse | -32.081 (1.0) worse | -37.133 (1.0) worse | -67.275 (1.0) worse |
 | JJ-rt3 | 1742 | 67.654 | 42.342 | -25.311 | -28.017 (1.0) worse | -20.154 (1.0) worse | -21.4 (1.0) worse | -30.03 (1.0) worse | -41.106 (1.0) worse |
