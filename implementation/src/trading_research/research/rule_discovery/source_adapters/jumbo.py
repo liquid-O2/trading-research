@@ -526,7 +526,10 @@ def box_geometry(market, kind: str) -> dict[str, Any] | None:
     if kind == "ny":
         start, end = _at(market, "06:00"), _at(market, "09:00")
     elif kind == "london":
-        start, end = _at(market, LONDON_BOX[0], -1), _at(market, LONDON_BOX[1])
+        if (_as_day(market) or date.min) >= LONDON_LATE_BOX_FROM:
+            start, end = _at(market, LONDON_LATE_BOX[0]), _at(market, LONDON_LATE_BOX[1])
+        else:
+            start, end = _at(market, LONDON_BOX[0], -1), _at(market, LONDON_BOX[1])
     else:
         return None
     bars = _bars(market, start, end, 60)
@@ -565,21 +568,14 @@ def box_geometry(market, kind: str) -> dict[str, Any] | None:
 # 06:00-09:30 gives exactly those three prices; 2026-05-15 prints 29,283.00 /
 # 29,152.00 against the owned 29,283.50 / 29,152.50. No other window on a
 # half-hour grid over the three days before comes within five points.
-#
-# London, 2026-06-05 ("London range exhaustion (1.33-1.66) longs", JR p.50): the
-# printed range is about 30,224 / 30,161 with the -1.66 line some ten points
-# under the session low 30,062.00. The overnight box (20:00-03:00: 30,264.00 /
-# 30,052.25) is not that range; the value area of the SAME three and a half
-# hours before the open, 23:30-03:00, is 30,224.50 / 30,158.75 and puts his
-# 30,066.50 buy inside its -1.33/-1.66 band (30,071.3 to 30,049.6). One chart,
-# read off its pixels: the window is the New York layer's by analogy.
-VALUE_RANGE_WINDOW = {"ny_value": (("06:00", 0), ("09:30", 0)), "london_value": (("23:30", -1), ("03:00", 0))}
+VALUE_RANGE_WINDOW = {"ny_value": (("06:00", 0), ("09:30", 0))}
 VALUE_RANGE_ACTION = ("09:30", "16:00")
-#: "the author trades a level whenever it is tested" (level_contacts): on the
-#: value layer every distinct test of a line after the break is an opportunity
-#: (2026-05-15: the +0.33 at 12:46 and the value high at 12:55 are late tests
-#: of lines the morning had crossed many times); the bound is a safety cap
-VALUE_RANGE_MAX_CONTACTS = 12
+#: a value line is tested on his two New York clocks, the morning ("cycle 2 from
+#: there to 12:00") and the afternoon (2026-05-15, "NY PM ... quick 80 points
+#: afternoon": the +0.33 at 12:46 and the value high at 12:55 are the afternoon's
+#: tests of lines the morning had crossed many times); MAX_CONTACTS_PER_LEVEL
+#: distinct tests of a line in each, not a dozen a day
+VALUE_RANGE_SEGMENTS = (("09:30", "12:00"), ("12:00", "16:00"))
 
 
 def _value_range_geometry(market, kind: str) -> dict[str, Any] | None:
@@ -672,8 +668,21 @@ ASIA_LIQUIDITY = ("18:00", "00:05")
 # closes at 03:00 (08:00 London): his printed R-Hi / R-Lo on 2025-10-06, 10-07
 # and 10-08 reproduce the 20:00-03:00 range within 1.5 points on both edges and
 # reproduce no 02:00-03:00 window (coordinator tape check 2026-09-17).
-LONDON_BOX = ("20:00", "03:00")
-LONDON_TRADE = ("03:00", "07:00")
+# The London box CLOSES AT 02:00 ET (source pass 2026-09-18): on 2025-10-08 his LOW line is
+# the 20:00-02:00 low 25,027.50 and the 02:45 wick goes through it (to 03:00 the low is
+# 25,026.25); the dotted vertical and the blue circles on HIGH and LOW sit at 02:00 (JR
+# pp.63-64); SDRange+ prints "Session 3: 02:00" (JR p.16); his 2026-06-12 sells are at 01:41
+# and 02:33 ET. On 2025-10-06, 10-07 and 10-13 the 20:00-02:00 and 20:00-03:00 ranges are the
+# same, which is why the 03:00 reading passed the first check.
+LONDON_BOX = ("20:00", "02:00")
+LONDON_TRADE = ("02:00", "07:00")
+# By June 2026 the box he draws is under an hour long (JR p.47, 2026-06-12: R-Hi 29,542.5 /
+# R-Lo 29,374.5 against the tape's 29,541.25 / 29,375.00 for any start from 01:03 to 01:23
+# and an end at 02:00; JR p.50, 2026-06-05: about 30,224 / 30,161 read off the chart against
+# 30,228.25 / 30,163.00). The chart of 06-12 begins at 01:15 ET; the start is known only to
+# that twenty-minute bracket. From the month of "testing the new NT studies" (2026-05-15).
+LONDON_LATE_BOX = ("01:15", "02:00")
+LONDON_LATE_BOX_FROM = date(2026, 5, 1)
 
 # P-zones and EVRange: the author's tools are proprietary; the printed frames
 # are reproduced by percentile bands of the raw-point excursion from the 09:00
@@ -1085,6 +1094,11 @@ def _session_excursion(market, span: Mapping[str, Any], window: tuple[str, str])
     return result
 
 
+def minimum_average(highs: Sequence[Decimal], lows: Sequence[Decimal]) -> Decimal:
+    """SessionStat's "Minimum Average": the mean, over the sample, of each session's smaller excursion."""
+    return sum(min(h, l) for h, l in zip(highs, lows)) / Decimal(len(highs))
+
+
 def sessionstat_envelope(market, window: tuple[str, str] = ("09:00", "12:00")) -> dict[str, Any] | None:
     """J13: the SessionStat envelope, computed rather than treated as injected.
 
@@ -1136,7 +1150,11 @@ def sessionstat_envelope(market, window: tuple[str, str] = ("09:00", "12:00")) -
         "high_median": _median(highs),
         "low_mean": _mean(lows),
         "low_median": _median(lows),
-        "minimum_average": min(_mean(highs), _mean(lows)),
+        # "It's the minimum average range if the 9-12 session" (JR p.68). His three printed tables put it
+        # well under BOTH side averages (40.74 against 74.53 / 65.55; 67.25 against 140.66 / 118.95; about
+        # 37.1 against 75.3 / 100.8), which the smaller of the two means can never be: it is the mean of
+        # each session's SMALLER excursion, the swing "that falls short from highs and lows" (SS p.3)
+        "minimum_average": minimum_average(highs, lows),
         "expansion_0_5_high": _mean(highs) * Decimal("1.5"),
         "expansion_0_5_low": _mean(lows) * Decimal("1.5"),
     }
@@ -1232,8 +1250,9 @@ def _absorption(bar: Mapping[str, Any], avg_volume: Decimal | None) -> bool | No
     if span <= 0:
         span = TICK
     body = abs(close - open_) / span
-    vol_ok = True if avg_volume is None else _d(bar.get("V") or bar.get("volume") or 0) >= Decimal("1.5") * avg_volume
-    return body <= Decimal("0.6") and vol_ok
+    if avg_volume is None:
+        return None  # no fourteen bars to measure against: the read is unknown, never a pass
+    return body <= Decimal("0.6") and _d(bar.get("V") or bar.get("volume") or 0) >= Decimal("1.5") * avg_volume
 
 
 def _avg_volume(market, before_ns: int, seconds: int = 60, n: int = 14) -> Decimal | None:
@@ -2472,24 +2491,21 @@ def _scan_eq_branch(market, branch: str) -> tuple[list[dict[str, Any]], list[dic
 
 def _value_layer_episodes(market, context: Mapping[str, Any], branch: str) -> list[dict[str, Any]]:
     """The same two plays on the value-area layer of the range (see
-    VALUE_RANGE_WINDOW). ``extension_reaction`` (and London's ``other_session``,
-    2026-06-05 "London range exhaustion (1.33-1.66) longs"): once a value edge has broken,
+    VALUE_RANGE_WINDOW). ``extension_reaction``: once a value edge has broken,
     a resting limit at the 1.33 and at the 1.66 projection beyond it, every
     contact its own opportunity (2026-05-19 buys the -1.66 at 10:22 and again
     at 10:51, "the -1.33/-1.66 band with absorption prints"). ``single_purged``:
     on the expansion day the broken value edge and the 0.33-0.66 projections
     are retested WITH the break (2026-05-15 buys the +0.33 retest at 12:46 and
     the reclaim from the value high at 12:55, "quick 80 points afternoon")."""
-    london = branch == "other_session"
-    box = box_geometry(market, "london_value" if london else "ny_value")
+    box = box_geometry(market, "ny_value")
     if box is None:
         return []
-    action = LONDON_TRADE if london else VALUE_RANGE_ACTION
-    begin = max(_at(market, action[0]), int(box["known_at"]))
-    end = min(_at(market, action[1]), int(market.end))
+    begin = max(_at(market, VALUE_RANGE_ACTION[0]), int(box["known_at"]))
+    end = min(_at(market, VALUE_RANGE_ACTION[1]), int(market.end))
     ladder, low, high = box["ladder"], box["low"], box["high"]
     episodes: list[dict[str, Any]] = []
-    if branch in ("extension_reaction", "other_session"):
+    if branch == "extension_reaction":
         for name, side, edge in (("plus_1.33", "short", high), ("plus_1.66", "short", high), ("minus_1.33", "long", low), ("minus_1.66", "long", low)):
             first_break = _first_break(market, begin=begin, end=end, edge=edge, side=side)
             if first_break is None:
@@ -2504,10 +2520,15 @@ def _value_layer_episodes(market, context: Mapping[str, Any], branch: str) -> li
                 continue
             objective = _trend_objective(box, side)
             for kind, level in [("value_high" if side == "long" else "value_low", edge)] + [(f"value_{name}", ladder[name]) for name in names]:
-                contacts = level_contacts(market, level=level, begin=int(broke["end"]), end=end, departure=box["width"] / 10, max_contacts=VALUE_RANGE_MAX_CONTACTS)
-                for index, contact in enumerate(contacts):
-                    fills = _contact_fills(market, level=level, side=side, contact=contact, end=end, placed_at=int(broke["end"]))
-                    episodes.extend(_line_episodes(market, context, branch=branch, side=side, level=level, kind=kind, location_kind="line_test", reference=box, trigger=contact, fills=fills, objective=objective, begin=begin, cycle=index))
+                index = 0
+                for seg_from, seg_to in VALUE_RANGE_SEGMENTS:
+                    start, stop_at = max(int(broke["end"]), _at(market, seg_from)), min(end, _at(market, seg_to))
+                    if start >= stop_at:
+                        continue
+                    for contact in level_contacts(market, level=level, begin=start, end=stop_at, departure=box["width"] / 10):
+                        fills = _contact_fills(market, level=level, side=side, contact=contact, end=stop_at, placed_at=start)
+                        episodes.extend(_line_episodes(market, context, branch=branch, side=side, level=level, kind=kind, location_kind="line_test", reference=box, trigger=contact, fills=fills, objective=objective, begin=begin, cycle=index))
+                        index += 1
     return episodes
 
 
@@ -2554,7 +2575,6 @@ def _scan_other_session(market) -> tuple[list[dict[str, Any]], list[dict[str, An
             for index, contact in enumerate(level_contacts(market, level=line, begin=int(first_break["start"]), end=end, departure=london["width"] / 10)):
                 fills = _contact_fills(market, level=line, side=side, contact=contact, end=end, placed_at=int(first_break["start"]))
                 episodes.extend(_line_episodes(market, context, branch="other_session", side=side, level=line, kind=name, location_kind="exhaustion_projection", reference=london, trigger=contact, fills=fills, objective=objective_ladder(london, side), begin=begin, cycle=index))
-    episodes.extend(_value_layer_episodes(market, context, "other_session"))
     # the drawn liquidity levels, live from 02:00
     for row in _sweep_levels(context, exclude_box=True):
         if not (row["kind"].startswith("prth_") or row["kind"][:2] in {"d1", "d2", "d3"}):
@@ -2691,10 +2711,27 @@ SINGLE_EXTENDED_END = "10:30"
 SINGLE_PURGED_END = "12:00"
 NY_ROUND_TRIPS = 8
 LONDON_ROUND_TRIPS = 4
+# THE TRADED LIST. He takes one trade on 24 of his 27 ticket days and two on the other
+# three; the list the caps above produced took twelve to fourteen (2026-09-18). His own
+# words set the clocks and the counts:
+#   "always terminating my trading session before 10am" (TBR p.8); "nothing beats being
+#   done in the first 20 mins of market open" (JR p.41); "one and done on the early fade of
+#   the range, highest probability of the time segment" (JR p.54); "done for the day at
+#   open" (JR p.38);
+#   after a failed setup "Exit and Observe ... Switch to Alternative Models ... or look for
+#   opportunities in PM session" (TBR p.37), a re-entry "is considered to be plausible" on
+#   expansive days (TBR p.24);
+#   the extension band is the business of the hours after 10:00 (TBR p.21), the afternoon
+#   of the day the morning consolidated (TBR p.36).
+# Each window is (from, to, round trips): an attempt and one re-entry in the morning and in
+# London, one trade in each later clock; a paid objective ends its own window. An add is
+# size on the open thesis, not a setup, and is left to the sizing layer.
+NY_TRADE_WINDOWS = (("09:00", "10:15", 2), ("10:15", "12:00", 1), ("12:00", "16:00", 1))
+LONDON_TRADE_WINDOWS = (("02:00", "07:00", 2),)
 MAX_PER_LINE = 2
 # the executed list's policy (Phase 1.5 selection axis: varied by the population runner)
 EDGE_FIRST = True
-EXECUTED_ALLOW_ADDS: bool | str = True
+EXECUTED_ALLOW_ADDS: bool | str = False
 EXECUTED_ALLOW_FLIPS = True
 # The 0.33/0.66 mean-reversal band is drawn on the author's charts from
 # December 2025 (audit §1.1: "the 'mean reversal' band, drawn from December
@@ -2789,15 +2826,19 @@ def selection_for(market, episodes, *, primary_play: str | None = None) -> dict[
     # framework admits, once (user instruction 2026-09-17: the list is per
     # play and small, not a cap on a crowd). The EXECUTED list beside it is
     # one position at a time with his adds and flips.
-    def segment(pool, clock, cap, open_candidates):
+    def segment(pool, clock, cap, open_candidates, trade_windows):
         if CANDIDATES_GATE_BY_PLAY:
             candidates = select_session_trades(pool, bars=bars, clock=clock, max_entries=cap, stop_after_target=False, edge_first=EDGE_FIRST, max_per_line=MAX_PER_LINE, one_position=False, reenter_same_line=CANDIDATES_REENTER_SAME_LINE)
         else:
             candidates = select_session_trades(open_candidates, bars=bars, clock=clock, max_entries=10**6, stop_after_target=False, edge_first=EDGE_FIRST, max_per_line=None, one_position=False, reenter_same_line=True)
-        candidates["executed"] = select_session_trades(pool, bars=bars, clock=clock, max_entries=cap, stop_after_target=False, edge_first=EDGE_FIRST, allow_adds=EXECUTED_ALLOW_ADDS, max_per_line=MAX_PER_LINE, allow_flips=EXECUTED_ALLOW_FLIPS)
+        candidates["executed"] = select_session_trades(
+            pool, bars=bars, clock=clock, max_entries=cap, stop_after_target=trade_windows is not None, edge_first=EDGE_FIRST, allow_adds=EXECUTED_ALLOW_ADDS,
+            max_per_line=MAX_PER_LINE, allow_flips=EXECUTED_ALLOW_FLIPS,
+            windows=None if trade_windows is None else [(_at(market, a), _at(market, b), n) for a, b, n in trade_windows],
+        )
         return candidates
-    london = segment([ep for ep in passing if ep.get("branch") == "other_session"], (_at(market, SEGMENTS["london"][0]), _at(market, SEGMENTS["london"][1])), LONDON_ROUND_TRIPS, [ep for ep in candidates_pool if ep.get("branch") == "other_session"])
-    ny = segment([ep for ep in passing if ep.get("branch") in branches], (_at(market, SEGMENTS["ny"][0]), _at(market, SEGMENTS["ny"][1])), NY_ROUND_TRIPS, [ep for ep in candidates_pool if ep.get("branch") != "other_session"])
+    london = segment([ep for ep in passing if ep.get("branch") == "other_session"], (_at(market, SEGMENTS["london"][0]), _at(market, SEGMENTS["london"][1])), LONDON_ROUND_TRIPS, [ep for ep in candidates_pool if ep.get("branch") == "other_session"], LONDON_TRADE_WINDOWS)
+    ny = segment([ep for ep in passing if ep.get("branch") in branches], (_at(market, SEGMENTS["ny"][0]), _at(market, SEGMENTS["ny"][1])), NY_ROUND_TRIPS, [ep for ep in candidates_pool if ep.get("branch") != "other_session"], NY_TRADE_WINDOWS)
     entries = list(london.get("entries") or []) + list(ny.get("entries") or [])
     entries.sort(key=lambda row: int(row.get("decision_at") or 0))
     executed = list(london["executed"].get("entries") or []) + list(ny["executed"].get("entries") or [])

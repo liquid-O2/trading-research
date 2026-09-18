@@ -26,6 +26,7 @@ def _module(name: str):
 
 v1 = _module("build_grading_dataset")
 gf = _module("grading_features")
+context = _module("day_context_features")
 
 from trading_research.research.rule_discovery.source_adapters import green_b02 as gb  # noqa: E402
 from trading_research.research.rule_discovery.source_adapters import jumbo as jj  # noqa: E402
@@ -100,7 +101,7 @@ def main(argv=None) -> int:
                 episodes.extend(e for e in gb.scan_b02(market, {"family": item, "branch": "all"})["episodes"] if e["research_verdict"] == "pass")
             read = gb.session_read(market)
             selection = gb.selection_for(market, episodes)
-        day_rows = augment(family, market, v1.rows_for(family, ex, entries, market, episodes, selection, read))
+        day_rows = context.context_rows(family, market, augment(family, market, v1.rows_for(family, ex, entries, market, episodes, selection, read)))
         rows.extend(day_rows)
         print(json.dumps({"id": ex["id"], "candidates": len(day_rows), "positives": sum(r["label"] for r in day_rows), "with_profile": sum(1 for r in day_rows if r.get("prior_day_poc_distance") is not None)}), flush=True)
     args.out.mkdir(parents=True, exist_ok=True)
