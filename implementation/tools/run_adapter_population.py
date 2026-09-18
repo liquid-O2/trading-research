@@ -121,6 +121,8 @@ def main(argv=None) -> int:
     parser.add_argument("--dates", default=None)
     parser.add_argument("--limit", type=int, default=None)
     parser.add_argument("--scanner-overrides", default=None, help="JSON {module.CONSTANT: value}, as run_jj_gb_population.py")
+    parser.add_argument("--recycle", type=int, default=20, help="sessions a worker serves before it is replaced: the adapters cache prior-session windows per process and a long-lived Member worker grew to 9 GB (2026-09-18)")
+    parser.add_argument("--skip-dates-file", type=Path, default=None, help="dates already finished by an earlier run of the same code (one per line); they are not re-run")
     parser.add_argument("--export-executed", action="store_true")
     parser.add_argument("--export-candidates", action="store_true")
     args = parser.parse_args(argv)
@@ -136,6 +138,9 @@ def main(argv=None) -> int:
 
         registry, _manifest = hr.load_registry(PHASE1_RUN, check_software=False)
         dates = [str(d) for d in evaluation_dates(registry)]
+    if args.skip_dates_file:
+        finished = {d.strip() for d in args.skip_dates_file.read_text().split() if d.strip()}
+        dates = [d for d in dates if d not in finished]
     if args.limit:
         dates = dates[: args.limit]
     args.out.mkdir(parents=True, exist_ok=True)
@@ -146,7 +151,7 @@ def main(argv=None) -> int:
     peak = 0
     done = 0
     with (args.out / "rows.jsonl").open("w") as sink:
-        with ProcessPoolExecutor(max_workers=max(1, args.workers)) as pool:
+        with ProcessPoolExecutor(max_workers=max(1, args.workers), max_tasks_per_child=max(1, args.recycle)) as pool:
             futures = {pool.submit(scan_one, ADAPTERS[args.family], day, overrides, args.export_executed, args.export_candidates): day for day in dates}
             for future in as_completed(futures):
                 day = futures[future]
