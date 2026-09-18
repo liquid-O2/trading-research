@@ -47,6 +47,10 @@ def _module(name: str):
     return module
 
 
+def _f(value):
+    return None if value is None else float(value)
+
+
 def _d(value):
     return None if value is None else Decimal(str(value))
 
@@ -80,7 +84,7 @@ def objective_for(boxes: list[dict], entry: Decimal, side: str, at_ns: int) -> D
     return best
 
 
-def scan_one(day: str, table_path: str, variants: list[dict], export_candidates: bool = False) -> dict:
+def scan_one(day: str, table_path: str, variants: list[dict], export_candidates: bool = False, export_executed: bool = False) -> dict:
     from trading_research.research.method_pack import historical_runner as hr
     from trading_research.research.method_pack.historical_features import HistoricalFeatures
     from trading_research.research.rule_discovery.baseline import PHASE1_RUN
@@ -152,13 +156,37 @@ def scan_one(day: str, table_path: str, variants: list[dict], export_candidates:
                 )
     pool.sort(key=lambda ep: ep["decision_at"])
     results = {}
+    executed_export: list[dict] = []
     for variant in [{"name": "B0.3", "overrides": {}}] + list(variants):
         policy = {**POLICY, **{k.split(".", 1)[1]: v for k, v in (variant.get("overrides") or {}).items() if k.startswith("policy.")}}
         executed = select_session_trades(pool, bars=rows, clock=(open_ns, end_ns), max_entries=policy["max_entries"], stop_after_target=False, reenter_same_line=policy["reenter_same_line"], allow_adds=policy["allow_adds"], max_per_line=policy["max_per_line"], allow_flips=policy["allow_flips"], edge_first=policy["edge_first"])
         stats = _POP.executed_points(executed)
         stats["n_candidates"] = len(pool)
         results[variant["name"]] = {"SIRES": stats}
+        if variant["name"] == "B0.3" and export_executed:
+            # the executed list in the shape run_exits_population.py consumes (the
+            # same fields as the Jumbo/Green Bird --export-executed rows)
+            executed_rows = []
+            for item in (executed or {}).get("entries") or []:
+                values = item.get("values") or {}
+                executed_rows.append(
+                    {
+                        "family": "SIRES",
+                        "branch": item.get("branch"),
+                        "side": item.get("side"),
+                        "decision_at": int(item["decision_at"]),
+                        "entry": _f(item.get("entry")),
+                        "stop": _f(item.get("stop")),
+                        "target": _f(item.get("target")),
+                        "candidate_id": item.get("candidate_id"),
+                        "mode": item.get("confirmation_mode") or values.get("confirmation_mode"),
+                        "outcome_e0": item.get("outcome"),
+                    }
+                )
+            executed_export = executed_rows
     out = {"date": day, "seconds": round(time.monotonic() - started, 2), "n_boxes": len(boxes), "n_candidates": len(pool), "variants": results, "reads": {}}
+    if export_executed:
+        out["executed"] = executed_export
     if export_candidates:
         # the admitted opportunities themselves (the grading study's candidate list)
         out["candidates"] = pool
@@ -173,6 +201,7 @@ def main(argv=None) -> int:
     parser.add_argument("--dates", default=None)
     parser.add_argument("--limit", type=int, default=None)
     parser.add_argument("--selection-variants", type=Path, default=None)
+    parser.add_argument("--export-executed", action="store_true", help="write each session's executed list (B0.3) into its session line, in the shape run_exits_population.py reads")
     parser.add_argument("--export-candidates", action="store_true", help="write each session's admitted candidate list into its session line (the grading study's rows)")
     args = parser.parse_args(argv)
     from trading_research.research.method_pack import historical_runner as hr
@@ -199,7 +228,7 @@ def main(argv=None) -> int:
     started = time.monotonic()
     with (args.out / "rows.jsonl").open("w") as sink:
         with ProcessPoolExecutor(max_workers=max(1, args.workers)) as pool:
-            futures = {pool.submit(scan_one, day, str(args.boxes), variants, args.export_candidates): day for day in dates}
+            futures = {pool.submit(scan_one, day, str(args.boxes), variants, args.export_candidates, args.export_executed): day for day in dates}
             done = 0
             for future in as_completed(futures):
                 day = futures[future]

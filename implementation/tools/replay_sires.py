@@ -150,12 +150,19 @@ def fills_after_failure(rows: list[dict], cycle: dict, level: Decimal, side: str
         return []
     out = []
     k = cycle["fail_index"]
-    out.append({"mode": "failure_close_1m", "entry": fail["C"], "at": fail["end"]})
+    # the failure's own invalidation: a tick beyond the sweep's extreme ("stop
+    # entry below the buyers", OFM p.14; 2026-07-10 10:24: SQ C 29,908.64,
+    # filled 29,909.75, stop seven ticks above). Until 2026-09-18 these fills
+    # carried no stop and the population rested it a tick beyond the box's far
+    # edge, which for a failure AT that edge is a one-tick stop inside the
+    # just-swept area (13 of 29 executed trades on three dated sessions).
+    extreme = cycle.get("extreme")
+    stop = None if extreme is None else ((extreme + STOP_BEYOND) if side == "short" else (extreme - STOP_BEYOND))
+    out.append({"mode": "failure_close_1m", "entry": fail["C"], "at": fail["end"], "stop": stop})
     # the resting stop AT the line, triggered as price comes back through it
-    # (2026-07-10 10:24: SQ C 29,908.64, filled 29,909.75, stop seven ticks above)
-    out.append({"mode": "stop_at_line", "entry": level, "at": fail["end"]})
+    out.append({"mode": "stop_at_line", "entry": level, "at": fail["end"], "stop": stop})
     if k + 1 < len(rows):
-        out.append({"mode": "next_bar_open", "entry": rows[k + 1]["O"], "at": rows[k + 1]["start"] + MINUTE})
+        out.append({"mode": "next_bar_open", "entry": rows[k + 1]["O"], "at": rows[k + 1]["start"] + MINUTE, "stop": stop})
     # the resting limit at the line, and at the failure box's near edge, filled
     # on the retest ("short on the retest of the failed squeeze", OFM p.7)
     near_edge = None
@@ -167,7 +174,7 @@ def fills_after_failure(rows: list[dict], cycle: dict, level: Decimal, side: str
         for bar in rows[k + 1 : k + 1 + horizon]:
             reached = (bar["H"] >= px - RETEST_INSIDE) if side == "short" else (bar["L"] <= px + RETEST_INSIDE)
             if reached:
-                out.append({"mode": label, "entry": px, "at": bar["end"]})
+                out.append({"mode": label, "entry": px, "at": bar["end"], "stop": stop})
                 break
             gone = (bar["C"] > level + FAIL_MARGIN * 4) if side == "short" else (bar["C"] < level - FAIL_MARGIN * 4)
             if gone:
