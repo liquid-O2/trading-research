@@ -317,11 +317,31 @@ def test_g11_selection_is_one_position_at_a_time_and_stops_after_a_full_objectiv
     first = episode(bars[0]["start"] - 1, "100", "90", "120")
     # Distinct prices, so the later setups are skipped for the reason under test
     # (the objective was reached) and not as near-duplicate fills of the first.
-    later = [episode(bars[0]["start"] + n, str(100 + 5 * n), "90", "120") for n in range(1, 5)]
+    later = [episode(bars[0]["start"] + n, str(100 + 4 * n), "90", "120") for n in range(1, 5)]
     result = select_session_trades([first] + later, bars=bars, clock=None, max_entries=3)
     assert result["n_entries"] == 1
     assert result["entries"][0]["outcome"] == "target"
     assert result["skipped"]["after_objective"] == 4
+
+
+def test_a_stop_or_target_on_the_wrong_side_of_the_entry_is_counted_and_never_traded():
+    """2026-09-18, Saint's population: a short at 8,803.75 with its 'target' at
+    8,823.00 was walked forward and scored a win on its first bar (1,615
+    trades). The shared selector refuses that geometry for every family."""
+    day = DAY
+    bars = [bar(day, "10:00", 100, 130, 95, 110), bar(day, "10:01", 110, 112, 108, 110)]
+
+    def episode(at, side, entry, stop, target):
+        return {"research_verdict": "pass", "branch": "nyam_box", "side": side, "decision_at": at, "values": {"cycle": at}, "reference": {"id": f"r{at}"},
+                "geometry": {"entry": Decimal(entry), "stop": Decimal(stop), "target": None if target is None else Decimal(target)}}
+
+    start = bars[0]["start"]
+    wrong_target = episode(start - 3, "short", "100", "105", "120")
+    wrong_stop = episode(start - 2, "long", "100", "104", "120")
+    sound = episode(start - 1, "long", "100", "90", "120")
+    result = select_session_trades([wrong_target, wrong_stop, sound], bars=bars, clock=None, max_entries=5)
+    assert result["skipped"]["invalid_geometry"] == 2
+    assert [(row["side"], row["entry"]) for row in result["entries"]] == [("long", Decimal("100"))]
 
 
 def test_open_candidate_list_contains_the_capped_one_and_leaves_the_executed_list_alone(monkeypatch):
