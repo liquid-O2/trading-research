@@ -48,6 +48,7 @@ def exits_one(day: str, executed: list[dict]) -> dict:
     start_ns, end_ns = account_day_window(__import__("datetime").date.fromisoformat(day))
     flatten = int(end_ns) - MINUTE_NS
     frozen = []
+    items = []
     for i, item in enumerate(executed):
         if item.get("entry") is None or item.get("stop") is None:
             continue
@@ -67,6 +68,7 @@ def exits_one(day: str, executed: list[dict]) -> dict:
                     account_day=day,
                 )
             )
+            items.append(item)
         except Exception:
             continue
     if not frozen:
@@ -75,8 +77,34 @@ def exits_one(day: str, executed: list[dict]) -> dict:
     tape = exits.compact_from_view(view)
     paired = exits.evaluate_entries_compact(frozen, tape)
     per_policy: dict = defaultdict(lambda: defaultdict(lambda: {"net_points": 0.0, "n_executed": 0, "wins": 0, "losses": 0, "open": 0, "ambiguous": 0, "n_round_trips": 0}))
-    for entry, pair in zip(frozen, paired):
+    records = []
+    for entry, item, pair in zip(frozen, items, paired):
         rec = exits.paired_to_json(pair, entry)
+        records.append(
+            {
+                "kind": "entry",
+                "date": day,
+                "entry_id": entry.entry_id,
+                "family": entry.family,
+                "branch": entry.branch,
+                "play": item.get("play"),
+                "mode": item.get("mode"),
+                "reference": item.get("reference"),
+                "side": item["side"],
+                "entry": str(entry.fill_price),
+                "decision_at": int(entry.fill_at_ns),
+                "stop": str(entry.initial_stop),
+                "target": None if entry.objective is None else str(entry.objective),
+                "policies": {
+                    policy_id: (
+                        {"net_points": result.get("net_points"), "reason": result.get("reason"), "exit_at_ns": result.get("exit_at_ns"), "complete": bool(result.get("complete"))}
+                        if isinstance(result, dict)
+                        else {"net_points": None, "reason": None, "exit_at_ns": None, "complete": False}
+                    )
+                    for policy_id, result in (rec.get("records") or {}).items()
+                },
+            }
+        )
         for policy_id, result in (rec.get("records") or {}).items():
             agg = per_policy[policy_id][entry.family]
             agg["n_executed"] += 1
@@ -91,7 +119,7 @@ def exits_one(day: str, executed: list[dict]) -> dict:
             elif points < 0:
                 agg["losses"] += 1
     variants = {policy: {family: {**agg, "net_points": round(agg["net_points"], 2)} for family, agg in fams.items()} for policy, fams in per_policy.items()}
-    return {"date": day, "entries": len(frozen), "variants": variants, "record_sample": exits.paired_to_json(paired[0], frozen[0]) if paired else None, "seconds": round(time.monotonic() - started, 1)}
+    return {"date": day, "entries": len(frozen), "variants": variants, "records": records, "record_sample": exits.paired_to_json(paired[0], frozen[0]) if paired else None, "seconds": round(time.monotonic() - started, 1)}
 
 
 def main(argv=None) -> int:
@@ -119,12 +147,14 @@ def main(argv=None) -> int:
                     failures.append({"date": day, "error": f"{type(exc).__name__}: {exc}"})
                     continue
                 done += 1
+                for record in result.get("records") or []:
+                    sink.write(json.dumps(record, default=str) + "\n")
                 sink.write(json.dumps({"kind": "session", "date": result["date"], "reads": {}, "variants": result["variants"], "entries": result["entries"]}, default=str) + "\n")
                 if done == 1 and result.get("record_sample"):
                     (args.out / "RECORD_SAMPLE.json").write_text(json.dumps(result["record_sample"], indent=1, default=str) + "\n")
                 if done % 25 == 0:
                     print(json.dumps({"event": "progress", "done": done, "of": len(sessions), "elapsed_s": round(time.monotonic() - started, 1)}), flush=True)
-    summary = {"schema": "exits-on-b03-executed-v1", "sessions": done, "failures": failures, "wall_seconds": round(time.monotonic() - started, 1)}
+    summary = {"schema": "exits-on-b03-executed-v2", "sessions": done, "failures": failures, "wall_seconds": round(time.monotonic() - started, 1)}
     (args.out / "EXITS.json").write_text(json.dumps(summary, indent=1) + "\n")
     print(json.dumps({"event": "exits_complete", **summary}))
     return 0
