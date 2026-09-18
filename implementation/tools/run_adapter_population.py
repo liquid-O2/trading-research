@@ -70,6 +70,7 @@ def scan_one(adapter: str, day: str, overrides: dict | None, export_executed: bo
     episodes = document.get("episodes") or []
     counts = defaultdict(lambda: {"episodes": 0, "pass": 0, "fail": 0, "unknown": 0})
     pool = []
+    violations: list[dict] = []
     for ep in episodes:
         branch = str(ep.get("branch"))
         verdict = str(ep.get("research_verdict"))
@@ -77,6 +78,13 @@ def scan_one(adapter: str, day: str, overrides: dict | None, export_executed: bo
         counts[branch][verdict if verdict in ("pass", "fail", "unknown") else "unknown"] += 1
         if verdict != "pass":
             continue
+        # no fact of a taken trade may be dated after its decision (2026-09-18: Member's
+        # level was defined by bars after the trade, 93% wins); counted per session and
+        # a population with any violation is not a result
+        decided = int(ep.get("decision_at") or 0)
+        late = [str(st.get("stage")) for st in ep.get("stages") or [] if st.get("at_ns") and int(st["at_ns"]) > decided]
+        if late:
+            violations.append({"session": day, "branch": branch, "decision_at": decided, "late_stages": late})
         geometry = ep.get("geometry") or {}
         values = dict(ep.get("values") or {})
         level = geometry.get("break_level") or values.get("reference_px") or values.get("level") or geometry.get("entry")
@@ -99,6 +107,7 @@ def scan_one(adapter: str, day: str, overrides: dict | None, export_executed: bo
         "peak_rss_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * 1024,
         "n_episodes": len(episodes),
         "counts": {k: dict(v) for k, v in counts.items()},
+        "causality_violations": violations,
         "variants": {"B0.3": {FAMILY: stats}},
         "reads": {},
     }
@@ -150,6 +159,7 @@ def main(argv=None) -> int:
     branch_counts = defaultdict(lambda: {"episodes": 0, "pass": 0, "fail": 0, "unknown": 0})
     peak = 0
     done = 0
+    causality: list[dict] = []
     with (args.out / "rows.jsonl").open("w") as sink:
         with ProcessPoolExecutor(max_workers=max(1, args.workers), max_tasks_per_child=max(1, args.recycle)) as pool:
             futures = {pool.submit(scan_one, ADAPTERS[args.family], day, overrides, args.export_executed, args.export_candidates): day for day in dates}
@@ -172,6 +182,7 @@ def main(argv=None) -> int:
                 totals["open"] += stats["open"]
                 totals["candidates"] += stats["n_candidates"]
                 totals["episodes"] += result["n_episodes"]
+                causality.extend(result.get("causality_violations") or [])
                 peak = max(peak, int(result.get("peak_rss_bytes") or 0))
                 for branch, c in result["counts"].items():
                     for k, v in c.items():
@@ -188,6 +199,8 @@ def main(argv=None) -> int:
         "workers": args.workers,
         "wall_seconds": round(time.monotonic() - started, 1),
         "peak_rss_bytes_worker": peak,
+        "causality_violations": len(causality),
+        "causality_detail": causality[:50],
         "policy": POLICY,
         "scanner_overrides": overrides,
         "per_session": {"episodes": round(totals["episodes"] / n, 2), "candidates": round(totals["candidates"] / n, 2), "trades": round(totals["trades"] / n, 2), "net_points": round(totals["net_points"] / n, 3), "win_rate": round(totals["wins"] / max(1, totals["wins"] + totals["losses"]), 3), "open": totals["open"]},
@@ -198,8 +211,8 @@ def main(argv=None) -> int:
     for branch, c in sorted(branch_counts.items()):
         lines.append(f"| {branch} | {c['episodes']} | {c['pass']} | {c['fail']} | {c['unknown']} | {c['pass'] / max(1, c['episodes']):.4f} |")
     (args.out / "POPULATION.md").write_text("\n".join(lines) + "\n")
-    print(json.dumps({"event": "population_complete", "dates": totals["sessions"], "failures": len(failures), "wall_s": summary["wall_seconds"]}))
-    return 0
+    print(json.dumps({"event": "population_complete", "dates": totals["sessions"], "failures": len(failures), "causality_violations": len(causality), "wall_s": summary["wall_seconds"]}))
+    return 0 if not causality else 2
 
 
 if __name__ == "__main__":

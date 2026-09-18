@@ -265,6 +265,8 @@ HVN_RADIUS = 2
 # both of his pairs; the composite of the prior ten sessions carries minor
 # nodes at 7,558-7,561 and 7,543-7,547, where his pairs sit.
 HTF_SESSIONS = 10
+#: the levels are pre-session work (K10 p.7); reactions known after this clock belong to the session being traded
+PRE_SESSION_CUTOFF = "09:00"
 TARGET_R = _D("1.5")
 
 RULES = {
@@ -308,9 +310,16 @@ def _look_left_reactions(market, side: str):
         if prior.get("sessions"):
             win = prior["sessions"][-1]["window"]
             rows.extend(win.bars(win.start, win.end, 300))
-        rows.extend(market_bars(market, getattr(market, "start", 0), getattr(market, "end", 0), 300))
+        # K10 p.7: "levels marked out from his own thesis building and profile
+        # framing, before a single order went out ... price had rejected from
+        # it before". The reactions are pre-session work: the prior session and
+        # the overnight up to PRE_SESSION_CUTOFF, never the session being traded
+        cutoff = market_at(market, PRE_SESSION_CUTOFF)
+        rows.extend(market_bars(market, getattr(market, "start", 0), cutoff, 300))
         qualified = []
         for reaction in pivots(rows):
+            if int(reaction.get("known_at") or 0) > cutoff:
+                continue
             after = [r for r in rows if r["start"] >= reaction["at"] and r["known_at"] <= reaction["known_at"]]
             if not after:
                 continue
@@ -436,9 +445,8 @@ def scan_member_branch_b02(market, branch: str) -> list[dict[str, Any]]:
                 decision_at=getattr(market, "end", None),
             )
         ]
-    start = market_at(market, "09:30") if getattr(market, "day", None) is not None else getattr(market, "start", 0)
     try:
-        start = market_at(market, "09:30")
+        start = market_at(market, PRE_SESSION_CUTOFF)  # his first K10 ticket is 09:25: the scan opens with the levels, not with the cash session
     except Exception:
         start = getattr(market, "start", 0)
     bars = market_bars(market, start, getattr(market, "end", start), 60)
@@ -459,7 +467,12 @@ def scan_member_branch_b02(market, branch: str) -> list[dict[str, Any]]:
     for pair in pairs:
         known = max(int(pair[0].get("known_at") or 0), int(pair[1].get("known_at") or 0))
         p_lo, p_hi = _band(pair)
-        touch = first_touch([b for b in bars if int(b.get("start") or 0) >= known], p_lo, p_hi)
+        # a touch is an ARRIVAL ("when price came back down to that level",
+        # K10 p.8): price sitting in the band when the scan opens is not one,
+        # so the pair arms only after a bar lies wholly outside its band
+        later = [b for b in bars if int(b.get("start") or 0) >= known]
+        armed_from = next((k for k, b in enumerate(later) if b.get("H") is not None and b.get("L") is not None and (dec(b["L"]) > p_hi or dec(b["H"]) < p_lo)), None)
+        touch = None if armed_from is None else first_touch(later[armed_from + 1 :], p_lo, p_hi)
         if touch is None:
             continue
         key = (int(touch.get("start") or 0), -known)
@@ -526,11 +539,17 @@ def scan_member_branch_b02(market, branch: str) -> list[dict[str, Any]]:
                 trigger=contact,
             )
         ]
-    after = [r for r in bars if int(r["start"]) >= int(contact["start"])]
-    observed = after[:5] or [contact]
+    # K10 pp.7-8: he acts "once the level actually printed the reaction", with
+    # the "stop above the high of the rejection": the entry is the reaction
+    # bar's close and the rejection is the touch through the reaction bar,
+    # nothing later. Until 2026-09-18 the entry was the touch bar's close, the
+    # stop sat beyond the extreme of the five bars AFTER the touch (it could
+    # not be hit in them) and the pass required the level to hold for fifteen
+    # more minutes: three uses of the future.
+    observed = [r for r in bars if int(contact["start"]) <= int(r["start"]) <= int(reaction_bar["start"])] or [contact]
     high = max(dec(r["H"]) for r in observed if r.get("H") is not None)
     low = min(dec(r["L"]) for r in observed if r.get("L") is not None)
-    entry = dec(contact.get("C") or px)
+    entry = dec(reaction_bar.get("C") or px)
     stop = high + B02_Q if side == "short" else low - B02_Q
     if fx.get("rejection_high") is not None and side == "short":
         high = dec(fx["rejection_high"])
@@ -543,7 +562,10 @@ def scan_member_branch_b02(market, branch: str) -> list[dict[str, Any]]:
     stop_ticks = (r_dist / B02_Q) if r_dist > 0 else _D("1")
     qty = (FIXED_RISK_USD / (stop_ticks * NQ_TICK_VALUE)) if stop_ticks > 0 else None
     stop_ok = stop > high if side == "short" else stop < low
-    held = reaction_held(bars, reaction_bar, px, side)
+    # the reaction IS the confirmation; whether the level then holds is the
+    # trade's outcome, recorded for study and never a condition of taking it
+    held_after = reaction_held(bars, reaction_bar, px, side)
+    held = True
     if fx.get("held") is not None:
         held = bool(fx["held"])
     conf = stage(
@@ -552,6 +574,7 @@ def scan_member_branch_b02(market, branch: str) -> list[dict[str, Any]]:
         int((reaction_bar or contact).get("known_at") or contact["end"]),
         {
             "held": held,
+            "outcome_held_15m_after": held_after,
             "kind": kind,
             "level_reason": kind,
             "flow_reason": "prior_reaction",
@@ -560,7 +583,7 @@ def scan_member_branch_b02(market, branch: str) -> list[dict[str, Any]]:
     risk = stage(
         "risk",
         "pass" if stop_ok else "fail",
-        int(contact.get("known_at") or contact["end"]),
+        int(reaction_bar.get("known_at") or reaction_bar["end"]),
         {
             "stop": str(stop),
             "rejection_high": str(high) if side == "short" else None,
@@ -574,7 +597,7 @@ def scan_member_branch_b02(market, branch: str) -> list[dict[str, Any]]:
     obj = stage(
         "objective",
         "pass",
-        int(contact.get("known_at") or contact["end"]),
+        int(reaction_bar.get("known_at") or reaction_bar["end"]),
         {
             "target_r": "1.5",
             "target": str(target),
@@ -583,7 +606,7 @@ def scan_member_branch_b02(market, branch: str) -> list[dict[str, Any]]:
     )
     stages = cascade_stages([ctx, ref, loc, trig, conf, risk, obj])
     verdict, failed, unknown = combine_verdict(stages)
-    decision = int(contact.get("known_at") or contact["end"])
+    decision = int(reaction_bar.get("known_at") or reaction_bar["end"])
     values = {
         "split_1245": False,
         "independent": independent,
