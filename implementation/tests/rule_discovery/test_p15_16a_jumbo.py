@@ -53,9 +53,10 @@ def _session(
     width = Decimal(str(box_high)) - Decimal(str(box_low))
     rows: list = []
     rows += flat_series(day, "18:00", 360, open_price, offset=-1)
-    rows += flat_series(day, "00:00", 120, open_price)
-    rows += [bar(day, "02:00", open_price, open_price + 10, open_price - 10, open_price)]
-    rows += flat_series(day, "02:01", 119, open_price)
+    # the London box closes at 02:00 (JR pp.16, 63-64) and from 2026 opens at 01:15 (JR p.47): its range is made at 01:30
+    rows += flat_series(day, "00:00", 90, open_price)
+    rows += [bar(day, "01:30", open_price, open_price + 10, open_price - 10, open_price)]
+    rows += flat_series(day, "01:31", 149, open_price)
     # the overnight low sits well below the box low, so a shallow poke at the
     # box edge cannot borrow another drawn level's coincidence
     rows += [bar(day, "04:00", open_price, open_price, box_low - 120, open_price)]

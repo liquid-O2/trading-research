@@ -43,3 +43,14 @@ def test_sister_index_reads_who_took_the_prior_extremes(monkeypatch):
     assert (read["nq_purged_prior_low"], read["es_purged_prior_low"], read["divergence_at_low"]) == (False, True, True)
     assert read["nq_overnight_pct"] == 1.0 and read["es_overnight_pct"] == 1.0 and read["nq_minus_es_overnight_pct"] == 0.0
     assert jc.sister_index(data_root=None, prior_window=(0, 10), overnight=(10, 20), nq_prior={}, nq_overnight={}) == {"available": False}
+
+
+def test_minimum_average_sits_under_both_side_averages_as_his_tables_print_it():
+    """JR p.69 prints Min Avg 40.74 under Exp 74.53 and Dist 65.55: the mean of each
+    session's smaller excursion, never the smaller of the two side means. Two sessions
+    worked by hand: excursions up 100 and 20, down 10 and 80; side means 60 and 45."""
+    from decimal import Decimal
+
+    from trading_research.research.rule_discovery.source_adapters import jumbo as jj
+
+    assert jj.minimum_average([Decimal(100), Decimal(20)], [Decimal(10), Decimal(80)]) == Decimal(15)
