@@ -192,7 +192,7 @@ def select_session_trades(
     one_position: bool = True,
     running_bucket_min: int | None = None,
     windows: Sequence[tuple[int, int, int]] | None = None,
-    objective_ends_session: bool = False,
+    objective_ends_session: bool | int | Decimal = False,
     trace: list | None = None,
     earliest_fill: bool = False,
 ) -> dict[str, Any]:
@@ -441,7 +441,12 @@ def select_session_trades(
         busy_side = str(episode.get("side"))
         busy_line = line_px
         if result["outcome"] == "target" and stop_after_target:
-            if window is None or objective_ends_session:
+            # ``objective_ends_session`` True: any paid objective ends the session; a number: only a paid
+            # objective of at least that many points does ("One clean 100 point trade. Lock out."), a smaller
+            # one ends its own window
+            reward = abs(target - entry) if target is not None else Decimal(0)
+            locks = objective_ends_session is True or (objective_ends_session not in (False, None) and reward >= Decimal(str(objective_ends_session)))
+            if window is None or locks:
                 finished = True
             else:
                 window_finished.add(window)

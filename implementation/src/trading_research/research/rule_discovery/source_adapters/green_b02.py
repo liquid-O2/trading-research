@@ -3010,6 +3010,16 @@ TRADED_MODES: tuple[str, ...] | None = (
 #: the open's own trigger is the one-minute spike and its turn ("9:30am manipulation below, reclaim, enter",
 #: GBp.40; 2026-08-31 09:33): that branch keeps its fills
 TRADED_MODES_EXEMPT = ("cash_open_reclaim_case",)
+#: "One clean 100 point trade. Lock out.": the New York day ends on a paid objective of at least this many
+#: points; a smaller paid objective ends only its own clock. False = never lock the day.
+LOCK_OUT_POINTS: Decimal | bool = Decimal("100")
+#: a paid objective ends the clock it was paid in
+WINDOW_ENDS_ON_OBJECTIVE = True
+#: PREMIUM AND DISCOUNT of the range traded so far: a short is taken in the upper part of it, a long in the
+#: lower ("For longs, I want a pullback into discount. Not an emotional entry because a green candle started
+#: running without me"; "mark off the 50% and there is your discount zone", GBp.25). The number is how far
+#: into its own half the entry must sit (0.5 = beyond the middle; None = no read). Known at the decision.
+TRADED_MIN_EXTREME: Decimal | None = None
 TRADE_WINDOWS = {
     "overnight": (("18:00", -1, "02:00", 0, 1), ("02:00", 0, "09:30", 0, 1)),
     "new_york": (("09:30", 0, "10:00", 0, 1), ("10:00", 0, "11:30", 0, 2), ("11:30", 0, "16:00", 0, 1)),
@@ -3033,6 +3043,20 @@ MAX_PER_LINE = 3
 #: list is the same either way. Read at call time.
 CANDIDATES_OPEN = True
 CANDIDATES_RUNNING_BUCKET_MIN = 15
+
+
+def _in_its_half(episode: Mapping[str, Any], bars: Sequence[Mapping[str, Any]]) -> bool:
+    """Is the entry in premium (short) or discount (long) of the range traded since the session opened,
+    by TRADED_MIN_EXTREME, on bars complete at the decision?"""
+    if TRADED_MIN_EXTREME is None:
+        return True
+    at, entry = int(episode.get("decision_at") or 0), _d((episode.get("geometry") or {}).get("entry"))
+    highs = [_d(r.get("H")) for r in bars if int(r.get("known_at") or r["end"]) <= at and r.get("H") is not None]
+    lows = [_d(r.get("L")) for r in bars if int(r.get("known_at") or r["end"]) <= at and r.get("L") is not None]
+    if entry is None or not highs or max(highs) <= min(lows):
+        return False
+    position = (entry - min(lows)) / (max(highs) - min(lows))
+    return (position if episode.get("side") == "short" else 1 - position) >= Decimal(str(TRADED_MIN_EXTREME))
 
 
 def _traded_fills(pool: Sequence[Mapping[str, Any]]) -> list[Mapping[str, Any]]:
@@ -3117,17 +3141,17 @@ def selection_for(market, episodes: Sequence[Mapping[str, Any]], *, primary_play
         else:
             result = select_session_trades(pool, bars=bars, clock=(start, end), max_entries=ROUND_TRIPS_PER_SEGMENT, stop_after_target=False, reenter_same_line=REENTER_SAME_LINE, max_per_line=MAX_PER_LINE, one_position=False)
         segments[name] = result
-        traded_pool.extend(_traded_fills([ep for ep in pool if start <= int(ep.get("decision_at") or 0) < end]))
+        traded_pool.extend(ep for ep in _traded_fills([ep for ep in pool if start <= int(ep.get("decision_at") or 0) < end]) if _in_its_half(ep, bars))
         entries.extend(result.get("entries") or [])
         candidates += int(result.get("n_candidates") or 0)
         fallbacks |= set(result.get("mode_preference_fallback") or [])
     # THE TRADED LIST runs on his clocks (TRADE_WINDOWS): the overnight shift keeps a lock-out per
     # clock (2026-07-29 sells the pocket at 22:04 and buys the London low at 04:00), the New York day
     # locks out after a paid objective ("One clean 100 point trade. Lock out.").
-    for shift, session_lock in (("overnight", False), ("new_york", True)):
+    for shift, session_lock in (("overnight", False), ("new_york", LOCK_OUT_POINTS)):
         spans = [(int(_at(market, a, a_off)), int(_at(market, b, b_off)), cap) for a, a_off, b, b_off, cap in TRADE_WINDOWS[shift]]
         result = select_session_trades(
-            traded_pool, bars=bars, clock=(spans[0][0], spans[-1][1]), max_entries=sum(cap for _a, _b, cap in spans), stop_after_target=True,
+            traded_pool, bars=bars, clock=(spans[0][0], spans[-1][1]), max_entries=sum(cap for _a, _b, cap in spans), stop_after_target=WINDOW_ENDS_ON_OBJECTIVE,
             reenter_same_line=REENTER_SAME_LINE, allow_adds=EXECUTED_ALLOW_ADDS, max_per_line=MAX_PER_LINE, allow_flips=EXECUTED_ALLOW_FLIPS,
             windows=spans, objective_ends_session=session_lock, earliest_fill=True,
         )
