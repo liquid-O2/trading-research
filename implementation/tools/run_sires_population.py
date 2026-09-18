@@ -64,7 +64,7 @@ def alive_boxes(table, session_open: int, session_end: int) -> list[dict]:
         consumed = None if row.consumed_at is None or row.consumed_at != row.consumed_at else int(row.consumed_at)
         if consumed is not None and consumed < session_open and int(row.known_at) < session_open:
             continue  # carried in and already consumed
-        out.append({"id": f"box:{int(row.known_at)}:{row.lo}:{row.hi}", "known_at": int(row.known_at), "consumed_at": consumed, "lo": _d(row.lo), "hi": _d(row.hi), "n_orders": int(row.n_orders), "contracts": int(row.contracts), "sides": row.sides})
+        out.append({"id": f"box:{int(row.known_at)}:{row.lo}:{row.hi}", "known_at": int(row.known_at), "consumed_at": consumed, "lo": _d(row.lo), "hi": _d(row.hi), "n_orders": int(row.n_orders), "contracts": int(row.contracts), "largest": int(row.largest), "sides": row.sides, "aggressor": row.aggressor})
     return out
 
 
