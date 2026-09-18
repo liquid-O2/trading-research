@@ -487,15 +487,20 @@ def _nwog_levels(market) -> dict[str, Any] | None:
     G7: the gap is a magnet and an objective ("close the whole trade when price
     hits NWOG"), never an entry reference. It is therefore carried only on the
     objective ladder.
+
+    It is the draw of the WEEK, not of Monday: his Tuesday 2026-09-08 chart
+    still draws both NWOG lines under price (p16_x18, p60_x130; context pass
+    C10), so the gap stays a level until it is filled -- until price has
+    traded at the Friday close since Sunday 18:00. ``dead_at`` is that moment
+    when it falls inside this session; a gap filled before the session opened
+    is no longer a level. Which Friday close his lines use (16:00 or 17:00) is
+    printed nowhere inside our tape: UNVERIFIED, the 16:00 session close of the
+    earlier code is kept (2026-08-14: 30,144.25 at 16:00, 30,154.00 at 16:59).
     """
     if market.day.weekday() > 4:
         return None
     monday = market.day - timedelta(days=market.day.weekday())
-    if (market.day - monday).days > 4:
-        return None
     sunday_open = clock(monday - timedelta(days=1), "18:00")
-    rows = _safe_bars(market, sunday_open, sunday_open + MINUTE)
-    open_px = _d(rows[0].get("O")) if rows else None
     friday_close = None
     try:
         prior = market.prior("week")
@@ -503,10 +508,29 @@ def _nwog_levels(market) -> dict[str, Any] | None:
         friday_close = _d((span or {}).get("close"))
     except Exception:
         friday_close = None
-    if open_px is None or friday_close is None:
+    if friday_close is None:
         return None
+    rows = _safe_bars(market, sunday_open, sunday_open + MINUTE)
+    open_px = _d(rows[0].get("O")) if rows else None
+    if open_px is None and int(market.start) > sunday_open and getattr(market, "data_root", None):
+        # from Tuesday on the session window does not reach back to Sunday:
+        # the week so far, on the same contract, from the one-minute bars
+        week = minute_span(market.data_root, market.instrument_id, sunday_open, int(market.start))
+        if week is None or not week["rows"] or week["other_rows"] or week["first_ns"] != sunday_open:
+            return None
+        if week["low"] <= friday_close <= week["high"]:
+            return None  # filled before this session opened
+        open_px = week["open"]
+    if open_px is None:
+        return None
+    dead_at = None
+    for row in _safe_bars(market, max(int(market.start), sunday_open + MINUTE), int(market.end)):
+        lo, hi = _d(row.get("L")), _d(row.get("H"))
+        if lo is not None and hi is not None and lo <= friday_close <= hi:
+            dead_at = int(row.get("known_at") or row.get("end"))
+            break
     lo, hi = sorted([open_px, friday_close])
-    return {"low": lo, "high": hi, "id": f"nwog:{market.instrument_id}:{monday}", "known_at": int(sunday_open)}
+    return {"low": lo, "high": hi, "id": f"nwog:{market.instrument_id}:{monday}", "known_at": int(sunday_open), "dead_at": dead_at, "friday_close": friday_close, "sunday_open": open_px}
 
 
 # ---------------------------------------------------------------------------
@@ -759,8 +783,8 @@ def objective_levels(market, refs: Sequence[Mapping[str, Any]]) -> list[dict[str
         out.append({"price": tdo, "label": "tdo", "known_at": int(_at(market, "00:00")) + MINUTE})
     nwog = _nwog_levels(market)
     if nwog is not None:
-        out.append({"price": nwog["low"], "label": "nwog_low", "known_at": nwog["known_at"]})
-        out.append({"price": nwog["high"], "label": "nwog_high", "known_at": nwog["known_at"]})
+        out.append({"price": nwog["low"], "label": "nwog_low", "known_at": nwog["known_at"], "dead_at": nwog["dead_at"]})
+        out.append({"price": nwog["high"], "label": "nwog_high", "known_at": nwog["known_at"], "dead_at": nwog["dead_at"]})
     return out
 
 
@@ -770,6 +794,8 @@ def next_drawn_level(levels: Sequence[Mapping[str, Any]], *, beyond: Decimal, si
         row
         for row in levels
         if int(row.get("known_at") or 0) <= int(known_by)
+        # a level that has been filled is no longer a draw (the weekly gap)
+        and not (row.get("dead_at") is not None and int(row["dead_at"]) <= int(known_by))
         and (row["price"] < beyond if side == "short" else row["price"] > beyond)
     ]
     if not candidates:

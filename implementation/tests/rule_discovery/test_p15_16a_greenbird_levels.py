@@ -75,3 +75,46 @@ def test_c2_rth_only_week_misses_his_line_and_a_fallback_is_recorded(monkeypatch
     assert week["scope"] == "rth_0930_1600"
     assert abs(week["high"] - Decimal("25360")) > Decimal("40"), week["high"]
     assert "weekly_candle_unavailable" in [row.get("reason") for row in omissions]
+
+
+def _tape_week_of_2025_07_27():
+    """Tape facts recomputed from the raw one-minute bars, not from the adapter:
+    the Sunday 18:00 open, the Friday 15:59 close and the first minute after the
+    open that traded at that close."""
+    import pandas as pd
+    import pyarrow.parquet as pq
+
+    frame = pq.read_table("/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2025.parquet").to_pandas()
+    frame.index = pd.to_datetime(frame["t"], unit="ms", utc=True).dt.tz_convert("America/New_York")
+    frame = frame.sort_index()
+    week = frame.loc["2025-07-27 18:00":"2025-08-01 16:59"]
+    friday_close = float(frame.loc["2025-07-25 15:59":"2025-07-25 15:59"]["c"].iloc[0])
+    filled = week[(week["l"] <= friday_close) & (week["h"] >= friday_close)]
+    return float(week["o"].iloc[0]), friday_close, filled.index[0]
+
+
+def test_c10_the_weekly_gap_is_a_level_all_week_until_it_is_filled():
+    """His Tuesday 2026-09-08 chart still draws both NWOG lines (p16_x18): the
+    gap is the draw of the week until it is filled. Native week of 2025-07-27:
+    on the raw bars the gap opens Sunday 18:00 and first trades at the Friday
+    close on Tuesday 07-29 at 15:39. So Monday and Tuesday carry it (Tuesday
+    with the minute it dies), and Wednesday no longer has it."""
+    sunday_open, friday_close, filled_at = _tape_week_of_2025_07_27()
+    assert str(filled_at)[:16] == "2025-07-29 15:39" and abs(sunday_open - friday_close) > 50
+    lo, hi = sorted([Decimal(str(sunday_open)), Decimal(str(friday_close))])
+
+    monday = gb._nwog_levels(load_source_market("2025-07-28"))
+    assert monday is not None and monday["dead_at"] is None
+
+    tuesday_market = load_source_market("2025-07-29")
+    tuesday = gb._nwog_levels(tuesday_market)
+    assert tuesday is not None, "the gap was dropped after Monday"
+    assert abs(tuesday["low"] - lo) <= Decimal("1") and abs(tuesday["high"] - hi) <= Decimal("1")
+    assert int(tuesday_market.at("15:39")) < tuesday["dead_at"] <= int(tuesday_market.at("15:41"))
+    # a rung that is dead at the decision is not offered as the next drawn level; before it dies it is
+    rung = {"price": tuesday["low"], "label": "nwog_low", "known_at": tuesday["known_at"], "dead_at": tuesday["dead_at"]}
+    beyond = tuesday["low"] + Decimal("500")
+    assert gb.next_drawn_level([rung], beyond=beyond, side="short", known_by=tuesday["dead_at"] - 1) is not None
+    assert gb.next_drawn_level([rung], beyond=beyond, side="short", known_by=tuesday["dead_at"]) is None
+
+    assert gb._nwog_levels(load_source_market("2025-07-30")) is None, "filled before Wednesday's session opened"
