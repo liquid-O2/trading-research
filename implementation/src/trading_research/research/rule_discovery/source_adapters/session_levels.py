@@ -236,3 +236,25 @@ def globex_prior_day(market) -> tuple[dict[str, Any] | None, list[dict[str, Any]
     span["known_at"] = int(clock(day, "17:00"))
     span["scope"] = "globex_day_1800_1700"
     return span, []
+
+
+def weekly_candle(market, weeks_back: int = 1) -> dict[str, Any] | None:
+    """The whole weekly candle ``weeks_back`` weeks before the session's week:
+    Sunday 18:00 open to Friday 17:00 close, on the session's own contract.
+
+    2025-11: the week of 11-16 made its high 25,361.25 on Monday at 03:57;
+    the RTH-only week says 25,310.00 and his chart prints PWH at about 25,360
+    (context pass C2). ``unavailable`` names why there is no candle: the bars
+    are not on disk, or the week traded (partly) on another contract.
+    ``weeks_back`` 0 is the current week so far and is used for its Sunday open.
+    """
+    data_root = getattr(market, "data_root", None)
+    monday = market.day - timedelta(days=market.day.weekday() + 7 * weeks_back)
+    start, end = clock(monday - timedelta(days=1), "18:00"), clock(monday + timedelta(days=4), "17:00")
+    out: dict[str, Any] = {"period_start": str(monday - timedelta(days=1)), "period_end": str(monday + timedelta(days=4)), "start": int(start), "known_at": int(end)}
+    span = minute_span(data_root, market.instrument_id, start, end) if data_root else None
+    if span is None:
+        return {**out, "unavailable": "one_minute_bars_not_on_disk"}
+    if span["other_rows"] or not span["rows"]:
+        return {**out, "unavailable": "week_not_wholly_on_this_contract"}
+    return {**out, **span}

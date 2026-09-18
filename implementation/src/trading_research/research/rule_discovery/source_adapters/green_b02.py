@@ -37,7 +37,7 @@ from trading_research.research.rule_discovery.source_adapters.enumeration import
     enumeration_scope,
     split_b02_overrides,
 )
-from trading_research.research.rule_discovery.source_adapters.session_levels import globex_prior_day, minute_span, prior_sessions
+from trading_research.research.rule_discovery.source_adapters.session_levels import globex_prior_day, minute_span, prior_sessions, weekly_candle
 from trading_research.research.rule_discovery.source_adapters.trade_selection import (
     branch_alternatives,
     MAX_ENTRIES_PER_SESSION,
@@ -441,7 +441,12 @@ def _prior_rth_window(market, *, reason: str) -> tuple[dict[str, Any] | None, li
     return out, [{"reason": reason, "operand": "prior_session_scope", "detail": "fell back to the RTH prior-day window"}]
 
 
-PRIOR_WEEK_SCOPE = "rth_0930_1600"
+# "last weeks range has a high and a low which is time based, from the opening
+# to the closing of the weekly candle" (GB p.32): Sunday 18:00 to Friday 17:00,
+# not the RTH windows. 2025-11-26's short is the failure of PWH 25,361.25, made
+# on Monday 11-17 at 03:57; the RTH-only week reads 25,310.00 (context pass C2).
+PRIOR_WEEK_SCOPE = "weekly_candle_sun1800_fri1700"
+PRIOR_WEEK_FALLBACK_SCOPE = "rth_0930_1600"
 PRIOR_WEEK_CONVENTION = "iso_monday_to_sunday"
 PRIOR_WEEK_CALENDAR = "method_pack.session_policy (versioned regular NQ matching policy)"
 
@@ -450,34 +455,29 @@ def _prior_week_range(market) -> tuple[dict[str, Any] | None, list[dict[str, Any
     fixture = getattr(market, "b02_prior_week", None)
     if fixture is not None:
         return dict(fixture), []
+    week_end = market.day - timedelta(days=market.day.weekday())
+    identity = {
+        "id": f"prior_week:{market.instrument_id}:{week_end}",
+        "period_kind": "week",
+        "source_calendar": PRIOR_WEEK_CALENDAR,
+        "week_convention": PRIOR_WEEK_CONVENTION,
+    }
+    candle = weekly_candle(market)
+    if candle is not None and not candle.get("unavailable"):
+        return {**identity, "low": candle["low"], "high": candle["high"], "open": candle["open"], "close": candle["close"], "scope": PRIOR_WEEK_SCOPE, "period_start": candle["period_start"], "period_end": candle["period_end"], "known_at": candle["known_at"]}, []
+    # the whole candle is not measurable on this contract (the week after a
+    # roll, or no bars on disk): the RTH windows of the same contract stand in
+    # and the gap is recorded, never hidden
+    omissions = [{"reason": "weekly_candle_unavailable", "operand": "full_prior_week_window", "detail": (candle or {}).get("unavailable") or "no_data_root", "fallback_scope": PRIOR_WEEK_FALLBACK_SCOPE}]
     try:
         prior = market.prior("week")
     except Exception as exc:
-        return None, [{"reason": "prior_week_unavailable", "detail": str(exc)}]
+        return None, omissions + [{"reason": "prior_week_unavailable", "detail": str(exc)}]
     span = (prior or {}).get("range")
     if not span or span.get("low") is None or span.get("high") is None:
-        return None, [{"reason": "prior_week_range_missing"}]
-    week_end = market.day - timedelta(days=market.day.weekday())
+        return None, omissions + [{"reason": "prior_week_range_missing"}]
     ref = dict(span)
-    ref.update(
-        {
-            "id": f"prior_week:{market.instrument_id}:{week_end}",
-            "period_kind": "week",
-            "scope": PRIOR_WEEK_SCOPE,
-            "source_calendar": PRIOR_WEEK_CALENDAR,
-            "week_convention": PRIOR_WEEK_CONVENTION,
-            "period_start": str(week_end - timedelta(days=7)),
-            "period_end": str(week_end - timedelta(days=1)),
-            "known_at": int(span.get("end") or market.start),
-        }
-    )
-    omissions = [
-        {
-            "reason": "full_session_scope_unmeasured",
-            "operand": "full_session_prior_week_window",
-            "detail": "prior('week') supplies RTH windows only",
-        }
-    ]
+    ref.update({**identity, "scope": PRIOR_WEEK_FALLBACK_SCOPE, "period_start": str(week_end - timedelta(days=7)), "period_end": str(week_end - timedelta(days=1)), "known_at": int(span.get("end") or market.start)})
     return ref, omissions
 
 

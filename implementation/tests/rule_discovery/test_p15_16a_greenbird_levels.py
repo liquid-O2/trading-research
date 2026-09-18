@@ -49,3 +49,29 @@ def test_c1_a_missing_closing_hour_is_recorded_not_hidden(monkeypatch):
     span, omissions = session_levels.globex_prior_day(market)
     assert span["scope"] == "cme_session_1800_1600" and span["high"] == Decimal("29368.25")
     assert [row["reason"] for row in omissions] == ["globex_closing_hour_unavailable"]
+
+
+@pytest.mark.parametrize(
+    "day, edge, printed, source",
+    [
+        ("2025-11-26", "high", Decimal("25360"), "p43_x73 prints PWH at about 25,360 (made Monday 11-17 03:57, outside RTH)"),
+        ("2025-11-19", "low", Decimal("24625"), "p31_x51: long 24,625.00 'Sweep of previous weeks low and reclaim'"),
+    ],
+)
+def test_c2_prior_week_is_the_whole_weekly_candle(day, edge, printed, source):
+    """'from the opening to the closing of the weekly candle' (GB p.32)."""
+    refs, omissions = _refs(load_source_market(day))
+    week = refs["prior_week"]
+    assert week["scope"] == "weekly_candle_sun1800_fri1700", omissions
+    assert abs(week[edge] - printed) <= LABEL_TOLERANCE, (week[edge], source)
+
+
+def test_c2_rth_only_week_misses_his_line_and_a_fallback_is_recorded(monkeypatch):
+    """Negative control: with the candle unavailable the RTH windows stand in,
+    labelled and recorded, and they do not reproduce his 25,360 (25,310.00)."""
+    monkeypatch.setattr(gb, "weekly_candle", lambda market: {"unavailable": "week_not_wholly_on_this_contract"})
+    refs, omissions = _refs(load_source_market("2025-11-26"))
+    week = refs["prior_week"]
+    assert week["scope"] == "rth_0930_1600"
+    assert abs(week["high"] - Decimal("25360")) > Decimal("40"), week["high"]
+    assert "weekly_candle_unavailable" in [row.get("reason") for row in omissions]
