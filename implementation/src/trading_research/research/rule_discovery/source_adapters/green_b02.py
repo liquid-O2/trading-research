@@ -81,6 +81,11 @@ LADDER_SPACING = Decimal("25")
 # beyond it; two points is the smallest structural buffer consistent with both.
 SWEEP_STOP_BUFFER = Decimal("2")
 LIMIT_INSIDE = Decimal("5")
+# a resting limit at a level counts as reached when a bar comes within this
+# distance of it (the at-level fill and the developing box's edge); a separate
+# constant from LIMIT_INSIDE, the close-back-inside margin that ends a poke,
+# so a rescan on either does not move the other (2026-09-18)
+LIMIT_REACH = Decimal("5")
 # a close back through the level must clear it by this much: a close one tick
 # past the line is not "back inside" (2026-08-27 11:05 closes 0.25 under the
 # 10-11 high and holds above it for two more bars; the failure is 11:20)
@@ -1045,7 +1050,7 @@ def at_level_fill(market, *, level: Decimal, side: str, cycle: Mapping[str, Any]
         open_px = _d(row.get("O"))
         if extreme is not None and open_px is not None and ((open_px > extreme) if side == "short" else (open_px < extreme)):
             return None
-        if (hi >= level - LIMIT_INSIDE) if side == "short" else (lo <= level + LIMIT_INSIDE):
+        if (hi >= level - LIMIT_REACH) if side == "short" else (lo <= level + LIMIT_REACH):
             return {
                 "entry": level,
                 "decision_at": int(row.get("known_at") or row.get("end")),
@@ -1925,7 +1930,7 @@ def _edge_test_episodes(market, ref, level, side, edge, begin, end, objectives) 
         beyond = hi > level if side == "short" else lo < level
         if beyond:
             break
-        if (hi >= level - LIMIT_INSIDE) if side == "short" else (lo <= level + LIMIT_INSIDE):
+        if (hi >= level - LIMIT_REACH) if side == "short" else (lo <= level + LIMIT_REACH):
             at = int(row.get("known_at") or row.get("end"))
             cycle = {"cycle": 0, "sweep": row, "sweep_at": int(row["start"]), "extreme": level, "depth": Decimal("0"), "fail": row, "fail_at": at, "status": "failed", "window_end": int(end)}
             out.append(
