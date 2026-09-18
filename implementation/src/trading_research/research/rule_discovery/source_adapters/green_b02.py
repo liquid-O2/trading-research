@@ -37,7 +37,7 @@ from trading_research.research.rule_discovery.source_adapters.enumeration import
     enumeration_scope,
     split_b02_overrides,
 )
-from trading_research.research.rule_discovery.source_adapters.session_levels import prior_sessions
+from trading_research.research.rule_discovery.source_adapters.session_levels import globex_prior_day, minute_span, prior_sessions
 from trading_research.research.rule_discovery.source_adapters.trade_selection import (
     branch_alternatives,
     MAX_ENTRIES_PER_SESSION,
@@ -386,11 +386,15 @@ def _tdo(market) -> Decimal | None:
 # ---------------------------------------------------------------------------
 # prior-period references
 #
-# G2/G3: PDH/PDL are the previous CME session's extremes, the line the author's
-# TradingView layout draws. 2026-09-01's printed PDL 29,270 is the previous
-# session's 18:00-16:00 low (29,273.50 on our tape) and not its RTH low
-# (29,355.00), so the reference is the full prior session, loaded from the
-# already-cached window of that session.
+# G2/G3: PDH/PDL are the previous GLOBEX day's extremes, 18:00 to 17:00 ET,
+# the line the author's TradingView layout draws and rolls at 18:00 (chart
+# p52_x105: one "PDL" label ends at the close, the next starts at 18:00).
+# 2026-09-01's printed PDL 29,270 is the previous day's overnight low
+# (29,273.50 on our tape) and not its RTH low (29,355.00); 2026-08-27's printed
+# PDH of about 29,437 is the 16:59 high 29,437.75 of the closing hour, 69.5
+# points above the high to 16:00 (context pass 2026-09-18, C1). The 18:00-16:00
+# part is the prior session's cached window, the closing hour the one-minute
+# bars of the same contract (session_levels.globex_prior_day).
 
 
 def _prior_session_window(market) -> tuple[dict[str, Any] | None, list[dict[str, Any]]]:
@@ -406,10 +410,9 @@ def _prior_session_window(market) -> tuple[dict[str, Any] | None, list[dict[str,
 
 
 def _prior_session_window_uncached(market) -> tuple[dict[str, Any] | None, list[dict[str, Any]]]:
-    sessions = prior_sessions(market, 1)
-    if not sessions:
+    span, omissions = globex_prior_day(market)
+    if span is None:
         return _prior_rth_window(market, reason="prior_full_session_unavailable")
-    span = sessions[0]
     return (
         {
             "id": span["id"],
@@ -421,7 +424,7 @@ def _prior_session_window_uncached(market) -> tuple[dict[str, Any] | None, list[
             "scope": span["scope"],
             "period_end": span["date"],
         },
-        [],
+        omissions,
     )
 
 
@@ -3514,7 +3517,7 @@ RULES: dict[str, dict[str, Any]] = {
             "london": "02:00-05:00 ET, every month",
             "ny": ["09:00-10:00 from 10:00", "10:00-11:00 from 11:00"],
             "later_hours": "each completed hour from its close (11:00-16:00)",
-            "prior_day_scope": "previous CME session 18:00-16:00",
+            "prior_day_scope": "previous Globex day 18:00-17:00 ET, rolling at 18:00",
             "prior_week_scope": PRIOR_WEEK_SCOPE,
             "lifecycle": "live until swept; no entry-window filter",
             "dropped": ["ny_session_extreme", "nwog_entry_branch", "09:00-09:30 half box (G13)"],
