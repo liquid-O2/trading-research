@@ -51,10 +51,29 @@ def _f(v):
 # --------------------------------------------------------------------------- profiles
 
 
+# The node and ledge analysis of one profile payload, remembered per payload
+# object: a session's prior-day profile and composite are analysed once, not
+# once per row (profile of the selection dataset, 2026-09-18). The payload is
+# held beside the result so its id cannot be reused while the entry lives.
+_NODE_MEMO: dict = {}
+
+
+def _memo(kind: str, payload: dict, args: tuple, compute):
+    key = (kind, id(payload), args)
+    hit = _NODE_MEMO.get(key)
+    if hit is not None and hit[0] is payload:
+        return hit[1]
+    if len(_NODE_MEMO) > 512:
+        _NODE_MEMO.clear()
+    value = compute()
+    _NODE_MEMO[key] = (payload, value)
+    return value
+
+
 def profile_nodes(payload: dict, *, smooth: int = 2, prominence: float = 0.20) -> tuple[list[Decimal], list[Decimal]]:
     from trading_research.research.method_pack.profile_nodes import nodes as _nodes
 
-    return _nodes(payload, smooth=smooth, prominence=prominence)
+    return _memo("nodes", payload, (smooth, prominence), lambda: _nodes(payload, smooth=smooth, prominence=prominence))
 
 
 def nearest_distance(level: Decimal, prices: list[Decimal]) -> float | None:
@@ -253,7 +272,7 @@ def delta_at(profile: dict[Decimal, float], level: Decimal, band: Decimal = Deci
 def ledges(payload: dict, *, smooth: int = 2, prominence: float = 0.20, drop: float = 0.5) -> list[Decimal]:
     from trading_research.research.method_pack.profile_nodes import ledges as _ledges
 
-    return _ledges(payload, smooth=smooth, prominence=prominence, drop=drop)
+    return _memo("ledges", payload, (smooth, prominence, drop), lambda: _ledges(payload, smooth=smooth, prominence=prominence, drop=drop))
 
 
 def author_profile_features(market, level: Decimal, side: str, at_ns: int, prior: dict | None) -> dict:
@@ -304,6 +323,18 @@ _PRIOR_CACHE: dict = {}
 
 
 def prior_session_profiles(market, n: int = 5) -> list[dict]:
+    """Per-market memo of ``_prior_session_profiles_uncached``: the result depends on the
+    session and ``n`` only, and the selection dataset asks for it once a row."""
+    key = f"_gf_prior_session_profiles_{n}"
+    if not hasattr(market, key):
+        try:
+            setattr(market, key, _prior_session_profiles_uncached(market, n))
+        except AttributeError:  # a market object that refuses attributes: compute every time
+            return _prior_session_profiles_uncached(market, n)
+    return getattr(market, key)
+
+
+def _prior_session_profiles_uncached(market, n: int = 5) -> list[dict]:
     """The prior ``n`` sessions' RTH profiles (09:30-16:00), oldest last,
     from their own session markets; cached per session date."""
     from datetime import date as _date, timedelta as _td
@@ -412,6 +443,18 @@ def context_profile_features(market, level: Decimal, side: str, at_ns: int) -> d
 
 
 def weekly_delta_print(market, n: int = 5) -> dict | None:
+    """Per-market memo of ``_weekly_delta_print_uncached``: the result depends on the
+    session and ``n`` only, and the selection dataset asks for it once a row."""
+    key = f"_gf_weekly_delta_print_{n}"
+    if not hasattr(market, key):
+        try:
+            setattr(market, key, _weekly_delta_print_uncached(market, n))
+        except AttributeError:  # a market object that refuses attributes: compute every time
+            return _weekly_delta_print_uncached(market, n)
+    return getattr(market, key)
+
+
+def _weekly_delta_print_uncached(market, n: int = 5) -> dict | None:
     """The prior ``n`` sessions' merged delta profile: its print price, sign
     and the contiguous band of same-signed delta around it (points)."""
     from datetime import date as _date, timedelta as _td

@@ -20,6 +20,14 @@ from decimal import Decimal
 
 import numpy as np
 
+try:
+    from numba import njit as _njit
+except Exception:  # numba absent: the same function, interpreted
+    def _njit(*_args, **_kwargs):
+        def wrap(fn):
+            return fn
+        return wrap
+
 SMOOTH = 2
 PROMINENCE = 0.20
 LEDGE_DROP = 0.5
@@ -83,6 +91,51 @@ def _prominence(vol, i: int) -> float:
     return float(vol[i] - max(left, right))
 
 
+@_njit(cache=True)
+def _mark_extrema(vol, floor):  # pragma: no cover - compiled
+    """1 where ``vol`` has a local maximum of prominence >= floor, 2 where it
+    has a local minimum of prominence >= floor (on the negated series), else 0;
+    index for index the decisions of the ``nodes`` loop over ``_prominence``."""
+    n = vol.shape[0]
+    out = np.zeros(n, dtype=np.int8)
+    for i in range(1, n - 1):
+        v = vol[i]
+        if v >= vol[i - 1] and v > vol[i + 1]:
+            left = v
+            k = i - 1
+            while k >= 0 and vol[k] <= v:
+                if vol[k] < left:
+                    left = vol[k]
+                k -= 1
+            right = v
+            k = i + 1
+            while k < n and vol[k] <= v:
+                if vol[k] < right:
+                    right = vol[k]
+                k += 1
+            trough = left if left > right else right
+            if v - trough >= floor:
+                out[i] = 1
+        elif v <= vol[i - 1] and v < vol[i + 1]:
+            # the same walk on -vol: troughs of -vol are crests of vol
+            left = v
+            k = i - 1
+            while k >= 0 and vol[k] >= v:
+                if vol[k] > left:
+                    left = vol[k]
+                k -= 1
+            right = v
+            k = i + 1
+            while k < n and vol[k] >= v:
+                if vol[k] > right:
+                    right = vol[k]
+                k += 1
+            crest = left if left < right else right
+            if crest - v >= floor:
+                out[i] = 2
+    return out
+
+
 def nodes(payload: dict, *, smooth: int = SMOOTH, prominence: float = PROMINENCE) -> tuple[list[Decimal], list[Decimal]]:
     """(HVN prices, LVN prices): local maxima and minima of the smoothed
     volume at price whose prominence (against the neighbouring troughs, or
@@ -98,12 +151,12 @@ def nodes(payload: dict, *, smooth: int = SMOOTH, prominence: float = PROMINENCE
         return [], []
     floor = prominence * peak
     hvn, lvn = [], []
-    neg = -vol
-    for i in range(1, len(vol) - 1):
-        if vol[i] >= vol[i - 1] and vol[i] > vol[i + 1] and _prominence(vol, i) >= floor:
-            hvn.append(prices[i])
-        elif vol[i] <= vol[i - 1] and vol[i] < vol[i + 1] and _prominence(neg, i) >= floor:
-            lvn.append(prices[i])
+    # one compiled pass marks every qualifying extremum (the per-index Python
+    # walk cost 35 s a session on the selection dataset, 2026-09-18); the
+    # comparisons are the ones _prominence makes, on the same float64 values
+    marks = _mark_extrema(np.ascontiguousarray(vol, dtype=np.float64), float(floor))
+    for i in np.nonzero(marks)[0]:
+        (hvn if marks[i] == 1 else lvn).append(prices[int(i)])
     return hvn, lvn
 
 

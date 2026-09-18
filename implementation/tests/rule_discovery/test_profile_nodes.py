@@ -72,3 +72,34 @@ def test_composite_merges_sessions_by_price_and_grows_value_from_the_poc():
     assert [(str(r["price"]), int(r["total_volume"])) for r in c["rows"]] == [("100.0", 10), ("100.25", 60), ("100.5", 45), ("100.75", 5)]
     # 120 total; 70% = 84: the POC bin (60) plus the larger neighbour (45) reaches it
     assert (str(c["poc"]), str(c["val"]), str(c["vah"])) == ("100.25", "100.25", "100.5")
+
+
+def test_compiled_extrema_pass_makes_the_decisions_of_the_reference_walk():
+    """``_mark_extrema`` replaced the per-index ``_prominence`` walk inside
+    ``nodes`` for speed (2026-09-18). The reference walk stays in the module;
+    on random profiles with plateaus, ties and flat edges the compiled pass
+    must mark exactly the indices the walk accepts."""
+    import numpy as np
+
+    from trading_research.research.method_pack import profile_nodes as pn
+
+    rng = np.random.default_rng(20260918)
+    for trial in range(200):
+        n = int(rng.integers(5, 400))
+        # integer-valued volumes make ties and plateaus common
+        vol = rng.integers(0, 12, size=n).astype(float)
+        if trial % 3 == 0:
+            vol = np.convolve(vol, np.ones(5) / 5, mode="same")
+        peak = float(vol.max())
+        if peak <= 0:
+            continue
+        floor = 0.2 * peak
+        neg = -vol
+        expected = np.zeros(n, dtype=np.int8)
+        for i in range(1, n - 1):
+            if vol[i] >= vol[i - 1] and vol[i] > vol[i + 1] and pn._prominence(vol, i) >= floor:
+                expected[i] = 1
+            elif vol[i] <= vol[i - 1] and vol[i] < vol[i + 1] and pn._prominence(neg, i) >= floor:
+                expected[i] = 2
+        got = pn._mark_extrema(np.ascontiguousarray(vol, dtype=np.float64), float(floor))
+        assert np.array_equal(got, expected), (trial, n)
