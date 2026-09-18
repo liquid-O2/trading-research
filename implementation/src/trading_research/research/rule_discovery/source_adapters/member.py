@@ -436,21 +436,43 @@ def scan_member_branch_b02(market, branch: str) -> list[dict[str, Any]]:
                 decision_at=getattr(market, "end", None),
             )
         ]
-    reaction, second, kind = pairs[-1]
-    independent = _independent(reaction, second, kind)
-    if fx.get("independent") is not None:
-        independent = bool(fx["independent"])
-    px = dec(reaction["price"])
-    second_px = dec(second.get("price") or second.get("low") or px)
-    lo = min(px, second_px) - B02_Q
-    hi = max(px, second_px) + B02_Q
     start = market_at(market, "09:30") if getattr(market, "day", None) is not None else getattr(market, "start", 0)
     try:
         start = market_at(market, "09:30")
     except Exception:
         start = getattr(market, "start", 0)
     bars = market_bars(market, start, getattr(market, "end", start), 60)
-    contact = first_touch(bars, lo, hi)
+
+    def _band(pair):
+        r, s, _k = pair
+        r_px = dec(r["price"])
+        s_px = dec(s.get("price") or s.get("low") or r_px)
+        return min(r_px, s_px) - B02_Q, max(r_px, s_px) + B02_Q
+
+    # A pair is tradable only at touches that come AFTER both of its reasons
+    # are known: "look left" is to the left of the touch. Until 2026-09-18 the
+    # last pair of the whole session was taken and its first touch searched
+    # from 09:30, so a reaction that formed at 15:40 was "traded" at 10:41 (the
+    # bounce that defined the level was the trade it predicted: 93% wins over
+    # 595 sessions). The earliest causal touch of any pair is the opportunity.
+    chosen = None
+    for pair in pairs:
+        known = max(int(pair[0].get("known_at") or 0), int(pair[1].get("known_at") or 0))
+        p_lo, p_hi = _band(pair)
+        touch = first_touch([b for b in bars if int(b.get("start") or 0) >= known], p_lo, p_hi)
+        if touch is None:
+            continue
+        key = (int(touch.get("start") or 0), -known)
+        if chosen is None or key < chosen[0]:
+            chosen = (key, pair, touch)
+    reaction, second, kind = chosen[1] if chosen else pairs[-1]
+    independent = _independent(reaction, second, kind)
+    if fx.get("independent") is not None:
+        independent = bool(fx["independent"])
+    px = dec(reaction["price"])
+    second_px = dec(second.get("price") or second.get("low") or px)
+    lo, hi = _band((reaction, second, kind))
+    contact = chosen[2] if chosen else None
     if fx.get("contact"):
         contact = dict(fx["contact"])
     ctx = stage("context", "pass", reaction.get("known_at"), {"split_1245": False, "look_left": True})
