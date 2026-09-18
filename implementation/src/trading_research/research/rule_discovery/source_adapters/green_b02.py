@@ -2977,15 +2977,35 @@ SEGMENTS = {
     # break-and-hold continuation and the VWAP long are scanned and reported
     # but no dated ticket shows either taken, so they are not in the list.
     "overnight": (("18:00", -1), ("09:30", 0), {"asia_box", "asia_tdo_case", "london_box", "prior_day_level", "prior_week_level", "nyam_box", "golden_pocket"}),
-    "cash_open": (("09:30", 0), ("10:00", 0), {"cash_open_reclaim_case", "prior_day_level", "prior_week_level", "nyam_box", "golden_pocket"}),
-    "ny": (("10:00", 0), ("16:00", 0), {"nyam_box", "previous_hour", "prior_day_level", "prior_week_level", "golden_pocket", "golden_pocket_continuation"}),
+    # His session lines stay live through New York until they are swept (G3; C4 of the source
+    # pass): "After the open, price closes back above the London low. That's my entry." and
+    # "sweeps the Asia high and fails to hold above it ... I switch sides." (2026-09-14); "One
+    # short after the New York open. Price swept midnight, failed" (2026-08-17); the London
+    # high's failed breakout at 13:30 on 2026-08-27. Until 2026-09-18 the Asia, London and
+    # midnight-open branches were admitted to the overnight list only.
+    "cash_open": (("09:30", 0), ("10:00", 0), {"cash_open_reclaim_case", "prior_day_level", "prior_week_level", "nyam_box", "golden_pocket", "asia_box", "asia_tdo_case", "london_box"}),
+    "ny": (("10:00", 0), ("16:00", 0), {"nyam_box", "previous_hour", "prior_day_level", "prior_week_level", "golden_pocket", "golden_pocket_continuation", "asia_box", "asia_tdo_case", "london_box"}),
 }
 # One opportunity is traded once and re-entered at most once ("two trades were
 # enough"); the round-trip cap is loose because the list is bounded by the
 # opportunities themselves, not by a count.
 ROUND_TRIPS_PER_SEGMENT = 6
+# THE TRADED LIST. He takes one trade on 13 of his 16 ticket days and two on the other three; the
+# list the cap above produced took about nineteen (2026-09-18). His words set the clocks and counts:
+#   "9-11 am est hands down best time to trade"; "I don't trade that much, usually nyam, or if I'm
+#   doing an overnight shift"; "Done by 10:30am"; "before 2AM" (source pass rows 27, 29);
+#   "One setup. One strike."; "Two trades were enough."; "One clean 100 point trade. Lock out.";
+#   "overtrading is the worst sin"; the second trade of a morning is the same structure again
+#   ("First +50, runners stopped. Same structure again +100.", 2026-08-27).
+# (from, day offset, to, day offset, round trips): one trade in each overnight clock and at the
+# open, two between 10:00 and 11:30, one in the afternoon (his 12:05, 12:35 and 13:30 tickets).
+TRADE_WINDOWS = {
+    "overnight": (("18:00", -1, "02:00", 0, 1), ("02:00", 0, "09:30", 0, 1)),
+    "new_york": (("09:30", 0, "10:00", 0, 1), ("10:00", 0, "11:30", 0, 2), ("11:30", 0, "16:00", 0, 1)),
+}
 # the executed list's policy (Phase 1.5 selection axis: varied by the population runner)
-EXECUTED_ALLOW_ADDS: bool | str = "same_line"
+# an add is size on the open trade ("I don't average down. I average up."), not a setup: left to the sizing layer
+EXECUTED_ALLOW_ADDS: bool | str = False
 EXECUTED_ALLOW_FLIPS = True
 REENTER_SAME_LINE = True
 # a level is re-entered on a later cycle while the first entry is still open
@@ -3019,6 +3039,7 @@ def selection_for(market, episodes: Sequence[Mapping[str, Any]], *, primary_play
     segments: dict[str, Any] = {}
     candidates = 0
     fallbacks: set[str] = set()
+    traded_pool: list[Mapping[str, Any]] = []
     for name, ((s_hhmm, s_off), (e_hhmm, e_off), branches) in SEGMENTS.items():
         start, end = int(_at(market, s_hhmm, s_off)), int(_at(market, e_hhmm, e_off))
         pool = [ep for ep in passing if ep.get("branch") in branches]
@@ -3041,9 +3062,11 @@ def selection_for(market, episodes: Sequence[Mapping[str, Any]], *, primary_play
         # NYAM: buy pullbacks / golden pockets / sweeps in the direction of
         # that reclaim"). The 09:30 manipulation is a separate trigger (GB
         # p.2) and is not filtered.
-        bias = read.get("bias")
-        if name == "ny" and bias in ("long", "short"):
-            pool = [ep for ep in pool if ep.get("side") == bias]
+        # The bias is RECORDED, never a gate (C8, source pass 2026-09-18): the only text that
+        # gates on it is the archive compiler's paraphrase above; in his own words he flips the
+        # same morning ("I don't owe the long my loyalty just because it paid me", 2026-09-14:
+        # the London-low long, then the Asia-high short), and with the 16:00 prior-day line the
+        # bias itself was false on 2026-04-23. Whether a trade is with the bias is a feature.
         # adds in the direction of the position are his by hand ("position
         # shown as 8 at 29,680.75"); they are the same opportunity, not a
         # second trade in the list
@@ -3054,13 +3077,24 @@ def selection_for(market, episodes: Sequence[Mapping[str, Any]], *, primary_play
             result = select_session_trades(pool, bars=bars, clock=(start, end), max_entries=10**6, stop_after_target=False, reenter_same_line=REENTER_SAME_LINE, max_per_line=None, one_position=False, running_bucket_min=CANDIDATES_RUNNING_BUCKET_MIN)
         else:
             result = select_session_trades(pool, bars=bars, clock=(start, end), max_entries=ROUND_TRIPS_PER_SEGMENT, stop_after_target=False, reenter_same_line=REENTER_SAME_LINE, max_per_line=MAX_PER_LINE, one_position=False)
-        result["executed"] = select_session_trades(pool, bars=bars, clock=(start, end), max_entries=ROUND_TRIPS_PER_SEGMENT, stop_after_target=False, reenter_same_line=REENTER_SAME_LINE, allow_adds=EXECUTED_ALLOW_ADDS, max_per_line=MAX_PER_LINE, allow_flips=EXECUTED_ALLOW_FLIPS)
         segments[name] = result
+        traded_pool.extend(ep for ep in pool if start <= int(ep.get("decision_at") or 0) < end)
         entries.extend(result.get("entries") or [])
-        executed.extend(result["executed"].get("entries") or [])
-        round_trips += int(result["executed"].get("n_round_trips") or 0)
         candidates += int(result.get("n_candidates") or 0)
         fallbacks |= set(result.get("mode_preference_fallback") or [])
+    # THE TRADED LIST runs on his clocks (TRADE_WINDOWS): the overnight shift keeps a lock-out per
+    # clock (2026-07-29 sells the pocket at 22:04 and buys the London low at 04:00), the New York day
+    # locks out after a paid objective ("One clean 100 point trade. Lock out.").
+    for shift, session_lock in (("overnight", False), ("new_york", True)):
+        spans = [(int(_at(market, a, a_off)), int(_at(market, b, b_off)), cap) for a, a_off, b, b_off, cap in TRADE_WINDOWS[shift]]
+        result = select_session_trades(
+            traded_pool, bars=bars, clock=(spans[0][0], spans[-1][1]), max_entries=sum(cap for _a, _b, cap in spans), stop_after_target=True,
+            reenter_same_line=REENTER_SAME_LINE, allow_adds=EXECUTED_ALLOW_ADDS, max_per_line=MAX_PER_LINE, allow_flips=EXECUTED_ALLOW_FLIPS,
+            windows=spans, objective_ends_session=session_lock,
+        )
+        segments[f"traded_{shift}"] = result
+        executed.extend(result.get("entries") or [])
+        round_trips += int(result.get("n_round_trips") or 0)
     entries.sort(key=lambda row: int(row.get("decision_at") or 0))
     executed.sort(key=lambda row: int(row.get("decision_at") or 0))
     return {

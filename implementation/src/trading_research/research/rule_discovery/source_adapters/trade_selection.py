@@ -192,6 +192,7 @@ def select_session_trades(
     one_position: bool = True,
     running_bucket_min: int | None = None,
     windows: Sequence[tuple[int, int, int]] | None = None,
+    objective_ends_session: bool = False,
 ) -> dict[str, Any]:
     """The author's trade list for one session.
 
@@ -200,8 +201,10 @@ def select_session_trades(
     terminating my trading session before 10am", "9-11 am est hands down best
     time to trade"): a setup decided outside every window is not taken, each
     window has its own cap, and with ``stop_after_target`` a paid objective
-    ends THAT window only ("one and done"), not the ones after it. The one
-    position carries across windows.
+    ends THAT window only ("one and done"), not the ones after it, unless
+    ``objective_ends_session`` ("One clean 100 point trade. Lock out."): then
+    a paid objective ends the whole session. The one position carries across
+    windows.
 
     Rules, in the audit's words:
 
@@ -401,7 +404,7 @@ def select_session_trades(
         busy_side = str(episode.get("side"))
         busy_line = line_px
         if result["outcome"] == "target" and stop_after_target:
-            if window is None:
+            if window is None or objective_ends_session:
                 finished = True
             else:
                 window_finished.add(window)

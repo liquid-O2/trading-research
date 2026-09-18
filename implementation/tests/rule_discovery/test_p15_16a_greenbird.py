@@ -346,6 +346,9 @@ def test_windows_cap_each_clock_and_a_paid_objective_ends_only_its_own_window():
     result = select_session_trades([first, second, between, afternoon], bars=bars, clock=None, max_entries=10, stop_after_target=True, windows=[morning, pm])
     assert [(row["entry"], row["outcome"]) for row in result["entries"]] == [(Decimal("100"), "target"), (Decimal("120"), "stop")]
     assert result["skipped"]["after_objective"] == 1 and result["skipped"]["outside_windows"] == 1
+    # "One clean 100 point trade. Lock out.": with the session-wide lock-out the afternoon is not traded either
+    locked = select_session_trades([first, second, between, afternoon], bars=bars, clock=None, max_entries=10, stop_after_target=True, windows=[morning, pm], objective_ends_session=True)
+    assert [row["entry"] for row in locked["entries"]] == [Decimal("100")]
 
 
 def test_a_stop_or_target_on_the_wrong_side_of_the_entry_is_counted_and_never_traded():
