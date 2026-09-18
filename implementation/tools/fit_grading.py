@@ -26,7 +26,7 @@ import numpy as np
 
 # Not features: identities, the label, anything decided after the fill, and
 # free-text lists (their count is a feature).
-META = {"family", "example_id", "session", "label", "outcome", "coincident_levels", "box", "decision_at", "reference_px", "entry_px"}
+META = {"family", "example_id", "session", "label", "outcome", "coincident_levels", "box", "decision_at", "reference_px", "entry_px", "sample_weight", "candidates_in_session"}
 
 
 NEAR_POINTS = 5.0
