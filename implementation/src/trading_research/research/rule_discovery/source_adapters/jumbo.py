@@ -322,11 +322,16 @@ RANGE_BINS = (
 )
 SINGLE_BREAK_MIN_BIN = Decimal("0.3")
 LEVEL_COINCIDENCE = Decimal("5")
-# the resting stop beyond the swept extreme (the extension band's limit fills)
-# and beyond a band's far edge (the give-back fill); a separate constant so a
-# rescan on the coincidence tolerance does not move the stops (2026-09-18:
-# the first "coincide8" candidate moved both and its +7.0 a session could not
-# be attributed)
+# the resting stop beyond the swept extreme on every fill (the line fills,
+# the two-minute reclaim, the big print, the extension band's limit fills, the
+# retest of a broken box edge) and beyond a band's far edge (the give-back
+# fill); a separate constant so a rescan on the coincidence tolerance does not
+# move the stops (2026-09-18: the first "coincide8" candidate moved both and
+# its gain could not be attributed; the first split moved only two of the
+# eight stop sites, so "coincide8-clean" and "coincide12-clean" still widened
+# the stops of the line fills; every stop now reads this constant, and the
+# guard test pins the roles: the tolerance is only ever compared, the stop
+# distance only ever added)
 STOP_BEYOND_EXTREME = Decimal("5")
 #: FITTED, shared with the Green Bird spike turn: the share of a tagging bar's
 #: own range it must close back from the extreme it made for the turn to be
@@ -1877,7 +1882,7 @@ def _line_failure_fills(market, *, level: Decimal, side: str, cycle: Mapping[str
     extreme = _d(cycle.get("extreme"))
     sweep = cycle.get("sweep") or {}
     reclaim = cycle.get("reclaim")
-    stop = None if extreme is None else ((extreme - LEVEL_COINCIDENCE) if side == "long" else (extreme + LEVEL_COINCIDENCE))
+    stop = None if extreme is None else ((extreme - STOP_BEYOND_EXTREME) if side == "long" else (extreme + STOP_BEYOND_EXTREME))
     if reclaim is not None:
         at = int(reclaim.get("known_at") or reclaim.get("end"))
         close = _d(reclaim.get("C"))
@@ -1894,7 +1899,7 @@ def _line_failure_fills(market, *, level: Decimal, side: str, cycle: Mapping[str
                 fills.append({"mode": "stop_at_next_line", "entry": internal, "at": int(crossing.get("known_at") or crossing.get("end")), "stop": stop, "evidence_at": at, "internal": internal})
     two = _two_minute_reclaim(market, level=level, side=side, begin=int(sweep.get("start") or evidence_at), end=end) if sweep else None
     if two is not None:
-        fills.append({"mode": "two_minute_close", "entry": two["entry"], "at": int(two["at"]), "stop": (two["extreme"] + LEVEL_COINCIDENCE) if side == "short" else (two["extreme"] - LEVEL_COINCIDENCE), "evidence_at": int(two["at"])})
+        fills.append({"mode": "two_minute_close", "entry": two["entry"], "at": int(two["at"]), "stop": (two["extreme"] + STOP_BEYOND_EXTREME) if side == "short" else (two["extreme"] - STOP_BEYOND_EXTREME), "evidence_at": int(two["at"])})
     if sweep:
         pack = confirm_pack(market, int(sweep["end"]), side, level, min(end, int(sweep["end"]) + CONFIRM_HORIZON_MIN * NS_MINUTE))
         confirmed = pack.get("confirmed")
@@ -1930,7 +1935,7 @@ def _contact_fills(market, *, level: Decimal, side: str, contact: Mapping[str, A
         if crossing is not None:
             c_lo, c_hi = _d(crossing.get("L")), _d(crossing.get("H"))
             extreme = min(lo, c_lo if c_lo is not None else lo) if side == "long" else max(hi, c_hi if c_hi is not None else hi)
-            fills.append({"mode": "stop_at_line", "entry": level, "at": int(crossing.get("known_at") or crossing.get("end")), "stop": (extreme - LEVEL_COINCIDENCE) if side == "long" else (extreme + LEVEL_COINCIDENCE), "evidence_at": max(int(placed_at), int(crossing.get("known_at") or crossing.get("end")))})
+            fills.append({"mode": "stop_at_line", "entry": level, "at": int(crossing.get("known_at") or crossing.get("end")), "stop": (extreme - STOP_BEYOND_EXTREME) if side == "long" else (extreme + STOP_BEYOND_EXTREME), "evidence_at": max(int(placed_at), int(crossing.get("known_at") or crossing.get("end")))})
     pack = confirm_pack(market, int(contact["end"]), side, level, min(end, int(contact["end"]) + CONFIRM_HORIZON_MIN * NS_MINUTE))
     confirmed = pack.get("confirmed")
     if confirmed is not None:
@@ -1945,7 +1950,7 @@ def _contact_fills(market, *, level: Decimal, side: str, contact: Mapping[str, A
         if big is not None:
             lo_c, hi_c = _d(contact.get("L")), _d(contact.get("H"))
             extreme = lo_c if side == "long" else hi_c
-            fills.append({**big, "stop": None if extreme is None else ((extreme - LEVEL_COINCIDENCE) if side == "long" else (extreme + LEVEL_COINCIDENCE)), "evidence_at": max(int(placed_at), int(big["at"]))})
+            fills.append({**big, "stop": None if extreme is None else ((extreme - STOP_BEYOND_EXTREME) if side == "long" else (extreme + STOP_BEYOND_EXTREME)), "evidence_at": max(int(placed_at), int(big["at"]))})
     return fills
 
 
@@ -2256,7 +2261,7 @@ def _scan_judas_outbound(market) -> tuple[list[dict[str, Any]], list[dict[str, A
     retest = _touch_after(market, level=edge, side=direction, begin=int(break_bar["end"]), end=end)
     fills = []
     if retest is not None:
-        stop = (edge + LEVEL_COINCIDENCE) if direction == "short" else (edge - LEVEL_COINCIDENCE)
+        stop = (edge + STOP_BEYOND_EXTREME) if direction == "short" else (edge - STOP_BEYOND_EXTREME)
         fills.append({"mode": "stop_at_line", "entry": edge, "at": int(retest.get("known_at") or retest.get("end")), "stop": stop, "evidence_at": int(break_bar["end"])})
     return _line_episodes(
         market, context,

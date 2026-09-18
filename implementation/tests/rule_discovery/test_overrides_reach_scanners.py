@@ -81,3 +81,48 @@ def test_no_module_constant_is_derived_from_an_overridden_one(path):
             if used:
                 offenders.append(f"{path.name}:{node.lineno} {', '.join(names)} derived from {', '.join(sorted(used))}")
     assert not offenders, "\n".join(offenders)
+
+
+JUMBO = ADAPTERS / "jumbo.py"
+
+
+def _uses(tree: ast.Module, name: str) -> list[tuple[int, str]]:
+    """(line, kind) for every read of ``name``: 'compare' when it is an
+    operand of a comparison, 'arith' when it is an operand of + or -, else
+    'other'."""
+    parents = {child: parent for parent in ast.walk(tree) for child in ast.iter_child_nodes(parent)}
+    out = []
+    for node in ast.walk(tree):
+        if not (isinstance(node, ast.Name) and node.id == name and isinstance(node.ctx, ast.Load)):
+            continue
+        parent = parents.get(node)
+        if isinstance(parent, ast.Compare):
+            out.append((node.lineno, "compare"))
+        elif isinstance(parent, ast.BinOp) and isinstance(parent.op, (ast.Add, ast.Sub)):
+            # ``low - TOL <= price <= high + TOL`` widens a band for a
+            # comparison: arithmetic whose result is compared is a tolerance
+            grand = parents.get(parent)
+            out.append((node.lineno, "compare" if isinstance(grand, ast.Compare) else "arith"))
+        elif isinstance(parent, ast.Call) and isinstance(parent.func, ast.Name) and parent.func.id == "str":
+            out.append((node.lineno, "other"))  # the parameters record
+        else:
+            out.append((node.lineno, "other"))
+    return out
+
+
+def test_jumbo_tolerance_is_compared_and_stop_distance_is_added():
+    """``LEVEL_COINCIDENCE`` is the tolerance for a print or an extreme to
+    count as at a level and ``STOP_BEYOND_EXTREME`` is the distance a resting
+    stop sits beyond the swept extreme. One constant once served both, so a
+    rescan of the tolerance moved every stop (2026-09-18: the first split
+    moved two of the eight stop sites and "coincide12-clean" still widened
+    the stops of 207,182 of 344,306 episodes by seven points; its +18.3 a
+    session was a stop read). A tolerance is only ever compared; a stop
+    distance is only ever added to or subtracted from a price."""
+    tree = ast.parse(JUMBO.read_text())
+    tolerance = [(line, kind) for line, kind in _uses(tree, "LEVEL_COINCIDENCE") if kind == "arith"]
+    assert not tolerance, f"LEVEL_COINCIDENCE added to a price (a stop?) at lines {tolerance}"
+    distance = [(line, kind) for line, kind in _uses(tree, "STOP_BEYOND_EXTREME") if kind == "compare"]
+    assert not distance, f"STOP_BEYOND_EXTREME used as a tolerance at lines {distance}"
+    assert any(kind == "arith" for _, kind in _uses(tree, "STOP_BEYOND_EXTREME")), "no stop reads STOP_BEYOND_EXTREME"
+    assert any(kind == "compare" for _, kind in _uses(tree, "LEVEL_COINCIDENCE")), "nothing compares against LEVEL_COINCIDENCE"
