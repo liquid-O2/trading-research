@@ -90,6 +90,11 @@ LIMIT_REACH = Decimal("5")
 # past the line is not "back inside" (2026-08-27 11:05 closes 0.25 under the
 # 10-11 high and holds above it for two more bars; the failure is 11:20)
 FAIL_MARGIN = Decimal("2")
+# the sweep's depth beyond the level that makes it a sweep at all, symmetric
+# with FAIL_MARGIN by default (a poke shallower than the margin took nothing);
+# its own constant so a rescan can move the failure close and the sweep depth
+# separately (2026-09-18)
+SWEEP_DEPTH_MIN = Decimal("2")
 #: FITTED: the share of a spike bar's own range it must close back from the
 #: extreme for the turn to be tradeable. Fitted on the two rr_tool tickets whose
 #: fill sits inside the spike bar -- 2026-08-31 09:31 (26% of range) and
@@ -847,7 +852,7 @@ def sweep_cycles(
                     break
             cursor += 1
         cycle_end = int((fail or {}).get("end") or deadline)
-        if depth_short_of_margin := ((extreme - level) if side == "short" else (level - extreme)) < FAIL_MARGIN:
+        if depth_short_of_margin := ((extreme - level) if side == "short" else (level - extreme)) < SWEEP_DEPTH_MIN:
             # a poke of less than the failure margin is not a sweep: the
             # level was not taken, so nothing failed (symmetric with the
             # close-through test)
