@@ -142,12 +142,9 @@ def replay(markets: Markets, example) -> dict:
         row["selected_our_mode"] = selected_match.get("our_mode")
         row["selected_delta_points"] = selected_match.get("delta_points")
         row["selected_bars_from_printed"] = selected_match.get("bars_from_printed")
-        row["selected_strict_10"] = selected_match.get("detected_strict_10")
+        row["selected_strict_10"] = strict_10(entry, selected_match)
         if entry.get("scored_by_decision"):
-            bars = selected_match.get("bars_from_printed")
-            allowed = 1.0 if entry.get("marked_by") == "rr_tool" else 3.0
-            row["decision_match"] = bool(selected_match.get("our_entry") is not None and bars is not None and float(bars) <= allowed)
-            row["selected_strict_10"] = bool(row["selected_strict_10"]) or row["decision_match"]
+            row["decision_match"] = _decision_match(entry, selected_match)
             row["detected_strict_10"] = bool(row.get("detected_strict_10")) or row["decision_match"]
         row["selected_strict"] = selected_match.get("detected_strict")
         row["selected_detected"] = selected_match.get("detected")
@@ -162,7 +159,7 @@ def replay(markets: Markets, example) -> dict:
         row["executed_our_mode"] = executed_match.get("our_mode")
         row["executed_delta_points"] = executed_match.get("delta_points")
         row["executed_bars_from_printed"] = executed_match.get("bars_from_printed")
-        row["executed_strict_10"] = executed_match.get("detected_strict_10")
+        row["executed_strict_10"] = strict_10(entry, executed_match)
 
         # The same selected-list test with the day read's classifier taken out
         # of the question: the primary play is set to the play the AUTHOR
@@ -202,6 +199,22 @@ def replay(markets: Markets, example) -> dict:
         "no_proper_entry_reason": example.get("no_proper_entry_reason"),
     }
 
+
+
+def _decision_match(entry, match) -> bool:
+    """A ticket whose price is a level read off a narration, not a printed fill, is scored by its
+    decision bar (one bar for an R:R-tool mark, three otherwise)."""
+    bars = match.get("bars_from_printed")
+    allowed = 1.0 if entry.get("marked_by") == "rr_tool" else 3.0
+    return bool(match.get("our_entry") is not None and bars is not None and float(bars) <= allowed)
+
+
+def strict_10(entry, match) -> bool:
+    """The acceptance flag of a ticket against ANY list (candidate or traded): within ten points on
+    the right bar, or, for a decision-scored ticket, the decision bar. Until 2026-09-18 the traded
+    list was scored without the decision rule the candidate list had (2025-11-20: our 10:05 short at
+    the 9-10 high, his 10:05 short at the 9-10 high, scored a miss)."""
+    return bool(match.get("detected_strict_10")) or (bool(entry.get("scored_by_decision")) and _decision_match(entry, match))
 
 
 def _selection_for_session(module, market, episodes, read) -> dict:
@@ -245,6 +258,12 @@ def _trades_and_episodes(episodes, taken) -> tuple[list[dict], list[dict]]:
     keys = {
         (str(row.get("branch")), str(row.get("side")), int(row.get("decision_at") or 0), str(row.get("entry")))
         for row in taken
+    }
+    # a taken trade stands for the coincident levels merged into it (its confluences) as well
+    keys |= {
+        (str(twin.get("branch")), str(row.get("side")), int(twin.get("decision_at") or 0), str(twin.get("entry")))
+        for row in taken
+        for twin in row.get("confluences") or []
     }
     chosen_fills = [
         ep

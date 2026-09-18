@@ -2999,6 +2999,11 @@ ROUND_TRIPS_PER_SEGMENT = 6
 #   ("First +50, runners stopped. Same structure again +100.", 2026-08-27).
 # (from, day offset, to, day offset, round trips): one trade in each overnight clock and at the
 # open, two between 10:00 and 11:30, one in the afternoon (his 12:05, 12:35 and 13:30 tickets).
+#: the fills the traded list may use; None = every fill the scan admits. His stated trigger is the
+#: five-minute close back through the level ("The key for me is getting a 5 min close below, once I got
+#: it I waited a few points and entered short", GBp.25), then the entry just after it or on the next
+#: retracement. Read at call time.
+TRADED_MODES: tuple[str, ...] | None = None
 TRADE_WINDOWS = {
     "overnight": (("18:00", -1, "02:00", 0, 1), ("02:00", 0, "09:30", 0, 1)),
     "new_york": (("09:30", 0, "10:00", 0, 1), ("10:00", 0, "11:30", 0, 2), ("11:30", 0, "16:00", 0, 1)),
@@ -3078,7 +3083,7 @@ def selection_for(market, episodes: Sequence[Mapping[str, Any]], *, primary_play
         else:
             result = select_session_trades(pool, bars=bars, clock=(start, end), max_entries=ROUND_TRIPS_PER_SEGMENT, stop_after_target=False, reenter_same_line=REENTER_SAME_LINE, max_per_line=MAX_PER_LINE, one_position=False)
         segments[name] = result
-        traded_pool.extend(ep for ep in pool if start <= int(ep.get("decision_at") or 0) < end)
+        traded_pool.extend(ep for ep in pool if start <= int(ep.get("decision_at") or 0) < end and (TRADED_MODES is None or (ep.get("values") or {}).get("confirmation_mode") in TRADED_MODES))
         entries.extend(result.get("entries") or [])
         candidates += int(result.get("n_candidates") or 0)
         fallbacks |= set(result.get("mode_preference_fallback") or [])

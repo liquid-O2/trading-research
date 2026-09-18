@@ -351,6 +351,23 @@ def test_windows_cap_each_clock_and_a_paid_objective_ends_only_its_own_window():
     assert [row["entry"] for row in locked["entries"]] == [Decimal("100")]
 
 
+def test_the_same_trade_seen_from_two_levels_is_one_trade_with_a_confluence():
+    """'Wait for sweep of 9-10 highs. Bonus PDH.' (2026-08-28): one failure that takes two drawn levels
+    closes on one bar at one price. It is one trade; the second level is kept on it as its confluence."""
+    day = DAY
+    bars = [bar(day, "10:05", 100, 101, 99, 100)]
+    at = bars[0]["start"] - 1
+
+    def episode(branch, kind):
+        return {"research_verdict": "pass", "branch": branch, "side": "short", "decision_at": at, "candidate_id": f"{branch}|{kind}",
+                "values": {"cycle": 0, "reference_kind": kind, "reference_px": Decimal("105")}, "reference": {"id": kind},
+                "geometry": {"entry": Decimal("100"), "stop": Decimal("106"), "target": Decimal("80")}}
+
+    result = select_session_trades([episode("nyam_box", "ny_box_09_10"), episode("prior_day_level", "prior_day")], bars=bars, clock=None, max_entries=5)
+    assert result["n_entries"] == 1 and result["skipped"]["duplicate"] == 1
+    assert [(c["branch"], c["reference_kind"]) for c in result["entries"][0]["confluences"]] == [("prior_day_level", "prior_day")]
+
+
 def test_a_stop_or_target_on_the_wrong_side_of_the_entry_is_counted_and_never_traded():
     """2026-09-18, Saint's population: a short at 8,803.75 with its 'target' at
     8,823.00 was walked forward and scored a win on its first bar (1,615

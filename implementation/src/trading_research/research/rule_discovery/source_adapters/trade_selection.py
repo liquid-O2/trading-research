@@ -306,13 +306,23 @@ def select_session_trades(
         # price minutes later (2026-07-13: the PDL's second retest at 20:22
         # and the third cycle's fill at 20:29-20:41 are two entries).
         cycle = (episode.get("values") or {}).get("cycle")
-        if any(
-            row["side"] == episode.get("side")
-            and abs(row["entry"] - entry) <= NEAR_PRICE
-            and abs(int(row["decision_at"]) - decision) <= NEAR_NS
-            and not (row["branch"] == episode.get("branch") and row.get("cycle") is not None and cycle is not None and row.get("cycle") != cycle)
-            for row in taken
-        ):
+        twin = next(
+            (
+                row
+                for row in taken
+                if row["side"] == episode.get("side")
+                and abs(row["entry"] - entry) <= NEAR_PRICE
+                and abs(int(row["decision_at"]) - decision) <= NEAR_NS
+                and not (row["branch"] == episode.get("branch") and row.get("cycle") is not None and cycle is not None and row.get("cycle") != cycle)
+            ),
+            None,
+        )
+        if twin is not None:
+            # the same trade seen from another drawn level is that trade's CONFLUENCE ("Bonus PDH", "More
+            # confluence = higher rating"): kept on the trade, so a list is scored and graded by the trade,
+            # whichever of its coincident levels happened to name it
+            if episode.get("branch") != twin["branch"] or (episode.get("values") or {}).get("reference_kind") != twin.get("reference_kind"):
+                twin.setdefault("confluences", []).append({"branch": episode.get("branch"), "reference_kind": (episode.get("values") or {}).get("reference_kind"), "decision_at": decision, "entry": entry, "candidate_id": episode.get("candidate_id")})
             skipped["duplicate"] += 1
             continue
         if finished:
@@ -385,6 +395,7 @@ def select_session_trades(
                 "confirmation_mode": (episode.get("values") or {}).get("confirmation_mode"),
                 "cycle": (episode.get("values") or {}).get("cycle"),
                 "reference_px": (episode.get("values") or {}).get("reference_px"),
+                "reference_kind": (episode.get("values") or {}).get("reference_kind"),
                 "reference_id": (episode.get("reference") or {}).get("id"),
                 "outcome": result["outcome"],
                 "outcome_at": result["at_ns"],
