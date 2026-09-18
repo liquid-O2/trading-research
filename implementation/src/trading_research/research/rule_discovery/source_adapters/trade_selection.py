@@ -193,6 +193,8 @@ def select_session_trades(
     running_bucket_min: int | None = None,
     windows: Sequence[tuple[int, int, int]] | None = None,
     objective_ends_session: bool = False,
+    trace: list | None = None,
+    earliest_fill: bool = False,
 ) -> dict[str, Any]:
     """The author's trade list for one session.
 
@@ -266,7 +268,11 @@ def select_session_trades(
         mode = str((episode.get("values") or {}).get("confirmation_mode"))
         rank = order.index(mode) if mode in order else len(order)
         current = best_by_key.get(key)
-        if current is None or (rank, row[0]) < (current[0], current[1][0]):
+        # ``earliest_fill``: a trader is filled by whichever of his orders comes first; he cannot wait for a
+        # preferred fill that may come half an hour later or never (2026-08-28: the preferred retest limit
+        # filled at 10:38, his entry after the five-minute close was 10:05). The preference then only breaks ties.
+        better = current is None or ((row[0], rank) < (current[1][0], current[0]) if earliest_fill else (rank, row[0]) < (current[0], current[1][0]))
+        if better:
             best_by_key[key] = (rank, row)
     rows = [item[1] for item in best_by_key.values()]
     # Two fills in the same minute, one at the box edge and one at a projection
@@ -297,6 +303,8 @@ def select_session_trades(
         key = _episode_key(episode, running_bucket_min)
         if key in seen_keys:
             skipped["duplicate"] += 1
+            if trace is not None:
+                trace.append({"candidate_id": episode.get("candidate_id"), "decision_at": decision, "side": episode.get("side"), "branch": episode.get("branch"), "entry": entry, "skipped": "duplicate"})
             continue
         # Two fills at the same price and side, minutes apart, are one trade
         # however the reference ids or branches differ: 2026-07-10 otherwise
@@ -324,18 +332,26 @@ def select_session_trades(
             if episode.get("branch") != twin["branch"] or (episode.get("values") or {}).get("reference_kind") != twin.get("reference_kind"):
                 twin.setdefault("confluences", []).append({"branch": episode.get("branch"), "reference_kind": (episode.get("values") or {}).get("reference_kind"), "decision_at": decision, "entry": entry, "candidate_id": episode.get("candidate_id")})
             skipped["duplicate"] += 1
+            if trace is not None:
+                trace.append({"candidate_id": episode.get("candidate_id"), "decision_at": decision, "side": episode.get("side"), "branch": episode.get("branch"), "entry": entry, "skipped": "duplicate"})
             continue
         if finished:
             skipped["after_objective"] += 1
+            if trace is not None:
+                trace.append({"candidate_id": episode.get("candidate_id"), "decision_at": decision, "side": episode.get("side"), "branch": episode.get("branch"), "entry": entry, "skipped": "after_objective"})
             continue
         window = None
         if windows is not None:
             window = next((n for n, (start, end, _cap) in enumerate(windows) if start <= decision < end), None)
             if window is None:
                 skipped["outside_windows"] = skipped.get("outside_windows", 0) + 1
+                if trace is not None:
+                    trace.append({"candidate_id": episode.get("candidate_id"), "decision_at": decision, "side": episode.get("side"), "branch": episode.get("branch"), "entry": entry, "skipped": "outside_windows"})
                 continue
             if window in window_finished:
                 skipped["after_objective"] += 1
+                if trace is not None:
+                    trace.append({"candidate_id": episode.get("candidate_id"), "decision_at": decision, "side": episode.get("side"), "branch": episode.get("branch"), "entry": entry, "skipped": "after_objective"})
                 continue
         line_px = _d((episode.get("values") or {}).get("reference_px")) or entry
         running_line = _episode_key(episode, running_bucket_min)[2] is None
@@ -346,13 +362,19 @@ def select_session_trades(
         is_add = bool(in_position and (allow_adds is True or (allow_adds == "same_line" and busy_line is not None and abs(line_px - busy_line) <= NEAR_PRICE * 3)))
         if not is_add and round_trips >= max_entries:
             skipped["max_entries"] += 1
+            if trace is not None:
+                trace.append({"candidate_id": episode.get("candidate_id"), "decision_at": decision, "side": episode.get("side"), "branch": episode.get("branch"), "entry": entry, "skipped": "max_entries"})
             continue
         if window is not None and not is_add and window_trips.get(window, 0) >= windows[window][2]:
             skipped["max_entries"] += 1
+            if trace is not None:
+                trace.append({"candidate_id": episode.get("candidate_id"), "decision_at": decision, "side": episode.get("side"), "branch": episode.get("branch"), "entry": entry, "skipped": "max_entries"})
             continue
         line_tag = _episode_key(episode, running_bucket_min)[:2] + _episode_key(episode, running_bucket_min)[3:5] if running_line else None
         if max_per_line is not None and sum(1 for side_, px, tag in per_line if side_ == str(episode.get("side")) and ((tag is not None and tag == line_tag) or (tag is None and line_tag is None and abs(px - line_px) <= NEAR_PRICE * 3))) >= max_per_line:
             skipped["max_per_line"] += 1
+            if trace is not None:
+                trace.append({"candidate_id": episode.get("candidate_id"), "decision_at": decision, "side": episode.get("side"), "branch": episode.get("branch"), "entry": entry, "skipped": "max_per_line"})
             continue
         # One position at a time blocks the OPPOSITE side while a trade is live;
         # a second entry on the same side is an add ("scaling in at the lines
@@ -364,6 +386,8 @@ def select_session_trades(
                 busy_until = decision
             else:
                 skipped["position_open"] += 1
+                if trace is not None:
+                    trace.append({"candidate_id": episode.get("candidate_id"), "decision_at": decision, "side": episode.get("side"), "branch": episode.get("branch"), "entry": entry, "skipped": "position_open"})
                 continue
         # A stopped idea is not re-entered at the same line: "after a failed
         # idea the author flips" (audit §1.1); no ticket shows a second entry at
@@ -375,6 +399,8 @@ def select_session_trades(
             for row in taken
         ):
             skipped["same_line_after_stop"] = skipped.get("same_line_after_stop", 0) + 1
+            if trace is not None:
+                trace.append({"candidate_id": episode.get("candidate_id"), "decision_at": decision, "side": episode.get("side"), "branch": episode.get("branch"), "entry": entry, "skipped": "same_line_after_stop"})
             continue
         seen_keys.add(key)
         result = resolve_trade(bars, side=str(episode.get("side")), entry=entry, stop=stop, target=target, after_ns=decision)

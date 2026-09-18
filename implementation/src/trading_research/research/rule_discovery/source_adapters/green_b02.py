@@ -3003,7 +3003,13 @@ ROUND_TRIPS_PER_SEGMENT = 6
 #: five-minute close back through the level ("The key for me is getting a 5 min close below, once I got
 #: it I waited a few points and entered short", GBp.25), then the entry just after it or on the next
 #: retracement. Read at call time.
-TRADED_MODES: tuple[str, ...] | None = None
+TRADED_MODES: tuple[str, ...] | None = (
+    "five_minute_close", "tdo_close", "post_open_retest", "post_open_reclaim", "at_level",
+    "pocket_failure_close", "pocket_retest_after_failure", "pocket_close",
+)
+#: the open's own trigger is the one-minute spike and its turn ("9:30am manipulation below, reclaim, enter",
+#: GBp.40; 2026-08-31 09:33): that branch keeps its fills
+TRADED_MODES_EXEMPT = ("cash_open_reclaim_case",)
 TRADE_WINDOWS = {
     "overnight": (("18:00", -1, "02:00", 0, 1), ("02:00", 0, "09:30", 0, 1)),
     "new_york": (("09:30", 0, "10:00", 0, 1), ("10:00", 0, "11:30", 0, 2), ("11:30", 0, "16:00", 0, 1)),
@@ -3027,6 +3033,34 @@ MAX_PER_LINE = 3
 #: list is the same either way. Read at call time.
 CANDIDATES_OPEN = True
 CANDIDATES_RUNNING_BUCKET_MIN = 15
+
+
+def _traded_fills(pool: Sequence[Mapping[str, Any]]) -> list[Mapping[str, Any]]:
+    """The fills of each opportunity that HIS trigger allows (TRADED_MODES): the entry after the five-minute
+    close back through the level, or the limit at the level on a retracement AFTER that close ("once closed
+    below, low risk entry on any retracement"). A limit that would fill before the close that makes the
+    failure visible is not his entry."""
+    from trading_research.research.rule_discovery.source_adapters.trade_selection import _episode_key
+
+    if TRADED_MODES is None:
+        return list(pool)
+    confirmed: dict[tuple, int] = {}
+    for ep in pool:
+        mode = (ep.get("values") or {}).get("confirmation_mode")
+        if mode in TRADED_MODES and mode != "at_level":
+            key = _episode_key(ep)
+            confirmed[key] = min(confirmed.get(key, 1 << 62), int(ep.get("decision_at") or 0))
+    out = []
+    for ep in pool:
+        mode = (ep.get("values") or {}).get("confirmation_mode")
+        if ep.get("branch") in TRADED_MODES_EXEMPT:
+            out.append(ep)
+        elif mode == "at_level":
+            if int(ep.get("decision_at") or 0) >= confirmed.get(_episode_key(ep), 1 << 62):
+                out.append(ep)
+        elif mode in TRADED_MODES:
+            out.append(ep)
+    return out
 
 
 def selection_for(market, episodes: Sequence[Mapping[str, Any]], *, primary_play: str | None = None) -> dict[str, Any]:
@@ -3083,7 +3117,7 @@ def selection_for(market, episodes: Sequence[Mapping[str, Any]], *, primary_play
         else:
             result = select_session_trades(pool, bars=bars, clock=(start, end), max_entries=ROUND_TRIPS_PER_SEGMENT, stop_after_target=False, reenter_same_line=REENTER_SAME_LINE, max_per_line=MAX_PER_LINE, one_position=False)
         segments[name] = result
-        traded_pool.extend(ep for ep in pool if start <= int(ep.get("decision_at") or 0) < end and (TRADED_MODES is None or (ep.get("values") or {}).get("confirmation_mode") in TRADED_MODES))
+        traded_pool.extend(_traded_fills([ep for ep in pool if start <= int(ep.get("decision_at") or 0) < end]))
         entries.extend(result.get("entries") or [])
         candidates += int(result.get("n_candidates") or 0)
         fallbacks |= set(result.get("mode_preference_fallback") or [])
@@ -3095,7 +3129,7 @@ def selection_for(market, episodes: Sequence[Mapping[str, Any]], *, primary_play
         result = select_session_trades(
             traded_pool, bars=bars, clock=(spans[0][0], spans[-1][1]), max_entries=sum(cap for _a, _b, cap in spans), stop_after_target=True,
             reenter_same_line=REENTER_SAME_LINE, allow_adds=EXECUTED_ALLOW_ADDS, max_per_line=MAX_PER_LINE, allow_flips=EXECUTED_ALLOW_FLIPS,
-            windows=spans, objective_ends_session=session_lock,
+            windows=spans, objective_ends_session=session_lock, earliest_fill=True,
         )
         segments[f"traded_{shift}"] = result
         executed.extend(result.get("entries") or [])
