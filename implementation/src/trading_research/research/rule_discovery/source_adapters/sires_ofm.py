@@ -167,12 +167,14 @@ BOX_BAND = 6.0
 BOX_WINDOW_S = 180
 
 
-def cluster_boxes(order_t, order_sign, lots, low, high, *, band: float = BOX_BAND, window_s: int = BOX_WINDOW_S, min_orders: int = 2) -> list[dict[str, Any]]:
+def cluster_boxes(order_t, order_sign, lots, low, high, *, band: float | None = None, window_s: int | None = None, min_orders: int = 2) -> list[dict[str, Any]]:
     """Big aggressive orders chained by PRICE into boxes, the same rule the
     box table is built with, so an area where one side's aggression printed
     repeatedly is one object with a memory. ``known_at`` is the box's last
     order (its edges are final then); the aggressor is the side of its largest
     order, and ``sides`` says whether both sides printed in it."""
+    band = BOX_BAND if band is None else band  # read at call time so an override reaches it
+    window_s = BOX_WINDOW_S if window_s is None else window_s
     boxes: list[dict[str, Any]] = []
     for k in range(len(order_t)):
         t, lo, hi, size, sign = int(order_t[k]), float(low[k]), float(high[k]), int(lots[k]), int(order_sign[k])
@@ -217,7 +219,7 @@ RUN_GAP_S = 180
 RUN_SPAN = Decimal("25")
 
 
-def aggression_runs(order_t, order_sign, lots, low, high, *, gap_s: int = RUN_GAP_S, span: Decimal = RUN_SPAN) -> list[dict[str, Any]]:
+def aggression_runs(order_t, order_sign, lots, low, high, *, gap_s: int | None = None, span: Decimal | None = None) -> list[dict[str, Any]]:
     """Runs of same-side big aggressive orders chained in TIME: the next order
     of the side joins while it arrives within ``gap_s`` of the last and keeps
     the run's prints inside ``span`` points. The paper's catalyst is "multiple
@@ -225,6 +227,8 @@ def aggression_runs(order_t, order_sign, lots, low, high, *, gap_s: int = RUN_GA
     aggression" (p.8): for a buy run the line is its lowest print, for a sell
     run its highest. Each run lists its orders in time order so a reader can
     take it as it stood at any moment."""
+    gap_s = RUN_GAP_S if gap_s is None else gap_s  # read at call time so an override reaches it
+    span = RUN_SPAN if span is None else span
     open_runs: dict[int, dict[str, Any]] = {}
     runs: list[dict[str, Any]] = []
     for k in range(len(order_t)):

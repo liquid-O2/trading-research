@@ -35,6 +35,9 @@ MAX_ENTRIES_PER_SESSION = 3
 #: REBUILD_JJ_GB_2026-09-17.md. Modes not in a branch's list, and branches not
 #: listed here, fall back to the earliest decision and are recorded as such --
 #: no order is invented where the tickets are silent.
+#: minutes that separate two sweep cycles of one developing (running) edge into two opportunities; None = one an edge a session
+RUNNING_EDGE_BUCKET_MIN: int | None = None
+
 MODE_PREFERENCE: dict[str, tuple[str, ...]] = {
     # --- Jumbo, read off the author's tickets (coordinator rebuild 2026-09-17):
     # the resting limit at the line and the signature at the line lead the
@@ -155,7 +158,17 @@ def _episode_key(episode: Mapping[str, Any]) -> tuple:
         # cuts it goes through and whatever price each cut printed: the edge
         # is the opportunity (2026-08-27: seven "lines" of the 12-13 hour's
         # high were one line moving up)
-        return (episode.get("branch"), episode.get("side"), None, kind.replace("_running", ""), str(values.get("level_edge") or ""), None)
+        # ... but a developing edge can be swept and fail MORE THAN ONCE in a
+        # session, and a later cycle is its own opportunity (2026-07-30: the
+        # London low fails at 03:21 and again at 04:01, where he buys;
+        # 2026-08-27: the 12:00 hour's high at 12:34 and at 12:48, where he
+        # sells). With RUNNING_EDGE_BUCKET_MIN set, fills of one edge that
+        # many minutes apart are different opportunities; None keeps one
+        # opportunity an edge a session (the list as built 2026-09-17).
+        bucket = None
+        if RUNNING_EDGE_BUCKET_MIN and episode.get("decision_at") is not None:
+            bucket = int(episode["decision_at"]) // (int(RUNNING_EDGE_BUCKET_MIN) * 60 * 1_000_000_000)
+        return (episode.get("branch"), episode.get("side"), None, kind.replace("_running", ""), str(values.get("level_edge") or ""), bucket)
     return (
         episode.get("branch"),
         episode.get("side"),
