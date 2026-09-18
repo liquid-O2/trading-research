@@ -909,11 +909,15 @@ def _scan_continuation_or_trapped(market, branch, balance, bars):
                     "target": str(target) if target is not None else None,
                     "selector": selector,
                     "target_fixed": target is not None,
+                    # a target on the wrong side of the entry is no objective: until 2026-09-18 a break of the
+                    # balance edge itself carried the edge as its "target" and was scored a win at once
+                    # (1,715 of 4,269 executed trades, 53% "wins" at 3.9R)
+                    "target_beyond_entry": target is not None and entry is not None and (dec(target) - entry) * sg > 0,
                     "distance": str(distance) if distance is not None else None,
                     "asia_range_claim": "150-160",
                     "inside_asia_usual_range": bool(_D("150") <= distance <= _D("160")) if asia and distance is not None else None,
                 },
-                require=("target_fixed",),
+                require=("target_fixed", "target_beyond_entry"),
             )
             stages = [context, ref_stage, loc, trig_stage, conf, risk, obj]
             values = {
@@ -1228,8 +1232,8 @@ def _scan_poc(market, balance, bars):
         obj = stage_from(
             "objective",
             confirm_at,
-            {"target": str(target), "selector": "VAH", "target_fixed": target is not None},
-            require=("target_fixed",),
+            {"target": str(target), "selector": "VAH", "target_fixed": target is not None, "target_beyond_entry": target is not None and dec(target) > dec((hold or push).get("C") or push["C"])},
+            require=("target_fixed", "target_beyond_entry"),
         )
         stages = [context, ref_stage, loc, trig, conf, obj]
         decision = confirm_at if confirm_at is not None else int(push.get("known_at") or push["end"])

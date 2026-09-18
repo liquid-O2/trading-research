@@ -219,6 +219,7 @@ def select_session_trades(
     if max_entries is None:
         max_entries = MAX_ENTRIES_PER_SESSION  # read at call time so a rescan override reaches it
     rows = []
+    invalid_geometry = 0
     for episode in episodes:
         if episode.get("research_verdict") != "pass":
             continue
@@ -229,7 +230,14 @@ def select_session_trades(
             continue
         if clock is not None and not (clock[0] <= int(decision) < clock[1]):
             continue
-        rows.append((int(decision), episode, entry, stop, _d(geometry.get("target"))))
+        target = _d(geometry.get("target"))
+        direction = 1 if str(episode.get("side")) == "long" else -1
+        if (entry - stop) * direction <= 0 or (target is not None and (target - entry) * direction <= 0):
+            # a stop or a target on the wrong side of the entry is not a trade: walked forward it
+            # "reaches its target" on the first bar (Saint, 2026-09-18). Counted, never traded.
+            invalid_geometry += 1
+            continue
+        rows.append((int(decision), episode, entry, stop, target))
     rows.sort(key=lambda item: (item[0], str(item[1].get("branch")), str(item[1].get("side"))))
 
     # One opportunity is one (branch, side, reference, cycle). Among its
@@ -268,7 +276,7 @@ def select_session_trades(
     round_trips = 0
     finished = False
     per_line: list[tuple[str, Decimal, tuple | None]] = []
-    skipped = {"duplicate": 0, "position_open": 0, "after_objective": 0, "max_entries": 0, "max_per_line": 0}
+    skipped = {"duplicate": 0, "position_open": 0, "after_objective": 0, "max_entries": 0, "max_per_line": 0, "invalid_geometry": invalid_geometry}
     NEAR_PRICE = Decimal("2")
     NEAR_NS = 10 * 60 * 1_000_000_000
     for decision, episode, entry, stop, target in rows:
