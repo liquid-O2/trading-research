@@ -92,6 +92,11 @@ def balances(bars, prior_width=None):
     return output
 
 
+#: fill the opens and closes the event clock withholds (see minute_ohlc.py);
+#: False reproduces the bars every run before 2026-09-18 saw
+FILL_WITHHELD_OPEN_CLOSE = True
+
+
 class HistoricalFeatures:
     def __init__(self, day, *, data_root='/workspace/data', document=None, records=None):
         self.day = date.fromisoformat(day) if isinstance(day,str) else day
@@ -128,7 +133,14 @@ class HistoricalFeatures:
     def bars(self,start,end,seconds=60):
         if start < self.start or end > self.end or end <= start:
             return []
-        return self.window.bars(start,end,seconds)
+        rows = self.window.bars(start,end,seconds)
+        if not FILL_WITHHELD_OPEN_CLOSE:
+            return rows
+        # the event clock withholds an open or close whose trades share a
+        # timestamp (6-17% of cash-session minutes); the owned trades file is
+        # in exchange order and settles it (minute_ohlc.py, 2026-09-18)
+        from .minute_ohlc import fill_withheld
+        return fill_withheld(rows, data_root=self.data_root, instrument_id=self.instrument_id)
 
     def coverage(self,start,end):
         return self.window.coverage(start,end)
