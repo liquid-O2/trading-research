@@ -254,7 +254,11 @@ def select_session_trades(
     # names the edge ("R-Lo swept") and is filled on its reclaim (2025-10-03
     # 25,091.45 on the low's reclaim, not the -0.5 limit under it).
     EDGE_KINDS = {"box_low", "box_high", "london_low", "london_high"}
-    rows.sort(key=lambda item: (item[0] // (2 * 60 * 1_000_000_000) if edge_first else item[0], 0 if (edge_first and (item[1].get("values") or {}).get("reference_kind") in EDGE_KINDS) else 1, item[0], str(item[1].get("branch")), str(item[1].get("side"))))
+    # A line of the value-area layer that coincides with a line of the main range is a
+    # confluence of that trade, not a second one: the main model's line names it
+    # (2026-05-20 09:39: the 6-9 box's -0.33 at 29,028.60 and the value range's -1.33 at 29,029.42).
+    layer = lambda item: 1 if str((item[1].get("values") or {}).get("reference_kind") or "").startswith("value_") else 0
+    rows.sort(key=lambda item: (item[0] // (2 * 60 * 1_000_000_000) if edge_first else item[0], 0 if (edge_first and (item[1].get("values") or {}).get("reference_kind") in EDGE_KINDS) else 1, item[0], layer(item), str(item[1].get("branch")), str(item[1].get("side"))))
 
     taken: list[dict[str, Any]] = []
     seen_keys: set[tuple] = set()

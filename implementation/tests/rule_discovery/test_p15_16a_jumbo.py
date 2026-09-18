@@ -263,7 +263,10 @@ def test_j6_the_day_read_is_recorded_with_its_inputs_and_gates_the_plays():
     context = jj.session_context(market)
     read = context["read"]
     assert set(read["inputs"]) >= {"range_pct", "range_bin", "open_location", "overnight_purged_high", "overnight_purged_low", "edges_still_drawn"}
-    assert read["unavailable_inputs"] == ["sister_index_relative_strength", "news_calendar"]
+    # the two outside reads (TBR p.12, pp.22-24) are recorded with their availability, never guessed:
+    # the fixture has no prior session to compare ES against, so the sister read must say so
+    assert read["sister_index"] == {"available": False} and "sister_index_relative_strength" in read["unavailable_inputs"]
+    assert ("news_calendar" in read["unavailable_inputs"]) == (not read["news_week"]["available"])
     document = jj.scan_b02(market, {"branch": "all"})
     assert not [row for row in document["omissions"] if row.get("reason") == "scan_error"], "a branch raised"
     plays = {ep["values"]["play"] for ep in document["episodes"]}

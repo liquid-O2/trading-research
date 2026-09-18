@@ -70,6 +70,7 @@ def rows_one(day: str, records: list[dict], details: dict) -> dict:
 
     install_write_guard()
     v2 = _module("build_grading_dataset_v2")
+    context = _module("day_context_features")
     started = time.monotonic()
     market = load_source_market(day)
     open_ns = int(market.at("09:30"))
@@ -112,7 +113,7 @@ def rows_one(day: str, records: list[dict], details: dict) -> dict:
         # the position in the day's executed list is known at the decision (earlier trades only)
         for i, row in enumerate(rows):
             row["nth_trade_of_session"] = i
-        out.extend(v2.augment(SHORT.get(family, family), market, rows))
+        out.extend(context.context_rows(SHORT.get(family, family), market, v2.augment(SHORT.get(family, family), market, rows)))
     return {"date": day, "rows": out, "seconds": round(time.monotonic() - started, 1)}
 
 

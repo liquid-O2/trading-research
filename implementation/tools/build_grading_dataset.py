@@ -182,6 +182,11 @@ def rows_for(family: str, example: dict, entries: list[dict], market, episodes: 
                 "read_day_model": read.get("day_model"),
                 "read_bias": read.get("bias"),
                 "side_with_bias": None if not read.get("bias") else (ep.get("side") == read.get("bias")),
+                # Jumbo's outside reads (TBR pp.22-24 and p.12); absent for Green Bird, whose read carries neither
+                "read_news_tier": (read.get("news_week") or {}).get("tier"),
+                "read_news_release_today": ";".join((read.get("news_week") or {}).get("release_today") or []) or None,
+                "read_sister_divergence_on_side": None if not (read.get("sister_index") or {}).get("available") else bool(read["sister_index"]["divergence_at_high" if ep.get("side") == "short" else "divergence_at_low"]),
+                "read_nq_minus_es_overnight_pct_with_side": None if not (read.get("sister_index") or {}).get("available") else round(float(read["sister_index"]["nq_minus_es_overnight_pct"]) * (1 if ep.get("side") == "long" else -1), 4),
                 "stop_points": None if entry_px is None or stop is None else round(abs(entry_px - stop), 2),
                 "first_objective_points": None if entry_px is None or first is None else round(abs(first - entry_px), 2),
                 "far_objective_points": None if entry_px is None or target is None else round(abs(target - entry_px), 2),

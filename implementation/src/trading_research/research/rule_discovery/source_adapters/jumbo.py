@@ -843,6 +843,21 @@ def drawn_levels(market, box: Mapping[str, Any] | None, *, evrange: Mapping[str,
     return out
 
 
+def _outside_reads(market, prior_day: Mapping[str, Any] | None) -> tuple[dict[str, Any], dict[str, Any]]:
+    """The news week (TBR pp.22-24) and NQ against ES overnight (TBR p.12), both
+    known at the 09:00 read; unavailable, never guessed, when their data is not on disk."""
+    from .jumbo_context import news_week, sister_index
+
+    data_root = getattr(market, "data_root", None)
+    news = news_week(_as_day(market), data_root)
+    night = (_at(market, "18:00", -1), _at(market, "09:00"))
+    overnight = _span(_bars(market, night[0], night[1], 60), known_at=night[1])
+    span = None if not prior_day else prior_day.get("window")
+    window = None if span is None else ((int(span.start), int(span.end)) if hasattr(span, "start") else tuple(int(x) for x in span))
+    sister = sister_index(data_root=data_root, prior_window=window, overnight=night, nq_prior=prior_day, nq_overnight=overnight)
+    return news, sister
+
+
 def session_context(market) -> dict[str, Any]:
     """Everything the author reads before the open, plus the day's classification."""
     cached = getattr(market, "_jj_context", None)
@@ -886,6 +901,7 @@ def session_context(market) -> dict[str, Any]:
         "sessionstat": sessionstat_envelope(market),
     }
     context["levels"] = drawn_levels(market, box, evrange=evrange, pzones=pzones)
+    context["news_week"], context["sister_index"] = _outside_reads(market, prior_day)
     context["case"] = None
     context["read"] = session_read(market, context)
     context["case"] = context["read"]["classification"]
@@ -1005,7 +1021,9 @@ def session_read(market, context: Mapping[str, Any]) -> dict[str, Any]:
             "evrange_source": context.get("evrange_source"),
             "pzone_source": context.get("pzone_source"),
         },
-        "unavailable_inputs": ["sister_index_relative_strength", "news_calendar"],
+        "news_week": context.get("news_week"),
+        "sister_index": context.get("sister_index"),
+        "unavailable_inputs": [name for name, body in (("sister_index_relative_strength", context.get("sister_index")), ("news_calendar", context.get("news_week"))) if not (body or {}).get("available")],
         "read_inputs_missing": [
             name
             for name, present in (
