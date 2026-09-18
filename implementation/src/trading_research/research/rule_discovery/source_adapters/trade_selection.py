@@ -191,8 +191,17 @@ def select_session_trades(
     allow_flips: bool = False,
     one_position: bool = True,
     running_bucket_min: int | None = None,
+    windows: Sequence[tuple[int, int, int]] | None = None,
 ) -> dict[str, Any]:
     """The author's trade list for one session.
+
+    ``windows`` (start_ns, end_ns, max_round_trips), in time order and not
+    overlapping, are the author's own clocks inside the session ("always
+    terminating my trading session before 10am", "9-11 am est hands down best
+    time to trade"): a setup decided outside every window is not taken, each
+    window has its own cap, and with ``stop_after_target`` a paid objective
+    ends THAT window only ("one and done"), not the ones after it. The one
+    position carries across windows.
 
     Rules, in the audit's words:
 
@@ -275,6 +284,8 @@ def select_session_trades(
     busy_line: Decimal | None = None
     round_trips = 0
     finished = False
+    window_trips: dict[int, int] = {}
+    window_finished: set[int] = set()
     per_line: list[tuple[str, Decimal, tuple | None]] = []
     skipped = {"duplicate": 0, "position_open": 0, "after_objective": 0, "max_entries": 0, "max_per_line": 0, "invalid_geometry": invalid_geometry}
     NEAR_PRICE = Decimal("2")
@@ -304,6 +315,15 @@ def select_session_trades(
         if finished:
             skipped["after_objective"] += 1
             continue
+        window = None
+        if windows is not None:
+            window = next((n for n, (start, end, _cap) in enumerate(windows) if start <= decision < end), None)
+            if window is None:
+                skipped["outside_windows"] = skipped.get("outside_windows", 0) + 1
+                continue
+            if window in window_finished:
+                skipped["after_objective"] += 1
+                continue
         line_px = _d((episode.get("values") or {}).get("reference_px")) or entry
         running_line = _episode_key(episode, running_bucket_min)[2] is None
         in_position = one_position and busy_until is not None and decision < busy_until and str(episode.get("side")) == busy_side
@@ -312,6 +332,9 @@ def select_session_trades(
         # "same_line" (Green Bird's re-entry of a level he is already long)
         is_add = bool(in_position and (allow_adds is True or (allow_adds == "same_line" and busy_line is not None and abs(line_px - busy_line) <= NEAR_PRICE * 3)))
         if not is_add and round_trips >= max_entries:
+            skipped["max_entries"] += 1
+            continue
+        if window is not None and not is_add and window_trips.get(window, 0) >= windows[window][2]:
             skipped["max_entries"] += 1
             continue
         line_tag = _episode_key(episode, running_bucket_min)[:2] + _episode_key(episode, running_bucket_min)[3:5] if running_line else None
@@ -367,6 +390,8 @@ def select_session_trades(
         )
         if not is_add:
             round_trips += 1
+            if window is not None:
+                window_trips[window] = window_trips.get(window, 0) + 1
         per_line.append((str(episode.get("side")), line_px, line_tag))
         # A position still open at the end of the bars is live for the rest of
         # the clock: nothing but an add or a flip may follow it.
@@ -376,7 +401,10 @@ def select_session_trades(
         busy_side = str(episode.get("side"))
         busy_line = line_px
         if result["outcome"] == "target" and stop_after_target:
-            finished = True
+            if window is None:
+                finished = True
+            else:
+                window_finished.add(window)
     return {
         "entries": taken,
         "n_entries": len(taken),

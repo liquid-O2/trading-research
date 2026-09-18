@@ -324,6 +324,30 @@ def test_g11_selection_is_one_position_at_a_time_and_stops_after_a_full_objectiv
     assert result["skipped"]["after_objective"] == 4
 
 
+def test_windows_cap_each_clock_and_a_paid_objective_ends_only_its_own_window():
+    """'Always terminating my trading session before 10am' and 'one and done':
+    each of the author's clocks has its own cap; a target paid in one clock
+    ends that clock, a later clock still trades; a setup between clocks is
+    not taken. Worked by hand on four one-minute bars."""
+    day = DAY
+    bars = [bar(day, "09:40", 100, 125, 100, 121), bar(day, "09:41", 121, 122, 119, 120), bar(day, "10:30", 120, 121, 119, 120), bar(day, "12:10", 120, 121, 99, 100)]
+
+    def episode(hhmm, entry, stop, target, n):
+        at = next(b for b in bars if b is bars[n])["start"] - 1
+        return {"research_verdict": "pass", "branch": "nyam_box", "side": "long", "decision_at": at, "values": {"cycle": n, "reference_px": Decimal(entry)},
+                "reference": {"id": f"r{n}"}, "geometry": {"entry": Decimal(entry), "stop": Decimal(stop), "target": Decimal(target)}}
+
+    first = episode("09:40", "100", "95", "120", 0)      # paid on the 09:40 bar
+    second = episode("09:41", "121", "115", "140", 1)    # same morning clock, after the objective: not taken
+    between = episode("10:30", "120", "115", "140", 2)   # between the clocks: not taken
+    afternoon = episode("12:10", "120", "110", "140", 3)  # the afternoon clock still trades
+    morning = (bars[0]["start"] - 60, bars[1]["end"], 2)
+    pm = (bars[3]["start"] - 60, bars[3]["end"], 1)
+    result = select_session_trades([first, second, between, afternoon], bars=bars, clock=None, max_entries=10, stop_after_target=True, windows=[morning, pm])
+    assert [(row["entry"], row["outcome"]) for row in result["entries"]] == [(Decimal("100"), "target"), (Decimal("120"), "stop")]
+    assert result["skipped"]["after_objective"] == 1 and result["skipped"]["outside_windows"] == 1
+
+
 def test_a_stop_or_target_on_the_wrong_side_of_the_entry_is_counted_and_never_traded():
     """2026-09-18, Saint's population: a short at 8,803.75 with its 'target' at
     8,823.00 was walked forward and scored a win on its first bar (1,615
