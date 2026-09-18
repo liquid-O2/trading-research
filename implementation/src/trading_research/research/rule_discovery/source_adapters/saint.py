@@ -869,10 +869,17 @@ def _scan_continuation_or_trapped(market, branch, balance, bars):
             else:
                 require = ("confirm_at", "held_retest", "arrival_ok", "alignment_ok")
             conf = stage_from("confirmation", confirm_at, conf_operands, require=require)
-            # the fill at the retest's extreme (TRAP pp.6-10: sold 29,729.25 into
-            # the 19:47 pullback high 29,726.75), the stop a tick through the
-            # broken level (his stop box 29,729-29,736.75 under the 29,740 line)
-            entry = dec(retest_extreme) if retest_extreme is not None else None
+            # The fill is the retest bar's CLOSE, the first price known once the
+            # retest exists. Until 2026-09-18 it was the retest's extreme, a
+            # price nobody can know before the bar ends (it was chosen to sit on
+            # his 29,729.25; the first population then won 68% of trades with
+            # three-to-thirteen-point stops). TRAP p.9 gives his real trigger:
+            # he waits for "aggressive selling printed inside the candle bodies"
+            # at the retest, an order-flow entry that belongs on the trade tape
+            # (2026-08-10: 15-, 113- and 68-lot sells at 19:20-19:23 under the
+            # retest); that entry replaces this close when it is built. The stop
+            # is a tick through the broken level (his stop box under the line).
+            entry = dec(retest["C"]) if retest is not None and retest.get("C") is not None else None
             stop = dec(boundary) - B02_Q if side == "long" else dec(boundary) + B02_Q
             shape = (context.get("operands") or {}).get("shape")
             if shape == "double":

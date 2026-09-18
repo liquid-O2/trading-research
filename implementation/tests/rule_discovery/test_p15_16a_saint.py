@@ -335,7 +335,9 @@ def test_RR22_asia_range_literal():
 def _member_market(*, independent=True, after_1245=True, contact_px=D("100.00")):
     prior_t = clock(DAY - timedelta(days=1), "13:10") if after_1245 else clock(DAY - timedelta(days=1), "10:00")
     t = _t("10:05")
-    bars = _fill(START, 2, 100, 101, 99, 100) + [
+    # price arrives at the level from below: a touch is an arrival (K10 p.8, "when price came back"), so the
+    # bars before the contact lie wholly outside the pair's band
+    bars = _fill(_t("10:03"), 2, 97, 98, 96.5, 97.5) + [  # inside the scan's clock (it opens at 09:00), before the 10:05 contact
         synth_bar(t, 100.1, 100.5, 99.5, contact_px, delta=-2),
         synth_bar(t + MINUTE, 100, 100.4, 99.4, 99.6, delta=-1),
     ]
@@ -612,7 +614,7 @@ def test_failed_auction_drive_without_return_fails_confirmation():
 def test_member_touch_without_reaction_fails_trigger():
     prior_t = clock(DAY - timedelta(days=1), "13:10")
     t = _t("10:05")
-    bars = _fill(START, 2, 100, 101, 99, 100) + [
+    bars = _fill(_t("10:03"), 2, 97, 98, 96.5, 97.5) + [  # price arrives at the level; the touch then prints no reaction
         synth_bar(t, 100.0, 100.1, 99.95, 100.05, delta=0),
         synth_bar(t + MINUTE, 100.05, 100.15, 100.0, 100.1, delta=0),
     ]
