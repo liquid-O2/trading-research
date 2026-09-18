@@ -2665,7 +2665,8 @@
      "proper_entry": true,
      "side": "long",
      "branch": "kg1_retest",
-     "marked_by": "ticket"
+     "marked_by": "ticket",
+     "tape_check_2026_09_18": "The printed minute cannot be the fill: at 10:17 NQ traded 29,592.25-29,616.25. After his 10:15 short was stopped (29,621.25 at 10:16), 29,654.5 first trades again at 10:20-10:21 (lows 29,626.5 and 29,641.5, above his 29,640 stop from 10:21) before the run to 29,715 at 10:22; the fill is most likely 10:21. The time is left as recorded."
     },
     {
      "time_et": "10:36",
@@ -3609,24 +3610,26 @@
    },
    "actions": [
     {
-     "time_et": "10:40-11:16",
+     "time_et": "11:50-12:02",
      "action": "sell",
      "qty": 5,
      "price": 27901.5,
-     "note": "short 5 at about 27,901.50 (position tag) after the sweep of the 09:00-10:00 box high 27,875.75 to 27,909 and the failure back inside; buy limits 27,805.50 down to 27,581; chart-marked",
+     "note": "short at about 27,901.50 (position tag) after the sweep of the 10:00-11:00 box high 27,909.25 to 27,917.0 at 11:47-11:50 and the failure; buy limits 27,805.50 down to 27,581; chart-marked",
      "proper_entry": true,
      "side": "short",
      "branch": "nyam_box",
      "marked_by": "chart",
-     "added": "added 2026-09-17 night: GB p.46 charts dated on the tape; chart-marked fills carry the chart's resolution (about 5 points)"
+     "added": "added 2026-09-17 night: GB p.46 charts dated on the tape; chart-marked fills carry the chart's resolution (about 5 points)",
+     "time_et_as_first_recorded": "10:40-11:16",
+     "record_correction_2026_09_18": "The first record dated the fill 10:40-11:16 from the chart's crosshair label ('01 May 26 11:16 AM'). The chart's own clock reads 12:11:09 (UTC-4), its last price is 27,842.50 and the open PnL is +$2,370: a short from 27,901.50 that is 59 points in profit at 12:11. On the tape the 10:00-11:00 box high 27,909.25 is swept at 11:47-11:50 (high 27,917.0), the 11:50 bar collapses to 27,837.75, and 27,901.50 trades again only at 11:57 (high 27,903.75) and 12:01 (high 27,901.50 exactly) before the fall to 27,842 by 12:11. The fill is between the failure at 11:50 and 12:02; the level is the 10:00-11:00 box high, not the 09:00-10:00 one."
     }
    ],
    "n_proper_entries": 1,
    "expected_detection": {
     "branch": "nyam_box",
     "side": "short",
-    "reference": "the 9-10 box high swept after 10:00 and failed",
-    "entry_window_et": "10:40-11:16"
+    "reference": "the 10:00-11:00 box high 27,909.25 swept at 11:47-11:50 (to 27,917.0) and failed",
+    "entry_window_et": "11:50-12:02"
    }
   },
   {

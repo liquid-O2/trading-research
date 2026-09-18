@@ -521,6 +521,8 @@ def projection_ladder(high, low) -> dict[str, str]:
 
 def box_geometry(market, kind: str) -> dict[str, Any] | None:
     """The time-based range with every internal the author draws on it."""
+    if kind in VALUE_RANGE_WINDOW:
+        return _value_range_geometry(market, kind)
     if kind == "ny":
         start, end = _at(market, "06:00"), _at(market, "09:00")
     elif kind == "london":
@@ -552,6 +554,70 @@ def box_geometry(market, kind: str) -> dict[str, Any] | None:
         "mean_reversal": mean_reversal_bands(high, low),
         "extension": extension_reaction_bands(high, low, width),
     }
+
+
+# From May 2026 his charts draw the range a second way ("testing the new NT
+# studies, same ranges, different layers", 2026-05-15; "in that chart is a time
+# based range", 2026-05-19): the VALUE AREA of the 06:00-09:30 profile, labelled
+# "VA 0.45%" / "VA 0.28%", its POC as the middle line, and the same 33 / 66 /
+# 133 / 166% projections measured from the value edges with the value width.
+# 2026-05-19 prints 28,915.75 / 28,865.00 / 28,834.25: the owned profile of
+# 06:00-09:30 gives exactly those three prices; 2026-05-15 prints 29,283.00 /
+# 29,152.00 against the owned 29,283.50 / 29,152.50. No other window on a
+# half-hour grid over the three days before comes within five points.
+#
+# London, 2026-06-05 ("London range exhaustion (1.33-1.66) longs", JR p.50): the
+# printed range is about 30,224 / 30,161 with the -1.66 line some ten points
+# under the session low 30,062.00. The overnight box (20:00-03:00: 30,264.00 /
+# 30,052.25) is not that range; the value area of the SAME three and a half
+# hours before the open, 23:30-03:00, is 30,224.50 / 30,158.75 and puts his
+# 30,066.50 buy inside its -1.33/-1.66 band (30,071.3 to 30,049.6). One chart,
+# read off its pixels: the window is the New York layer's by analogy.
+VALUE_RANGE_WINDOW = {"ny_value": (("06:00", 0), ("09:30", 0)), "london_value": (("23:30", -1), ("03:00", 0))}
+VALUE_RANGE_ACTION = ("09:30", "16:00")
+#: "the author trades a level whenever it is tested" (level_contacts): on the
+#: value layer every distinct test of a line after the break is an opportunity
+#: (2026-05-15: the +0.33 at 12:46 and the value high at 12:55 are late tests
+#: of lines the morning had crossed many times); the bound is a safety cap
+VALUE_RANGE_MAX_CONTACTS = 12
+
+
+def _value_range_geometry(market, kind: str) -> dict[str, Any] | None:
+    cache = getattr(market, "_jj_value_range", None)
+    if cache is None:
+        cache = {}
+        setattr(market, "_jj_value_range", cache)
+    if kind in cache:
+        return cache[kind]
+    result = None
+    profile = getattr(market, "profile", None)
+    (from_hhmm, from_day), (to_hhmm, to_day) = VALUE_RANGE_WINDOW[kind]
+    start, end = _at(market, from_hhmm, from_day), _at(market, to_hhmm, to_day)
+    if callable(profile) and end <= int(market.end):
+        payload = profile(start, end) or {}
+        low, high, poc = _d(payload.get("val")), _d(payload.get("vah")), _d(payload.get("poc"))
+        if low is not None and high is not None and high > low:
+            width = high - low
+            result = {
+                "kind": kind,
+                "id": f"jj-{kind.replace('_', '-')}:{market.instrument_id}:{start}:{end}",
+                "low": low,
+                "high": high,
+                "eq": (low + high) / 2,
+                "poc": poc,
+                "q25": low + width / 4,
+                "q75": low + width * 3 / 4,
+                "range_open": None,
+                "range_close": None,
+                "width": width,
+                "known_at": end,
+                "window": [start, end],
+                "ladder": {key: Decimal(value) for key, value in projection_ladder(high, low).items()},
+                "mean_reversal": mean_reversal_bands(high, low),
+                "extension": extension_reaction_bands(high, low, width),
+            }
+    cache[kind] = result
+    return result
 
 
 def range_class(width: Decimal | None, price: Decimal | None) -> dict[str, Any]:
@@ -1625,10 +1691,10 @@ def _scan_extension_reaction(market) -> tuple[list[dict[str, Any]], list[dict[st
     context = session_context(market)
     box = context.get("box")
     if box is None:
-        return [], []
+        return _value_layer_episodes(market, context, "extension_reaction"), []
     bands = box["extension"]
     if not bands.get("available"):
-        return [], [{"reason": "extension_band_unavailable", "branch": "extension_reaction"}]
+        return _value_layer_episodes(market, context, "extension_reaction"), [{"reason": "extension_band_unavailable", "branch": "extension_reaction"}]
     begin, end = _at(market, NY_EXTENSION_ACTION[0]), _at(market, NY_EXTENSION_ACTION[1])
     stat = context.get("sessionstat")
     episodes = []
@@ -1721,8 +1787,8 @@ def _scan_extension_reaction(market) -> tuple[list[dict[str, Any]], list[dict[st
                         geometry={"band": [band[0], band[1]], "first_objective": target},
                     )
                 )
+    episodes.extend(_value_layer_episodes(market, context, "extension_reaction"))
     return episodes, []
-
 
 
 def _spike_turn(market, *, level: Decimal, side: str, bar: Mapping[str, Any], end: int) -> dict[str, Any] | None:
@@ -2381,7 +2447,50 @@ def _scan_eq_branch(market, branch: str) -> tuple[list[dict[str, Any]], list[dic
                         cycle=int(cycle["cycle"]), extra_values={"trend_direction": direction, "range_bin": (context.get("range_class") or {}).get("bin")},
                     )
                 )
+    if branch == "single_purged":
+        episodes.extend(_value_layer_episodes(market, context, branch))
     return episodes, []
+
+
+def _value_layer_episodes(market, context: Mapping[str, Any], branch: str) -> list[dict[str, Any]]:
+    """The same two plays on the value-area layer of the range (see
+    VALUE_RANGE_WINDOW). ``extension_reaction`` (and London's ``other_session``,
+    2026-06-05 "London range exhaustion (1.33-1.66) longs"): once a value edge has broken,
+    a resting limit at the 1.33 and at the 1.66 projection beyond it, every
+    contact its own opportunity (2026-05-19 buys the -1.66 at 10:22 and again
+    at 10:51, "the -1.33/-1.66 band with absorption prints"). ``single_purged``:
+    on the expansion day the broken value edge and the 0.33-0.66 projections
+    are retested WITH the break (2026-05-15 buys the +0.33 retest at 12:46 and
+    the reclaim from the value high at 12:55, "quick 80 points afternoon")."""
+    london = branch == "other_session"
+    box = box_geometry(market, "london_value" if london else "ny_value")
+    if box is None:
+        return []
+    action = LONDON_TRADE if london else VALUE_RANGE_ACTION
+    begin = max(_at(market, action[0]), int(box["known_at"]))
+    end = min(_at(market, action[1]), int(market.end))
+    ladder, low, high = box["ladder"], box["low"], box["high"]
+    episodes: list[dict[str, Any]] = []
+    if branch in ("extension_reaction", "other_session"):
+        for name, side, edge in (("plus_1.33", "short", high), ("plus_1.66", "short", high), ("minus_1.33", "long", low), ("minus_1.66", "long", low)):
+            first_break = _first_break(market, begin=begin, end=end, edge=edge, side=side)
+            if first_break is None:
+                continue
+            for index, contact in enumerate(level_contacts(market, level=ladder[name], begin=int(first_break["start"]), end=end, departure=box["width"] / 10)):
+                fills = _contact_fills(market, level=ladder[name], side=side, contact=contact, end=end, placed_at=int(first_break["start"]))
+                episodes.extend(_line_episodes(market, context, branch=branch, side=side, level=ladder[name], kind=f"value_{name}", location_kind="exhaustion_projection", reference=box, trigger=contact, fills=fills, objective=objective_ladder(box, side), begin=begin, cycle=index))
+    elif branch == "single_purged":
+        for side, edge, names in (("long", high, ("plus_0.33", "plus_0.5", "plus_0.66")), ("short", low, ("minus_0.33", "minus_0.5", "minus_0.66"))):
+            broke = _first_break(market, begin=begin, end=end, edge=edge, side="short" if side == "long" else "long")
+            if broke is None:
+                continue
+            objective = _trend_objective(box, side)
+            for kind, level in [("value_high" if side == "long" else "value_low", edge)] + [(f"value_{name}", ladder[name]) for name in names]:
+                contacts = level_contacts(market, level=level, begin=int(broke["end"]), end=end, departure=box["width"] / 10, max_contacts=VALUE_RANGE_MAX_CONTACTS)
+                for index, contact in enumerate(contacts):
+                    fills = _contact_fills(market, level=level, side=side, contact=contact, end=end, placed_at=int(broke["end"]))
+                    episodes.extend(_line_episodes(market, context, branch=branch, side=side, level=level, kind=kind, location_kind="line_test", reference=box, trigger=contact, fills=fills, objective=objective, begin=begin, cycle=index))
+    return episodes
 
 
 def _scan_other_session(market) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
@@ -2427,6 +2536,7 @@ def _scan_other_session(market) -> tuple[list[dict[str, Any]], list[dict[str, An
             for index, contact in enumerate(level_contacts(market, level=line, begin=int(first_break["start"]), end=end, departure=london["width"] / 10)):
                 fills = _contact_fills(market, level=line, side=side, contact=contact, end=end, placed_at=int(first_break["start"]))
                 episodes.extend(_line_episodes(market, context, branch="other_session", side=side, level=line, kind=name, location_kind="exhaustion_projection", reference=london, trigger=contact, fills=fills, objective=objective_ladder(london, side), begin=begin, cycle=index))
+    episodes.extend(_value_layer_episodes(market, context, "other_session"))
     # the drawn liquidity levels, live from 02:00
     for row in _sweep_levels(context, exclude_box=True):
         if not (row["kind"].startswith("prth_") or row["kind"][:2] in {"d1", "d2", "d3"}):
@@ -2614,7 +2724,10 @@ def selection_for(market, episodes, *, primary_play: str | None = None) -> dict[
     # 25 of his 30 tickets within ten points on the right bar against 0.23 for fake
     # tickets, at about 32 candidates a day (gated and capped: 20 of 30 against 0.07
     # at about 12). The play, the caps and the position rules shape the EXECUTED
-    # list below, which is unchanged. Both lists share the clock rules that follow.
+    # list below. Both lists share the double-break clock rules that follow; "one thesis
+    # per session" (the purged-day retest and the outbound taken once) is an execution
+    # rule and leaves the candidates alone: his 2026-05-15 buys are the afternoon's tests
+    # of lines the morning had already tested.
     if classification == "double_break":
         # "cycle 1 from 09:30 to the 09:40-09:50 window (the Judas), cycle 2 from
         # there to 12:00" (audit §1.1 clocks): the first hour belongs to the
@@ -2634,6 +2747,7 @@ def selection_for(market, episodes, *, primary_play: str | None = None) -> dict[
             first_side = min(pre_open_eq, key=lambda ep: int(ep.get("decision_at") or 0)).get("side")
             pre_open_eq = [ep for ep in pre_open_eq if ep.get("side") == first_side]
         passing = [ep for ep in passing if ep.get("branch") != "single_extended"] + pre_open_eq
+    candidates_pool = list(passing)
     for one_shot in ("single_purged", "judas_outbound"):
         # "one thesis per session": the purged-day retest and the outbound are
         # taken once, at the first line that gives the entry (2026-07-28 09:35)
@@ -2664,8 +2778,8 @@ def selection_for(market, episodes, *, primary_play: str | None = None) -> dict[
             candidates = select_session_trades(open_candidates, bars=bars, clock=clock, max_entries=10**6, stop_after_target=False, edge_first=EDGE_FIRST, max_per_line=None, one_position=False, reenter_same_line=True)
         candidates["executed"] = select_session_trades(pool, bars=bars, clock=clock, max_entries=cap, stop_after_target=False, edge_first=EDGE_FIRST, allow_adds=EXECUTED_ALLOW_ADDS, max_per_line=MAX_PER_LINE, allow_flips=EXECUTED_ALLOW_FLIPS)
         return candidates
-    london = segment([ep for ep in passing if ep.get("branch") == "other_session"], (_at(market, SEGMENTS["london"][0]), _at(market, SEGMENTS["london"][1])), LONDON_ROUND_TRIPS, [ep for ep in passing if ep.get("branch") == "other_session"])
-    ny = segment([ep for ep in passing if ep.get("branch") in branches], (_at(market, SEGMENTS["ny"][0]), _at(market, SEGMENTS["ny"][1])), NY_ROUND_TRIPS, [ep for ep in passing if ep.get("branch") != "other_session"])
+    london = segment([ep for ep in passing if ep.get("branch") == "other_session"], (_at(market, SEGMENTS["london"][0]), _at(market, SEGMENTS["london"][1])), LONDON_ROUND_TRIPS, [ep for ep in candidates_pool if ep.get("branch") == "other_session"])
+    ny = segment([ep for ep in passing if ep.get("branch") in branches], (_at(market, SEGMENTS["ny"][0]), _at(market, SEGMENTS["ny"][1])), NY_ROUND_TRIPS, [ep for ep in candidates_pool if ep.get("branch") != "other_session"])
     entries = list(london.get("entries") or []) + list(ny.get("entries") or [])
     entries.sort(key=lambda row: int(row.get("decision_at") or 0))
     executed = list(london["executed"].get("entries") or []) + list(ny["executed"].get("entries") or [])

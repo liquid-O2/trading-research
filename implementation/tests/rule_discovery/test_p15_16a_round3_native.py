@@ -308,3 +308,52 @@ def test_clock_lookups_work_on_the_native_replay_view():
     assert jj._at(view, "09:00") == expected_0900
     assert gb._at(view, "20:00", -1) == expected_prev_2000
     assert jj._at(view, "20:00", -1) == expected_prev_2000
+
+
+# --------------------------------------------------------------------------- the value-area layer of the range
+
+
+def test_the_value_range_is_the_one_printed_on_his_may_charts():
+    """JR p.10 (HIswHpTXwAAJVXt.png, 2026-05-19) prints "VA 0.28%" with lines at
+    28,915.75 / 28,865.00 / 28,834.25; JR p.11 (2026-05-15) prints "VA 0.45%"
+    with 29,283.00 / 29,152.00. The expected prices are his chart's labels."""
+    may19 = jj.box_geometry(_market("2026-05-19"), "ny_value")
+    assert (may19["high"], may19["poc"], may19["low"]) == (Decimal("28915.75"), Decimal("28865.0"), Decimal("28834.25"))
+    may15 = jj.box_geometry(_market("2026-05-15"), "ny_value")
+    assert abs(may15["high"] - Decimal("29283")) <= 1 and abs(may15["low"] - Decimal("29152")) <= 1
+    assert may15["known_at"] == int(_market("2026-05-15").at("09:30")), "the range is a fact of 06:00-09:30 and is traded after it"
+
+
+def test_the_value_layer_gives_his_long_at_the_lower_exhaustion_band():
+    """2026-05-19: long at the -1.33/-1.66 band of the value range (chart-marked
+    28,695, red arrows at 15:22 and 15:51 UK). The candidate must sit within
+    ten points of his mark, be decided inside his window, and never before
+    the value range is known or the value low has broken."""
+    ticket = _ticket("JJ-2026-05-19")
+    market = _market("2026-05-19")
+    episodes = jj.scan_b02(market, {"branch": "all"})["episodes"]
+    layer = [ep for ep in episodes if ep["research_verdict"] == "pass" and str(ep["values"].get("reference_kind", "")).startswith("value_minus_1.")]
+    assert layer, "the value layer's exhaustion band produced no candidate"
+    lo, hi = int(market.at("10:15")), int(market.at("10:55"))
+    near = [ep for ep in layer if ep["side"] == "long" and lo <= int(ep["decision_at"]) < hi and abs(Decimal(str(ep["geometry"]["entry"])) - Decimal(str(ticket["price"]))) <= 10]
+    assert near, [(ep["values"]["reference_kind"], str(ep["geometry"]["entry"])) for ep in layer]
+    assert all(int(ep["decision_at"]) >= int(market.at("09:30")) for ep in layer)
+
+
+def test_the_london_value_layer_gives_his_exhaustion_long():
+    """JR p.50, 2026-06-05 "London range exhaustion (1.33-1.66) longs": Buy 3 @
+    30,066.50 at 08:20 UK. The printed range (about 30,224 / 30,161, read off the
+    chart) is the value area of 23:30-03:00, not the overnight box; the ticket is
+    the expectation, the window is the claim under test."""
+    ticket = _ticket("JJ-2026-06-05-LONDON")
+    market = _market("2026-06-05")
+    box = jj.box_geometry(market, "london_value")
+    assert abs(box["high"] - Decimal("30224")) <= 3 and abs(box["low"] - Decimal("30161")) <= 3
+    band_top, band_bottom = box["ladder"]["minus_1.33"], box["ladder"]["minus_1.66"]
+    assert band_bottom <= Decimal(str(ticket["price"])) <= band_top, "his fill is inside the -1.33/-1.66 band of that range"
+    episodes = jj.scan_b02(market, {"branch": "all"})["episodes"]
+    near = [ep for ep in episodes if ep["research_verdict"] == "pass" and ep["branch"] == "other_session" and ep["side"] == "long"
+            and str(ep["values"].get("reference_kind", "")).startswith("value_minus_1.")
+            and abs(Decimal(str(ep["geometry"]["entry"])) - Decimal(str(ticket["price"]))) <= 10
+            and int(market.at("03:15")) <= int(ep["decision_at"]) < int(market.at("03:30"))]
+    assert near
