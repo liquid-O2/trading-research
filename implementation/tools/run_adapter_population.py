@@ -160,35 +160,42 @@ def main(argv=None) -> int:
     peak = 0
     done = 0
     causality: list[dict] = []
+    # Workers are replaced between batches of dates: the adapters cache prior-session
+    # windows per process and a long-lived Member worker grew to 9 GB. The executor's own
+    # max_tasks_per_child deadlocked at the first replacement here (2026-09-18: both runs
+    # stopped at exactly workers x recycle sessions), so each batch gets a fresh pool.
+    batch = max(1, args.workers) * max(1, args.recycle)
     with (args.out / "rows.jsonl").open("w") as sink:
-        with ProcessPoolExecutor(max_workers=max(1, args.workers), max_tasks_per_child=max(1, args.recycle)) as pool:
-            futures = {pool.submit(scan_one, ADAPTERS[args.family], day, overrides, args.export_executed, args.export_candidates): day for day in dates}
-            for future in as_completed(futures):
-                day = futures[future]
-                try:
-                    result = future.result()
-                except Exception as exc:
-                    failures.append({"date": day, "error": f"{type(exc).__name__}: {exc}"})
-                    continue
-                done += 1
-                sink.write(json.dumps({"kind": "session", **result}, default=str) + "\n")
-                FAMILY = result["family"]
-                stats = result["variants"]["B0.3"][FAMILY]
-                totals["sessions"] += 1
-                totals["net_points"] += stats["net_points"]
-                totals["trades"] += stats["n_executed"]
-                totals["wins"] += stats["wins"]
-                totals["losses"] += stats["losses"]
-                totals["open"] += stats["open"]
-                totals["candidates"] += stats["n_candidates"]
-                totals["episodes"] += result["n_episodes"]
-                causality.extend(result.get("causality_violations") or [])
-                peak = max(peak, int(result.get("peak_rss_bytes") or 0))
-                for branch, c in result["counts"].items():
-                    for k, v in c.items():
-                        branch_counts[branch][k] += v
-                if done % 25 == 0:
-                    print(json.dumps({"event": "progress", "done": done, "of": len(dates), "elapsed_s": round(time.monotonic() - started, 1)}), flush=True)
+        for offset in range(0, len(dates), batch):
+            with ProcessPoolExecutor(max_workers=max(1, args.workers)) as pool:
+                futures = {pool.submit(scan_one, ADAPTERS[args.family], day, overrides, args.export_executed, args.export_candidates): day for day in dates[offset : offset + batch]}
+                for future in as_completed(futures):
+                    day = futures[future]
+                    try:
+                        result = future.result()
+                    except Exception as exc:
+                        failures.append({"date": day, "error": f"{type(exc).__name__}: {exc}"})
+                        continue
+                    done += 1
+                    sink.write(json.dumps({"kind": "session", **result}, default=str) + "\n")
+                    sink.flush()
+                    FAMILY = result["family"]
+                    stats = result["variants"]["B0.3"][FAMILY]
+                    totals["sessions"] += 1
+                    totals["net_points"] += stats["net_points"]
+                    totals["trades"] += stats["n_executed"]
+                    totals["wins"] += stats["wins"]
+                    totals["losses"] += stats["losses"]
+                    totals["open"] += stats["open"]
+                    totals["candidates"] += stats["n_candidates"]
+                    totals["episodes"] += result["n_episodes"]
+                    causality.extend(result.get("causality_violations") or [])
+                    peak = max(peak, int(result.get("peak_rss_bytes") or 0))
+                    for branch, c in result["counts"].items():
+                        for k, v in c.items():
+                            branch_counts[branch][k] += v
+                    if done % 25 == 0:
+                        print(json.dumps({"event": "progress", "done": done, "of": len(dates), "elapsed_s": round(time.monotonic() - started, 1)}), flush=True)
     n = max(1, totals["sessions"])
     summary = {
         "schema": "adapter-population-b03-v1",
