@@ -324,6 +324,43 @@ def test_g11_selection_is_one_position_at_a_time_and_stops_after_a_full_objectiv
     assert result["skipped"]["after_objective"] == 4
 
 
+def test_open_candidate_list_contains_the_capped_one_and_leaves_the_executed_list_alone(monkeypatch):
+    """2026-09-18: six of his 19 tickets were off the capped candidate list
+    (segment cap, line cap, a developing edge collapsed to one opportunity a
+    session). The open list is the default; the capped one must be inside it
+    and the executed list must not move."""
+    market = _session()
+    opened = _passes(market)[0]["selection"]
+    monkeypatch.setattr(gb, "CANDIDATES_OPEN", False)
+    capped = _passes(market)[0]["selection"]
+    ident = lambda row: (row["branch"], row["side"], row["decision_at"], str(row["entry"]))
+    assert {ident(row) for row in capped["entries"]} <= {ident(row) for row in opened["entries"]}
+    assert capped["executed"]["entries"] == opened["executed"]["entries"]
+
+
+def test_a_developing_edge_swept_again_later_is_a_second_opportunity_only_when_asked():
+    """2026-07-30: the London low fails at 03:21 and again at 04:01, where he
+    buys. One developing edge is one opportunity a session unless the caller
+    separates sweep cycles by time."""
+    minute = 60 * 1_000_000_000
+
+    def sweep(at, entry):
+        return {
+            "research_verdict": "pass",
+            "branch": "london_box",
+            "side": "long",
+            "decision_at": at,
+            "values": {"reference_kind": "london_box_running", "level_edge": "low", "cycle": at},
+            "reference": {"id": "london"},
+            "geometry": {"entry": Decimal(entry), "stop": Decimal(entry) - 10, "target": Decimal(entry) + 20},
+        }
+
+    pair = [sweep(201 * minute, "100"), sweep(241 * minute, "96")]
+    common = dict(bars=[], clock=None, max_entries=10, stop_after_target=False, one_position=False, reenter_same_line=True)
+    assert select_session_trades(pair, **common)["n_entries"] == 1
+    assert select_session_trades(pair, running_bucket_min=15, **common)["n_entries"] == 2
+
+
 # --------------------------------------------------------------------------- G12
 
 

@@ -436,26 +436,35 @@ def test_j13_sessionstat_is_computed_from_the_tape_when_asked():
 # --------------------------------------------------------------------------- frequency
 
 
-def test_frequency_selection_takes_the_chosen_play_first_and_keeps_one_position():
+def test_frequency_selection_takes_the_chosen_play_first_and_keeps_one_position(monkeypatch):
     """Audit 1.1 'Sizing and frequency': one thesis per session, one to four
-    round trips. Fidelity pass 8: the candidate list holds every admitted
-    opportunity once (bounded per segment), the executed list is one position
-    at a time with adds and flips, and the day's play leads in New York. The
-    author's density itself is the grading layer (fidelity-round8 REPORT
-    section 11) and is gated in the plausibility test."""
+    round trips. The EXECUTED list is one position at a time with adds and
+    flips, bounded per segment, and the day's play leads it in New York. The
+    CANDIDATE list is what he chooses from: since 2026-09-18 every admitted
+    opportunity once, whatever the day's play (six of his tickets are outside
+    the play or past the caps); the gated list of 2026-09-17 stays available
+    and the open list must contain it."""
     market = _session()
     document = jj.scan_b02(market, {"branch": "all"})
     assert not [row for row in document["omissions"] if row.get("reason") == "scan_error"], "a branch raised"
     assert {ep["branch"] for ep in document["episodes"]} >= {"single_purged", "internal_rotation"}, "the EQ plays scan on the fixture"
     selection = document["selection"]
     assert selection["primary_play"] == document["day_read"]["primary_play"]
-    assert selection["n_entries"] <= jj.NY_ROUND_TRIPS + jj.LONDON_ROUND_TRIPS
     executed = selection["executed"]
+    assert executed["n_round_trips"] <= jj.NY_ROUND_TRIPS + jj.LONDON_ROUND_TRIPS
     assert executed["n_round_trips"] <= executed["n_entries"]
     assert_one_position_at_a_time(executed["entries"])
-    new_york = [row for row in selection["entries"] if row["branch"] != "other_session"]
+    new_york = [row for row in executed["entries"] if row["branch"] != "other_session"]
     if new_york and not selection["fallback_play_used"]:
         assert jj.PLAY_OF_BRANCH[new_york[0]["branch"]] == selection["primary_play"], "the day's play leads"
+
+    monkeypatch.setattr(jj, "CANDIDATES_GATE_BY_PLAY", True)
+    gated = jj.scan_b02(market, {"branch": "all"})["selection"]
+    assert gated["n_entries"] <= jj.NY_ROUND_TRIPS + jj.LONDON_ROUND_TRIPS
+    assert gated["executed"]["entries"] == executed["entries"], "the switch does not touch the executed list"
+    ident = lambda row: (row["branch"], row["side"], row["decision_at"], str(row["entry"]))
+    assert {ident(row) for row in gated["entries"]} <= {ident(row) for row in selection["entries"]}, "opening the list loses no candidate"
+    assert selection["n_entries"] > gated["n_entries"], "the fixture has opportunities outside the day's play"
 
 
 # --------------------------------------------------------------------------- causality

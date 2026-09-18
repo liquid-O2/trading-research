@@ -12,6 +12,16 @@ and the pin is only rewritten with ``--pin``.
 
     fidelity_guard.py --out <dir>            # check against the pin
     fidelity_guard.py --out <dir> --pin      # re-pin after an accepted change
+    fidelity_guard.py --out <dir> --placebo  # also replay the fake tickets
+
+A reproduction count is evidence only beside its chance rate (2026-09-18: the
+loose Jumbo count was 0.87 real against 0.51 for fake tickets). With
+``--placebo`` the Jumbo and Green Bird replay also runs on fake tickets (every
+real one moved 40 minutes either way on its own day, side and branch, priced
+at the market, ``placebo_examples_jj_gb.py``) and the share of them found on
+the candidate list within ten points is pinned beside the tickets: the guard
+fails when a ticket is lost OR when that chance rate rises by more than
+PLACEBO_SLACK, so a list cannot be widened into reproducing everything.
 
 Any scanner change, in any family, runs this before it is merged: a change to
 one strategy must not move another's tickets (owner instruction 2026-09-17).
@@ -28,6 +38,8 @@ HERE = Path(__file__).resolve().parent
 WORKTREE = HERE.parents[1]
 PIN = WORKTREE / "planning/phase-1-5/FIDELITY_PIN.json"
 PYTHON = sys.executable
+PLACEBO_SHIFTS = (40, -40)
+PLACEBO_SLACK = 0.05
 
 
 def run(cmd: list[str], env_src: str) -> None:
@@ -58,11 +70,31 @@ def collect(out: Path) -> dict[str, dict]:
     return flags
 
 
+def collect_placebo(out: Path) -> dict[str, dict]:
+    """Per family: fake tickets replayed, and how many sit on the candidate
+    list (and on the executed list) within ten points on the right bar."""
+    rates: dict[str, dict] = {}
+    for shift in PLACEBO_SHIFTS:
+        doc = json.loads((out / f"placebo/{shift}/REPLAY_JJ_GB.json").read_text())
+        for example in doc["examples"]:
+            if example.get("inside_tape") is False:
+                continue
+            body = rates.setdefault(example["family"], {"tickets": 0, "selected": 0, "executed": 0})
+            for entry in example.get("entries") or []:
+                body["tickets"] += 1
+                body["selected"] += 1 if entry.get("selected_strict_10") else 0
+                body["executed"] += 1 if entry.get("executed_strict_10") else 0
+    for body in rates.values():
+        body["selected_rate"] = round(body["selected"] / max(1, body["tickets"]), 3)
+    return rates
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--pin", action="store_true", help="write the pin from this run (after an accepted change)")
     parser.add_argument("--skip-run", action="store_true", help="compare the replays already in --out")
+    parser.add_argument("--placebo", action="store_true", help="also replay the fake Jumbo and Green Bird tickets and check the chance rate")
     args = parser.parse_args(argv)
     out = args.out
     src = str(WORKTREE / "implementation/src")
@@ -70,12 +102,28 @@ def main(argv=None) -> int:
         run([PYTHON, str(HERE / "replay_jj_gb.py"), "--out", str(out / "jjgb")], src)
         run([PYTHON, str(HERE / "replay_sires.py"), "--out", str(out / "sires"), "--levels", "drawn"], src)
         run([PYTHON, str(HERE / "replay_member.py"), "--out", str(out / "member")], src)
+        if args.placebo:
+            for shift in PLACEBO_SHIFTS:
+                fake = out / f"placebo/fake_{shift}.json"
+                fake.parent.mkdir(parents=True, exist_ok=True)
+                run([PYTHON, str(HERE / "placebo_examples_jj_gb.py"), "--shift", str(shift), "--out", str(fake)], src)
+                run([PYTHON, str(HERE / "replay_jj_gb.py"), "--examples", str(fake), "--out", str(out / f"placebo/{shift}")], src)
     flags = collect(out)
+    placebo = collect_placebo(out) if args.placebo else None
     if args.pin or not PIN.exists():
-        PIN.write_text(json.dumps({"pinned_from": str(out), "tickets": flags}, indent=1, sort_keys=True) + "\n")
-        print(json.dumps({"event": "pinned", "tickets": len(flags), "detected": sum(1 for f in flags.values() if f["detected"])}))
+        if placebo is None:
+            raise SystemExit("a pin is written with --placebo: a ticket count is pinned beside its chance rate")
+        PIN.write_text(json.dumps({"pinned_from": str(out), "tickets": flags, "placebo": placebo}, indent=1, sort_keys=True) + "\n")
+        print(json.dumps({"event": "pinned", "tickets": len(flags), "detected": sum(1 for f in flags.values() if f["detected"]), "selected": sum(1 for f in flags.values() if f["selected"]), "placebo": placebo}))
         return 0
-    pinned = json.loads(PIN.read_text())["tickets"]
+    document = json.loads(PIN.read_text())
+    pinned = document["tickets"]
+    risen = []
+    if placebo is not None:
+        for family, was in (document.get("placebo") or {}).items():
+            now = placebo.get(family)
+            if now is None or now["selected_rate"] > was["selected_rate"] + PLACEBO_SLACK:
+                risen.append(f"{family}: fake tickets on the candidate list {None if now is None else now['selected_rate']} against the pinned {was['selected_rate']}")
     lost, gained, missing = [], [], []
     for key, was in pinned.items():
         now = flags.get(key)
@@ -88,8 +136,8 @@ def main(argv=None) -> int:
             if was.get(field) is False and now.get(field) is True:
                 gained.append(f"{key} [{field}]")
     new = sorted(set(flags) - set(pinned))
-    verdict = "fail" if lost or missing else "pass"
-    print(json.dumps({"event": "fidelity_guard", "verdict": verdict, "tickets": len(flags), "lost": lost, "missing": missing, "gained": gained, "new_tickets": new}, indent=1))
+    verdict = "fail" if lost or missing or risen else "pass"
+    print(json.dumps({"event": "fidelity_guard", "verdict": verdict, "tickets": len(flags), "lost": lost, "missing": missing, "gained": gained, "new_tickets": new, "placebo": placebo, "placebo_risen": risen}, indent=1))
     return 1 if verdict == "fail" else 0
 
 

@@ -35,8 +35,6 @@ MAX_ENTRIES_PER_SESSION = 3
 #: REBUILD_JJ_GB_2026-09-17.md. Modes not in a branch's list, and branches not
 #: listed here, fall back to the earliest decision and are recorded as such --
 #: no order is invented where the tickets are silent.
-#: minutes that separate two sweep cycles of one developing (running) edge into two opportunities; None = one an edge a session
-RUNNING_EDGE_BUCKET_MIN: int | None = None
 
 MODE_PREFERENCE: dict[str, tuple[str, ...]] = {
     # --- Jumbo, read off the author's tickets (coordinator rebuild 2026-09-17):
@@ -138,7 +136,7 @@ def branch_alternatives(text: Any) -> tuple[str, ...]:
     return tuple(part.strip() for part in str(text).split("/") if part.strip())
 
 
-def _episode_key(episode: Mapping[str, Any]) -> tuple:
+def _episode_key(episode: Mapping[str, Any], running_bucket_min: int | None = None) -> tuple:
     """One opportunity: the branch, the side, the LINE (its kind and price) and
     the cycle. The reference id alone is the box, which every line of the play
     shares; keying on it collapsed every Judas long of a session into one
@@ -162,12 +160,12 @@ def _episode_key(episode: Mapping[str, Any]) -> tuple:
         # session, and a later cycle is its own opportunity (2026-07-30: the
         # London low fails at 03:21 and again at 04:01, where he buys;
         # 2026-08-27: the 12:00 hour's high at 12:34 and at 12:48, where he
-        # sells). With RUNNING_EDGE_BUCKET_MIN set, fills of one edge that
+        # sells). With ``running_bucket_min`` set, fills of one edge that
         # many minutes apart are different opportunities; None keeps one
-        # opportunity an edge a session (the list as built 2026-09-17).
+        # opportunity an edge a session (the executed list).
         bucket = None
-        if RUNNING_EDGE_BUCKET_MIN and episode.get("decision_at") is not None:
-            bucket = int(episode["decision_at"]) // (int(RUNNING_EDGE_BUCKET_MIN) * 60 * 1_000_000_000)
+        if running_bucket_min and episode.get("decision_at") is not None:
+            bucket = int(episode["decision_at"]) // (int(running_bucket_min) * 60 * 1_000_000_000)
         return (episode.get("branch"), episode.get("side"), None, kind.replace("_running", ""), str(values.get("level_edge") or ""), bucket)
     return (
         episode.get("branch"),
@@ -192,6 +190,7 @@ def select_session_trades(
     max_per_line: int | None = None,
     allow_flips: bool = False,
     one_position: bool = True,
+    running_bucket_min: int | None = None,
 ) -> dict[str, Any]:
     """The author's trade list for one session.
 
@@ -240,7 +239,7 @@ def select_session_trades(
     fallbacks: set[str] = set()
     for row in rows:
         episode = row[1]
-        key = _episode_key(episode)
+        key = _episode_key(episode, running_bucket_min)
         order = MODE_PREFERENCE.get(str(episode.get("branch"))) or ()
         if not order:
             fallbacks.add(str(episode.get("branch")))
@@ -269,7 +268,7 @@ def select_session_trades(
     NEAR_PRICE = Decimal("2")
     NEAR_NS = 10 * 60 * 1_000_000_000
     for decision, episode, entry, stop, target in rows:
-        key = _episode_key(episode)
+        key = _episode_key(episode, running_bucket_min)
         if key in seen_keys:
             skipped["duplicate"] += 1
             continue
@@ -294,7 +293,7 @@ def select_session_trades(
             skipped["after_objective"] += 1
             continue
         line_px = _d((episode.get("values") or {}).get("reference_px")) or entry
-        running_line = _episode_key(episode)[2] is None
+        running_line = _episode_key(episode, running_bucket_min)[2] is None
         in_position = one_position and busy_until is not None and decision < busy_until and str(episode.get("side")) == busy_side
         # an add: the same side while the position is live -- any line when
         # ``allow_adds`` is True, the SAME line on a later cycle when it is
@@ -303,7 +302,7 @@ def select_session_trades(
         if not is_add and round_trips >= max_entries:
             skipped["max_entries"] += 1
             continue
-        line_tag = _episode_key(episode)[:2] + _episode_key(episode)[3:5] if running_line else None
+        line_tag = _episode_key(episode, running_bucket_min)[:2] + _episode_key(episode, running_bucket_min)[3:5] if running_line else None
         if max_per_line is not None and sum(1 for side_, px, tag in per_line if side_ == str(episode.get("side")) and ((tag is not None and tag == line_tag) or (tag is None and line_tag is None and abs(px - line_px) <= NEAR_PRICE * 3))) >= max_per_line:
             skipped["max_per_line"] += 1
             continue

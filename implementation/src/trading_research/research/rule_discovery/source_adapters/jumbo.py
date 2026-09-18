@@ -333,11 +333,11 @@ LEVEL_COINCIDENCE = Decimal("5")
 # guard test pins the roles: the tolerance is only ever compared, the stop
 # distance only ever added)
 STOP_BEYOND_EXTREME = Decimal("5")
-#: the candidate list admits only the branches of the day's primary play (True, the
-#: list as built 2026-09-17) or every branch's opportunities (False); and whether a line
-#: that has just stopped a trade may be a candidate again (his 2025-10-07 London ticket
-#: is a second entry at the same quadrant). Read at call time so a replay can set them.
-CANDIDATES_GATE_BY_PLAY = True
+#: False (default since 2026-09-18): the candidate list is every branch's opportunities,
+#: uncapped, a line re-enterable (see selection_for). True restores the list of
+#: 2026-09-17 (the day's play only, the segment caps, CANDIDATES_REENTER_SAME_LINE).
+#: The executed list is not affected by either. Read at call time.
+CANDIDATES_GATE_BY_PLAY = False
 CANDIDATES_REENTER_SAME_LINE = False
 # where the stop of a signature fill rests (TBR pp.27-29): "conservative", a
 # tick beyond the sweep candle's extreme ("Conservative Stop Loss at the low
@@ -2606,14 +2606,16 @@ def selection_for(market, episodes, *, primary_play: str | None = None) -> dict[
     if primary_play == "pzone":
         branches.add("timed_pzone_reversal")
     passing = [ep for ep in episodes if ep.get("research_verdict") == "pass"]
-    if not CANDIDATES_GATE_BY_PLAY:
-        # the day's play is a READ, not a gate: he takes a rotation at the range
-        # mid on a double-break day (2026-07-10 11:05), a P-zone reversal
-        # (2026-05-20 09:46) and a Judas on a single-break day (2025-10-14).
-        # With the gate off every branch's opportunities are candidates and the
-        # play is a feature of the selection layer.
-        branches = {str(ep.get("branch")) for ep in passing} - {"other_session"}
-    if classification == "double_break" and CANDIDATES_GATE_BY_PLAY:
+    # The CANDIDATE list is open: the day's play is a READ, not a gate. He takes a
+    # rotation at the range mid on a double-break day (2026-07-10 11:05), a P-zone
+    # reversal (2026-05-20 09:46), a Judas on a single-break day (2025-10-14), two
+    # extension reactions after the eighth New York entry (2025-09-09, 2026-07-06)
+    # and a second entry at a London quadrant (2025-10-07). Open, the list holds
+    # 25 of his 30 tickets within ten points on the right bar against 0.23 for fake
+    # tickets, at about 32 candidates a day (gated and capped: 20 of 30 against 0.07
+    # at about 12). The play, the caps and the position rules shape the EXECUTED
+    # list below, which is unchanged. Both lists share the clock rules that follow.
+    if classification == "double_break":
         # "cycle 1 from 09:30 to the 09:40-09:50 window (the Judas), cycle 2 from
         # there to 12:00" (audit §1.1 clocks): the first hour belongs to the
         # Judas; the range scalps of the rotation play join from 10:00. The
@@ -2655,12 +2657,15 @@ def selection_for(market, episodes, *, primary_play: str | None = None) -> dict[
     # framework admits, once (user instruction 2026-09-17: the list is per
     # play and small, not a cap on a crowd). The EXECUTED list beside it is
     # one position at a time with his adds and flips.
-    def segment(pool, clock, cap):
-        candidates = select_session_trades(pool, bars=bars, clock=clock, max_entries=cap, stop_after_target=False, edge_first=EDGE_FIRST, max_per_line=MAX_PER_LINE, one_position=False, reenter_same_line=CANDIDATES_REENTER_SAME_LINE)
+    def segment(pool, clock, cap, open_candidates):
+        if CANDIDATES_GATE_BY_PLAY:
+            candidates = select_session_trades(pool, bars=bars, clock=clock, max_entries=cap, stop_after_target=False, edge_first=EDGE_FIRST, max_per_line=MAX_PER_LINE, one_position=False, reenter_same_line=CANDIDATES_REENTER_SAME_LINE)
+        else:
+            candidates = select_session_trades(open_candidates, bars=bars, clock=clock, max_entries=10**6, stop_after_target=False, edge_first=EDGE_FIRST, max_per_line=None, one_position=False, reenter_same_line=True)
         candidates["executed"] = select_session_trades(pool, bars=bars, clock=clock, max_entries=cap, stop_after_target=False, edge_first=EDGE_FIRST, allow_adds=EXECUTED_ALLOW_ADDS, max_per_line=MAX_PER_LINE, allow_flips=EXECUTED_ALLOW_FLIPS)
         return candidates
-    london = segment([ep for ep in passing if ep.get("branch") == "other_session"], (_at(market, SEGMENTS["london"][0]), _at(market, SEGMENTS["london"][1])), LONDON_ROUND_TRIPS)
-    ny = segment([ep for ep in passing if ep.get("branch") in branches], (_at(market, SEGMENTS["ny"][0]), _at(market, SEGMENTS["ny"][1])), NY_ROUND_TRIPS)
+    london = segment([ep for ep in passing if ep.get("branch") == "other_session"], (_at(market, SEGMENTS["london"][0]), _at(market, SEGMENTS["london"][1])), LONDON_ROUND_TRIPS, [ep for ep in passing if ep.get("branch") == "other_session"])
+    ny = segment([ep for ep in passing if ep.get("branch") in branches], (_at(market, SEGMENTS["ny"][0]), _at(market, SEGMENTS["ny"][1])), NY_ROUND_TRIPS, [ep for ep in passing if ep.get("branch") != "other_session"])
     entries = list(london.get("entries") or []) + list(ny.get("entries") or [])
     entries.sort(key=lambda row: int(row.get("decision_at") or 0))
     executed = list(london["executed"].get("entries") or []) + list(ny["executed"].get("entries") or [])

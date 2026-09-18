@@ -2963,6 +2963,16 @@ REENTER_SAME_LINE = True
 # (2026-07-13: the PDL's first retest at 20:01, the third cycle's reclaim at
 # 20:40 is his fill; "add" on 2026-07-29 23:30); three trades on one line
 MAX_PER_LINE = 3
+#: True (default since 2026-09-18): the CANDIDATE list is every opportunity the
+#: segment's plays admit, without the segment and line caps, and a developing
+#: edge swept again CANDIDATES_RUNNING_BUCKET_MIN minutes later is its own
+#: opportunity (2026-07-30 04:01, 2026-08-27 12:48 are second sweeps he took).
+#: Open, the list holds 17 of his 19 tickets within ten points on the right bar
+#: against 0.26 for fake tickets at about 45 candidates a day (capped: 13 of 19
+#: against 0.17). False restores the capped list of 2026-09-17. The executed
+#: list is the same either way. Read at call time.
+CANDIDATES_OPEN = True
+CANDIDATES_RUNNING_BUCKET_MIN = 15
 
 
 def selection_for(market, episodes: Sequence[Mapping[str, Any]], *, primary_play: str | None = None) -> dict[str, Any]:
@@ -3011,7 +3021,10 @@ def selection_for(market, episodes: Sequence[Mapping[str, Any]], *, primary_play
         # the CANDIDATE list: every opportunity the segment's plays admit, once
         # (user instruction 2026-09-17); the EXECUTED list beside it is one
         # position at a time with the same-line re-entry and the flip
-        result = select_session_trades(pool, bars=bars, clock=(start, end), max_entries=ROUND_TRIPS_PER_SEGMENT, stop_after_target=False, reenter_same_line=REENTER_SAME_LINE, max_per_line=MAX_PER_LINE, one_position=False)
+        if CANDIDATES_OPEN:
+            result = select_session_trades(pool, bars=bars, clock=(start, end), max_entries=10**6, stop_after_target=False, reenter_same_line=REENTER_SAME_LINE, max_per_line=None, one_position=False, running_bucket_min=CANDIDATES_RUNNING_BUCKET_MIN)
+        else:
+            result = select_session_trades(pool, bars=bars, clock=(start, end), max_entries=ROUND_TRIPS_PER_SEGMENT, stop_after_target=False, reenter_same_line=REENTER_SAME_LINE, max_per_line=MAX_PER_LINE, one_position=False)
         result["executed"] = select_session_trades(pool, bars=bars, clock=(start, end), max_entries=ROUND_TRIPS_PER_SEGMENT, stop_after_target=False, reenter_same_line=REENTER_SAME_LINE, allow_adds=EXECUTED_ALLOW_ADDS, max_per_line=MAX_PER_LINE, allow_flips=EXECUTED_ALLOW_FLIPS)
         segments[name] = result
         entries.extend(result.get("entries") or [])
