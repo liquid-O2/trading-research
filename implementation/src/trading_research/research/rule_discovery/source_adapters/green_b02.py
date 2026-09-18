@@ -97,7 +97,12 @@ SPIKE_GIVE_BACK = Decimal("0.15")
 # The bound is four times the observed maximum so no ticket is excluded and a
 # level that "fails" hours later is not counted as the author's trade.
 FAIL_WINDOW_BARS = 12
-FAIL_WINDOW_NS = FAIL_WINDOW_BARS * FIVE
+
+def _fail_window_ns() -> int:
+    """The failure window in nanoseconds, read from FAIL_WINDOW_BARS at call
+    time so a rescan override of the bar count reaches every deadline (the
+    derived module constant above is fixed when the module loads)."""
+    return FAIL_WINDOW_BARS * FIVE
 # A reference can be swept more than once a session: 2026-08-27 traded the
 # 9-10 box high on its second excursion at 13:00 after an earlier break held.
 MAX_CYCLES_PER_LEVEL = 3
@@ -816,7 +821,7 @@ def sweep_cycles(
             continue
         sweep_at = int(row.get("start") or stamp)
         extreme = hi if side == "short" else lo
-        deadline = min(int(end), stamp + FAIL_WINDOW_NS)
+        deadline = min(int(end), stamp + _fail_window_ns())
         fail = None
         inside = None
         cursor = index
@@ -944,7 +949,7 @@ def _rejection_fill(market, *, level: Decimal, side: str, cycle: Mapping[str, An
     # opportunity's fill, exactly as at_level_fill stops at the sweep extreme
     # being retaken.
     fail_at = cycle.get("fail_at")
-    horizon = min(int(end), sweep_at + FAIL_WINDOW_NS)
+    horizon = min(int(end), sweep_at + _fail_window_ns())
     if fail_at is not None:
         horizon = min(horizon, int(fail_at))
     rows = _safe_bars(market, sweep_at, horizon)
@@ -2005,7 +2010,7 @@ def _scan_asia_tdo(market, refs, objectives) -> list[dict[str, Any]]:  # noqa: C
             confirm = None
             if tdo is not None:
                 t = int(cycle["sweep_at"]) // FIVE * FIVE
-                deadline = min(int(market.end), int(cycle["sweep_at"]) + FAIL_WINDOW_NS)
+                deadline = min(int(market.end), int(cycle["sweep_at"]) + _fail_window_ns())
                 while t + FIVE <= deadline:
                     bar = _five_min_row(market, t)
                     if _bar_complete(bar):
@@ -2376,7 +2381,7 @@ def _pocket_for_leg(market, refs, objectives, *, family: str, branch: str, end_n
     if touch is not None:
         near = near_edge(pocket, side)
         t = int(touch["start"]) // FIVE * FIVE
-        deadline = min(int(market.end), int(touch["start"]) + FAIL_WINDOW_NS)
+        deadline = min(int(market.end), int(touch["start"]) + _fail_window_ns())
         while t + FIVE <= deadline:
             bar = _five_min_row(market, t)
             if _bar_complete(bar):
