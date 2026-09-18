@@ -333,6 +333,13 @@ LEVEL_COINCIDENCE = Decimal("5")
 # guard test pins the roles: the tolerance is only ever compared, the stop
 # distance only ever added)
 STOP_BEYOND_EXTREME = Decimal("5")
+# where the stop of a signature fill rests (TBR pp.27-29): "conservative", a
+# tick beyond the sweep candle's extreme ("Conservative Stop Loss at the low
+# of the orderblock"), the baseline; "aggressive", the midpoint of the block
+# ("Aggressive Stop Loss at the midpoint of the orderblock", "at the midpoint
+# of the rejection block"; p.37 "Tight Initial Stops: Using the aggressive
+# stop placement"). Read at call time so a rescan can set it.
+SIGNATURE_STOP = "conservative"
 #: FITTED, shared with the Green Bird spike turn: the share of a tagging bar's
 #: own range it must close back from the extreme it made for the turn to be
 #: tradeable. See green_b02.SPIKE_GIVE_BACK for the tickets it was fitted on.
@@ -1051,6 +1058,16 @@ def sessionstat_envelope(market, window: tuple[str, str] = ("09:00", "12:00")) -
 # confirmation signatures (audit 1.2: faithful, kept unchanged)
 
 
+def _signature_stop(side: str, band_lo: Decimal, band_hi: Decimal) -> Decimal:
+    """The stop of an orderblock or rejection-block fill: a tick beyond the
+    block's extreme, or its midpoint under the aggressive placement."""
+    if SIGNATURE_STOP == "aggressive":
+        return (band_lo + band_hi) / 2
+    if SIGNATURE_STOP != "conservative":
+        raise ValueError(f"SIGNATURE_STOP must be conservative or aggressive, not {SIGNATURE_STOP!r}")
+    return (band_lo - TICK) if side == "long" else (band_hi + TICK)
+
+
 def _three_candle_ob(bars: list[dict[str, Any]], side: str, level: Decimal | None = None) -> dict[str, Any] | None:
     """TBR pp.27-28: C2 sweeps C1; C3 closes beyond C2's opposite extreme."""
     rows = [row for row in bars if row.get("C") is not None and row.get("H") is not None and row.get("L") is not None]
@@ -1062,10 +1079,11 @@ def _three_candle_ob(bars: list[dict[str, Any]], side: str, level: Decimal | Non
         t_c = _d(third["C"])
         if level is not None and not (s_l <= level <= s_h):
             continue
+        stop = _signature_stop(side, s_l, s_h)
         if side == "long":
-            swept, closed, stop = s_l < f_l, t_c > s_h, s_l - TICK
+            swept, closed = s_l < f_l, t_c > s_h
         else:
-            swept, closed, stop = s_h > f_h, t_c < s_l, s_h + TICK
+            swept, closed = s_h > f_h, t_c < s_l
         if swept and closed:
             return {
                 "ok": True,
@@ -1097,9 +1115,10 @@ def _rejection_block(bars: list[dict[str, Any]], side: str, level: Decimal | Non
         body_lo, body_hi = min(s_o, s_c), max(s_o, s_c)
         body = body_hi - body_lo
         if side == "long":
-            wick, closed, band, stop = body_lo - s_l, c_c > s_h, [s_l, body_lo], s_l - TICK
+            wick, closed, band = body_lo - s_l, c_c > s_h, [s_l, body_lo]
         else:
-            wick, closed, band, stop = s_h - body_hi, c_c < s_l, [body_hi, s_h], s_h + TICK
+            wick, closed, band = s_h - body_hi, c_c < s_l, [body_hi, s_h]
+        stop = _signature_stop(side, band[0], band[1])
         if wick > body and closed:
             return {
                 "ok": True,
