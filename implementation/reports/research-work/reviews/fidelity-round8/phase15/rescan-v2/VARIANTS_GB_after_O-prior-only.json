@@ -1,0 +1,1585 @@
+{
+ "GB-FAIL": {
+  "family": "GB-FAIL",
+  "baseline_sessions": 1742,
+  "years": [
+   "2020",
+   "2021",
+   "2022",
+   "2023",
+   "2024",
+   "2025",
+   "2026"
+  ],
+  "folds": [
+   {
+    "test_year": "2022",
+    "n_variants": 17,
+    "holm_floor": 0.0029
+   },
+   {
+    "test_year": "2023",
+    "n_variants": 17,
+    "holm_floor": 0.0029
+   },
+   {
+    "test_year": "2024",
+    "n_variants": 17,
+    "holm_floor": 0.0029
+   },
+   {
+    "test_year": "2025",
+    "n_variants": 17,
+    "holm_floor": 0.0029
+   },
+   {
+    "test_year": "2026",
+    "n_variants": 17,
+    "holm_floor": 0.0029
+   }
+  ],
+  "variants": {
+   "GB-O-prior-only": {
+    "overall": {
+     "sessions": 1742,
+     "mean_daily_diff": -25.074,
+     "baseline_mean": 3.484,
+     "variant_mean": -21.59
+    },
+    "test_folds": {
+     "2022": {
+      "sessions": 260,
+      "mean_daily_diff": -10.199,
+      "p_raw": 0.8765061746912655,
+      "ci_low": -26.923241346153848,
+      "ci_high": 7.610748076923051,
+      "fit_mean_daily_diff": -26.75,
+      "p_holm": 1.0,
+      "verdict": "worse"
+     },
+     "2023": {
+      "sessions": 260,
+      "mean_daily_diff": -19.489,
+      "p_raw": 0.9986500674966252,
+      "ci_low": -31.882474038461538,
+      "ci_high": -7.33190961538462,
+      "fit_mean_daily_diff": -21.254,
+      "p_holm": 1.0,
+      "verdict": "worse"
+     },
+     "2024": {
+      "sessions": 262,
+      "mean_daily_diff": -36.033,
+      "p_raw": 1.0,
+      "ci_low": -49.97920419847328,
+      "ci_high": -22.965594465648877,
+      "fit_mean_daily_diff": -20.814,
+      "p_holm": 1.0,
+      "verdict": "worse"
+     },
+     "2025": {
+      "sessions": 261,
+      "mean_daily_diff": -34.307,
+      "p_raw": 0.9998000099995,
+      "ci_low": -50.33356034482758,
+      "ci_high": -19.940549808429164,
+      "fit_mean_daily_diff": -23.87,
+      "p_holm": 1.0,
+      "verdict": "worse"
+     },
+     "2026": {
+      "sessions": 176,
+      "mean_daily_diff": -20.314,
+      "p_raw": 0.9140542972851358,
+      "ci_low": -49.678171875000004,
+      "ci_high": 9.269088068181798,
+      "fit_mean_daily_diff": -25.609,
+      "p_holm": 1.0,
+      "verdict": "worse"
+     }
+    },
+    "strata": {
+     "day_model=pullback_continuation|bias=None": {
+      "sessions": 433,
+      "mean_daily_diff": -12.01
+     },
+     "day_model=pullback_continuation|bias=long": {
+      "sessions": 158,
+      "mean_daily_diff": -4.042
+     },
+     "day_model=pullback_continuation|bias=short": {
+      "sessions": 162,
+      "mean_daily_diff": -2.444
+     },
+     "day_model=sweep_and_fail|bias=None": {
+      "sessions": 613,
+      "mean_daily_diff": -49.323
+     },
+     "day_model=sweep_and_fail|bias=long": {
+      "sessions": 169,
+      "mean_daily_diff": -23.057
+     },
+     "day_model=sweep_and_fail|bias=short": {
+      "sessions": 207,
+      "mean_daily_diff": -16.005
+     }
+    }
+   },
+   "GB-anyadds": {
+    "overall": {
+     "sessions": 1742,
+     "mean_daily_diff": -2.797,
+     "baseline_mean": 3.484,
+     "variant_mean": 0.687
+    },
+    "test_folds": {
+     "2022": {
+      "sessions": 260,
+      "mean_daily_diff": -3.846,
+      "p_raw": 0.67961601919904,
+      "ci_low": -18.91274038461539,
+      "ci_high": 12.279002884615375,
+      "fit_mean_daily_diff": -1.947,
+      "p_holm": 1.0,
+      "verdict": "worse"
+     },
+     "2023": {
+      "sessions": 260,
+      "mean_daily_diff": -4.813,
+      "p_raw": 0.7976601169941503,
+      "ci_low": -16.70600480769231,
+      "ci_high": 6.5410124999999875,
+      "fit_mean_daily_diff": -2.578,
+      "p_holm": 1.0,
+      "verdict": "worse"
+     },
+     "2024": {
+      "sessions": 262,
+      "mean_daily_diff": -5.337,
+      "p_raw": 0.7716614169291536,
+      "ci_low": -19.198708015267176,
+      "ci_high": 8.764446564885475,
+      "fit_mean_daily_diff": -3.135,
+      "p_holm": 1.0,
+      "verdict": "worse"
+     },
+     "2025": {
+      "sessions": 261,
+      "mean_daily_diff": 10.71,
+      "p_raw": 0.19544022798860056,
+      "ci_low": -12.128935823754789,
+      "ci_high": 37.851605363984646,
+      "fit_mean_daily_diff": -3.577,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2026": {
+      "sessions": 176,
+      "mean_daily_diff": -17.048,
+      "p_raw": 0.8610569471526424,
+      "ci_low": -47.13734943181818,
+      "ci_high": 14.739154829545448,
+      "fit_mean_daily_diff": -1.196,
+      "p_holm": 1.0,
+      "verdict": "worse"
+     }
+    },
+    "strata": {
+     "day_model=pullback_continuation|bias=None": {
+      "sessions": 433,
+      "mean_daily_diff": 0.486
+     },
+     "day_model=pullback_continuation|bias=long": {
+      "sessions": 158,
+      "mean_daily_diff": 20.715
+     },
+     "day_model=pullback_continuation|bias=short": {
+      "sessions": 162,
+      "mean_daily_diff": 4.042
+     },
+     "day_model=sweep_and_fail|bias=None": {
+      "sessions": 613,
+      "mean_daily_diff": -10.973
+     },
+     "day_model=sweep_and_fail|bias=long": {
+      "sessions": 169,
+      "mean_daily_diff": 16.108
+     },
+     "day_model=sweep_and_fail|bias=short": {
+      "sessions": 207,
+      "mean_daily_diff": -24.188
+     }
+    }
+   },
+   "GB-line1": {
+    "overall": {
+     "sessions": 1742,
+     "mean_daily_diff": -7.002,
+     "baseline_mean": 3.484,
+     "variant_mean": -3.518
+    },
+    "test_folds": {
+     "2022": {
+      "sessions": 260,
+      "mean_daily_diff": -13.114,
+      "p_raw": 0.9492025398730064,
+      "ci_low": -28.628757692307698,
+      "ci_high": 2.372799999999998,
+      "fit_mean_daily_diff": -0.158,
+      "p_holm": 1.0,
+      "verdict": "worse"
+     },
+     "2023": {
+      "sessions": 260,
+      "mean_daily_diff": -7.232,
+      "p_raw": 0.8845557722113895,
+      "ci_low": -19.376338461538463,
+      "ci_high": 4.101087499999999,
+      "fit_mean_daily_diff": -4.46,
+      "p_holm": 1.0,
+      "verdict": "worse"
+     },
+     "2024": {
+      "sessions": 262,
+      "mean_daily_diff": -3.777,
+      "p_raw": 0.687365631718414,
+      "ci_low": -20.25454961832061,
+      "ci_high": 11.212274809160299,
+      "fit_mean_daily_diff": -5.151,
+      "p_holm": 1.0,
+      "verdict": "worse"
+     },
+     "2025": {
+      "sessions": 261,
+      "mean_daily_diff": -23.276,
+      "p_raw": 0.9853507324633768,
+      "ci_low": -43.99669923371647,
+      "ci_high": -4.527494252873563,
+      "fit_mean_daily_diff": -4.875,
+      "p_holm": 1.0,
+      "verdict": "worse"
+     },
+     "2026": {
+      "sessions": 176,
+      "mean_daily_diff": 1.361,
+      "p_raw": 0.4831758412079396,
+      "ci_low": -33.02504119318181,
+      "ci_high": 32.932801136363615,
+      "fit_mean_daily_diff": -7.942,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     }
+    },
+    "strata": {
+     "day_model=pullback_continuation|bias=None": {
+      "sessions": 433,
+      "mean_daily_diff": -13.511
+     },
+     "day_model=pullback_continuation|bias=long": {
+      "sessions": 158,
+      "mean_daily_diff": -1.159
+     },
+     "day_model=pullback_continuation|bias=short": {
+      "sessions": 162,
+      "mean_daily_diff": -8.039
+     },
+     "day_model=sweep_and_fail|bias=None": {
+      "sessions": 613,
+      "mean_daily_diff": -12.457
+     },
+     "day_model=sweep_and_fail|bias=long": {
+      "sessions": 169,
+      "mean_daily_diff": -4.032
+     },
+     "day_model=sweep_and_fail|bias=short": {
+      "sessions": 207,
+      "mean_daily_diff": 16.694
+     }
+    }
+   },
+   "GB-noadds": {
+    "overall": {
+     "sessions": 1742,
+     "mean_daily_diff": -6.103,
+     "baseline_mean": 3.484,
+     "variant_mean": -2.619
+    },
+    "test_folds": {
+     "2022": {
+      "sessions": 260,
+      "mean_daily_diff": -7.363,
+      "p_raw": 0.9423028848557572,
+      "ci_low": -16.555391346153844,
+      "ci_high": 1.4176336538461498,
+      "fit_mean_daily_diff": -6.187,
+      "p_holm": 1.0,
+      "verdict": "worse"
+     },
+     "2023": {
+      "sessions": 260,
+      "mean_daily_diff": -6.236,
+      "p_raw": 0.9066046697665117,
+      "ci_low": -15.806332692307697,
+      "ci_high": 2.408999999999993,
+      "fit_mean_daily_diff": -6.577,
+      "p_holm": 1.0,
+      "verdict": "worse"
+     },
+     "2024": {
+      "sessions": 262,
+      "mean_daily_diff": -2.307,
+      "p_raw": 0.6908654567271636,
+      "ci_low": -12.392646946564886,
+      "ci_high": 6.715935114503814,
+      "fit_mean_daily_diff": -6.492,
+      "p_holm": 1.0,
+      "verdict": "worse"
+     },
+     "2025": {
+      "sessions": 261,
+      "mean_daily_diff": -11.018,
+      "p_raw": 0.9665516724163792,
+      "ci_low": -22.905113026819922,
+      "ci_high": -0.2836657088122838,
+      "fit_mean_daily_diff": -5.652,
+      "p_holm": 1.0,
+      "verdict": "worse"
+     },
+     "2026": {
+      "sessions": 176,
+      "mean_daily_diff": -2.157,
+      "p_raw": 0.6027698615069247,
+      "ci_low": -23.607546875,
+      "ci_high": 16.16104829545453,
+      "fit_mean_daily_diff": -6.546,
+      "p_holm": 1.0,
+      "verdict": "worse"
+     }
+    },
+    "strata": {
+     "day_model=pullback_continuation|bias=None": {
+      "sessions": 433,
+      "mean_daily_diff": -7.246
+     },
+     "day_model=pullback_continuation|bias=long": {
+      "sessions": 158,
+      "mean_daily_diff": -7.283
+     },
+     "day_model=pullback_continuation|bias=short": {
+      "sessions": 162,
+      "mean_daily_diff": -1.147
+     },
+     "day_model=sweep_and_fail|bias=None": {
+      "sessions": 613,
+      "mean_daily_diff": -9.615
+     },
+     "day_model=sweep_and_fail|bias=long": {
+      "sessions": 169,
+      "mean_daily_diff": -5.666
+     },
+     "day_model=sweep_and_fail|bias=short": {
+      "sessions": 207,
+      "mean_daily_diff": 3.354
+     }
+    }
+   },
+   "GB-noflips": {
+    "overall": {
+     "sessions": 1742,
+     "mean_daily_diff": -2.414,
+     "baseline_mean": 3.484,
+     "variant_mean": 1.07
+    },
+    "test_folds": {
+     "2022": {
+      "sessions": 260,
+      "mean_daily_diff": -4.556,
+      "p_raw": 0.688115594220289,
+      "ci_low": -22.083517307692308,
+      "ci_high": 13.388905769230755,
+      "fit_mean_daily_diff": 0.205,
+      "p_holm": 1.0,
+      "verdict": "worse"
+     },
+     "2023": {
+      "sessions": 260,
+      "mean_daily_diff": -5.059,
+      "p_raw": 0.7482125893705315,
+      "ci_low": -19.572279807692308,
+      "ci_high": 9.658372115384612,
+      "fit_mean_daily_diff": -1.376,
+      "p_holm": 1.0,
+      "verdict": "worse"
+     },
+     "2024": {
+      "sessions": 262,
+      "mean_daily_diff": -5.588,
+      "p_raw": 0.7059147042647868,
+      "ci_low": -27.20996564885496,
+      "ci_high": 14.504382633587786,
+      "fit_mean_daily_diff": -2.294,
+      "p_holm": 1.0,
+      "verdict": "worse"
+     },
+     "2025": {
+      "sessions": 261,
+      "mean_daily_diff": -6.215,
+      "p_raw": 0.7107144642767862,
+      "ci_low": -28.94449712643678,
+      "ci_high": 15.570294061302679,
+      "fit_mean_daily_diff": -2.955,
+      "p_holm": 1.0,
+      "verdict": "worse"
+     },
+     "2026": {
+      "sessions": 176,
+      "mean_daily_diff": 7.231,
+      "p_raw": 0.3993300334983251,
+      "ci_low": -42.506176136363635,
+      "ci_high": 51.95980255681817,
+      "fit_mean_daily_diff": -3.499,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     }
+    },
+    "strata": {
+     "day_model=pullback_continuation|bias=None": {
+      "sessions": 433,
+      "mean_daily_diff": -3.513
+     },
+     "day_model=pullback_continuation|bias=long": {
+      "sessions": 158,
+      "mean_daily_diff": 22.1
+     },
+     "day_model=pullback_continuation|bias=short": {
+      "sessions": 162,
+      "mean_daily_diff": -15.222
+     },
+     "day_model=sweep_and_fail|bias=None": {
+      "sessions": 613,
+      "mean_daily_diff": -8.837
+     },
+     "day_model=sweep_and_fail|bias=long": {
+      "sessions": 169,
+      "mean_daily_diff": -5.702
+     },
+     "day_model=sweep_and_fail|bias=short": {
+      "sessions": 207,
+      "mean_daily_diff": 12.898
+     }
+    }
+   },
+   "GB-noreenter": {
+    "overall": {
+     "sessions": 1742,
+     "mean_daily_diff": 23.688,
+     "baseline_mean": 3.484,
+     "variant_mean": 27.172
+    },
+    "test_folds": {
+     "2022": {
+      "sessions": 260,
+      "mean_daily_diff": 33.071,
+      "p_raw": 4.999750012499375e-05,
+      "ci_low": 21.22215480769231,
+      "ci_high": 44.629002884615346,
+      "fit_mean_daily_diff": 28.592,
+      "p_holm": 0.0008,
+      "verdict": "promoted"
+     },
+     "2023": {
+      "sessions": 260,
+      "mean_daily_diff": 16.521,
+      "p_raw": 9.99950002499875e-05,
+      "ci_low": 9.054542307692309,
+      "ci_high": 23.726890384615384,
+      "fit_mean_daily_diff": 30.079,
+      "p_holm": 0.0017,
+      "verdict": "promoted"
+     },
+     "2024": {
+      "sessions": 262,
+      "mean_daily_diff": 20.241,
+      "p_raw": 0.004099795010249488,
+      "ci_low": 3.6385314885496203,
+      "ci_high": 35.420042938931275,
+      "fit_mean_daily_diff": 26.7,
+      "p_holm": 0.0697,
+      "verdict": "not_promoted"
+     },
+     "2025": {
+      "sessions": 261,
+      "mean_daily_diff": 5.219,
+      "p_raw": 0.23808809559522023,
+      "ci_low": -9.278150383141762,
+      "ci_high": 19.062508620689652,
+      "fit_mean_daily_diff": 25.403,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2026": {
+      "sessions": 176,
+      "mean_daily_diff": 38.36,
+      "p_raw": 0.0010499475026248687,
+      "ci_low": 14.576485795454545,
+      "ci_high": 63.02450142045453,
+      "fit_mean_daily_diff": 22.039,
+      "p_holm": 0.0178,
+      "verdict": "promoted"
+     }
+    },
+    "strata": {
+     "day_model=pullback_continuation|bias=None": {
+      "sessions": 433,
+      "mean_daily_diff": 13.639
+     },
+     "day_model=pullback_continuation|bias=long": {
+      "sessions": 158,
+      "mean_daily_diff": 48.215
+     },
+     "day_model=pullback_continuation|bias=short": {
+      "sessions": 162,
+      "mean_daily_diff": 24.861
+     },
+     "day_model=sweep_and_fail|bias=None": {
+      "sessions": 613,
+      "mean_daily_diff": 19.39
+     },
+     "day_model=sweep_and_fail|bias=long": {
+      "sessions": 169,
+      "mean_daily_diff": 27.051
+     },
+     "day_model=sweep_and_fail|bias=short": {
+      "sessions": 207,
+      "mean_daily_diff": 35.05
+     }
+    }
+   },
+   "GB-rt1": {
+    "overall": {
+     "sessions": 1742,
+     "mean_daily_diff": -7.872,
+     "baseline_mean": 3.484,
+     "variant_mean": -4.388
+    },
+    "test_folds": {
+     "2022": {
+      "sessions": 260,
+      "mean_daily_diff": -11.796,
+      "p_raw": 0.8244587770611469,
+      "ci_low": -37.18457307692307,
+      "ci_high": 12.762939423076885,
+      "fit_mean_daily_diff": -8.036,
+      "p_holm": 1.0,
+      "verdict": "worse"
+     },
+     "2023": {
+      "sessions": 260,
+      "mean_daily_diff": -7.337,
+      "p_raw": 0.8128093595320234,
+      "ci_low": -23.601545192307697,
+      "ci_high": 8.831561538461512,
+      "fit_mean_daily_diff": -9.284,
+      "p_holm": 1.0,
+      "verdict": "worse"
+     },
+     "2024": {
+      "sessions": 262,
+      "mean_daily_diff": -9.972,
+      "p_raw": 0.7822608869556522,
+      "ci_low": -38.56093606870229,
+      "ci_high": 14.008587786259522,
+      "fit_mean_daily_diff": -8.799,
+      "p_holm": 1.0,
+      "verdict": "worse"
+     },
+     "2025": {
+      "sessions": 261,
+      "mean_daily_diff": -12.223,
+      "p_raw": 0.8590570471476426,
+      "ci_low": -35.081999042145604,
+      "ci_high": 9.485827586206874,
+      "fit_mean_daily_diff": -9.034,
+      "p_holm": 1.0,
+      "verdict": "worse"
+     },
+     "2026": {
+      "sessions": 176,
+      "mean_daily_diff": 7.196,
+      "p_raw": 0.4044297785110744,
+      "ci_low": -45.17946874999999,
+      "ci_high": 56.44079829545454,
+      "fit_mean_daily_diff": -9.566,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     }
+    },
+    "strata": {
+     "day_model=pullback_continuation|bias=None": {
+      "sessions": 433,
+      "mean_daily_diff": -8.939
+     },
+     "day_model=pullback_continuation|bias=long": {
+      "sessions": 158,
+      "mean_daily_diff": 5.783
+     },
+     "day_model=pullback_continuation|bias=short": {
+      "sessions": 162,
+      "mean_daily_diff": 6.266
+     },
+     "day_model=sweep_and_fail|bias=None": {
+      "sessions": 613,
+      "mean_daily_diff": -23.284
+     },
+     "day_model=sweep_and_fail|bias=long": {
+      "sessions": 169,
+      "mean_daily_diff": -18.926
+     },
+     "day_model=sweep_and_fail|bias=short": {
+      "sessions": 207,
+      "mean_daily_diff": 27.536
+     }
+    }
+   },
+   "GB-rt2": {
+    "overall": {
+     "sessions": 1742,
+     "mean_daily_diff": -2.286,
+     "baseline_mean": 3.484,
+     "variant_mean": 1.198
+    },
+    "test_folds": {
+     "2022": {
+      "sessions": 260,
+      "mean_daily_diff": -6.494,
+      "p_raw": 0.7475126243687815,
+      "ci_low": -26.874098076923072,
+      "ci_high": 12.387183653846135,
+      "fit_mean_daily_diff": -4.224,
+      "p_holm": 1.0,
+      "verdict": "worse"
+     },
+     "2023": {
+      "sessions": 260,
+      "mean_daily_diff": -0.196,
+      "p_raw": 0.5082745862706864,
+      "ci_low": -15.275612500000001,
+      "ci_high": 14.431814423076906,
+      "fit_mean_daily_diff": -4.978,
+      "p_holm": 1.0,
+      "verdict": "worse"
+     },
+     "2024": {
+      "sessions": 262,
+      "mean_daily_diff": -1.766,
+      "p_raw": 0.5963201839908004,
+      "ci_low": -19.653500954198474,
+      "ci_high": 14.178452290076331,
+      "fit_mean_daily_diff": -3.786,
+      "p_holm": 1.0,
+      "verdict": "worse"
+     },
+     "2025": {
+      "sessions": 261,
+      "mean_daily_diff": -3.248,
+      "p_raw": 0.6392180390980451,
+      "ci_low": -21.773585249042146,
+      "ci_high": 14.172826628352489,
+      "fit_mean_daily_diff": -3.38,
+      "p_holm": 1.0,
+      "verdict": "worse"
+     },
+     "2026": {
+      "sessions": 176,
+      "mean_daily_diff": 7.251,
+      "p_raw": 0.38278086095695213,
+      "ci_low": -36.232734375,
+      "ci_high": 48.27580539772727,
+      "fit_mean_daily_diff": -3.358,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     }
+    },
+    "strata": {
+     "day_model=pullback_continuation|bias=None": {
+      "sessions": 433,
+      "mean_daily_diff": -1.964
+     },
+     "day_model=pullback_continuation|bias=long": {
+      "sessions": 158,
+      "mean_daily_diff": 16.611
+     },
+     "day_model=pullback_continuation|bias=short": {
+      "sessions": 162,
+      "mean_daily_diff": 8.867
+     },
+     "day_model=sweep_and_fail|bias=None": {
+      "sessions": 613,
+      "mean_daily_diff": -17.8
+     },
+     "day_model=sweep_and_fail|bias=long": {
+      "sessions": 169,
+      "mean_daily_diff": -6.906
+     },
+     "day_model=sweep_and_fail|bias=short": {
+      "sessions": 207,
+      "mean_daily_diff": 23.599
+     }
+    }
+   },
+   "GB-rt3": {
+    "overall": {
+     "sessions": 1742,
+     "mean_daily_diff": -3.642,
+     "baseline_mean": 3.484,
+     "variant_mean": -0.157
+    },
+    "test_folds": {
+     "2022": {
+      "sessions": 260,
+      "mean_daily_diff": -5.336,
+      "p_raw": 0.7814109294535273,
+      "ci_low": -19.130454807692306,
+      "ci_high": 8.40919519230769,
+      "fit_mean_daily_diff": -5.384,
+      "p_holm": 1.0,
+      "verdict": "worse"
+     },
+     "2023": {
+      "sessions": 260,
+      "mean_daily_diff": -4.642,
+      "p_raw": 0.8010599470026498,
+      "ci_low": -15.641990384615385,
+      "ci_high": 5.980082692307689,
+      "fit_mean_daily_diff": -5.368,
+      "p_holm": 1.0,
+      "verdict": "worse"
+     },
+     "2024": {
+      "sessions": 262,
+      "mean_daily_diff": -2.438,
+      "p_raw": 0.6445677716114194,
+      "ci_low": -20.004826335877862,
+      "ci_high": 11.426994274809156,
+      "fit_mean_daily_diff": -5.187,
+      "p_holm": 1.0,
+      "verdict": "worse"
+     },
+     "2025": {
+      "sessions": 261,
+      "mean_daily_diff": 1.917,
+      "p_raw": 0.38908054597270136,
+      "ci_low": -11.712134099616856,
+      "ci_high": 15.848980842911875,
+      "fit_mean_daily_diff": -4.635,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2026": {
+      "sessions": 176,
+      "mean_daily_diff": -4.519,
+      "p_raw": 0.6217689115544223,
+      "ci_low": -36.36455965909091,
+      "ci_high": 25.99084801136363,
+      "fit_mean_daily_diff": -3.543,
+      "p_holm": 1.0,
+      "verdict": "worse"
+     }
+    },
+    "strata": {
+     "day_model=pullback_continuation|bias=None": {
+      "sessions": 433,
+      "mean_daily_diff": -7.877
+     },
+     "day_model=pullback_continuation|bias=long": {
+      "sessions": 158,
+      "mean_daily_diff": -1.766
+     },
+     "day_model=pullback_continuation|bias=short": {
+      "sessions": 162,
+      "mean_daily_diff": -15.265
+     },
+     "day_model=sweep_and_fail|bias=None": {
+      "sessions": 613,
+      "mean_daily_diff": -8.496
+     },
+     "day_model=sweep_and_fail|bias=long": {
+      "sessions": 169,
+      "mean_daily_diff": 8.806
+     },
+     "day_model=sweep_and_fail|bias=short": {
+      "sessions": 207,
+      "mean_daily_diff": 17.094
+     }
+    }
+   },
+   "JJ-line1": {
+    "overall": {
+     "sessions": 1742,
+     "mean_daily_diff": 0.0,
+     "baseline_mean": 3.484,
+     "variant_mean": 3.484
+    },
+    "test_folds": {
+     "2022": {
+      "sessions": 260,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2023": {
+      "sessions": 260,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2024": {
+      "sessions": 262,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2025": {
+      "sessions": 261,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2026": {
+      "sessions": 176,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     }
+    },
+    "strata": {
+     "day_model=pullback_continuation|bias=None": {
+      "sessions": 433,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=pullback_continuation|bias=long": {
+      "sessions": 158,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=pullback_continuation|bias=short": {
+      "sessions": 162,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=sweep_and_fail|bias=None": {
+      "sessions": 613,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=sweep_and_fail|bias=long": {
+      "sessions": 169,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=sweep_and_fail|bias=short": {
+      "sessions": 207,
+      "mean_daily_diff": 0.0
+     }
+    }
+   },
+   "JJ-noadds": {
+    "overall": {
+     "sessions": 1742,
+     "mean_daily_diff": 0.0,
+     "baseline_mean": 3.484,
+     "variant_mean": 3.484
+    },
+    "test_folds": {
+     "2022": {
+      "sessions": 260,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2023": {
+      "sessions": 260,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2024": {
+      "sessions": 262,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2025": {
+      "sessions": 261,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2026": {
+      "sessions": 176,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     }
+    },
+    "strata": {
+     "day_model=pullback_continuation|bias=None": {
+      "sessions": 433,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=pullback_continuation|bias=long": {
+      "sessions": 158,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=pullback_continuation|bias=short": {
+      "sessions": 162,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=sweep_and_fail|bias=None": {
+      "sessions": 613,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=sweep_and_fail|bias=long": {
+      "sessions": 169,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=sweep_and_fail|bias=short": {
+      "sessions": 207,
+      "mean_daily_diff": 0.0
+     }
+    }
+   },
+   "JJ-noflips": {
+    "overall": {
+     "sessions": 1742,
+     "mean_daily_diff": 0.0,
+     "baseline_mean": 3.484,
+     "variant_mean": 3.484
+    },
+    "test_folds": {
+     "2022": {
+      "sessions": 260,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2023": {
+      "sessions": 260,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2024": {
+      "sessions": 262,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2025": {
+      "sessions": 261,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2026": {
+      "sessions": 176,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     }
+    },
+    "strata": {
+     "day_model=pullback_continuation|bias=None": {
+      "sessions": 433,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=pullback_continuation|bias=long": {
+      "sessions": 158,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=pullback_continuation|bias=short": {
+      "sessions": 162,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=sweep_and_fail|bias=None": {
+      "sessions": 613,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=sweep_and_fail|bias=long": {
+      "sessions": 169,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=sweep_and_fail|bias=short": {
+      "sessions": 207,
+      "mean_daily_diff": 0.0
+     }
+    }
+   },
+   "JJ-rt1": {
+    "overall": {
+     "sessions": 1742,
+     "mean_daily_diff": 0.0,
+     "baseline_mean": 3.484,
+     "variant_mean": 3.484
+    },
+    "test_folds": {
+     "2022": {
+      "sessions": 260,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2023": {
+      "sessions": 260,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2024": {
+      "sessions": 262,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2025": {
+      "sessions": 261,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2026": {
+      "sessions": 176,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     }
+    },
+    "strata": {
+     "day_model=pullback_continuation|bias=None": {
+      "sessions": 433,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=pullback_continuation|bias=long": {
+      "sessions": 158,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=pullback_continuation|bias=short": {
+      "sessions": 162,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=sweep_and_fail|bias=None": {
+      "sessions": 613,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=sweep_and_fail|bias=long": {
+      "sessions": 169,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=sweep_and_fail|bias=short": {
+      "sessions": 207,
+      "mean_daily_diff": 0.0
+     }
+    }
+   },
+   "JJ-rt2": {
+    "overall": {
+     "sessions": 1742,
+     "mean_daily_diff": 0.0,
+     "baseline_mean": 3.484,
+     "variant_mean": 3.484
+    },
+    "test_folds": {
+     "2022": {
+      "sessions": 260,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2023": {
+      "sessions": 260,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2024": {
+      "sessions": 262,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2025": {
+      "sessions": 261,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2026": {
+      "sessions": 176,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     }
+    },
+    "strata": {
+     "day_model=pullback_continuation|bias=None": {
+      "sessions": 433,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=pullback_continuation|bias=long": {
+      "sessions": 158,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=pullback_continuation|bias=short": {
+      "sessions": 162,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=sweep_and_fail|bias=None": {
+      "sessions": 613,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=sweep_and_fail|bias=long": {
+      "sessions": 169,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=sweep_and_fail|bias=short": {
+      "sessions": 207,
+      "mean_daily_diff": 0.0
+     }
+    }
+   },
+   "JJ-rt3": {
+    "overall": {
+     "sessions": 1742,
+     "mean_daily_diff": 0.0,
+     "baseline_mean": 3.484,
+     "variant_mean": 3.484
+    },
+    "test_folds": {
+     "2022": {
+      "sessions": 260,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2023": {
+      "sessions": 260,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2024": {
+      "sessions": 262,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2025": {
+      "sessions": 261,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2026": {
+      "sessions": 176,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     }
+    },
+    "strata": {
+     "day_model=pullback_continuation|bias=None": {
+      "sessions": 433,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=pullback_continuation|bias=long": {
+      "sessions": 158,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=pullback_continuation|bias=short": {
+      "sessions": 162,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=sweep_and_fail|bias=None": {
+      "sessions": 613,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=sweep_and_fail|bias=long": {
+      "sessions": 169,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=sweep_and_fail|bias=short": {
+      "sessions": 207,
+      "mean_daily_diff": 0.0
+     }
+    }
+   },
+   "JJ-rt4": {
+    "overall": {
+     "sessions": 1742,
+     "mean_daily_diff": 0.0,
+     "baseline_mean": 3.484,
+     "variant_mean": 3.484
+    },
+    "test_folds": {
+     "2022": {
+      "sessions": 260,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2023": {
+      "sessions": 260,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2024": {
+      "sessions": 262,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2025": {
+      "sessions": 261,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2026": {
+      "sessions": 176,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     }
+    },
+    "strata": {
+     "day_model=pullback_continuation|bias=None": {
+      "sessions": 433,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=pullback_continuation|bias=long": {
+      "sessions": 158,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=pullback_continuation|bias=short": {
+      "sessions": 162,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=sweep_and_fail|bias=None": {
+      "sessions": 613,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=sweep_and_fail|bias=long": {
+      "sessions": 169,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=sweep_and_fail|bias=short": {
+      "sessions": 207,
+      "mean_daily_diff": 0.0
+     }
+    }
+   },
+   "JJ-timeorder": {
+    "overall": {
+     "sessions": 1742,
+     "mean_daily_diff": 0.0,
+     "baseline_mean": 3.484,
+     "variant_mean": 3.484
+    },
+    "test_folds": {
+     "2022": {
+      "sessions": 260,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2023": {
+      "sessions": 260,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2024": {
+      "sessions": 262,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2025": {
+      "sessions": 261,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     },
+     "2026": {
+      "sessions": 176,
+      "mean_daily_diff": 0.0,
+      "p_raw": 1.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "fit_mean_daily_diff": 0.0,
+      "p_holm": 1.0,
+      "verdict": "not_promoted"
+     }
+    },
+    "strata": {
+     "day_model=pullback_continuation|bias=None": {
+      "sessions": 433,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=pullback_continuation|bias=long": {
+      "sessions": 158,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=pullback_continuation|bias=short": {
+      "sessions": 162,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=sweep_and_fail|bias=None": {
+      "sessions": 613,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=sweep_and_fail|bias=long": {
+      "sessions": 169,
+      "mean_daily_diff": 0.0
+     },
+     "day_model=sweep_and_fail|bias=short": {
+      "sessions": 207,
+      "mean_daily_diff": 0.0
+     }
+    }
+   }
+  },
+  "stratum_conditional": {
+   "test_folds": {
+    "2022": {
+     "sessions": 260,
+     "mean_daily_diff": 24.563,
+     "p_raw": 0.000599970001499925,
+     "ci_low": 9.172666346153846,
+     "ci_high": 39.24611730769229,
+     "choice": {
+      "day_model=sweep_and_fail|bias=None": "GB-noreenter",
+      "day_model=pullback_continuation|bias=None": "GB-noreenter",
+      "day_model=sweep_and_fail|bias=long": "GB-noreenter",
+      "day_model=sweep_and_fail|bias=short": "GB-noreenter",
+      "day_model=pullback_continuation|bias=short": "GB-rt1",
+      "day_model=pullback_continuation|bias=long": "GB-noreenter"
+     }
+    },
+    "2023": {
+     "sessions": 260,
+     "mean_daily_diff": 16.521,
+     "p_raw": 9.99950002499875e-05,
+     "ci_low": 9.054542307692309,
+     "ci_high": 23.726890384615384,
+     "choice": {
+      "day_model=sweep_and_fail|bias=None": "GB-noreenter",
+      "day_model=pullback_continuation|bias=None": "GB-noreenter",
+      "day_model=sweep_and_fail|bias=long": "GB-noreenter",
+      "day_model=sweep_and_fail|bias=short": "GB-noreenter",
+      "day_model=pullback_continuation|bias=short": "GB-noreenter",
+      "day_model=pullback_continuation|bias=long": "GB-noreenter"
+     }
+    },
+    "2024": {
+     "sessions": 262,
+     "mean_daily_diff": 20.241,
+     "p_raw": 0.004099795010249488,
+     "ci_low": 3.6385314885496203,
+     "ci_high": 35.420042938931275,
+     "choice": {
+      "day_model=sweep_and_fail|bias=None": "GB-noreenter",
+      "day_model=pullback_continuation|bias=None": "GB-noreenter",
+      "day_model=sweep_and_fail|bias=long": "GB-noreenter",
+      "day_model=sweep_and_fail|bias=short": "GB-noreenter",
+      "day_model=pullback_continuation|bias=short": "GB-noreenter",
+      "day_model=pullback_continuation|bias=long": "GB-noreenter"
+     }
+    },
+    "2025": {
+     "sessions": 261,
+     "mean_daily_diff": 5.219,
+     "p_raw": 0.23808809559522023,
+     "ci_low": -9.278150383141762,
+     "ci_high": 19.062508620689652,
+     "choice": {
+      "day_model=sweep_and_fail|bias=None": "GB-noreenter",
+      "day_model=pullback_continuation|bias=None": "GB-noreenter",
+      "day_model=sweep_and_fail|bias=long": "GB-noreenter",
+      "day_model=sweep_and_fail|bias=short": "GB-noreenter",
+      "day_model=pullback_continuation|bias=short": "GB-noreenter",
+      "day_model=pullback_continuation|bias=long": "GB-noreenter"
+     }
+    },
+    "2026": {
+     "sessions": 176,
+     "mean_daily_diff": 38.36,
+     "p_raw": 0.0010499475026248687,
+     "ci_low": 14.576485795454545,
+     "ci_high": 63.02450142045453,
+     "choice": {
+      "day_model=sweep_and_fail|bias=None": "GB-noreenter",
+      "day_model=pullback_continuation|bias=None": "GB-noreenter",
+      "day_model=sweep_and_fail|bias=long": "GB-noreenter",
+      "day_model=sweep_and_fail|bias=short": "GB-noreenter",
+      "day_model=pullback_continuation|bias=short": "GB-noreenter",
+      "day_model=pullback_continuation|bias=long": "GB-noreenter"
+     }
+    }
+   }
+  }
+ }
+}
